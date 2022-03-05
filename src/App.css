@@ -1,38 +1,56 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: "Gilroy_Regular";
+  src: local("Gilroy_Regular"), url(./fonts/Gilroy-Regular.ttf) format("woff");
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+@font-face {
+  font-family: "Gilroy_Bold";
+  src: local("Gilroy_Bold"), url(./fonts/Gilroy-Bold.ttf) format("woff");
+}
+@font-face {
+  font-family: "Gilroy_Medium";
+  src: local("Gilroy_Medium"), url(./fonts/Gilroy-Medium.ttf) format("woff");
+}
+@font-face {
+  font-family: "Gilroy_Light";
+  src: local("Gilroy_Light"), url(./fonts/Gilroy-Light.ttf) format("woff");
+}
+@font-face {
+  font-family: "Gilroy_Heavy";
+  src: local("Gilroy_Heavy"), url(./fonts/Gilroy-Heavy.ttf) format("woff");
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.font_regular {
+  font-family: Gilroy_Regular;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.font_bold {
+  font-family: Gilroy_Bold;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.font_medium {
+  font-family: Gilroy_Medium;
 }
 
-.App-link {
-  color: #61dafb;
+.font_light {
+  font-family: Gilroy_Light;
+}
+.font_heavy {
+  font-family: Gilroy_Heavy;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.bg_primary {
+  background-color: #06c16b;
+}
+
+.hr_line {
+  width: 625.18px;
+  opacity: 0.9;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.step_card {
+  width: 342px;
+  height: 506px;
 }
