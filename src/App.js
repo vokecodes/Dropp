@@ -149,7 +149,11 @@ function App() {
             <div className="mx-5 lg:mx-0">
               <div className="bg-white px-10 py-20 rounded-2xl items-center testimonial_card">
                 <div className="flex flex-row items-center mb-8">
-                  <img src={Afolabi} className="h-18 w-18 rounded-full" />
+                  <img
+                    src={Afolabi}
+                    className="h-18 w-18 rounded-full"
+                    alt="afolabi"
+                  />
                   <p className="font_bold text-2xl text-black ml-5">Afolabi</p>
                 </div>
                 <p className="font_regular text-lg text-black">
@@ -161,7 +165,11 @@ function App() {
               </div>
               <div className="bg-white px-10 py-20 rounded-2xl items-center mt-5 testimonial_card h_484">
                 <div className="flex flex-row items-center mb-8">
-                  <img src={Lolade} className="h-18 w-18 rounded-full" />
+                  <img
+                    src={Lolade}
+                    className="h-18 w-18 rounded-full"
+                    alt="lolade"
+                  />
                   <p className="font_bold text-2xl text-black ml-5">Lolade</p>
                 </div>
                 <p className="font_regular text-lg text-black">
@@ -178,7 +186,11 @@ function App() {
             <div className="mx-5 lg:mx-0">
               <div className="bg-white px-10 py-20 rounded-2xl items-center mt-5 lg:mt-0 testimonial_card h_484">
                 <div className="flex flex-row items-center mb-8">
-                  <img src={Alex} className="h-18 w-18 rounded-full" />
+                  <img
+                    src={Alex}
+                    className="h-18 w-18 rounded-full"
+                    alt="alex"
+                  />
                   <p className="font_bold text-2xl text-black ml-5">Alex</p>
                 </div>
                 <p className="font_regular text-lg text-black">
@@ -194,13 +206,17 @@ function App() {
               </div>
               <div className="bg-white px-10 py-20 rounded-2xl items-center mt-5 testimonial_card">
                 <div className="flex flex-row items-center mb-8">
-                  <img src={Taiwo} className="h-18 w-18 rounded-full" />
+                  <img
+                    src={Taiwo}
+                    className="h-18 w-18 rounded-full"
+                    alt="taiwo"
+                  />
                   <p className="font_bold text-2xl text-black ml-5">Taiwo</p>
                 </div>
                 <p className="font_regular text-lg text-black">
                   I just schedule a Dropp in the middle of the day, and boom the
-                  order is here in less than an hour, I’m surprised how they do
-                  the magic but it works and it matches my remote work
+                  order is here in less than an hour, I&apos;m surprised how
+                  they do the magic but it works and it matches my remote work
                   lifestyle. Go schedule a Dropp and see for yourself.
                 </p>
               </div>
@@ -208,27 +224,36 @@ function App() {
             <div className="mx-5 lg:mx-0">
               <div className="bg-white px-10 py-20 rounded-2xl items-center mt-5 lg:mt-0 testimonial_card">
                 <div className="flex flex-row items-center mb-8">
-                  <img src={Tobi} className="h-18 w-18 rounded-full" />
+                  <img
+                    src={Tobi}
+                    className="h-18 w-18 rounded-full"
+                    alt="tobi"
+                  />
                   <p className="font_bold text-2xl text-black ml-5">Tobi</p>
                 </div>
                 <p className="font_regular text-lg text-black">
                   A friend told me about Dropp and I could not believe it, until
                   I scheduled a Dropp myself, it is a cool experience and the
-                  person that shopped for me was super nice. I’m recommending
-                  this to everybody I meet.
+                  person that shopped for me was super nice. I&apos;m
+                  recommending this to everybody I meet.
                 </p>
               </div>
               <div className="bg-white px-10 py-20 rounded-2xl items-center mt-5 testimonial_card h_484">
                 <div className="flex flex-row items-center mb-8">
-                  <img src={Victor} className="h-18 w-18 rounded-full" />
+                  <img
+                    src={Victor}
+                    className="h-18 w-18 rounded-full"
+                    alt="victor"
+                  />
                   <p className="font_bold text-2xl text-black ml-5">Victor</p>
                 </div>
                 <p className="font_regular text-lg text-black">
                   Oh my God, I have been looking for a platform like this all my
-                  life since I got to Lagos, I’m quite lazy with shopping and
-                  sometimes have to force myself to do it, but when I discovered
-                  Dropp, it was like they lifted the weight of the world off my
-                  shoulders, sharing this with all my family members right now.
+                  life since I got to Lagos, I&apos;m quite lazy with shopping
+                  and sometimes have to force myself to do it, but when I
+                  discovered Dropp, it was like they lifted the weight of the
+                  world off my shoulders, sharing this with all my family
+                  members right now.
                 </p>
               </div>
             </div>
