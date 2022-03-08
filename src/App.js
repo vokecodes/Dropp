@@ -47,7 +47,7 @@ function App() {
             </div>
           </div>
           <div className="">
-            <img src={items} alt="items" />
+            <img src={items} alt="items" className="" />
           </div>
         </main>
       </section>
@@ -272,13 +272,13 @@ function App() {
             </div>
           </div>
         </div>
-        <div id="pot">
+        {/* <div id="pot">
           <img
             src="https://i.stack.imgur.com/qgNyF.png?s=328&g=1"
             width={100}
             height={100}
           />
-        </div>
+        </div> */}
       </section>
     </>
   );

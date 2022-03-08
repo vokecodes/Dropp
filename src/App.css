@@ -65,12 +65,12 @@
   .testimonial_card {
     width: 90%;
   }
-}
-
-@media (min-width: 1280px) and (max-width: 2000px) {
   .hr_line {
     width: 625.18px;
   }
+}
+
+@media (min-width: 1280px) and (max-width: 2000px) {
   .h_601 {
     height: 601px;
   }
