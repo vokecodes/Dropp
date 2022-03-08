@@ -21,7 +21,7 @@ function App() {
         <div className="w-4/5 mx-auto py-10">
           <a href="/">
             <span className="sr-only">Dropp</span>
-            <img className="w-40" src={logo} alt="dropp_logo" />
+            <img className="w-48" src={logo} alt="dropp_logo" />
           </a>
         </div>
         <main className="w-4/5 mx-auto pt-5 pb-20  lg:flex flex-row">
@@ -75,7 +75,7 @@ function App() {
                 Choose what you <br /> want. Very simple.
               </p>
               <p className="font_regular text-xl">
-                Select items from your favorite grocery stores on our platform.
+                Select items from your favourite grocery stores on our platform.
               </p>
             </div>
           </div>
@@ -275,7 +275,7 @@ function App() {
         <div className="lg:mx-28 mx-10 mt-10 lg:mt-0">
           <div className="lg:flex mt-16">
             <div className="lg:flex-1">
-              <img className="w-40" src={logo} alt="dropp_logo" />
+              <img className="w-48" src={logo} alt="dropp_logo" />
             </div>
             <div
               className="lg:flex lg:justify-between mt-10 lg:mt-0"
