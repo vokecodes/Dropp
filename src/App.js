@@ -115,7 +115,7 @@ function App() {
         </div>
 
         <div className="mt-16 text-center">
-          <button className="inline-flex items-center font_bold px-28 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg_primary">
+          <button className="inline-flex items-center font_bold lg:px-28 px-20 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg_primary">
             Start Dropp-ing now!
           </button>
         </div>
