@@ -45,7 +45,13 @@
 }
 
 .hr_line {
-  width: 625.18px;
+  width: auto;
+  opacity: 0.9;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.footer_hr_line {
+  width: auto;
   opacity: 0.9;
   border-top: 1px solid rgba(0, 0, 0, 0.3);
 }
@@ -53,4 +59,107 @@
 .step_card {
   width: 342px;
   height: 506px;
+}
+
+@media (min-width: 2056px) {
+  .testimonial_card {
+    width: 90%;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 2000px) {
+  .hr_line {
+    width: 625.18px;
+  }
+  .h_601 {
+    height: 601px;
+  }
+  .testimonial_card {
+    width: 405px;
+    height: 407px;
+  }
+}
+
+.h_484 {
+  height: 484px;
+}
+
+/* #DROPP {
+  bottom: 15%;
+  position: absolute;
+  -webkit-animation: linear infinite;
+  -webkit-animation-name: run;
+  -webkit-animation-duration: 5s;
+}
+
+@-webkit-keyframes run {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: calc(100% - 100px);
+  }
+  100% {
+    left: 0;
+  }
+} */
+
+#pot {
+  /* bottom: 15%;
+  position: absolute; */
+  animation: run infinite 5s linear;
+  /* animation-name: ;
+  animation-duration: 5s; */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes run {
+  /* 0% {
+    left: 0;
+    right: 100%;
+  }
+  50% {
+    left: 0;
+    right: 0;
+  }
+  100% {
+    left: 0;
+    right: 0;
+  } */
+
+  from {
+    transform: left 0;
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
