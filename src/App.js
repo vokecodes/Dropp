@@ -29,10 +29,13 @@ function App() {
             <h1 className="lg:text-6xl text-4xl font_bold">
               Groceries <br /> delivered to your <br /> doorstep in 1 hour.
             </h1>
-            <p className="my-7 font_regular text-lg">
-              Dropp is a grocery delivery platform facilitating doorstep
-              deliveries of <br /> groceries and other home essentials in
-              Africa.
+            <p className="lg:block hidden my-7 font_regular text-lg text-left">
+              Dropp allows you to shop groceries from your favourite
+              supermarkets <br /> and delivers to your doorstep in just 1 hour.
+            </p>
+            <p className="lg:hidden my-7 font_regular text-lg text-left">
+              Dropp allows you to shop groceries from your favourite
+              supermarkets and delivers to your doorstep in just 1 hour.
             </p>
             <button className="w-full lg:w-1/3 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
               Schedule a Dropp
