@@ -26,7 +26,7 @@ function App() {
         </div>
         <main className="w-4/5 mx-auto pt-5 pb-20  lg:flex flex-row">
           <div className="flex-1 lg:mt-20 mr-10">
-            <h1 className="text-6xl font_bold">
+            <h1 className="lg:text-6xl text-4xl font_bold">
               Groceries <br /> delivered to your <br /> doorstep in 1 hour.
             </h1>
             <p className="my-7 font_regular text-lg">
@@ -34,7 +34,7 @@ function App() {
               deliveries of <br /> groceries and other home essentials in
               Africa.
             </p>
-            <button className="inline-flex items-center font_bold lg:px-28 px-20 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg_primary">
+            <button className="w-full lg:w-1/3 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
               Schedule a Dropp
             </button>
             <div className="my-7">
@@ -55,16 +55,13 @@ function App() {
       {/* Dropp it in few clicks. */}
       <section className="w-4/5 mx-auto pt-5 pb-20">
         <div className="flex-1 lg:mt-20">
-          <h1
-            className="text-5xl font_bold text-center mb-20"
-            style={{ fontSize: 65 }}
-          >
+          <h1 className="lg:text-6xl text-4xl font_bold text-center mb-20">
             Dropp it in few clicks.
           </h1>
         </div>
         <div className="my-10 lg:flex lg:flex-row lg:justify-between">
           <div
-            className="lg:w-1/3 py-16 px-10 lg:mr-10"
+            className="lg:w-1/3 py-16 px-10 lg:mr-10 rounded-l3xlg"
             style={{ backgroundColor: "#FFFFF5" }}
           >
             <div className="flex place-content-center">
@@ -80,7 +77,7 @@ function App() {
             </div>
           </div>
           <div
-            className="lg:w-1/3 py-16 px-10 lg:mr-10 mt-5 lg:mt-0"
+            className="lg:w-1/3 py-16 px-10 lg:mr-10 mt-5 lg:mt-0 rounded-3xl"
             style={{ backgroundColor: "#F3FFF9" }}
           >
             <div className="flex place-content-center">
@@ -97,7 +94,7 @@ function App() {
             </div>
           </div>
           <div
-            className="lg:w-1/3 py-16 px-10 lg:mr-10 mt-5 lg:mt-0"
+            className="lg:w-1/3 py-16 px-10 lg:mr-10 mt-5 lg:mt-0 rounded-3xl"
             style={{ backgroundColor: "#FFF7F5" }}
           >
             <div className="flex place-content-center">
@@ -115,7 +112,7 @@ function App() {
         </div>
 
         <div className="mt-16 text-center">
-          <button className="inline-flex items-center font_bold lg:px-28 px-20 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg_primary">
+          <button className="w-full lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
             Start Dropp-ing now!
           </button>
         </div>
@@ -127,10 +124,7 @@ function App() {
         style={{ backgroundColor: "#FFFFF5" }}
       >
         <div className="flex-1 lg:mt-20">
-          <h1
-            className="text-5xl font_bold text-center mb-20"
-            style={{ fontSize: 65 }}
-          >
+          <h1 className="lg:text-6xl text-4xl font_bold text-center mb-20">
             See what people are saying!
           </h1>
         </div>
@@ -144,7 +138,7 @@ function App() {
         <div className="lg:w-11/12 mx-auto">
           <div
             className="lg:flex lg:flex-row lg:justify-between"
-            style={{ marginTop: -180 }}
+            style={{ marginTop: -150 }}
           >
             <div className="mx-5 lg:mx-0">
               <div className="bg-white px-10 py-20 rounded-2xl items-center testimonial_card">
@@ -264,7 +258,7 @@ function App() {
       {/* Schedule a Dropp */}
       <section className="lg:pt-40" style={{ backgroundColor: "#FFFFF5" }}>
         <div className="text-center my-24">
-          <button className="inline-flex items-center font_bold px-28 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg_primary">
+          <button className="w-2/3 lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
             Schedule a Dropp
           </button>
         </div>
