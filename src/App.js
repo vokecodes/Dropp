@@ -283,24 +283,41 @@ function App() {
               </p>
               <p className="font_regular text-base my-5 lg:my-0">
                 <span className="font_bold">Wanna talk? </span>
-                <br /> +2349061494881
+                <br />
+                <a href="mailto:hello@getdropp.com">hello@getdropp.com</a>
+                <br />
+                <a href="tel:+2349061494881">+2349061494881</a>
               </p>
               <p className="font_regular text-base pb-10 lg:pb-0">
                 <span className="font_bold">Follow Us</span>
-                <br /> Instagram
-                <br /> Facebook
-                <br /> Twitter
+                <br />
+                <a
+                  href="https://www.instagram.com/getdropp/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Instagram
+                </a>
+                <br />
+                <a
+                  href="https://www.linkedin.com/company/getdropp/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn
+                </a>
+                <br />
+                <a
+                  href="https://twitter.com/getdropp?s=11"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Twitter
+                </a>
               </p>
             </div>
           </div>
         </div>
-        {/* <div id="pot">
-          <img
-            src="https://i.stack.imgur.com/qgNyF.png?s=328&g=1"
-            width={100}
-            height={100}
-          />
-        </div> */}
       </section>
     </>
   );
