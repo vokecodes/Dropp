@@ -61,7 +61,7 @@
   height: 506px;
 }
 
-@media (min-width: 2056px) {
+@media (min-width: 1869px) {
   .testimonial_card {
     width: 90%;
   }
@@ -73,7 +73,7 @@
   }
 }
 
-@media (min-width: 1280px) and (max-width: 2000px) {
+@media (min-width: 1280px) and (max-width: 1860px) {
   .h_601 {
     height: 601px;
   }
@@ -91,17 +91,17 @@
   position: relative;
   animation: linear infinite;
   animation-name: run;
-  animation-duration: 3s;
+  animation-duration: 5s;
 }
 
 @keyframes run {
   0% {
-    left: 0;
+    left: -100%;
   }
   50% {
     left: 100%;
   }
   100% {
-    left: 0;
+    left: 100%;
   }
 }
