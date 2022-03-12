@@ -303,7 +303,9 @@ function App() {
                 <br />
                 <a href="mailto:hello@getdropp.com">hello@getdropp.com</a>
                 <br />
-                <a href="tel:+2349061494881">+2349061494881</a>
+                <a href="https://api.whatsapp.com/send?phone=+23408068424478&text=Hello, I have a question for Dropp https://paystack.shop/dropp">
+                  +2349061494881
+                </a>
               </p>
               <p className="font_regular text-base pb-10 lg:pb-0">
                 <span className="font_bold">Follow Us</span>
