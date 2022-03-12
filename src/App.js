@@ -37,7 +37,10 @@ function App() {
               Dropp allows you to shop groceries from your favourite
               supermarkets and delivers to your doorstep in just 1 hour.
             </p>
-            <button className="w-full lg:w-1/3 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+            <button
+              className="w-full lg:w-1/3 font_bold py-3 button border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
+              onClick={() => window.open("https://paystack.shop/dropp")}
+            >
               Schedule a Dropp
             </button>
             <div className="my-7">
@@ -115,7 +118,10 @@ function App() {
         </div>
 
         <div className="mt-16 text-center">
-          <button className="w-full lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+          <button
+            className="w-full lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
+            onClick={() => window.open("https://paystack.shop/dropp")}
+          >
             Start Dropp-ing now!
           </button>
         </div>
@@ -260,8 +266,11 @@ function App() {
 
       {/* Schedule a Dropp */}
       <section className="lg:pt-40" style={{ backgroundColor: "#FFFFF5" }}>
-        <div className="text-center my-24">
-          <button className="w-2/3 lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+        <div className="text-center mt-24 mb-10">
+          <button
+            className="w-2/3 lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
+            onClick={() => window.open("https://paystack.shop/dropp")}
+          >
             Schedule a Dropp
           </button>
         </div>
@@ -279,7 +288,15 @@ function App() {
               style={{ flexGrow: 0.2 }}
             >
               <p className="font_bold text-base my-5 lg:my-0">
-                2022 Dropp technologies. <br /> All rights reserved.
+                2022 Dropp technologies. <br /> All rights reserved. <br />
+                <a
+                  href="https://paystack.shop/dropp"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font_regular"
+                >
+                  Terms of Use
+                </a>
               </p>
               <p className="font_regular text-base my-5 lg:my-0">
                 <span className="font_bold">Wanna talk? </span>

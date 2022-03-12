@@ -61,9 +61,21 @@
   height: 506px;
 }
 
-@media (min-width: 1869px) {
+@media (min-width: 1869px) and (max-width: 2050px) {
   .testimonial_card {
-    width: 90%;
+    width: 545px;
+  }
+  .hr_line {
+    width: 625.18px;
+  }
+  .h_601 {
+    height: 601px;
+  }
+}
+
+@media (min-width: 2056px) {
+  .testimonial_card {
+    width: 575px;
   }
   .hr_line {
     width: 625.18px;
@@ -91,7 +103,7 @@
   position: relative;
   animation: linear infinite;
   animation-name: run;
-  animation-duration: 5s;
+  animation-duration: 12s;
 }
 
 @keyframes run {
