@@ -303,7 +303,11 @@ function App() {
                 <br />
                 <a href="mailto:hello@getdropp.com">hello@getdropp.com</a>
                 <br />
-                <a href="https://api.whatsapp.com/send?phone=+23408068424478&text=Hello, I have a question for Dropp https://paystack.shop/dropp">
+                <a
+                  href="https://api.whatsapp.com/send?phone=+23408068424478&text=Hello, I have a question for Dropp https://paystack.shop/dropp"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   +2349061494881
                 </a>
               </p>
