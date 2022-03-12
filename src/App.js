@@ -290,7 +290,7 @@ function App() {
               <p className="font_bold text-base my-5 lg:my-0">
                 2022 Dropp technologies. <br /> All rights reserved. <br />
                 <a
-                  href="https://paystack.shop/dropp"
+                  href="https://opposite-pet-88e.notion.site/Terms-of-Use-750a370ccc434a16b2b80c3f277f4968"
                   target="_blank"
                   rel="noreferrer"
                   className="font_regular"
