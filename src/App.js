@@ -1,6 +1,5 @@
 import logo from "./images/dropp_logo.svg";
 import items from "./images/items.svg";
-import spar from "./images/spar.svg";
 import plus from "./images/plus.svg";
 import check from "./images/check.svg";
 import location from "./images/location.svg";
@@ -11,6 +10,12 @@ import Tobi from "./images/tobi.svg";
 import Lolade from "./images/lolade.svg";
 import Taiwo from "./images/taiwo.svg";
 import Victor from "./images/victor.svg";
+import FoodCo from "./images/foodco.svg";
+import Addide from "./images/addide.svg";
+import Next from "./images/next.svg";
+import Spar from "./images/spar.svg";
+import Jendol from "./images/jendol.svg";
+import Justrite from "./images/justrite.svg";
 import "./App.css";
 
 function App() {
@@ -43,19 +48,74 @@ function App() {
             >
               Schedule a Dropp
             </button>
-            <div className="my-7">
-              <div className="hr_line" />
-              <p className="py-4 font_regular text-lg lg:flex lg:flex-row lg:items-center">
-                We shop from your fav Spar supermarket
-                <img src={spar} alt="spar_logo" className="lg:ml-3" />
-              </p>
-              <div className="hr_line" />
-            </div>
           </div>
           <div className="">
             <img src={items} alt="items" className="" />
           </div>
         </main>
+      </section>
+
+      {/* Choose your store in Lagos or Abuja. */}
+      <section className="w-4/5 mx-auto pt-5 pb-20">
+        <div className="flex-1 lg:mt-20">
+          <h1 className="lg:text-6xl text-4xl font_bold text-center mb-20">
+            Choose your store in Lagos or Abuja.
+          </h1>
+        </div>
+        <div className="lg:mt-10 lg:mb-2 lg:flex lg:flex-row lg:justify-between">
+          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+            <img src={FoodCo} alt="FoodCo" className="mr-5" />
+            <div>
+              <p className="font_bold text-xl">FoodCo Lekki</p>
+              <p className="font_bold text_primary text-md">
+                Lekki, Lagos{" "}
+                <span className="text-black">• Delivery & pickup</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+            <img src={Addide} alt="Addide" className="mr-5" />
+            <div>
+              <p className="font_bold text-xl">Addide supermarket</p>
+              <p className="font_bold text_primary text-md">
+                Marina, Lagos{" "}
+                <span className="text-black">• Delivery & pickup</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+            <img src={Next} alt="Next" className="mr-5" />
+            <div>
+              <p className="font_bold text-xl">FoodCo Lekki</p>
+              <p className="font_bold text_primary text-md">
+                Abuja <span className="text-black">• Delivery & pickup</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="lg:flex lg:flex-row lg:justify-between">
+          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+            <img src={Spar} alt="Spar" className="mr-5" />
+            <div>
+              <p className="font_bold text-xl">Spar market</p>
+              <p className="font_bold text_red text-md">Coming soon!</p>
+            </div>
+          </div>
+          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+            <img src={Jendol} alt="Jendol" className="mr-5" />
+            <div>
+              <p className="font_bold text-xl">Jendol superstores</p>
+              <p className="font_bold text_red text-md">Coming soon!</p>
+            </div>
+          </div>
+          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+            <img src={Justrite} alt="Justrite" className="mr-5" />
+            <div>
+              <p className="font_bold text-xl">Justrite superstore</p>
+              <p className="font_bold text_red text-md">Coming soon!</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Dropp it in few clicks. */}

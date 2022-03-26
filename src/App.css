@@ -44,6 +44,14 @@
   background-color: #06c16b;
 }
 
+.text_primary {
+  color: #06c16b;
+}
+
+.text_red {
+  color: #e21d24;
+}
+
 .hr_line {
   width: auto;
   opacity: 0.9;
