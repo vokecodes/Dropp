@@ -42,12 +42,11 @@ function App() {
               Dropp allows you to shop groceries from your favourite
               supermarkets and delivers to your doorstep in just 1 hour.
             </p>
-            <button
-              className="w-full lg:w-1/3 font_bold py-3 button border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
-              onClick={() => window.open("https://paystack.shop/dropp")}
-            >
-              Schedule a Dropp
-            </button>
+            <a href="#stores">
+              <button className="w-full lg:w-1/3 font_bold py-3 button border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+                Schedule a Dropp
+              </button>
+            </a>
           </div>
           <div className="mt-10">
             <img src={items} alt="items" className="" />
@@ -56,14 +55,17 @@ function App() {
       </section>
 
       {/* Choose your store in Lagos or Abuja. */}
-      <section className="w-4/5 mx-auto pt-5 pb-20">
+      <section className="w-4/5 mx-auto pt-5 pb-20" id="stores">
         <div className="flex-1 lg:mt-20">
           <h1 className="lg:text-6xl text-4xl font_bold text-center mb-20">
             Choose your store in Lagos or Abuja.
           </h1>
         </div>
         <div className="lg:mt-10 lg:mb-2 lg:flex lg:flex-row lg:justify-between">
-          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+          <div
+            className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5 cursor-pointer"
+            onClick={() => window.open("https://paystack.shop/droppfoodco")}
+          >
             <img src={FoodCo} alt="FoodCo" className="mr-5" />
             <div>
               <p className="font_bold text-xl">FoodCo Lekki</p>
@@ -73,20 +75,28 @@ function App() {
               </p>
             </div>
           </div>
-          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+          <div
+            className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5 cursor-pointer"
+            onClick={() => window.open("https://paystack.shop/droppaddide")}
+          >
             <img src={Addide} alt="Addide" className="mr-5" />
             <div>
-              <p className="font_bold text-xl">Addide supermarket</p>
+              <p className="font_bold text-xl">Addide Supermarket</p>
               <p className="font_bold text_primary text-md">
                 Marina, Lagos{" "}
                 <span className="text-black">• Delivery & pickup</span>
               </p>
             </div>
           </div>
-          <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
+          <div
+            className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5 cursor-pointer"
+            onClick={() =>
+              window.open("https://paystack.shop/droppnext-cash--carry")
+            }
+          >
             <img src={Next} alt="Next" className="mr-5" />
             <div>
-              <p className="font_bold text-xl">FoodCo Lekki</p>
+              <p className="font_bold text-xl">Next Cash & Carry </p>
               <p className="font_bold text_primary text-md">
                 Abuja <span className="text-black">• Delivery & pickup</span>
               </p>
@@ -97,21 +107,21 @@ function App() {
           <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
             <img src={Spar} alt="Spar" className="mr-5" />
             <div>
-              <p className="font_bold text-xl">Spar market</p>
+              <p className="font_bold text-xl">Spar Market</p>
               <p className="font_bold text_red text-md">Coming soon!</p>
             </div>
           </div>
           <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
             <img src={Jendol} alt="Jendol" className="mr-5" />
             <div>
-              <p className="font_bold text-xl">Jendol superstores</p>
+              <p className="font_bold text-xl">Jendol Superstores</p>
               <p className="font_bold text_red text-md">Coming soon!</p>
             </div>
           </div>
           <div className="flex flex-row items-center bg-white border rounded-xl shadow-2xl px-4 py-3 lg:w-1/3 lg:mr-5 mt-5">
             <img src={Justrite} alt="Justrite" className="mr-5" />
             <div>
-              <p className="font_bold text-xl">Justrite superstore</p>
+              <p className="font_bold text-xl">Justrite Superstore</p>
               <p className="font_bold text_red text-md">Coming soon!</p>
             </div>
           </div>
@@ -178,12 +188,11 @@ function App() {
         </div>
 
         <div className="mt-16 text-center">
-          <button
-            className="w-full lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
-            onClick={() => window.open("https://paystack.shop/dropp")}
-          >
-            Start Dropp-ing now!
-          </button>
+          <a href="#stores">
+            <button className="w-full lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+              Start Dropp-ing now!
+            </button>
+          </a>
         </div>
       </section>
 
@@ -327,12 +336,11 @@ function App() {
       {/* Schedule a Dropp */}
       <section className="lg:pt-40" style={{ backgroundColor: "#FFFFF5" }}>
         <div className="text-center mt-24 mb-10">
-          <button
-            className="w-2/3 lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
-            onClick={() => window.open("https://paystack.shop/dropp")}
-          >
-            Schedule a Dropp
-          </button>
+          <a href="#stores">
+            <button className="w-2/3 lg:w-1/5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+              Schedule a Dropp
+            </button>
+          </a>
         </div>
         <div id="DROPP">
           <img src={DROPP} alt="DROPP.DROPP" className="w-full" />
