@@ -49,7 +49,7 @@ function App() {
               Schedule a Dropp
             </button>
           </div>
-          <div className="">
+          <div className="mt-10">
             <img src={items} alt="items" className="" />
           </div>
         </main>
