@@ -1,3 +1,5 @@
+import React, { useEffect } from "react";
+import ReactGA from "react-ga";
 import logo from "./images/dropp_logo.svg";
 import items from "./images/items.svg";
 import plus from "./images/plus.svg";
@@ -18,7 +20,12 @@ import Jendol from "./images/jendol.svg";
 import Justrite from "./images/justrite.svg";
 import "./App.css";
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    ReactGA.initialize("G-EHK6CS7TX2");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <>
       {/* Dropp Banner */}
@@ -412,6 +419,6 @@ function App() {
       </section>
     </>
   );
-}
+};
 
 export default App;
