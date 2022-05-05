@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import logo from "./images/dropp_logo.svg";
 import items from "./images/items.svg";
 import plus from "./images/plus.svg";
@@ -23,7 +23,7 @@ import "./App.css";
 const App = () => {
   useEffect(() => {
     ReactGA.initialize("G-EHK6CS7TX2");
-    ReactGA.pageview(window.location.pathname + window.location.search);
+    ReactGA.send(window.location.pathname + window.location.search);
   }, []);
 
   return (
