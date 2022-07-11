@@ -52,6 +52,22 @@
   color: #e21d24;
 }
 
+.text_black1 {
+  color: #313130;
+}
+
+.text_secondary {
+  color: #6c6457;
+}
+
+.text_secondary2 {
+  color: #4a443a;
+}
+
+.text_gray {
+  color: #c5c7c8;
+}
+
 .hr_line {
   width: auto;
   opacity: 0.9;
@@ -101,6 +117,10 @@
     width: 405px;
     height: 407px;
   }
+
+  .testimonial_image {
+    margin-top: -2.5rem;
+  }
 }
 
 .h_484 {
@@ -109,9 +129,7 @@
 
 #DROPP {
   position: relative;
-  animation: linear infinite;
-  animation-name: run;
-  animation-duration: 12s;
+  animation: run 12s linear infinite;
 }
 
 @keyframes run {
@@ -123,5 +141,154 @@
   }
   100% {
     left: 100%;
+  }
+}
+
+.tech-slideshow .mover-1 {
+  animation: moveSlideshow 12s linear infinite;
+}
+.tech-slideshow .mover-2 {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  background-position: 0 -200px;
+  animation: moveSlideshow 15s linear infinite;
+}
+.tech-slideshow:hover .mover-2 {
+  opacity: 1;
+}
+
+@keyframes moveSlideshow {
+  100% {
+    transform: translateX(-66.6666%);
+  }
+}
+
+.border_primary {
+  border: 1px solid #06c16b;
+}
+
+.avail_br {
+  border-top: 1px solid #e3e5e5;
+  border-bottom: 1px solid #e3e5e5;
+}
+
+.header_bg {
+  background-image: linear-gradient(to right, #d4edcc, #ffe7d5);
+}
+
+.supermarkets_bg {
+  background-image: linear-gradient(#2a4a35, #142814);
+}
+
+.mt__50 {
+  margin-top: -50px;
+}
+
+.step_num {
+  font-size: 14rem;
+  line-height: 130%;
+}
+
+.text_yellow {
+  color: #fec828;
+}
+
+.border_green {
+  border-color: #3a6047;
+}
+
+.bg_green {
+  background-color: #3a6147;
+}
+
+.slideshow {
+  position: relative;
+  overflow: hidden;
+}
+.images {
+  background: url("./images/testimonials/afolabi.png");
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 300%;
+  animation: slideshow 10s linear infinite;
+}
+@keyframes slideshow {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -200%;
+  }
+}
+
+.logos-slideshow {
+  height: 64px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.logos-slideshow > div {
+  /* height: 200px; */
+  width: 2526px;
+  background: url("./images/slideshow/logos.png");
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transform: translate3d(0, 0, 0);
+}
+.logos-slideshow .mover-1 {
+  animation: moveSlideshow 12s linear infinite;
+}
+/* .logos-slideshow .mover-2 {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  background-position: 0 -200px;
+  animation: moveSlideshow 15s linear infinite;
+}
+.logos-slideshow:hover .mover-2 {
+  opacity: 1;
+} */
+
+.tech-slideshow {
+  height: 289.95px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.tech-slideshow > div {
+  /* height: 200px; */
+  width: 2526px;
+  background: url("./images/slideshow/Images.png");
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transform: translate3d(0, 0, 0);
+}
+.tech-slideshow .mover-1 {
+  animation: moveSlideshow 12s linear infinite;
+}
+/* .tech-slideshow .mover-2 {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  background-position: 0 -200px;
+  animation: moveSlideshow 15s linear infinite;
+} */
+/* .tech-slideshow:hover .mover-2 {
+  opacity: 1;
+} */
+
+@keyframes moveSlideshow {
+  100% {
+    transform: translateX(-66.6666%);
   }
 }
