@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ReactGA from "react-ga4";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import Login from "../components/Login";
 import NeedSomething from "../components/NeedSomething";
@@ -245,7 +244,7 @@ const Home = () => {
       {/* Footer */}
       <Footer logo={Images.logo} />
 
-      {/* <Login showModal={showModal} setShowModal={setShowModal} /> */}
+      <Login showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 };
