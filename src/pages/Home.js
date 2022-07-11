@@ -146,20 +146,20 @@ const steps = [
     title: `Create a shopping list. \n Very simple.`,
     description: `Fill your shopping list with everything from \n groceries to pharmacy essentials and more.`,
   },
-  {
-    id: 2,
-    image: Images.step02,
-    number: "02.",
-    title: `Have your shopping taken \ncare of by a Dropper.`,
-    description: `Forget to add something? Just send your \nDropper a message through the app.`,
-  },
-  {
-    id: 3,
-    image: Images.step03,
-    number: "03.",
-    title: `Get it when you \nneed it.`,
-    description: `Need an order delivered later? \nSchedule it for later.`,
-  },
+  // {
+  //   id: 2,
+  //   image: Images.step02,
+  //   number: "02.",
+  //   title: `Have your shopping taken \ncare of by a Dropper.`,
+  //   description: `Forget to add something? Just send your \nDropper a message through the app.`,
+  // },
+  // {
+  //   id: 3,
+  //   image: Images.step03,
+  //   number: "03.",
+  //   title: `Get it when you \nneed it.`,
+  //   description: `Need an order delivered later? \nSchedule it for later.`,
+  // },
 ];
 
 const businesses = [
