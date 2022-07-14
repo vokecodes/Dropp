@@ -14,13 +14,12 @@ const Header = ({ itemsImage, setShowModal }) => {
             Groceries <br /> delivered to <br /> your doorstep <br /> in hour.
           </h1>
           <p className="hidden lg:block my-7 font_regular text_black1 text-lg text-left">
-            We deliver groceries including fresh fruits and vegetables directly
-            to your home within 1hr and at supermarket prices.
+            We deliver groceries including fresh fruits & vegetables in organic
+            quality directly to your home in 1hr & at supermarket prices.
           </p>
           <p className="lg:hidden my-7 font_regular text_black1 text-lg text-center">
-            We deliver your groceries including fresh fruits and vegetables in
-            organic quality directly to your home. Within 1 hour and at
-            supermarket prices.
+            We deliver groceries including fresh fruits & vegetables in organic
+            quality directly to your home in 1hr & at supermarket prices.
           </p>
           <div className="text-center lg:text-left">
             <button className="w-60 font_bold py-3 button border border-transparent text-lg rounded-xl shadow-sm text-center text-white bg_primary">

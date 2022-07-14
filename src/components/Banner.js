@@ -40,20 +40,18 @@ const Banner = ({ bannerImage, businesses }) => {
           </h2>
           <div className="flex flex-row flex-wrap justify-between px-5 pt-5">
             {businesses?.map((business) => (
-              <>
+              <React.Fragment key={business.id}>
                 <img
-                  key={business.id}
                   src={business.image}
                   alt={business.title}
                   className="mb-5 hidden lg:block"
                 />
                 <img
-                  key={business.id}
                   src={business.mobileImage}
                   alt={business.title}
                   className="mb-5 lg:hidden"
                 />
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>

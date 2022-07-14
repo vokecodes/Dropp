@@ -129,7 +129,7 @@
 
 #DROPP {
   position: relative;
-  animation: run 12s linear infinite;
+  animation: slides 120s linear infinite;
   animation-direction: alternate;
 }
 
@@ -292,6 +292,32 @@
 @keyframes moveSlideshow {
   100% {
     transform: translateX(-66.6666%);
+  }
+}
+
+.brands {
+  animation-name: slides;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 80s;
+  animation-direction: reverse;
+  /* float: left; */
+}
+
+.galley {
+  animation-name: slides;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 120s;
+  /* float: left; */
+}
+
+@keyframes slides {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
   }
 }
 

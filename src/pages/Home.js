@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Login from "../components/Login";
 import NeedSomething from "../components/NeedSomething";
@@ -143,6 +143,8 @@ const galley = [
   Images.gImage7,
   Images.gImage8,
   Images.gImage9,
+  Images.gImage1,
+  Images.gImage2,
 ];
 
 const steps = [
@@ -200,35 +202,35 @@ const testimonials = [
     image: Images.afolabi,
   },
   {
-    id: 0,
+    id: 1,
     name: "Alex",
     message:
       "This is a game-changer for me, I have always been looking for a way to get rid of shopping because of my busy schedule. Dropp came in at the right time, especially now that my wife and I had our baby. I’m scheduling a Dropp again this week and the week to come and the one after. LOL",
     image: Images.alex,
   },
   {
-    id: 0,
+    id: 2,
     name: "Tobi",
     message:
       "A friend told me about Dropp and I could not believe it, until I scheduled a Dropp myself, it is a cool experience and the person that shopped for me was super nice. I’m recommending this to everybody I meet. ",
     image: Images.tobi,
   },
   {
-    id: 0,
+    id: 3,
     name: "Lolade",
     message:
       "My mother is quite old and it is very difficult for me to do her shopping for her because of my busy schedule. The first time I used Dropp I was skeptical about it, but right now I’m pretty much convinced and I’m using it for the fourth time. I would recommend Dropp over and over again.",
     image: Images.lolade,
   },
   {
-    id: 0,
+    id: 4,
     name: "Taiwo",
     message:
       "I just schedule a Dropp in the middle of the day, and boom the order is here in less than an hour, I’m surprised how they do the magic but it works and it matches my remote work lifestyle. Go schedule a Dropp and see for yourself.",
     image: Images.taiwo,
   },
   {
-    id: 0,
+    id: 5,
     name: "Victor",
     message:
       "Oh my God, I have been looking for a platform like this all my life since I got to Lagos, I’m quite lazy with shopping and sometimes have to force myself to do it, but when I discovered Dropp, it was like they lifted the weight of the world off my shoulders, sharing this with all my family members right now.",
@@ -241,6 +243,35 @@ const Home = () => {
   //   ReactGA.initialize("G-EHK6CS7TX2");
   //   ReactGA.send(window.location.pathname + window.location.search);
   // }, []);
+
+  const [step1Class, setStep1Class] = useState(false);
+  const [step2Class, setStep2Class] = useState(false);
+  const [step3Class, setStep3Class] = useState(false);
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", pop);
+
+  //   return () => window.removeEventListener("scroll", pop);
+  // }, []);
+
+  const pop = () => {
+    if (window.scrollY > 2500) {
+      // setX(classes.Swipe);
+      setStep1Class(true);
+    }
+
+    if (window.scrollY > 2600) {
+      // setNavColor('red');
+      setStep2Class(true);
+      console.log("2600");
+    }
+
+    if (window.scrollY > 2700) {
+      // setNavColor('red');
+      setStep3Class(true);
+      console.log("2700");
+    }
+  };
 
   const [showModal, setShowModal] = useState(false);
 
@@ -256,7 +287,12 @@ const Home = () => {
       <Supermarkets supermartkets={supermartkets} galley={galley} />
 
       {/* Steps */}
-      <Steps steps={steps} />
+      <Steps
+        steps={steps}
+        step1Class={step1Class}
+        step2Class={step2Class}
+        step3Class={setStep3Class}
+      />
 
       {/* Banner */}
       <Banner bannerImage={Images.boy} businesses={businesses} />

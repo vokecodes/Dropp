@@ -35,8 +35,10 @@ const Testimonials = ({ testimonials, dropp_logo }) => {
           Schedule a Dropp!
         </button>
       </div>
-      <div id="DROPP">
-        <img src={dropp_logo} alt="DROPP.DROPP" className="w-full" />
+      <div className="overflow-hidden">
+        <div id="DROPP">
+          <img src={dropp_logo} alt="DROPP.DROPP" className="w-full" />
+        </div>
       </div>
     </section>
   );
