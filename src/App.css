@@ -130,6 +130,7 @@
 #DROPP {
   position: relative;
   animation: run 12s linear infinite;
+  animation-direction: alternate;
 }
 
 @keyframes run {
@@ -141,25 +142,6 @@
   }
   100% {
     left: 100%;
-  }
-}
-
-.tech-slideshow .mover-1 {
-  animation: moveSlideshow 12s linear infinite;
-}
-.tech-slideshow .mover-2 {
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
-  background-position: 0 -200px;
-  animation: moveSlideshow 15s linear infinite;
-}
-.tech-slideshow:hover .mover-2 {
-  opacity: 1;
-}
-
-@keyframes moveSlideshow {
-  100% {
-    transform: translateX(-66.6666%);
   }
 }
 
@@ -219,7 +201,7 @@
   background-color: #3a6147;
 }
 
-.slideshow {
+/* .slideshow {
   position: relative;
   overflow: hidden;
 }
@@ -239,7 +221,7 @@
   100% {
     left: -200%;
   }
-}
+} */
 
 .logos-slideshow {
   height: 64px;
