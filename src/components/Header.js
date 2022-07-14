@@ -22,7 +22,7 @@ const Header = ({ itemsImage, setShowModal }) => {
             organic quality directly to your home. Within 1 hour and at
             supermarket prices.
           </p>
-          <div className="text-center">
+          <div className="text-center lg:text-left">
             <button className="w-60 font_bold py-3 button border border-transparent text-lg rounded-xl shadow-sm text-center text-white bg_primary">
               Try Dropp now!
             </button>
