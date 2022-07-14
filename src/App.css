@@ -262,6 +262,7 @@
 }
 .logos-slideshow .mover-1 {
   animation: moveSlideshow 12s linear infinite;
+  animation-direction: alternate-reverse;
 }
 /* .logos-slideshow .mover-2 {
   opacity: 0;
@@ -294,6 +295,7 @@
 }
 .tech-slideshow .mover-1 {
   animation: moveSlideshow 12s linear infinite;
+  animation-direction: alternate;
 }
 /* .tech-slideshow .mover-2 {
   opacity: 0;
