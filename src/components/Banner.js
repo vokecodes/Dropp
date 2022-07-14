@@ -35,7 +35,7 @@ const Banner = ({ bannerImage, businesses }) => {
             marginTop: "-180px",
           }}
         >
-          <h2 className="text-2xl lg:text-3xl font_medium text_gray text-center">
+          <h2 className="text-2xl lg:text-3xl px-5 font_medium text_gray text-center">
             Trusted by some of the notable businesses around.
           </h2>
           <div className="flex flex-row flex-wrap justify-between px-5 pt-5">
