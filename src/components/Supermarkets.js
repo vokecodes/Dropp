@@ -27,7 +27,7 @@ const Supermarkets = ({ supermartkets, galley }) => {
             ))}
           </div> */}
         </div>
-        <div className="pt-14">
+        <div className="pt-14 overflow-hidden">
           <div class="logos-slideshow">
             <div class="mover-1"></div>
           </div>
