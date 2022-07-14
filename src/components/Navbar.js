@@ -4,22 +4,22 @@ import { Images } from "../config/images";
 
 const Navbar = ({ setShowModal }) => {
   return (
-    <nav className="w-4/5 mx-auto flex justify-between py-10">
+    <nav className="w-4/5 lg:w-3/5 mx-auto flex justify-between py-10">
       <Link to="/">
         <span className="sr-only">Dropp</span>
         <img className="w-48" src={Images.logo} alt="dropp_logo" />
       </Link>
-      {/* <div className="flex">
+      <div className="lg:flex">
         <button
-          className="w-52 font_bold py-3 border_primary border-transparent text-sm rounded-xl shadow-sm"
-          onClick={() => setShowModal(true)}
+          className="hidden lg:block w-52 font_bold py-3 border_black text_black2 border-transparent text-sm rounded-xl shadow-sm"
+          // onClick={() => setShowModal(true)}
         >
           Become a Dropper
         </button>
-        <button className="w-40 ml-5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
+        <button className="w-24 lg:w-40 ml-5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary">
           Sign up
         </button>
-      </div> */}
+      </div>
     </nav>
   );
 };

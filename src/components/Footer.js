@@ -2,8 +2,8 @@ import React from "react";
 
 const Footer = ({ logo }) => {
   return (
-    <section className="bg-white py-10">
-      <div className="lg:mx-28 mx-10 mt-10 lg:mt-0">
+    <section className="bg-white w-3/5 mx-auto py-10">
+      <div className="mt-10 lg:mt-0">
         <div className="lg:flex mt-16">
           <div className="lg:flex-1">
             <img className="w-48" src={logo} alt="dropp_logo" />

@@ -14,41 +14,49 @@ const items = [
     id: 0,
     title: "Fruits",
     image: Images.fruits,
+    mobileImage: Images.fruits_mobile,
   },
   {
     id: 1,
     title: "Drinks",
     image: Images.drinks,
+    mobileImage: Images.drinks_mobile,
   },
   {
     id: 2,
     title: "Canned food",
     image: Images.canned_food,
+    mobileImage: Images.canned_food_mobile,
   },
   {
     id: 3,
     title: "Snacks",
     image: Images.snacks,
+    mobileImage: Images.snacks_mobile,
   },
   {
     id: 4,
     title: "Bread & Bakery",
     image: Images.bread_bakery,
+    mobileImage: Images.bread_bakery_mobile,
   },
   {
     id: 5,
     title: "Spices",
     image: Images.spices,
+    mobileImage: Images.spices_mobile,
   },
   {
     id: 6,
     title: "Condiments",
     image: Images.condiments,
+    mobileImage: Images.condiments_mobile,
   },
   {
     id: 7,
     title: "More",
     image: Images.more,
+    mobileImage: Images.more_mobile,
   },
 ];
 
@@ -162,10 +170,25 @@ const steps = [
 ];
 
 const businesses = [
-  { id: 0, title: "Paga", image: Images.paga },
-  { id: 1, title: "Eight Studio", image: Images.studio8 },
-  { id: 2, title: "Vvend", image: Images.vvend },
-  { id: 3, title: "Remotely", image: Images.remotely },
+  { id: 0, title: "Paga", image: Images.paga, mobileImage: Images.paga_mobile },
+  {
+    id: 1,
+    title: "Eight Studio",
+    image: Images.studio8,
+    mobileImage: Images.studio8_mobile,
+  },
+  {
+    id: 2,
+    title: "Vvend",
+    image: Images.vvend,
+    mobileImage: Images.vvend_mobile,
+  },
+  {
+    id: 3,
+    title: "Remotely",
+    image: Images.remotely,
+    mobileImage: Images.remotely_mobile,
+  },
 ];
 
 const testimonials = [
