@@ -291,7 +291,7 @@ const Home = () => {
         steps={steps}
         step1Class={step1Class}
         step2Class={step2Class}
-        step3Class={setStep3Class}
+        step3Class={step3Class}
       />
 
       {/* Banner */}
