@@ -4,7 +4,7 @@ import { Images } from "../config/images";
 
 const Navbar = ({ setShowModal }) => {
   return (
-    <nav className="w-4/5 lg:w-3/5 mx-auto flex justify-between py-10">
+    <nav className="w-4/5 lg:w-4/6 mx-auto flex justify-between py-10">
       <Link to="/">
         <span className="sr-only">Dropp</span>
         <img className="w-48" src={Images.logo} alt="dropp_logo" />

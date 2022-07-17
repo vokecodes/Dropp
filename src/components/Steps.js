@@ -7,10 +7,10 @@ const Steps = ({ step1Class, step2Class, step3Class }) => {
     <section className="header_bg">
       <div className="w-4/5 lg:w-3/5 mx-auto pt-40 lg:pt-12">
         <div className="lg:mt-24">
-          <h1 className="lg:text-6xl text-2xl font_bold text-center text_secondary2 mb-5">
+          <h1 className="lg:text-6xl text-2xl font_bold text-center text_black1 mb-5">
             Dropp it in few clicks.
           </h1>
-          <p className="text-lg lg:text-2xl font_medium text-center text_secondary2">
+          <p className="text-lg lg:text-2xl font_medium text-center #313130">
             Our WhatsApp bot solution enables you to shop, track and pay in
             minutes.
           </p>

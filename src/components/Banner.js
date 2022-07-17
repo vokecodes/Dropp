@@ -2,11 +2,11 @@ import React from "react";
 
 const Banner = ({ bannerImage, businesses }) => {
   return (
-    <section className="gradient_bg">
+    <section className="header_bg">
       <div className="w-4/5 lg:w-3/5 mx-auto">
         <div className="lg:flex lg:flex-row pt-32 pb-64">
           <div className="">
-            <h1 className="hidden lg:block lg:text-6xl text-4xl font_bold">
+            <h1 className="hidden lg:block lg:text-4xl text-2xl font_bold">
               Love to shop? <br /> Join our growing <br /> network of <br />
               Droppers and <br />
               earn extra cash <br />
