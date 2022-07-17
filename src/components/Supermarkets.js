@@ -4,7 +4,7 @@ const Supermarkets = ({ supermartkets, galley }) => {
   return (
     <section>
       <div className="supermarkets_bg pt-20 pb-60">
-        <div className="w-4/5 mx-auto">
+        <div className="w-4/6 mx-auto">
           <h1 className="lg:text-6xl text-4xl text-white font_bold text-center">
             Shop from over 1000+ stores and supermarkets.
           </h1>

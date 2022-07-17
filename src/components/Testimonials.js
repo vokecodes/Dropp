@@ -7,7 +7,7 @@ const Testimonials = ({ testimonials, dropp_logo }) => {
         See what people are saying!
       </h1>
 
-      <div className="w-4/5 lg:w-3/5 mx-auto">
+      <div className="w-4/5 lg:w-4/6 mx-auto">
         <div className="flex flex-row flex-wrap justify-center">
           {testimonials?.map((testimonial) => (
             <div

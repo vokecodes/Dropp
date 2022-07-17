@@ -2,7 +2,7 @@ import React from "react";
 
 const NeedSomething = ({ items }) => {
   return (
-    <section className="w-4/5 lg:w-3/5 mx-auto pt-5 pb-20">
+    <section className="w-4/5 lg:w-4/6 mx-auto pt-5 pb-20">
       <div className="flex-1 lg:mt-20">
         <h1 className="lg:text-6xl text-4xl font_bold text-center text_secondary2 mb-5">
           Need something? Just Dropp it!

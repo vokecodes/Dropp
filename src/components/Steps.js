@@ -5,7 +5,7 @@ const Steps = ({ step1Class, step2Class, step3Class }) => {
   console.log("eikmf", step1Class);
   return (
     <section className="header_bg">
-      <div className="w-4/5 lg:w-3/5 mx-auto pt-40 lg:pt-12">
+      <div className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12">
         <div className="lg:mt-24">
           <h1 className="lg:text-6xl text-2xl font_bold text-center text_black1 mb-5">
             Dropp it in few clicks.

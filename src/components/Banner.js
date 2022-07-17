@@ -3,7 +3,7 @@ import React from "react";
 const Banner = ({ bannerImage, businesses }) => {
   return (
     <section className="header_bg">
-      <div className="w-4/5 lg:w-3/5 mx-auto">
+      <div className="w-4/5 lg:w-4/6 mx-auto">
         <div className="lg:flex lg:flex-row pt-32 pb-64">
           <div className="">
             <h1 className="hidden lg:block lg:text-4xl text-2xl font_bold">
