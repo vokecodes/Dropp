@@ -14,7 +14,8 @@ const Header = ({ itemsImage, setShowModal }) => {
             Groceries <br /> delivered to <br /> your doorstep <br /> in hour.
           </h1>
           <p className="hidden lg:block my-7 font_regular text_black1 text-lg text-left">
-            We deliver groceries including fresh fruits & vegetables in organic
+            We deliver groceries including fresh fruits & vegetables in organic{" "}
+            <br />
             quality directly to your home in 1hr & at supermarket prices.
           </p>
           <p className="lg:hidden my-7 font_regular text_black1 text-lg text-center">
