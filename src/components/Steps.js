@@ -6,16 +6,16 @@ const Steps = ({ step1Class, step2Class, step3Class }) => {
   return (
     <section className="header_bg">
       <div className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12">
-        <div className="lg:mt-24">
+        <div className="lg:mt-32">
           <h1 className="lg:text-6xl text-2xl font_bold text-center text_black1 mb-5">
             Dropp it in few clicks.
           </h1>
-          <p className="text-lg lg:text-2xl font_medium text-center #313130">
+          <p className="text-lg lg:text-2xl font_medium text-center text_black1">
             Our WhatsApp bot solution enables you to shop, track and pay in
             minutes.
           </p>
         </div>
-        <div className="mt-28">
+        <div className="mt-20">
           {/* {steps?.map((step) => (
             <div key={step.id} className="lg:flex lg:flex-row">
               <div className="lg:w-1/2">
@@ -66,7 +66,7 @@ const Steps = ({ step1Class, step2Class, step3Class }) => {
             </div>
           </div>
 
-          <div className={`${step2Class ? "hidden" : "block"}`}>
+          {/* <div className={`${step2Class ? "hidden" : "block"}`}>
             <div className="lg:flex lg:flex-row">
               <div className="lg:w-1/2">
                 <img
@@ -91,9 +91,9 @@ const Steps = ({ step1Class, step2Class, step3Class }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className={`${step3Class ? "hidden" : "block"}`}>
+          {/* <div className={`${step3Class ? "hidden" : "block"}`}>
             <div className="lg:flex lg:flex-row">
               <div className="lg:w-1/2">
                 <img src={Images.step03} alt={`Get it when you \nneed it.`} />
@@ -115,7 +115,7 @@ const Steps = ({ step1Class, step2Class, step3Class }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

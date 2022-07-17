@@ -4,10 +4,10 @@ const NeedSomething = ({ items }) => {
   return (
     <section className="w-4/5 lg:w-4/6 mx-auto pt-5 pb-20">
       <div className="flex-1 lg:mt-20">
-        <h1 className="lg:text-6xl text-4xl font_bold text-center text_secondary2 mb-5">
+        <h1 className="lg:text-6xl text-4xl font_bold text-center text_black1 mb-5">
           Need something? Just Dropp it!
         </h1>
-        <p className="text-2xl font_medium text-center text_secondary2">
+        <p className="text-2xl font_medium text-center text_black1">
           Explore our assortment of fresh fruits, vegetables, bread and more.
         </p>
       </div>

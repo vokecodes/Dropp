@@ -31,7 +31,7 @@ const Testimonials = ({ testimonials, dropp_logo }) => {
       </div>
 
       <div className="my-20 flex justify-center">
-        <button className="w-80 font_bold py-3 button text-xl rounded-xl shadow-sm text-white bg_primary">
+        <button className="w-80 font_bold py-3 button text-lg rounded-xl shadow-sm text-white bg_primary">
           Schedule a Dropp!
         </button>
       </div>

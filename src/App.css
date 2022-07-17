@@ -129,7 +129,7 @@
 
 #DROPP {
   position: relative;
-  animation: slides 120s linear infinite;
+  animation: slides 60s linear infinite;
   animation-direction: alternate;
 }
 
@@ -299,7 +299,7 @@
   animation-name: slides;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  animation-duration: 80s;
+  animation-duration: 60s;
   animation-direction: reverse;
   /* float: left; */
 }
@@ -308,7 +308,7 @@
   animation-name: slides;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  animation-duration: 120s;
+  animation-duration: 60s;
   /* float: left; */
 }
 
@@ -321,13 +321,17 @@
   }
 }
 
-@media (min-width: 1280px) and (max-width: 1860px) {
+/* @media (min-width: 1280px) and (max-width: 1860px) {
   .w_550 {
     width: 550px;
   }
-}
+} */
 
 .w_300 {
   width: 310px;
   height: 340px;
+}
+
+.w_550 {
+  width: 550px;
 }

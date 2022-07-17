@@ -145,6 +145,13 @@ const galley = [
   Images.gImage9,
   Images.gImage1,
   Images.gImage2,
+  Images.gImage3,
+  Images.gImage4,
+  Images.gImage5,
+  Images.gImage6,
+  Images.gImage7,
+  Images.gImage8,
+  Images.gImage9,
 ];
 
 const steps = [
@@ -260,13 +267,13 @@ const Home = () => {
       setStep1Class(true);
     }
 
-    if (window.scrollY > 2600) {
+    if (window.scrollY > 2700) {
       // setNavColor('red');
       setStep2Class(true);
       console.log("2600");
     }
 
-    if (window.scrollY > 2700) {
+    if (window.scrollY > 2800) {
       // setNavColor('red');
       setStep3Class(true);
       console.log("2700");
