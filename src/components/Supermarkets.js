@@ -6,7 +6,7 @@ const Supermarkets = ({ supermartkets, galley }) => {
       <div className="supermarkets_bg pt-20 pb-60">
         <div className="w-4/6 mx-auto">
           <h1 className="lg:text-6xl text-4xl text-white font_bold text-center">
-            Shop from over 1000+ stores and supermarkets.
+            Shop from over 1000 stores and supermarkets.
           </h1>
         </div>
         <div className="pt-14 overflow-hidden">
