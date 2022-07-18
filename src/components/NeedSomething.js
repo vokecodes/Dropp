@@ -7,11 +7,11 @@ const NeedSomething = ({ items }) => {
         <h1 className="lg:text-6xl text-4xl font_bold text-center text_black1 mb-5">
           Need something? Just Dropp it!
         </h1>
-        <p className="text-2xl font_medium text-center text_black1">
+        <p className="text-lg lg:text-2xl font_medium text-center text_black1">
           Explore our assortment of fresh fruits, vegetables, bread and more.
         </p>
       </div>
-      <div className="my-10 flex flex-row flex-wrap justify-around">
+      <div className="my-10 flex flex-row flex-wrap justify-center lg:justify-around">
         {items?.map((item) => (
           <div className="" key={item.id}>
             <img
@@ -22,7 +22,7 @@ const NeedSomething = ({ items }) => {
             <img
               src={item.mobileImage}
               alt={item.tile}
-              className="lg:hidden mx-auto"
+              className="lg:hidden mx-auto mr-5"
             />
             <p className="font_regular text-sm lg:text-lg text-black text-center my-3">
               {item.title}

@@ -186,7 +186,14 @@
 
 .step_num {
   font-size: 14rem;
-  line-height: 130%;
+  line-height: 80%;
+}
+
+@media (min-width: 1869px) and (max-width: 2050px) {
+  .step_num {
+    /* font-size: 14rem; */
+    line-height: 130%;
+  }
 }
 
 .text_yellow {

@@ -23,7 +23,7 @@ const Header = ({ itemsImage, setShowModal }) => {
             quality directly to your home in 1hr & at supermarket prices.
           </p>
           <div className="text-center lg:text-left">
-            <button className="w-60 font_bold py-3 button border border-transparent text-lg rounded-xl shadow-sm text-center text-white bg_primary">
+            <button className="w-80 lg:w-60 font_bold py-5 button border border-transparent text-lg rounded-xl shadow-sm text-center text-white bg_primary">
               Try Dropp now!
             </button>
           </div>

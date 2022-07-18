@@ -4,8 +4,11 @@ import { Images } from "../config/images";
 const Testimonials = ({}) => {
   return (
     <section className="pt-40 lg:pt-32 pb-10 supermarkets_bg">
-      <h1 className="my-20 text-6xl text-white font_bold text-center">
+      <h1 className="hidden lg:block my-20 text-6xl text-white font_bold text-center">
         See what people are saying!
+      </h1>
+      <h1 className="lg:hidden my-20 text-4xl text-white font_bold text-center">
+        See what people <br /> are saying!
       </h1>
 
       {/* <div className="w-4/5 lg:w-4/6 mx-auto">
@@ -30,9 +33,9 @@ const Testimonials = ({}) => {
           ))}
         </div>
       </div> */}
-      <div className="w-45 lg:w-4/6 mx-auto lg:flex lg:flex-row">
+      <div className="w-45 lg:w-4/6 mx-auto lg:flex lg:flex-row justify-center">
         <div className="mx-3">
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center testimonial_card">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.afolabi}
@@ -50,7 +53,7 @@ const Testimonials = ({}) => {
               recommend Dropp 1001 times.
             </p>
           </div>
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.lolade}
@@ -109,7 +112,7 @@ const Testimonials = ({}) => {
           </div>
         </div>
         <div className="mx-3">
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.tobi}
@@ -127,7 +130,7 @@ const Testimonials = ({}) => {
               I&apos;m recommending this to everybody I meet.
             </p>
           </div>
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.victor}

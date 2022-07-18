@@ -299,10 +299,12 @@ const Home = () => {
         step1Class={step1Class}
         step2Class={step2Class}
         step3Class={step3Class}
+        bannerImage={Images.boy}
+        businesses={businesses}
       />
 
       {/* Banner */}
-      <Banner bannerImage={Images.boy} businesses={businesses} />
+      {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
 
       {/* Testimonials */}
       <Testimonials />
