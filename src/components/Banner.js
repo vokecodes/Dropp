@@ -23,7 +23,7 @@ const Banner = ({ bannerImage, businesses }) => {
               Become a Dropper today!
             </button>
           </div>
-          <div className="w-1/2">
+          <div className="w-full lg:w-1/2">
             <img src={bannerImage} alt="items" />
           </div>
         </div>

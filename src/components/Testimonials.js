@@ -50,7 +50,7 @@ const Testimonials = ({}) => {
               recommend Dropp 1001 times.
             </p>
           </div>
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 testimonial_card">
+          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.lolade}
@@ -71,7 +71,7 @@ const Testimonials = ({}) => {
           </div>
         </div>
         <div className="mx-3">
-          <div className="bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0 testimonial_card">
+          <div className="bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.alex}
@@ -91,7 +91,7 @@ const Testimonials = ({}) => {
               the one after. LOL
             </p>
           </div>
-          <div className="bg-white px-10 py-10 rounded-2xl items-center mt-5 testimonial_card">
+          <div className="bg-white px-10 py-10 rounded-2xl items-center mt-5">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.taiwo}
@@ -109,7 +109,7 @@ const Testimonials = ({}) => {
           </div>
         </div>
         <div className="mx-3">
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center testimonial_card">
+          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.tobi}
@@ -127,7 +127,7 @@ const Testimonials = ({}) => {
               I&apos;m recommending this to everybody I meet.
             </p>
           </div>
-          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 testimonial_card">
+          <div className="w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.victor}
