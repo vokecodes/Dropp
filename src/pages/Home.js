@@ -305,7 +305,7 @@ const Home = () => {
       <Banner bannerImage={Images.boy} businesses={businesses} />
 
       {/* Testimonials */}
-      <Testimonials testimonials={testimonials} dropp_logo={Images.DROPP} />
+      <Testimonials />
 
       {/* Footer */}
       <Footer logo={Images.logo} />

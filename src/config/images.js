@@ -4,7 +4,7 @@ export const Images = {
   plus: require("../images/plus.svg").default,
   check: require("../images/check.svg").default,
   location: require("../images/location.svg").default,
-  DROPP: require("../images/DROPP.DROPP.svg").default,
+  DROPP: require("../images/dropp_vector.svg").default,
   afolabi: require("../images/testimonials/afolabi.png"),
   alex: require("../images/testimonials/alex.png"),
   tobi: require("../images/testimonials/tobi.png"),

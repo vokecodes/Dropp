@@ -86,9 +86,9 @@
 }
 
 @media (min-width: 1869px) and (max-width: 2050px) {
-  .testimonial_card {
+  /* .testimonial_card {
     width: 545px;
-  }
+  } */
   .hr_line {
     width: 625.18px;
   }
@@ -98,9 +98,9 @@
 }
 
 @media (min-width: 2056px) {
-  .testimonial_card {
+  /* .testimonial_card {
     width: 575px;
-  }
+  } */
   .hr_line {
     width: 625.18px;
   }
@@ -113,10 +113,10 @@
   .h_601 {
     height: 601px;
   }
-  .testimonial_card {
+  /* .testimonial_card {
     width: 405px;
     height: 407px;
-  }
+  } */
 }
 
 .testimonial_image {

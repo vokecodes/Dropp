@@ -45,14 +45,14 @@ const Banner = ({ bannerImage, businesses }) => {
                   <img
                     src={business.image}
                     alt={business.title}
-                    className={`hidden lg:block ${
+                    className={`w-36 hidden lg:block ${
                       businesses.length === i + 1 ? "" : "mr-12"
                     }`}
                   />
                   <img
                     src={business.mobileImage}
                     alt={business.title}
-                    className="lg:hidden mb-5"
+                    className="w-36 lg:hidden mb-5"
                   />
                 </React.Fragment>
               );
