@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import ReactGA from "react-ga4";
 import Header from "../components/Header";
 import Login from "../components/Login";
 import NeedSomething from "../components/NeedSomething";
 import Supermarkets from "../components/Supermarkets";
 import Steps from "../components/Steps";
-import Banner from "../components/Banner";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import { Images } from "../config/images";
@@ -200,60 +200,15 @@ const businesses = [
   },
 ];
 
-const testimonials = [
-  {
-    id: 0,
-    name: "Afolabi",
-    message:
-      "Dropp is everything I have always needed to complement my busy life. They do all the shopping for you without any hiccup. I will recommend Dropp 1001 times.",
-    image: Images.afolabi,
-  },
-  {
-    id: 1,
-    name: "Alex",
-    message:
-      "This is a game-changer for me, I have always been looking for a way to get rid of shopping because of my busy schedule. Dropp came in at the right time, especially now that my wife and I had our baby. I’m scheduling a Dropp again this week and the week to come and the one after. LOL",
-    image: Images.alex,
-  },
-  {
-    id: 2,
-    name: "Tobi",
-    message:
-      "A friend told me about Dropp and I could not believe it, until I scheduled a Dropp myself, it is a cool experience and the person that shopped for me was super nice. I’m recommending this to everybody I meet. ",
-    image: Images.tobi,
-  },
-  {
-    id: 3,
-    name: "Lolade",
-    message:
-      "My mother is quite old and it is very difficult for me to do her shopping for her because of my busy schedule. The first time I used Dropp I was skeptical about it, but right now I’m pretty much convinced and I’m using it for the fourth time. I would recommend Dropp over and over again.",
-    image: Images.lolade,
-  },
-  {
-    id: 4,
-    name: "Taiwo",
-    message:
-      "I just schedule a Dropp in the middle of the day, and boom the order is here in less than an hour, I’m surprised how they do the magic but it works and it matches my remote work lifestyle. Go schedule a Dropp and see for yourself.",
-    image: Images.taiwo,
-  },
-  {
-    id: 5,
-    name: "Victor",
-    message:
-      "Oh my God, I have been looking for a platform like this all my life since I got to Lagos, I’m quite lazy with shopping and sometimes have to force myself to do it, but when I discovered Dropp, it was like they lifted the weight of the world off my shoulders, sharing this with all my family members right now.",
-    image: Images.victor,
-  },
-];
-
 const Home = () => {
-  // useEffect(() => {
-  //   ReactGA.initialize("G-EHK6CS7TX2");
-  //   ReactGA.send(window.location.pathname + window.location.search);
-  // }, []);
+  useEffect(() => {
+    ReactGA.initialize("G-EHK6CS7TX2");
+    ReactGA.send(window.location.pathname + window.location.search);
+  }, []);
 
-  const [step1Class, setStep1Class] = useState(false);
-  const [step2Class, setStep2Class] = useState(false);
-  const [step3Class, setStep3Class] = useState(false);
+  const [step1Class] = useState(false);
+  const [step2Class] = useState(false);
+  const [step3Class] = useState(false);
 
   // useEffect(() => {
   //   window.addEventListener("scroll", pop);
@@ -261,24 +216,24 @@ const Home = () => {
   //   return () => window.removeEventListener("scroll", pop);
   // }, []);
 
-  const pop = () => {
-    if (window.scrollY > 2500) {
-      // setX(classes.Swipe);
-      setStep1Class(true);
-    }
+  // const pop = () => {
+  //   if (window.scrollY > 2500) {
+  //     // setX(classes.Swipe);
+  //     setStep1Class(true);
+  //   }
 
-    if (window.scrollY > 2700) {
-      // setNavColor('red');
-      setStep2Class(true);
-      console.log("2600");
-    }
+  //   if (window.scrollY > 2700) {
+  //     // setNavColor('red');
+  //     setStep2Class(true);
+  //     console.log("2600");
+  //   }
 
-    if (window.scrollY > 2800) {
-      // setNavColor('red');
-      setStep3Class(true);
-      console.log("2700");
-    }
-  };
+  //   if (window.scrollY > 2800) {
+  //     // setNavColor('red');
+  //     setStep3Class(true);
+  //     console.log("2700");
+  //   }
+  // };
 
   const [showModal, setShowModal] = useState(false);
 
