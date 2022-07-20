@@ -169,7 +169,11 @@ const Steps = ({
             </div>
           </div>
           <div className="w-full lg:w-1/2">
-            <img src={bannerImage} alt="items" />
+            <img
+              src={bannerImage}
+              alt="items"
+              className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 duration-300"
+            />
           </div>
         </div>
       </div>

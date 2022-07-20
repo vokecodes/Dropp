@@ -35,75 +35,75 @@ const Testimonials = ({}) => {
       </div> */}
       <div className="w-45 lg:w-4/6 mx-auto lg:flex lg:flex-row justify-center">
         <div className="mx-3">
-          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center transition ease-in-out delay-150 hover:scale-105 duration-300">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.afolabi}
-                className="h-18 w-18 rounded-full"
+                className="h-16 w-16 rounded-full"
                 alt="afolabi"
               />
-              <p className="font_bold text-2xl text-black ml-5">Afolabi</p>
+              <p className="font_bold text-2xl text_black1 ml-5">Afolabi</p>
             </div>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text_black1">
               Dropp is everything I have always needed to complement my busy
               life.
             </p>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text_black1">
               They do all the shopping for you without any hiccup. I will
               recommend Dropp 1001 times.
             </p>
           </div>
-          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 transition ease-in-out delay-150 hover:scale-105 duration-30">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.lolade}
-                className="h-18 w-18 rounded-full"
+                className="h-16 w-16 rounded-full"
                 alt="lolade"
               />
-              <p className="font_bold text-2xl text-black ml-5">Lolade</p>
+              <p className="font_bold text-2xl text_black1 ml-5">Lolade</p>
             </div>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text_black1">
               My mother is quite old and it is very difficult for me to do her
               shopping for her because of my busy schedule. The first time I
               used Dropp I was skeptical about it, but right now I&apos;m pretty
               much convinced and I&apos;m using it for the fourth time.
             </p>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text-black">
               I would recommend Dropp over and over again.
             </p>
           </div>
         </div>
         <div className="mx-3">
-          <div className="bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0 transition ease-in-out delay-150 hover:scale-105 duration-30">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.alex}
-                className="h-18 w-18 rounded-full"
+                className="h-16 w-16 rounded-full"
                 alt="alex"
               />
-              <p className="font_bold text-2xl text-black ml-5">Alex</p>
+              <p className="font_bold text-2xl text_black1 ml-5">Alex</p>
             </div>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text_black1">
               This is a game-changer for me, I have always been looking for a
               way to get rid of shopping because of my busy schedule. Dropp came
               in at the right time, especially now that my wife and I had our
               baby.
             </p>
-            <p className="font_regular text-lg text-black mt-5">
+            <p className="font_regular text-base text_black1 mt-5">
               I’m scheduling a Dropp again this week and the week to come and
               the one after. LOL
             </p>
           </div>
-          <div className="bg-white px-10 py-10 rounded-2xl items-center mt-5">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 transition ease-in-out delay-150 hover:scale-105 duration-30">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.taiwo}
-                className="h-18 w-18 rounded-full"
+                className="h-16 w-16 rounded-full"
                 alt="taiwo"
               />
-              <p className="font_bold text-2xl text-black ml-5">Taiwo</p>
+              <p className="font_bold text-2xl text_black1 ml-5">Taiwo</p>
             </div>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text_black1">
               I just schedule a Dropp in the middle of the day, and boom the
               order is here in less than an hour, I&apos;m surprised how they do
               the magic but it works and it matches my remote work lifestyle. Go
@@ -112,34 +112,34 @@ const Testimonials = ({}) => {
           </div>
         </div>
         <div className="mx-3">
-          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 lg:mt-0 transition ease-in-out delay-150 hover:scale-105 duration-30">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.tobi}
-                className="h-18 w-18 rounded-full"
+                className="h-16 w-16 rounded-full"
                 alt="tobi"
               />
-              <p className="font_bold text-2xl text-black ml-5">Tobi</p>
+              <p className="font_bold text-2xl text_black1 ml-5">Tobi</p>
             </div>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text_black1">
               A friend told me about Dropp and I could not believe it, until I
               scheduled a Dropp myself, it is a cool experience and the person
               that shopped for me was super nice.
             </p>
-            <p className="font_regular text-lg text-black mt-2">
+            <p className="font_regular text-lg text_black1 mt-2">
               I&apos;m recommending this to everybody I meet.
             </p>
           </div>
-          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5">
+          <div className="lg:w-96 bg-white px-10 py-10 rounded-2xl items-center mt-5 transition ease-in-out delay-150 hover:scale-105 duration-30">
             <div className="flex flex-row items-center mb-8">
               <img
                 src={Images.victor}
-                className="h-18 w-18 rounded-full"
+                className="h-16 w-16 rounded-full"
                 alt="victor"
               />
-              <p className="font_bold text-2xl text-black ml-5">Victor</p>
+              <p className="font_bold text-2xl text_black1 ml-5">Victor</p>
             </div>
-            <p className="font_regular text-lg text-black">
+            <p className="font_regular text-base text-black">
               Oh my God, I have been looking for a platform like this all my
               life since I got to Lagos, I&apos;m quite lazy with shopping and
               sometimes have to force myself to do it, but when I discovered
