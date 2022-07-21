@@ -7,7 +7,7 @@ export const Images = {
   DROPP: require("../images/dropp_vector.svg").default,
   afolabi: require("../images/testimonials/afolabi.png"),
   alex: require("../images/testimonials/alex.png"),
-  tobi: require("../images/testimonials/tobi.png"),
+  yetunde: require("../images/testimonials/yetunde.png"),
   lolade: require("../images/testimonials/lolade.png"),
   taiwo: require("../images/testimonials/taiwo.png"),
   victor: require("../images/testimonials/victor.png"),

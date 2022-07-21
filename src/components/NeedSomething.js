@@ -33,7 +33,10 @@ const NeedSomething = ({ items }) => {
 
       <div className="mt-16 text-center">
         <a href="#stores">
-          <button className="w-80 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+          <button
+            className="w-80 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary"
+            onClick={() => window.open("https://wa.me/message/YKVHYMI6AXGUC1")}
+          >
             Schedule a Dropp!
           </button>
         </a>

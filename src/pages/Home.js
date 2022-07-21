@@ -249,14 +249,7 @@ const Home = () => {
       <Supermarkets supermartkets={supermartkets} galley={galley} />
 
       {/* Steps */}
-      <Steps
-        steps={steps}
-        step1Class={step1Class}
-        step2Class={step2Class}
-        step3Class={step3Class}
-        bannerImage={Images.boy}
-        businesses={businesses}
-      />
+      <Steps bannerImage={Images.boy} businesses={businesses} />
 
       {/* Banner */}
       {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
