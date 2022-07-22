@@ -1,6 +1,7 @@
 export const Images = {
   logo: require("../images/dropp_logo.svg").default,
   items: require("../images/items.svg").default,
+  itemsGif: require("../images/droppItems.gif"),
   plus: require("../images/plus.svg").default,
   check: require("../images/check.svg").default,
   location: require("../images/location.svg").default,

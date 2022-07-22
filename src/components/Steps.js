@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 // import { useParallax, Parallax } from "react-scroll-parallax";
 import { useSpring, config, animated } from "react-spring";
-import { Parallax, ParallaxLayer } from "@react-spring/parallax";
+import { Parallax, ParallaxLayer, IParallax } from "@react-spring/parallax";
 import { Images } from "../config/images";
 
 const Steps = ({ bannerImage, businesses }) => {
@@ -45,6 +45,15 @@ const Steps = ({ bannerImage, businesses }) => {
     onRest: () => set(!flip),
   });
 
+  const url = (name, wrap = false) =>
+    `${
+      wrap ? "url(" : ""
+    }https://awv3node-homepage.surge.sh/build/assets/${name}.svg${
+      wrap ? ")" : ""
+    }`;
+
+  const parallax = useRef(null);
+
   return (
     <section className="header_bg">
       <div className="lg:w-4/6 mx-auto pt-40 lg:pt-12">
@@ -61,16 +70,177 @@ const Steps = ({ bannerImage, businesses }) => {
             shopper and pay in minutes.
           </p>
         </div>
-        {/* <div className="mt-12 lg:mt-20">
-          <Parallax pages={2}>
+
+        {/* <div style={{ width: "100%", height: "100%", background: "#253237" }}>
+          <Parallax ref={parallax} pages={3}>
             <ParallaxLayer
-              factor={0.5}
+              offset={1}
+              speed={1}
+              style={{ backgroundColor: "#805E73" }}
+            />
+            <ParallaxLayer
+              offset={2}
+              speed={1}
+              style={{ backgroundColor: "#87BCDE" }}
+            />
+
+            <ParallaxLayer
+              offset={0}
+              speed={0}
+              factor={3}
+              style={{
+                backgroundImage: url("stars", true),
+                backgroundSize: "cover",
+              }}
+            />
+
+            <ParallaxLayer
+              offset={1.3}
+              speed={-0.3}
+              style={{ pointerEvents: "none" }}
+            >
+              <img
+                src={url("satellite4")}
+                style={{ width: "15%", marginLeft: "70%" }}
+              />
+            </ParallaxLayer>
+
+            <ParallaxLayer offset={1} speed={0.8} style={{ opacity: 0.1 }}>
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "20%", marginLeft: "55%" }}
+              />
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "10%", marginLeft: "15%" }}
+              />
+            </ParallaxLayer>
+
+            <ParallaxLayer offset={1.75} speed={0.5} style={{ opacity: 0.1 }}>
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "20%", marginLeft: "70%" }}
+              />
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "20%", marginLeft: "40%" }}
+              />
+            </ParallaxLayer>
+
+            <ParallaxLayer offset={1} speed={0.2} style={{ opacity: 0.2 }}>
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "10%", marginLeft: "10%" }}
+              />
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "20%", marginLeft: "75%" }}
+              />
+            </ParallaxLayer>
+
+            <ParallaxLayer offset={1.6} speed={-0.1} style={{ opacity: 0.4 }}>
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "20%", marginLeft: "60%" }}
+              />
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "25%", marginLeft: "30%" }}
+              />
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "10%", marginLeft: "80%" }}
+              />
+            </ParallaxLayer>
+
+            <ParallaxLayer offset={2.6} speed={0.4} style={{ opacity: 0.6 }}>
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "20%", marginLeft: "5%" }}
+              />
+              <img
+                src={url("cloud")}
+                style={{ display: "block", width: "15%", marginLeft: "75%" }}
+              />
+            </ParallaxLayer>
+
+            <ParallaxLayer
+              offset={2.5}
+              speed={-0.4}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                pointerEvents: "none",
+              }}
+            >
+              <img src={url("earth")} style={{ width: "60%" }} />
+            </ParallaxLayer>
+
+            <ParallaxLayer
+              offset={2}
+              speed={-0.3}
+              style={{
+                backgroundSize: "80%",
+                backgroundPosition: "center",
+                backgroundImage: url("clients", true),
+              }}
+            />
+
+            <ParallaxLayer
+              offset={0}
+              speed={0.1}
+              onClick={() => parallax.current.scrollTo(1)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img src={url("server")} style={{ width: "20%" }} />
+            </ParallaxLayer>
+
+            <ParallaxLayer
+              offset={1}
+              speed={0.1}
+              onClick={() => parallax.current.scrollTo(2)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img src={url("bash")} style={{ width: "40%" }} />
+            </ParallaxLayer>
+
+            <ParallaxLayer
+              offset={2}
+              speed={-0}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onClick={() => parallax.current.scrollTo(0)}
+            >
+              <img src={url("clients-main")} style={{ width: "40%" }} />
+            </ParallaxLayer>
+          </Parallax>
+        </div> */}
+
+        {/* <div
+          className="mt-12 lg:mt-20"
+          style={{ position: "absolute", width: "60%", height: "100%" }}
+        >
+          <Parallax pages={3} style={{ top: "0", left: "0" }}>
+            <ParallaxLayer
               offset={0}
               speed={2.5}
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                // backgroundColor: "blue",
               }}
             >
               <div className="hidden lg:block lg:flex lg:flex-row">
@@ -86,10 +256,10 @@ const Steps = ({ bannerImage, businesses }) => {
                       01.
                     </p>
                     <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Create a shopping list. \n Very simple.`}
+                      {`Create a shopping list. Very simple.`}
                     </p>
                     <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Fill your shopping list with everything from \n groceries to pharmacy essentials and more.`}
+                      {`Fill your shopping list with everything from groceries to pharmacy essentials and more.`}
                     </p>
                   </div>
 
@@ -111,18 +281,20 @@ const Steps = ({ bannerImage, businesses }) => {
             <ParallaxLayer
               offset={1}
               speed={0.5}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                color: "white",
-              }}
+              style={
+                {
+                  // display: "flex",
+                  // justifyContent: "center",
+                  // alignItems: "center",
+                  // color: "white",
+                }
+              }
             >
               <div className="hidden lg:block lg:flex lg:flex-row">
                 <div className="lg:w-1/2">
                   <img
                     src={Images.step02}
-                    alt={`Create a shopping list. \n Very simple.`}
+                    alt={`Have your shopping taken \ncare of by a Dropper.`}
                   />
                 </div>
                 <div className="lg:w-1/2 ml-0 lg:ml-10">
@@ -131,10 +303,51 @@ const Steps = ({ bannerImage, businesses }) => {
                       02.
                     </p>
                     <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Create a shopping list. \n Very simple.`}
+                      {`Have your shopping \ntaken care of by a Dropper.`}
                     </p>
                     <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Fill your shopping list with everything from \n groceries to pharmacy essentials and more.`}
+                      {`Forget to add something? \nJust send your Dropper a \nmessage through the app. `}
+                    </p>
+                  </div>
+
+                  <div className="text-center lg:text-left mt-7">
+                    <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                      Schedule a Dropp!
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ParallaxLayer>
+
+            <ParallaxLayer
+              offset={2}
+              speed={2}
+              // style={{ backgroundColor: "black" }}
+            />
+
+            <ParallaxLayer
+              offset={2}
+              speed={0.5}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div className="hidden lg:block lg:flex lg:flex-row">
+                <div className="lg:w-1/2">
+                  <img src={Images.step01} alt={`Get it when \nyou need it.`} />
+                </div>
+                <div className="lg:w-1/2 ml-0 lg:ml-10">
+                  <div>
+                    <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                      03.
+                    </p>
+                    <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                      {`Get it when \nyou need it.`}
+                    </p>
+                    <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                      {`Need an order delivered later? \nSchedule it for later.`}
                     </p>
                   </div>
 
@@ -147,9 +360,13 @@ const Steps = ({ bannerImage, businesses }) => {
               </div>
             </ParallaxLayer>
           </Parallax>
+         
         </div> */}
       </div>
-      <div className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12">
+      <div
+        className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12"
+        // style={{ marginTop: 800 }}
+      >
         <div className="lg:flex lg:flex-row pt-32 pb-64">
           <div className="my-auto flex-1">
             <h1 className="text-4xl lg:text-6xl text-center lg:text-left text_black1 font_bold">

@@ -3,40 +3,51 @@ import React from "react";
 const Banner = ({ bannerImage, businesses }) => {
   return (
     <section className="header_bg">
-      <div className="w-4/5 lg:w-4/6 mx-auto">
+      <div className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12">
         <div className="lg:flex lg:flex-row pt-32 pb-64">
           <div className="my-auto flex-1">
-            <h1 className="text-3xl lg:text-6xl text_black1 font_bold">
+            <h1 className="text-4xl lg:text-6xl text-center lg:text-left text_black1 font_bold">
               Love to shop? <br />
               <span>Join our growing</span> <br />
               list of Droppers.
             </h1>
-            {/* <h1 className="lg:hidden text-3xl text_black1 font_bold">
-              Love to shop? <br />
-              Join our growing <br />
-              list of Droppers.
-            </h1> */}
-            <p className="my-7 font_medium text-lg lg:text-2xl text-left text_black1">
+            <p className="my-7 font_medium text-lg lg:text-2xl text-center lg:text-left text_black1">
               Shop and deliver groceries to others <br /> and get paid for it!
             </p>
-            <button className="my-5 w-72 lg:w-80 font_bold py-3 button text-lg rounded-xl shadow-sm text-white bg_primary">
-              Become a Dropper today!
-            </button>
+            <div className="text-center lg:text-left">
+              <button
+                className="my-5 w-72 lg:w-80 font_bold py-3 button text-lg rounded-xl shadow-sm text-white bg_primary"
+                onClick={() =>
+                  window.open("https://forms.gle/1UYShXQKgjpZheS67")
+                }
+              >
+                Become a Dropper today!
+              </button>
+            </div>
           </div>
           <div className="w-full lg:w-1/2">
-            <img src={bannerImage} alt="items" />
+            <img
+              src={bannerImage}
+              alt="items"
+              className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-125 duration-300"
+            />
           </div>
         </div>
+      </div>
+      <div className="lg:w-4/6 lg:mx-auto">
         <div
-          className="bg-white rounded-xl shadow-md py-16"
+          className="bg-white rounded-xl shadow-md py-16 mx-2"
           style={{
             width: "inherit",
             position: "absolute",
             marginTop: "-180px",
           }}
         >
-          <h2 className="text-2xl lg:text-3xl font_medium text_gray text-center">
-            Trusted by some of the notable businesses around.
+          <h2 className="hidden lg:block text-3xl font_medium text_gray text-center">
+            Trusted by some of the notable <br /> businesses around.
+          </h2>
+          <h2 className="lg:hidden text-xl font_medium text_gray text-center">
+            Trusted by some of the notable <br /> businesses around.
           </h2>
           <div className="flex flex-row flex-wrap justify-center px-5 pt-6">
             {businesses?.map((business, i) => {
@@ -52,7 +63,9 @@ const Banner = ({ bannerImage, businesses }) => {
                   <img
                     src={business.mobileImage}
                     alt={business.title}
-                    className="w-36 lg:hidden mb-5"
+                    className={`w-32 lg:hidden mb-5 ${
+                      businesses.length === i + 1 ? "" : "mr-7"
+                    }`}
                   />
                 </React.Fragment>
               );
