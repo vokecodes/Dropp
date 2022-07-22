@@ -5,6 +5,7 @@ import Login from "../components/Login";
 import NeedSomething from "../components/NeedSomething";
 import Supermarkets from "../components/Supermarkets";
 import Steps from "../components/Steps";
+import Banner from "../components/Banner";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import { Images } from "../config/images";
@@ -240,7 +241,7 @@ const Home = () => {
   return (
     <>
       {/* Header */}
-      <Header itemsImage={Images.items} setShowModal={setShowModal} />
+      <Header itemsImage={Images.itemsGif} />
 
       {/* Need Something */}
       <NeedSomething items={items} title="Dropp" />
@@ -260,7 +261,7 @@ const Home = () => {
       {/* Footer */}
       <Footer logo={Images.logo} />
 
-      <Login showModal={showModal} setShowModal={setShowModal} />
+      {/* <Login showModal={showModal} setShowModal={setShowModal} /> */}
     </>
   );
 };
