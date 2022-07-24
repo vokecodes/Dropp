@@ -19,97 +19,105 @@ const Steps = ({ bannerImage, businesses }) => {
           </p>
         </div>
       </div>
-      <div className="mt-20 lg:w-4/6 mx-auto steps_img_bg">
-        <div className="lg:flex lg:flex-row overflow-hidden overflow-y-scroll stepsScroll">
-          <div className="lg:w-1/2">
-            {/* <img
-              src={Images.step01}
-              alt={`Create a shopping list. \n Very simple.`}
-            /> */}
-          </div>
-          <div className="lg:ml-32 mt-20">
-            <div className="">
-              <div className="hidden lg:block steps_471">
+      <div className="mt-20 lg:w-4/6 mx-auto">
+        <div className="hidden lg:block ">
+          <div className="steps_img_bg">
+            <div className="lg:flex lg:flex-row overflow-hidden overflow-y-scroll stepsScroll">
+              <div className="lg:w-1/2"></div>
+              <div className="lg:ml-32 mt-20">
                 <div className="">
-                  <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                    01.
-                  </p>
-                  <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Create a shopping list. \nVery simple.`}
-                  </p>
-                  <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
-                  </p>
-                </div>
-                <div className="my-20">
-                  <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                    02.
-                  </p>
-                  <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Have your shopping taken \ncare of by a Dropper.`}
-                  </p>
-                  <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Forget to add something? Just send your \nDropper a message through the app.`}
-                  </p>
-                </div>
-                <div className="">
-                  <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                    03.
-                  </p>
-                  <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Get it when you \nneed it.`}
-                  </p>
-                  <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Need an order delivered later? \nSchedule it for later.`}
-                  </p>
-                  <div className="text-center lg:text-left">
-                    <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
-                      Schedule a Dropp!
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="lg:hidden steps_400">
-                <div className="mt-10 lg:mt-0">
-                  <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                    01.
-                  </p>
-                  <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Create a shopping list. \nVery simple.`}
-                  </p>
-                  <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
-                  </p>
-                </div>
-                <div className="mt-10 mb-20 lg:mt-0">
-                  <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                    02.
-                  </p>
-                  <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Have your shopping taken \ncare of by a Dropper.`}
-                  </p>
-                  <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Forget to add something? Just send your \nDropper a message through the app.`}
-                  </p>
-                </div>
-                <div className="mt-10 lg:mt-0">
-                  <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                    03.
-                  </p>
-                  <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Get it when you \nneed it.`}
-                  </p>
-                  <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                    {`Need an order delivered later? \nSchedule it for later.`}
-                  </p>
-                  <div className="text-center lg:text-left">
-                    <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
-                      Schedule a Dropp!
-                    </button>
+                  <div className="steps_471">
+                    <div className="">
+                      <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                        01.
+                      </p>
+                      <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                        {`Create a shopping list. \nVery simple.`}
+                      </p>
+                      <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                        {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
+                      </p>
+                    </div>
+                    <div className="my-20">
+                      <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                        02.
+                      </p>
+                      <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                        {`Have your shopping taken \ncare of by a Dropper.`}
+                      </p>
+                      <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                        {`Forget to add something? Just send your \nDropper a message through the app.`}
+                      </p>
+                    </div>
+                    <div className="">
+                      <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                        03.
+                      </p>
+                      <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                        {`Get it when you \nneed it.`}
+                      </p>
+                      <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                        {`Need an order delivered later? \nSchedule it for later.`}
+                      </p>
+                      <div className="text-center lg:text-left">
+                        <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                          Schedule a Dropp!
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="lg:hidden">
+          <div className="steps_400 overflow-hidden overflow-y-scroll stepsScroll">
+            <div className="my-10">
+              <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                01.
+              </p>
+              <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Create a shopping list. \nVery simple.`}
+              </p>
+              <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
+              </p>
+            </div>
+            <div className="mt-10 mb-20">
+              <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                02.
+              </p>
+              <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Have your shopping taken \ncare of by a Dropper.`}
+              </p>
+              <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Forget to add something? Just send your \nDropper a message through the app.`}
+              </p>
+            </div>
+            <div className="mt-10">
+              <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                03.
+              </p>
+              <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Get it when you \nneed it.`}
+              </p>
+              <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Need an order delivered later? \nSchedule it for later.`}
+              </p>
+              <div className="text-center lg:text-left">
+                <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                  Schedule a Dropp!
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="mt-10">
+            <img
+              src={Images.step01}
+              alt={`Create a shopping list. \n Very simple.`}
+            />
           </div>
         </div>
         {/* <div className="mt-10 lg:flex lg:flex-row">
@@ -171,7 +179,7 @@ const Steps = ({ bannerImage, businesses }) => {
         className="w-4/5 lg:w-4/6 mx-auto pt-20 lg:pt-12"
         // style={{ marginTop: 800 }}
       >
-        <div className="lg:flex lg:flex-row pt-32 pb-64">
+        <div className="lg:flex lg:flex-row pt-10 pt-32 pb-64">
           <div className="my-auto flex-1">
             <h1 className="text-4xl lg:text-6xl text-center lg:text-left text_black1 font_bold">
               Love to shop? <br />
