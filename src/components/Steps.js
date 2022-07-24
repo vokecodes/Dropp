@@ -1,59 +1,7 @@
-import React, { useState, useRef } from "react";
-// import { useParallax, Parallax } from "react-scroll-parallax";
-import { useSpring, config, animated } from "react-spring";
-import { Parallax, ParallaxLayer, IParallax } from "@react-spring/parallax";
+import React from "react";
 import { Images } from "../config/images";
 
 const Steps = ({ bannerImage, businesses }) => {
-  // const { ref } = useParallax({ speed: 10 });
-
-  const [flip, set] = useState(false);
-
-  const steps = [
-    {
-      id: 1,
-      image: Images.step01,
-      number: "01.",
-      title: `Create a shopping list. \n Very simple.`,
-      description: `Fill your shopping list with everything from \n groceries to pharmacy essentials and more.`,
-    },
-    {
-      id: 2,
-      image: Images.step02,
-      number: "02.",
-      title: `Have your shopping taken \ncare of by a Dropper.`,
-      description: `Forget to add something? Just send your \nDropper a message through the app.`,
-    },
-    {
-      id: 3,
-      image: Images.step03,
-      number: "03.",
-      title: `Get it when you \nneed it.`,
-      description: `Need an order delivered later? \nSchedule it for later.`,
-    },
-  ];
-
-  const words = ["We", "came.", "We", "saw.", "We", "kicked", "its", "ass."];
-
-  const { scroll } = useSpring({
-    scroll: (steps.length - 1) * 400,
-    from: { scroll: 0 },
-    reset: true,
-    reverse: flip,
-    delay: 200,
-    config: config.molasses,
-    onRest: () => set(!flip),
-  });
-
-  const url = (name, wrap = false) =>
-    `${
-      wrap ? "url(" : ""
-    }https://awv3node-homepage.surge.sh/build/assets/${name}.svg${
-      wrap ? ")" : ""
-    }`;
-
-  const parallax = useRef(null);
-
   return (
     <section className="header_bg">
       <div className="lg:w-4/6 mx-auto pt-40 lg:pt-12">
@@ -70,301 +18,155 @@ const Steps = ({ bannerImage, businesses }) => {
             shopper and pay in minutes.
           </p>
         </div>
-
-        {/* <div style={{ width: "100%", height: "100%", background: "#253237" }}>
-          <Parallax ref={parallax} pages={3}>
-            <ParallaxLayer
-              offset={1}
-              speed={1}
-              style={{ backgroundColor: "#805E73" }}
+      </div>
+      <div className="mt-20 lg:w-4/6 mx-auto lg:flex lg:flex-row">
+        <div className="lg:w-1/2">
+          <img
+            src={Images.step01}
+            alt={`Create a shopping list. \n Very simple.`}
+          />
+        </div>
+        <div className="lg:ml-20 mt-20 lg:my-auto">
+          <div className="overflow-hidden overflow-y-scroll stepsScroll">
+            <div className="hidden lg:block steps_471">
+              <div className="">
+                <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                  01.
+                </p>
+                <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Create a shopping list. \nVery simple.`}
+                </p>
+                <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
+                </p>
+              </div>
+              <div className="">
+                <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                  02.
+                </p>
+                <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Have your shopping taken \ncare of by a Dropper.`}
+                </p>
+                <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Forget to add something? Just send your \nDropper a message through the app.`}
+                </p>
+              </div>
+              <div className="">
+                <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                  03.
+                </p>
+                <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Get it when you \nneed it.`}
+                </p>
+                <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Need an order delivered later? \nSchedule it for later.`}
+                </p>
+                <div className="text-center lg:text-left">
+                  <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                    Schedule a Dropp!
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="lg:hidden steps_400">
+              <div className="mt-10 lg:mt-0">
+                <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                  01.
+                </p>
+                <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Create a shopping list. \nVery simple.`}
+                </p>
+                <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
+                </p>
+              </div>
+              <div className="mt-10 mb-20 lg:mt-0">
+                <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                  02.
+                </p>
+                <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Have your shopping taken \ncare of by a Dropper.`}
+                </p>
+                <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Forget to add something? Just send your \nDropper a message through the app.`}
+                </p>
+              </div>
+              <div className="mt-10 lg:mt-0">
+                <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                  03.
+                </p>
+                <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Get it when you \nneed it.`}
+                </p>
+                <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                  {`Need an order delivered later? \nSchedule it for later.`}
+                </p>
+                <div className="text-center lg:text-left">
+                  <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                    Schedule a Dropp!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div className="mt-10 lg:flex lg:flex-row">
+          <div className="lg:w-1/2">
+            <img
+              src={Images.step02}
+              alt={`Create a shopping list. \n Very simple.`}
             />
-            <ParallaxLayer
-              offset={2}
-              speed={1}
-              style={{ backgroundColor: "#87BCDE" }}
-            />
-
-            <ParallaxLayer
-              offset={0}
-              speed={0}
-              factor={3}
-              style={{
-                backgroundImage: url("stars", true),
-                backgroundSize: "cover",
-              }}
-            />
-
-            <ParallaxLayer
-              offset={1.3}
-              speed={-0.3}
-              style={{ pointerEvents: "none" }}
-            >
-              <img
-                src={url("satellite4")}
-                style={{ width: "15%", marginLeft: "70%" }}
-              />
-            </ParallaxLayer>
-
-            <ParallaxLayer offset={1} speed={0.8} style={{ opacity: 0.1 }}>
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "20%", marginLeft: "55%" }}
-              />
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "10%", marginLeft: "15%" }}
-              />
-            </ParallaxLayer>
-
-            <ParallaxLayer offset={1.75} speed={0.5} style={{ opacity: 0.1 }}>
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "20%", marginLeft: "70%" }}
-              />
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "20%", marginLeft: "40%" }}
-              />
-            </ParallaxLayer>
-
-            <ParallaxLayer offset={1} speed={0.2} style={{ opacity: 0.2 }}>
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "10%", marginLeft: "10%" }}
-              />
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "20%", marginLeft: "75%" }}
-              />
-            </ParallaxLayer>
-
-            <ParallaxLayer offset={1.6} speed={-0.1} style={{ opacity: 0.4 }}>
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "20%", marginLeft: "60%" }}
-              />
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "25%", marginLeft: "30%" }}
-              />
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "10%", marginLeft: "80%" }}
-              />
-            </ParallaxLayer>
-
-            <ParallaxLayer offset={2.6} speed={0.4} style={{ opacity: 0.6 }}>
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "20%", marginLeft: "5%" }}
-              />
-              <img
-                src={url("cloud")}
-                style={{ display: "block", width: "15%", marginLeft: "75%" }}
-              />
-            </ParallaxLayer>
-
-            <ParallaxLayer
-              offset={2.5}
-              speed={-0.4}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                pointerEvents: "none",
-              }}
-            >
-              <img src={url("earth")} style={{ width: "60%" }} />
-            </ParallaxLayer>
-
-            <ParallaxLayer
-              offset={2}
-              speed={-0.3}
-              style={{
-                backgroundSize: "80%",
-                backgroundPosition: "center",
-                backgroundImage: url("clients", true),
-              }}
-            />
-
-            <ParallaxLayer
-              offset={0}
-              speed={0.1}
-              onClick={() => parallax.current.scrollTo(1)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img src={url("server")} style={{ width: "20%" }} />
-            </ParallaxLayer>
-
-            <ParallaxLayer
-              offset={1}
-              speed={0.1}
-              onClick={() => parallax.current.scrollTo(2)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img src={url("bash")} style={{ width: "40%" }} />
-            </ParallaxLayer>
-
-            <ParallaxLayer
-              offset={2}
-              speed={-0}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onClick={() => parallax.current.scrollTo(0)}
-            >
-              <img src={url("clients-main")} style={{ width: "40%" }} />
-            </ParallaxLayer>
-          </Parallax>
+          </div>
+          <div className="lg:ml-20 mt-20">
+            <div>
+              <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                02.
+              </p>
+              <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Have your shopping taken \ncare of by a Dropper.`}
+              </p>
+              <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Forget to add something? Just send your \nDropper a message through the app.`}
+              </p>
+              <div className="text-center lg:text-left mt-7">
+                <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                  Schedule a Dropp!
+                </button>
+              </div>
+            </div>
+          </div>
         </div> */}
 
-        {/* <div
-          className="mt-12 lg:mt-20"
-          style={{ position: "absolute", width: "60%", height: "100%" }}
-        >
-          <Parallax pages={3} style={{ top: "0", left: "0" }}>
-            <ParallaxLayer
-              offset={0}
-              speed={2.5}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                // backgroundColor: "blue",
-              }}
-            >
-              <div className="hidden lg:block lg:flex lg:flex-row">
-                <div className="lg:w-1/2">
-                  <img
-                    src={Images.step01}
-                    alt={`Create a shopping list. \n Very simple.`}
-                  />
-                </div>
-                <div className="lg:w-1/2 ml-0 lg:ml-10">
-                  <div>
-                    <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                      01.
-                    </p>
-                    <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Create a shopping list. Very simple.`}
-                    </p>
-                    <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Fill your shopping list with everything from groceries to pharmacy essentials and more.`}
-                    </p>
-                  </div>
-
-                  <div className="text-center lg:text-left mt-7">
-                    <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
-                      Schedule a Dropp!
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </ParallaxLayer>
-
-            <ParallaxLayer
-              offset={1}
-              speed={2}
-              style={{ backgroundColor: "#ff6d6d" }}
+        {/* <div className="mt-10 lg:flex lg:flex-row">
+          <div className="lg:w-1/2">
+            <img
+              src={Images.step03}
+              alt={`Create a shopping list. \n Very simple.`}
             />
-
-            <ParallaxLayer
-              offset={1}
-              speed={0.5}
-              style={
-                {
-                  // display: "flex",
-                  // justifyContent: "center",
-                  // alignItems: "center",
-                  // color: "white",
-                }
-              }
-            >
-              <div className="hidden lg:block lg:flex lg:flex-row">
-                <div className="lg:w-1/2">
-                  <img
-                    src={Images.step02}
-                    alt={`Have your shopping taken \ncare of by a Dropper.`}
-                  />
-                </div>
-                <div className="lg:w-1/2 ml-0 lg:ml-10">
-                  <div>
-                    <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                      02.
-                    </p>
-                    <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Have your shopping \ntaken care of by a Dropper.`}
-                    </p>
-                    <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Forget to add something? \nJust send your Dropper a \nmessage through the app. `}
-                    </p>
-                  </div>
-
-                  <div className="text-center lg:text-left mt-7">
-                    <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
-                      Schedule a Dropp!
-                    </button>
-                  </div>
-                </div>
+          </div>
+          <div className="lg:ml-20">
+            <div>
+              <p className="text-center lg:text-left step_num text_yellow font_heavy">
+                03.
+              </p>
+              <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Get it when you \nneed it.`}
+              </p>
+              <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Need an order delivered later? \nSchedule it for later.`}
+              </p>
+              <div className="text-center lg:text-left mt-7">
+                <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                  Schedule a Dropp!
+                </button>
               </div>
-            </ParallaxLayer>
-
-            <ParallaxLayer
-              offset={2}
-              speed={2}
-              // style={{ backgroundColor: "black" }}
-            />
-
-            <ParallaxLayer
-              offset={2}
-              speed={0.5}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div className="hidden lg:block lg:flex lg:flex-row">
-                <div className="lg:w-1/2">
-                  <img src={Images.step01} alt={`Get it when \nyou need it.`} />
-                </div>
-                <div className="lg:w-1/2 ml-0 lg:ml-10">
-                  <div>
-                    <p className="text-center lg:text-left step_num text_yellow font_heavy">
-                      03.
-                    </p>
-                    <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Get it when \nyou need it.`}
-                    </p>
-                    <p className="my-3 font_medium text-base lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                      {`Need an order delivered later? \nSchedule it for later.`}
-                    </p>
-                  </div>
-
-                  <div className="text-center lg:text-left mt-7">
-                    <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
-                      Schedule a Dropp!
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </ParallaxLayer>
-          </Parallax>
-         
+            </div>
+          </div>
         </div> */}
       </div>
+
       <div
-        className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12"
+        className="w-4/5 lg:w-4/6 mx-auto pt-20 lg:pt-12"
         // style={{ marginTop: 800 }}
       >
         <div className="lg:flex lg:flex-row pt-32 pb-64">

@@ -194,6 +194,10 @@
     /* font-size: 14rem; */
     line-height: 130%;
   }
+
+  .steps {
+    height: 471px;
+  }
 }
 
 .text_yellow {
@@ -341,4 +345,34 @@
 
 .w_550 {
   width: 550px;
+}
+
+.steps_471 {
+  height: 471px;
+}
+
+.steps_400 {
+  height: 400px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.stepsScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.stepsScroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.reveal {
+  position: relative;
+  transform: translateY(150px);
+  /* opacity: 0; */
+  transition: 2s all ease;
+}
+.reveal.active {
+  transform: translateY(0);
+  opacity: 1;
 }
