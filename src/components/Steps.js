@@ -19,12 +19,12 @@ const Steps = ({ bannerImage, businesses }) => {
           </p>
         </div>
       </div>
-      <div className="mt-20 lg:w-4/6 mx-auto">
-        <div className="hidden lg:block ">
+      <div className="mt-20">
+        <div className="hidden lg:block ml-10 ml_10_0">
           <div className="steps_img_bg">
             <div className="lg:flex lg:flex-row overflow-hidden overflow-y-scroll stepsScroll">
               <div className="lg:w-1/2"></div>
-              <div className="lg:ml-32 mt-20">
+              <div className="ml-40 mt-20">
                 <div className="">
                   <div className="steps_471">
                     <div className="">
@@ -49,7 +49,7 @@ const Steps = ({ bannerImage, businesses }) => {
                         {`Forget to add something? Just send your \nDropper a message through the app.`}
                       </p>
                     </div>
-                    <div className="">
+                    <div className="mt-36">
                       <p className="text-center lg:text-left step_num text_yellow font_heavy">
                         03.
                       </p>
@@ -60,7 +60,12 @@ const Steps = ({ bannerImage, businesses }) => {
                         {`Need an order delivered later? \nSchedule it for later.`}
                       </p>
                       <div className="text-center lg:text-left">
-                        <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                        <button
+                          className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary"
+                          onClick={() =>
+                            window.open("https://wa.me/message/YKVHYMI6AXGUC1")
+                          }
+                        >
                           Schedule a Dropp!
                         </button>
                       </div>

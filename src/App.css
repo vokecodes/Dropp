@@ -382,3 +382,9 @@
   background-repeat: no-repeat;
   height: 763px;
 }
+
+@media (min-width: 1197px) and (max-width: 1869px) {
+  .ml_10_0 {
+    margin-left: 0px !important;
+  }
+}
