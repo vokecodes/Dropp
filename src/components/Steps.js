@@ -112,7 +112,12 @@ const Steps = ({ bannerImage, businesses }) => {
                 {`Need an order delivered later? \nSchedule it for later.`}
               </p>
               <div className="text-center lg:text-left">
-                <button className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary">
+                <button
+                  className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary"
+                  onClick={() =>
+                    window.open("https://wa.me/message/YKVHYMI6AXGUC1")
+                  }
+                >
                   Schedule a Dropp!
                 </button>
               </div>
