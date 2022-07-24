@@ -267,6 +267,15 @@
   opacity: 1;
 } */
 
+@keyframes slides {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .tech-slideshow {
   height: 289.95px;
   max-width: 1200px;
@@ -308,28 +317,32 @@
 
 .brands {
   animation-name: slides;
+  -webkit-animation-name: slides;
+  -moz-animation-name: slides;
+  -o-animation-name: slides;
   animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  -o-animation-timing-function: linear;
   animation-iteration-count: infinite;
-  animation-duration: 60s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  animation-duration: 100s;
+  -webkit-animation-duration: 100s;
+  -moz-animation-duration: 100s;
+  -o-animation-duration: 100s;
   animation-direction: reverse;
-  /* float: left; */
+  -webkit-animation-direction: reverse;
+  -moz-animation-direction: reverse;
+  -o-animation-direction: reverse;
 }
 
 .galley {
-  animation-name: slides;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: 60s;
-  /* float: left; */
-}
-
-@keyframes slides {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  animation: slides 60s 0s infinite reverse linear;
+  -webkit-animation: slides 60s 0s infinite reverse linear;
+  -moz-animation: slides 60s 0s infinite reverse linear;
+  -o-animation: slides 60s 0s infinite reverse linear;
 }
 
 /* @media (min-width: 1280px) and (max-width: 1860px) {
