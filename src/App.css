@@ -376,3 +376,9 @@
   transform: translateY(0);
   opacity: 1;
 }
+
+.steps_img_bg {
+  background-image: url("./images/steps/step_01.svg");
+  background-repeat: no-repeat;
+  height: 763px;
+}
