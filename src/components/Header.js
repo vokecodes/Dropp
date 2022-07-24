@@ -39,8 +39,8 @@ const Header = ({ itemsImage, setShowModal }) => {
           </div>
         </div>
         <div>
-          <div className="lg:w-4/5 mx-auto">
-            <img src={itemsImage} alt="items" className="pb-20 ml-20" />
+          <div className="lg:w-4/5 lg:mx-auto">
+            <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" />
           </div>
         </div>
       </main>
