@@ -310,7 +310,7 @@
   animation-name: slides;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  animation-duration: 30s;
+  animation-duration: 60s;
   animation-direction: reverse;
   /* float: left; */
 }
@@ -319,7 +319,7 @@
   animation-name: slides;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  animation-duration: 30s;
+  animation-duration: 60s;
   /* float: left; */
 }
 

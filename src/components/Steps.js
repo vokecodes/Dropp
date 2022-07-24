@@ -74,15 +74,15 @@ const Steps = ({ bannerImage, businesses }) => {
 
         <div className="lg:hidden">
           <div className="steps_400 overflow-hidden overflow-y-scroll stepsScroll">
-            <div className="my-10">
+            <div className="mt-10 mb-20">
               <p className="text-center lg:text-left step_num text_yellow font_heavy">
                 01.
               </p>
               <p className="font_bold text-2xl lg:text-4xl text-center lg:text-left text_black1 whitespace-pre-line">
                 {`Create a shopping list. \nVery simple.`}
               </p>
-              <p className="my-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
-                {`Fill your shopping list with everything from groceries \nto pharmacy essentials and more.`}
+              <p className="mt-3 font_medium text-lg lg:text-xl text-center lg:text-left text_black1 whitespace-pre-line">
+                {`Fill your shopping list with everything from groceries to pharmacy essentials and more.`}
               </p>
             </div>
             <div className="mt-10 mb-20">
