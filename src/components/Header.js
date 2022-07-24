@@ -6,7 +6,7 @@ const Header = ({ itemsImage, setShowModal }) => {
     <section className="header_bg">
       <Navbar setShowModal={setShowModal} />
       <main className="w-4/5 lg:w-4/6 mx-auto pt-5 lg:flex flex-row">
-        <div className="lg:flex-1 lg:mt-20 lg:mr-10">
+        <div className="lg:flex-1 lg:mt-20">
           <h1 className="hidden lg:block lg:text-6xl text-4xl font_bold text_black1">
             Groceries delivered <br /> to your doorstep, <br /> same day.
           </h1>
@@ -34,12 +34,14 @@ const Header = ({ itemsImage, setShowModal }) => {
           </div>
           <div className="my-8 py-3 lg:w-80 avail_br">
             <p className="text-lg font_bold text_secondary">
-              ⭐ Available only in Marina and Lekki.
+              ⭐ Available only in Marina & Lekki.
             </p>
           </div>
         </div>
-        <div className="">
-          <img src={itemsImage} alt="items" className="pb-20" />
+        <div>
+          <div className="lg:w-4/5 lg:mx-auto">
+            <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" />
+          </div>
         </div>
       </main>
     </section>

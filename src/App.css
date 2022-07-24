@@ -194,6 +194,10 @@
     /* font-size: 14rem; */
     line-height: 130%;
   }
+
+  .steps {
+    height: 471px;
+  }
 }
 
 .text_yellow {
@@ -263,6 +267,15 @@
   opacity: 1;
 } */
 
+@keyframes slides {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .tech-slideshow {
   height: 289.95px;
   max-width: 1200px;
@@ -304,28 +317,32 @@
 
 .brands {
   animation-name: slides;
+  -webkit-animation-name: slides;
+  -moz-animation-name: slides;
+  -o-animation-name: slides;
   animation-timing-function: linear;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  -o-animation-timing-function: linear;
   animation-iteration-count: infinite;
-  animation-duration: 60s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  animation-duration: 100s;
+  -webkit-animation-duration: 100s;
+  -moz-animation-duration: 100s;
+  -o-animation-duration: 100s;
   animation-direction: reverse;
-  /* float: left; */
+  -webkit-animation-direction: reverse;
+  -moz-animation-direction: reverse;
+  -o-animation-direction: reverse;
 }
 
 .galley {
-  animation-name: slides;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: 60s;
-  /* float: left; */
-}
-
-@keyframes slides {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  animation: slides 60s 0s infinite reverse linear;
+  -webkit-animation: slides 60s 0s infinite reverse linear;
+  -moz-animation: slides 60s 0s infinite reverse linear;
+  -o-animation: slides 60s 0s infinite reverse linear;
 }
 
 /* @media (min-width: 1280px) and (max-width: 1860px) {
@@ -341,4 +358,46 @@
 
 .w_550 {
   width: 550px;
+}
+
+.steps_471 {
+  height: 471px;
+}
+
+.steps_400 {
+  height: 400px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.stepsScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.stepsScroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.reveal {
+  position: relative;
+  transform: translateY(150px);
+  /* opacity: 0; */
+  transition: 2s all ease;
+}
+.reveal.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.steps_img_bg {
+  background-image: url("./images/steps/step_01.svg");
+  background-repeat: no-repeat;
+  height: 763px;
+}
+
+@media (min-width: 1197px) and (max-width: 1869px) {
+  .ml_10_0 {
+    margin-left: 0px !important;
+  }
 }
