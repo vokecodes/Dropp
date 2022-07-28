@@ -20,10 +20,10 @@ const Steps = ({ bannerImage, businesses }) => {
         </div>
       </div>
       <div className="mt-20">
-        <div className="hidden lg:block ml-10 ml_10_0">
+        <div className="hidden lg:block ml-20">
           <div className="steps_img_bg">
-            <div className="lg:flex lg:flex-row overflow-hidden overflow-y-scroll stepsScroll">
-              <div className="lg:w-1/3"></div>
+            <div className="flex flex-row overflow-hidden overflow-y-scroll stepsScroll">
+              <div className="w-2/5"></div>
               <div className="ml-40 mt-20 lg:ml-44">
                 <div className="">
                   <div className="steps_471">
