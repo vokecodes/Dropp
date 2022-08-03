@@ -328,10 +328,10 @@
   -webkit-animation-iteration-count: infinite;
   -moz-animation-iteration-count: infinite;
   -o-animation-iteration-count: infinite;
-  animation-duration: 100s;
-  -webkit-animation-duration: 100s;
-  -moz-animation-duration: 100s;
-  -o-animation-duration: 100s;
+  animation-duration: 40s;
+  -webkit-animation-duration: 40s;
+  -moz-animation-duration: 40s;
+  -o-animation-duration: 40s;
   animation-direction: reverse;
   -webkit-animation-direction: reverse;
   -moz-animation-direction: reverse;
@@ -339,10 +339,10 @@
 }
 
 .galley {
-  animation: slides 60s 0s infinite reverse linear;
-  -webkit-animation: slides 60s 0s infinite reverse linear;
-  -moz-animation: slides 60s 0s infinite reverse linear;
-  -o-animation: slides 60s 0s infinite reverse linear;
+  animation: slides 40s 0s infinite reverse linear;
+  -webkit-animation: slides 40s 0s infinite reverse linear;
+  -moz-animation: slides 40s 0s infinite reverse linear;
+  -o-animation: slides 40s 0s infinite reverse linear;
 }
 
 /* @media (min-width: 1280px) and (max-width: 1860px) {
