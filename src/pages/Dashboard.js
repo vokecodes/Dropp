@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {user ? (
+      {!user ? (
         <div className="splash-screen">
           <img src={Images.logo} alt="logo" />
         </div>
