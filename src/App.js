@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
+import { Provider } from "react-redux";
+import store from "./store";
 import Navigation from "./routes/index";
 import "./App.css";
 
@@ -10,9 +12,9 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <Provider store={store}>
       <Navigation />
-    </>
+    </Provider>
   );
 };
 

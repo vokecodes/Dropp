@@ -70,4 +70,11 @@ export const Images = {
   remotely: require("../images/brands/remotely.svg").default,
   remotely_mobile: require("../images/brands/remotely_mobile.svg").default,
   hero: require("../images/hero.svg").default,
+  register_banner: require("../images/register_banner.png"),
+  dashboard_banner: require("../images/dashboard_banner.png"),
+  settings_phone: require("../images/settings-phone.png"),
+  mail: require("../images/mail.png"),
+  shopping_cart: require("../images/shopping-cart.png"),
+  lock: require("../images/lock.png"),
+  invite: require("../images/invite.png"),
 };

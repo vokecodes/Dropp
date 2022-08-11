@@ -401,3 +401,39 @@
     margin-left: 0px !important;
   }
 }
+
+.register_bg {
+  background-color: #fff7e7;
+}
+
+.register_input {
+  border-bottom: 1px solid #e0d4bb;
+}
+
+.bg_yellow {
+  background-color: #fec62e;
+}
+
+.label_color {
+  color: #b7b192;
+}
+
+.dashboard_hr {
+  border-bottom: 1px solid #f0e9db;
+}
+
+.bg_week {
+  background-color: #fff0c5;
+}
+
+.light_gray {
+  color: #918d77;
+}
+
+.bg_light_orange {
+  background: #ffe4dc;
+}
+
+.text_orange {
+  color: #fd6a3a;
+}
