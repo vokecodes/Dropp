@@ -11,6 +11,7 @@ import { AUTH_DATA } from "../reducers/type";
 const Register = ({ showModal, setShowModal }) => {
   const [authType, setAuthType] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const registerSchema = Yup.object().shape({
     firstName: Yup.string().required(),
@@ -30,8 +31,6 @@ const Register = ({ showModal, setShowModal }) => {
     { value: "Week 4", label: "Week 4" },
   ];
 
-  const dispatch = useDispatch();
-
   const registerUser = (values) => {
     console.log("wemk", values);
     axios
@@ -39,7 +38,6 @@ const Register = ({ showModal, setShowModal }) => {
         ...values,
       })
       .then(({ data }) => {
-        console.log("register", data);
         dispatch({
           type: AUTH_DATA,
           payload: data,
@@ -177,7 +175,7 @@ const Register = ({ showModal, setShowModal }) => {
                         </label>
                         <Select
                           isMulti
-                          className="bg-transparent"
+                          classNamePrefix="custom_select"
                           onChange={(value) =>
                             props.setFieldValue(
                               "shoppingWeek",

@@ -454,3 +454,10 @@
   margin-left: calc(100vw - 100%);
   margin-bottom: 30px;
 }
+
+.custom_select__control {
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #e0d4bb !important;
+  outline: none !important;
+}

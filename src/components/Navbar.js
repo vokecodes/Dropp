@@ -1,10 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Images } from "../config/images";
+import { AUTH_DATA } from "../reducers/type";
 
 const Navbar = ({ user, setShowModal }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch({
+      type: AUTH_DATA,
+      payload: null,
+    });
+    sessionStorage.removeItem("auth");
+    navigate("/");
+  };
+
   return (
-    <nav className="w-4/5 lg:w-4/6 mx-auto lg:flex lg:items-center justify-between py-10">
+    <nav className="w-4/5 lg:w-4/6 mx-auto flex lg:items-center justify-between py-10">
       <Link to="/">
         <span className="sr-only">Dropp</span>
         <img
@@ -17,7 +32,7 @@ const Navbar = ({ user, setShowModal }) => {
         {user ? (
           <button
             className="w-24 h-8 font_bold border border-transparent rounded-xl shadow-sm text-sm text_orange bg_light_orange"
-            onClick={() => setShowModal(true)}
+            onClick={handleLogout}
           >
             Log out
           </button>
