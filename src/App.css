@@ -461,3 +461,15 @@
   border-bottom: 1px solid #e0d4bb !important;
   outline: none !important;
 }
+
+.bg_shopping {
+  background: #fcfbf9;
+}
+
+.text_item_light_gray {
+  color: #979c9e;
+}
+
+.text_light_orange {
+  color: #cd9622;
+}

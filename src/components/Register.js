@@ -34,9 +34,12 @@ const Register = ({ showModal, setShowModal }) => {
   const registerUser = (values) => {
     console.log("wemk", values);
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/shopper/register`, {
-        ...values,
-      })
+      .post(
+        `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
+        {
+          ...values,
+        }
+      )
       .then(({ data }) => {
         dispatch({
           type: AUTH_DATA,
