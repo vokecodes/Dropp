@@ -13,6 +13,9 @@ const Register = ({ showModal, setShowModal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+
   const registerSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required."),
     lastName: Yup.string().required("Last is required."),
@@ -214,7 +217,7 @@ const Register = ({ showModal, setShowModal }) => {
                           </label>
                           <div className="flex">
                             <Field
-                              type="password"
+                              type={showRegisterPassword ? "text" : "password"}
                               name="password"
                               className="block w-full shadow-sm bg-transparent outline-none register_input "
                             />
@@ -223,6 +226,9 @@ const Register = ({ showModal, setShowModal }) => {
                               className="h-4 w-4 absolute right-10"
                               viewBox="0 0 20 20"
                               fill="#6C7072"
+                              onClick={() =>
+                                setShowRegisterPassword(!showRegisterPassword)
+                              }
                             >
                               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                               <path
@@ -365,7 +371,7 @@ const Register = ({ showModal, setShowModal }) => {
                           </label>
                           <div className="flex">
                             <Field
-                              type="password"
+                              type={showLoginPassword ? "text" : "password"}
                               name="password"
                               className="block w-full shadow-sm bg-transparent outline-none register_input "
                             />
@@ -374,6 +380,9 @@ const Register = ({ showModal, setShowModal }) => {
                               className="h-4 w-4 absolute right-10"
                               viewBox="0 0 20 20"
                               fill="#6C7072"
+                              onClick={() =>
+                                setShowLoginPassword(!showLoginPassword)
+                              }
                             >
                               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                               <path
