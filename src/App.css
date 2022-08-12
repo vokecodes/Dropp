@@ -473,3 +473,31 @@
 .text_light_orange {
   color: #cd9622;
 }
+
+.bg_list {
+  background-color: #f1e4cb;
+}
+
+.gray_title {
+  color: #6c7072;
+}
+
+.item_br {
+  border: 1px solid #f4f4f4;
+}
+
+.item_input {
+  border-bottom: 1px solid #e3e5e5;
+}
+
+.helper_text {
+  color: #b0b0b0;
+}
+
+.bg_save_list {
+  background-color: #fef9ee;
+}
+
+.text_save_list {
+  color: #888888;
+}

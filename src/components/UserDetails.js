@@ -1,4 +1,3 @@
-import React from "react";
 import { Images } from "../config/images";
 
 const UserDetails = ({ user }) => {
@@ -52,8 +51,11 @@ const UserDetails = ({ user }) => {
                 className="mr-2"
               />
               <div className="w-full flex flex-wrap">
-                {user?.shoppingWeek?.map((week) => (
-                  <button className="bg_week h-5 w-16 rounded-full text-xs font_medium mr-2">
+                {user?.shoppingWeek?.map((week, i) => (
+                  <button
+                    key={i}
+                    className="bg_week h-5 w-16 rounded-full text-xs font_medium mr-2 mb-1"
+                  >
                     {week}
                   </button>
                 ))}

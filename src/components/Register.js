@@ -51,7 +51,7 @@ const Register = ({ showModal, setShowModal }) => {
       })
       .catch((error) => {
         const { message } = error.response.data;
-        if (message) alert(message);
+        if (message) alert("Dropp", message);
       })
       .finally(() => formikBag.setSubmitting(false));
   };
@@ -117,7 +117,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="firstName"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -135,7 +135,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="lastName"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -153,7 +153,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="email"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -172,7 +172,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="phoneNumber"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -190,7 +190,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="password"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-7">
@@ -214,7 +214,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="shoppingWeek"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -232,7 +232,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="address"
                           component="span"
-                          className="text-red-500"
+                          className="text-sm text-red-500"
                         />
                       </div>
                       <div className="mb-3">
