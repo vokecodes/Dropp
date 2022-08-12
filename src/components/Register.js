@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Field, Formik, Form } from "formik";
+import { Field, Formik, Form, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import * as Yup from "yup";
@@ -16,9 +16,11 @@ const Register = ({ showModal, setShowModal }) => {
   const registerSchema = Yup.object().shape({
     firstName: Yup.string().required(),
     lastName: Yup.string().required(),
-    email: Yup.string().required(),
-    phoneNumber: Yup.string().required(),
-    password: Yup.string().required(),
+    email: Yup.string().email().required(),
+    phoneNumber: Yup.string().min(11, "Phone number is not valid.").required(),
+    password: Yup.string()
+      .min(8, "Password must be minimum of 8 letters.")
+      .required(),
     shoppingWeek: Yup.array().required(),
     address: Yup.string().required(),
     referralCode: Yup.string(),
@@ -48,7 +50,8 @@ const Register = ({ showModal, setShowModal }) => {
         navigate("/dashboard");
       })
       .catch((error) => {
-        console.log("error", error, error.response);
+        const { message } = error.response.data;
+        if (message) alert(message);
       });
   };
 
@@ -108,7 +111,12 @@ const Register = ({ showModal, setShowModal }) => {
                         <Field
                           type="text"
                           name="firstName"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input"
+                        />
+                        <ErrorMessage
+                          name="firstName"
+                          component="span"
+                          className="text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -123,6 +131,11 @@ const Register = ({ showModal, setShowModal }) => {
                           name="lastName"
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
+                        <ErrorMessage
+                          name="lastName"
+                          component="span"
+                          className="text-red-500"
+                        />
                       </div>
                       <div className="mb-3">
                         <label
@@ -135,6 +148,11 @@ const Register = ({ showModal, setShowModal }) => {
                           type="email"
                           name="email"
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="text-red-500"
                         />
                       </div>
                       <div className="mb-3">
@@ -149,6 +167,11 @@ const Register = ({ showModal, setShowModal }) => {
                           name="phoneNumber"
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
+                        <ErrorMessage
+                          name="phoneNumber"
+                          component="span"
+                          className="text-red-500"
+                        />
                       </div>
                       <div className="mb-3">
                         <label
@@ -161,6 +184,11 @@ const Register = ({ showModal, setShowModal }) => {
                           type="password"
                           name="password"
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="password"
+                          component="span"
+                          className="text-red-500"
                         />
                       </div>
                       <div className="mb-7">
@@ -181,6 +209,11 @@ const Register = ({ showModal, setShowModal }) => {
                           }
                           options={options}
                         />
+                        <ErrorMessage
+                          name="shoppingWeek"
+                          component="span"
+                          className="text-red-500"
+                        />
                       </div>
                       <div className="mb-3">
                         <label
@@ -193,6 +226,11 @@ const Register = ({ showModal, setShowModal }) => {
                           type="text"
                           name="address"
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="address"
+                          component="span"
+                          className="text-red-500"
                         />
                       </div>
                       <div className="mb-3">
