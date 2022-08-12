@@ -166,6 +166,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <Field
                           type="text"
                           name="phoneNumber"
+                          maxLength="11"
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
                         <ErrorMessage
