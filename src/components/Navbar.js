@@ -20,7 +20,7 @@ const Navbar = ({ user, setShowModal }) => {
 
   return (
     <nav className="w-4/5 lg:w-4/6 mx-auto flex lg:items-center justify-between py-10">
-      <Link to="/">
+      <Link to={user ? "/dashboard" : "/"}>
         <span className="sr-only">Dropp</span>
         <img
           className="w-40 mx-auto lg:w-48 lg:mx-0"

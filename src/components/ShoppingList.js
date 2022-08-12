@@ -97,6 +97,39 @@ const ShoppingList = () => {
       });
   };
 
+  const handleShareList = () => {
+    if (!listName) {
+      setListNameError("List name can not be empty.");
+    }
+    if (items?.length <= 0) return;
+
+    setIsShareLoading(true);
+    const result = sessionStorage.getItem("auth");
+    const { token, data } = JSON.parse(result);
+
+    axios
+      .post(
+        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/shopper/${data?.user?._id}`,
+        { name: listName, items },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(({ data }) => {
+        alert("List saved.");
+        handleSelectList("my");
+        getUserLists();
+      })
+      .catch((error) => {})
+      .finally(() => {
+        setListName();
+        setItems([]);
+        setIsShareLoading(false);
+      });
+  };
+
   return (
     <div className="lg:w-1/2 lg:mr-5 bg_shopping p-8 rounded-3xl shadow-sm mb-10 lg:mb-0">
       <div className="lg:flex items-center">
@@ -272,6 +305,7 @@ const ShoppingList = () => {
               <button
                 className="mt-3 lg:mt-0 w-full h-14 lg:w-96 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-sm lg:text-lg text-center text-white font_bold bg_primary"
                 disabled={isShareLoading}
+                onClick={handleShareList}
               >
                 Share with a Dropper On Whatsapp
               </button>

@@ -7,13 +7,11 @@ import Dashboard from "../pages/Dashboard";
 const Navigation = () => {
   return (
     <Router>
-      <div>
-        <Routes>
-          <Route path="/market" element={<Market />}></Route>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/" element={<Home />}></Route>
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/market" element={<Market />}></Route>
+        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/" element={<Home />}></Route>
+      </Routes>
     </Router>
   );
 };
