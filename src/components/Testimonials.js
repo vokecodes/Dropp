@@ -1,7 +1,7 @@
 import React from "react";
 import { Images } from "../config/images";
 
-const Testimonials = ({}) => {
+const Testimonials = ({ setShowModal }) => {
   return (
     <section className="pt-40 lg:pt-32 pb-10 supermarkets_bg">
       <h1 className="hidden lg:block my-20 text-6xl text-white font_bold text-center">
@@ -173,7 +173,7 @@ const Testimonials = ({}) => {
       <div className="my-20 flex justify-center">
         <button
           className="w-80 font_bold py-3 button text-lg rounded-xl shadow-sm text-white bg_primary"
-          onClick={() => window.open("https://wa.me/message/YKVHYMI6AXGUC1")}
+          onClick={() => setShowModal(true)}
         >
           Schedule a Dropp!
         </button>

@@ -18,7 +18,7 @@ const Register = ({ showModal, setShowModal }) => {
 
   const registerSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required."),
-    lastName: Yup.string().required("Last is required."),
+    lastName: Yup.string().required("Last name is required."),
     email: Yup.string().email().required("Email is required."),
     phoneNumber: Yup.string()
       .min(11, "Phone number is not valid.")
@@ -26,7 +26,7 @@ const Register = ({ showModal, setShowModal }) => {
     password: Yup.string()
       .min(8, "Password must be minimum of 8 letters.")
       .required("Password is required."),
-    shoppingWeek: Yup.array().required(),
+    shoppingWeek: Yup.array().required("Shopping week is required."),
     address: Yup.string().required("Address is required."),
     referralCode: Yup.string(),
   });
@@ -63,7 +63,7 @@ const Register = ({ showModal, setShowModal }) => {
       })
       .catch((error) => {
         const { message } = error.response.data;
-        if (message) alert("Dropp", message);
+        if (message) alert(message);
       })
       .finally(() => formikBag.setSubmitting(false));
   };
@@ -83,7 +83,7 @@ const Register = ({ showModal, setShowModal }) => {
       })
       .catch((error) => {
         const { message } = error.response.data;
-        if (message) alert("Dropp", message);
+        if (message) alert(message);
       })
       .finally(() => formikBag.setSubmitting(false));
   };

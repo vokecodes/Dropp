@@ -216,7 +216,7 @@ const Home = () => {
       <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
       {/* Need Something */}
-      <NeedSomething items={items} title="Dropp" />
+      <NeedSomething items={items} title="Dropp" setShowModal={setShowModal} />
 
       {/* Supermarkets */}
       <Supermarkets supermartkets={supermartkets} galley={galley} />
@@ -228,7 +228,7 @@ const Home = () => {
       {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
 
       {/* Testimonials */}
-      <Testimonials />
+      <Testimonials setShowModal={setShowModal} />
 
       {/* Footer */}
       <Footer logo={Images.logo} />

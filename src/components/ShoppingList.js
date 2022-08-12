@@ -13,6 +13,7 @@ const ShoppingList = () => {
   const [items, setItems] = useState([]);
   const [localItem, setLocalItem] = useState(null);
   const [isSaveLoading, setIsSaveLoading] = useState(false);
+  const [isShareLoading, setIsShareLoading] = useState(false);
 
   const itemSchema = Yup.object().shape({
     name: Yup.string().min(3).required(),
@@ -268,7 +269,10 @@ const ShoppingList = () => {
                   "Save list"
                 )}
               </button>
-              <button className="mt-3 lg:mt-0 w-full h-14 lg:w-96 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-sm lg:text-lg text-center text-white font_bold bg_primary">
+              <button
+                className="mt-3 lg:mt-0 w-full h-14 lg:w-96 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-sm lg:text-lg text-center text-white font_bold bg_primary"
+                disabled={isShareLoading}
+              >
                 Share with a Dropper On Whatsapp
               </button>
             </div>
