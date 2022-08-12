@@ -32,32 +32,36 @@ const Register = ({ showModal, setShowModal }) => {
   ];
 
   const registerUser = (values) => {
-    console.log("wemk", values);
-    axios
-      .post(
-        `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
-        {
-          ...values,
-        }
-      )
-      .then(({ data }) => {
-        dispatch({
-          type: AUTH_DATA,
-          payload: data,
-        });
-        sessionStorage.setItem("auth", JSON.stringify(data));
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.log("error", error, error.response);
-      });
+    alert(
+      JSON.stringify(values),
+      `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`
+    );
+
+    // axios
+    //   .post(
+    //     `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
+    //     {
+    //       ...values,
+    //     }
+    //   )
+    //   .then(({ data }) => {
+    //     dispatch({
+    //       type: AUTH_DATA,
+    //       payload: data,
+    //     });
+    //     sessionStorage.setItem("auth", JSON.stringify(data));
+    //     navigate("/dashboard");
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error, error.response);
+    //   });
   };
 
   return showModal ? (
     <>
-      <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 my-6 mx-auto">
-          <div className="border-0 rounded-3xl shadow-lg relative flex flex-col w-full register_bg outline-none focus:outline-none">
+      <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
+        <div className="relative w-4/5 lg:w-1/4 h-5/6 register_bg overflow-scroll mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+          <div className="relative flex flex-col w-full outline-none focus:outline-none">
             <div className="min-h-full flex flex-col justify-center">
               <img
                 src={Images.register_banner}
@@ -79,13 +83,8 @@ const Register = ({ showModal, setShowModal }) => {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-              {/* <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center">
-                <h2 className="flex-1 mt-6 text-center text-3xl font-extrabold text-gray-900">
-                  {authType ? "Register" : "Login"}
-                </h2>
-              </div> */}
 
-              <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-md sm:px-6 lg:px-8">
+              <div className="pt-5 px-8">
                 <Formik
                   initialValues={{
                     firstName: "",
@@ -104,10 +103,10 @@ const Register = ({ showModal, setShowModal }) => {
                 >
                   {(props) => (
                     <Form onSubmit={props.handleSubmit}>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="firstName"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           First name
                         </label>
@@ -117,10 +116,10 @@ const Register = ({ showModal, setShowModal }) => {
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
                       </div>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="lastName"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           Last name
                         </label>
@@ -130,10 +129,10 @@ const Register = ({ showModal, setShowModal }) => {
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
                       </div>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           Email
                         </label>
@@ -143,10 +142,10 @@ const Register = ({ showModal, setShowModal }) => {
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
                       </div>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="phoneNumber"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           Phone number
                         </label>
@@ -156,10 +155,10 @@ const Register = ({ showModal, setShowModal }) => {
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
                       </div>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="password"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           Password
                         </label>
@@ -172,7 +171,7 @@ const Register = ({ showModal, setShowModal }) => {
                       <div className="mb-7">
                         <label
                           htmlFor="shoppingWeek"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           My shopping week
                         </label>
@@ -188,10 +187,10 @@ const Register = ({ showModal, setShowModal }) => {
                           options={options}
                         />
                       </div>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="address"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           Address
                         </label>
@@ -201,10 +200,10 @@ const Register = ({ showModal, setShowModal }) => {
                           className="block w-full shadow-sm bg-transparent outline-none register_input "
                         />
                       </div>
-                      <div className="mb-7">
+                      <div className="mb-3">
                         <label
                           htmlFor="referralCode"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
                           Referral code (optional)
                         </label>
@@ -217,10 +216,9 @@ const Register = ({ showModal, setShowModal }) => {
 
                       <button
                         type="submit"
-                        className="mt-12 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
-                        // disabled={props.isSubmitting}
+                        className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
+                        disabled={props.isSubmitting}
                       >
-                        {/* {authType ? "Register now" : "Login"} */}
                         {props.isSubmitting ? (
                           <svg
                             className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -248,7 +246,7 @@ const Register = ({ showModal, setShowModal }) => {
                   )}
                 </Formik>
 
-                <div className="flex justify-center items-center mt-5 mb-10">
+                <div className="flex justify-center items-center mt-3 mb-5">
                   <p
                     className="text-gray-500 cursor-pointer"
                     onClick={() => setAuthType(!authType)}
