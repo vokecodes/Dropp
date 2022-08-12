@@ -32,35 +32,30 @@ const Register = ({ showModal, setShowModal }) => {
   ];
 
   const registerUser = (values) => {
-    alert(
-      JSON.stringify(values),
-      `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`
-    );
-
-    // axios
-    //   .post(
-    //     `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
-    //     {
-    //       ...values,
-    //     }
-    //   )
-    //   .then(({ data }) => {
-    //     dispatch({
-    //       type: AUTH_DATA,
-    //       payload: data,
-    //     });
-    //     sessionStorage.setItem("auth", JSON.stringify(data));
-    //     navigate("/dashboard");
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error, error.response);
-    //   });
+    axios
+      .post(
+        `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
+        {
+          ...values,
+        }
+      )
+      .then(({ data }) => {
+        dispatch({
+          type: AUTH_DATA,
+          payload: data,
+        });
+        sessionStorage.setItem("auth", JSON.stringify(data));
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log("error", error, error.response);
+      });
   };
 
   return showModal ? (
     <>
       <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 h-5/6 register_bg overflow-scroll mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+        <div className="relative w-4/5 lg:w-1/4 register_bg overflow-scroll mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
           <div className="relative flex flex-col w-full outline-none focus:outline-none">
             <div className="min-h-full flex flex-col justify-center">
               <img
