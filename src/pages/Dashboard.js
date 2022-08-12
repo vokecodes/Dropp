@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import ReactGA from "react-ga4";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import ShoppingList from "../components/ShoppingList";

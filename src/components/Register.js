@@ -14,23 +14,25 @@ const Register = ({ showModal, setShowModal }) => {
   const dispatch = useDispatch();
 
   const registerSchema = Yup.object().shape({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    email: Yup.string().email().required(),
-    phoneNumber: Yup.string().min(11, "Phone number is not valid.").required(),
+    firstName: Yup.string().required("First name is required."),
+    lastName: Yup.string().required("Last is required."),
+    email: Yup.string().email().required("Email is required."),
+    phoneNumber: Yup.string()
+      .min(11, "Phone number is not valid.")
+      .required("Phone number is required."),
     password: Yup.string()
       .min(8, "Password must be minimum of 8 letters.")
-      .required(),
+      .required("Password is required."),
     shoppingWeek: Yup.array().required(),
-    address: Yup.string().required(),
+    address: Yup.string().required("Address is required."),
     referralCode: Yup.string(),
   });
 
   const loginSchema = Yup.object().shape({
-    email: Yup.string().email().required(),
+    email: Yup.string().email().required("Email is required."),
     password: Yup.string()
       .min(8, "Password must be minimum of 8 letters.")
-      .required(),
+      .required("Password is required."),
   });
 
   const options = [
