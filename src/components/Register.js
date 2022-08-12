@@ -33,7 +33,7 @@ const Register = ({ showModal, setShowModal }) => {
     { value: "Week 4", label: "Week 4" },
   ];
 
-  const registerUser = (values) => {
+  const registerUser = (values, formikBag) => {
     axios
       .post(
         `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
@@ -52,7 +52,8 @@ const Register = ({ showModal, setShowModal }) => {
       .catch((error) => {
         const { message } = error.response.data;
         if (message) alert(message);
-      });
+      })
+      .finally(() => formikBag.setSubmitting(false));
   };
 
   return showModal ? (
@@ -95,8 +96,8 @@ const Register = ({ showModal, setShowModal }) => {
                     referralCode: "",
                   }}
                   validationSchema={registerSchema}
-                  onSubmit={(values) => {
-                    registerUser(values);
+                  onSubmit={(values, formikBag) => {
+                    registerUser(values, formikBag);
                   }}
                 >
                   {(props) => (
