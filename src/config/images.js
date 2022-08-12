@@ -77,4 +77,5 @@ export const Images = {
   shopping_cart: require("../images/shopping-cart.png"),
   lock: require("../images/lock.png"),
   invite: require("../images/invite.png"),
+  login_banner: require("../images/login_banner.png"),
 };

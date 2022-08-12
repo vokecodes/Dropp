@@ -25,9 +25,7 @@ const Dashboard = () => {
       .then(({ data }) => {
         if (data?.success) setUser(data?.user);
       })
-      .catch((error) => {
-        console.log("error", error);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {

@@ -54,12 +54,9 @@ const ShoppingList = () => {
         }
       )
       .then(({ data }) => {
-        console.log(data);
         setUserLists(data.lists);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -87,14 +84,11 @@ const ShoppingList = () => {
         }
       )
       .then(({ data }) => {
-        console.log(data);
         alert("List saved.");
         handleSelectList("my");
         getUserLists();
       })
-      .catch((error) => {
-        console.log("err", error);
-      })
+      .catch((error) => {})
       .finally(() => {
         setListName();
         setItems([]);
