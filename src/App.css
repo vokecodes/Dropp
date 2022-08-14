@@ -505,3 +505,7 @@
 .bg_subList {
   background: #f7f7f7;
 }
+
+.blur-bg {
+  filter: blur(4px);
+}

@@ -225,7 +225,7 @@ const Home = () => {
 
   return (
     <>
-      <div className={showModal ? "blur-sm" : ""}>
+      <div className={showModal ? "blur-bg" : ""}>
         {/* Header */}
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
