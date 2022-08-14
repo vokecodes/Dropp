@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactGA from "react-ga4";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Register from "../components/Register";
 import NeedSomething from "../components/NeedSomething";
@@ -208,30 +209,48 @@ const Home = () => {
   //   }
   // };
 
+  const navigate = useNavigate();
+
+  const getUser = useCallback(() => {
+    const result = sessionStorage.getItem("auth");
+
+    if (result) navigate("/dashboard");
+  }, [navigate]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      {/* Header */}
-      <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
+      <div className={showModal ? "blur-sm" : ""}>
+        {/* Header */}
+        <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
-      {/* Need Something */}
-      <NeedSomething items={items} title="Dropp" setShowModal={setShowModal} />
+        {/* Need Something */}
+        <NeedSomething
+          items={items}
+          title="Dropp"
+          setShowModal={setShowModal}
+        />
 
-      {/* Supermarkets */}
-      <Supermarkets supermartkets={supermartkets} galley={galley} />
+        {/* Supermarkets */}
+        <Supermarkets supermartkets={supermartkets} galley={galley} />
 
-      {/* Steps */}
-      <Steps bannerImage={Images.boy} businesses={businesses} />
+        {/* Steps */}
+        <Steps bannerImage={Images.boy} businesses={businesses} />
 
-      {/* Banner */}
-      {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
+        {/* Banner */}
+        {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
 
-      {/* Testimonials */}
-      <Testimonials setShowModal={setShowModal} />
+        {/* Testimonials */}
+        <Testimonials setShowModal={setShowModal} />
 
-      {/* Footer */}
-      <Footer logo={Images.logo} />
+        {/* Footer */}
+        <Footer logo={Images.logo} />
+      </div>
 
       <Register showModal={showModal} setShowModal={setShowModal} />
     </>

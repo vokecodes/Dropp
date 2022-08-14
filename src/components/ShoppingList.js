@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Item from "./Item";
@@ -14,11 +14,14 @@ const ShoppingList = () => {
   const [localItem, setLocalItem] = useState(null);
   const [isSaveLoading, setIsSaveLoading] = useState(false);
   const [isShareLoading, setIsShareLoading] = useState(false);
+  const [openList, setOpenList] = useState(false);
+  const [showAddAItem, setShowAddAItem] = useState(false);
+  const [listId, setListId] = useState("");
 
   const itemSchema = Yup.object().shape({
-    name: Yup.string().min(3).required(),
-    quantity: Yup.number().min(1).required(),
-    measurement: Yup.string().min(1).required(),
+    name: Yup.string().min(3).required("Name is required."),
+    quantity: Yup.number().min(1).required("Quantity is required."),
+    measurement: Yup.string().min(1).required("Measurement is required."),
   });
 
   const handleSelectList = (list) => setSelectedList(list);
@@ -39,6 +42,7 @@ const ShoppingList = () => {
   const handleEditItem = (item) => {
     handleDeleteItem(item);
     setLocalItem(item);
+    setShowAddAItem(true);
   };
 
   const getUserLists = () => {
@@ -127,6 +131,37 @@ const ShoppingList = () => {
         setListName();
         setItems([]);
         setIsShareLoading(false);
+      });
+  };
+
+  const handleUpdateList = () => {
+    if (items?.length <= 0) return;
+
+    setIsSaveLoading(true);
+    const result = sessionStorage.getItem("auth");
+    const { token, data } = JSON.parse(result);
+
+    axios
+      .patch(
+        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        { name: listName, items },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(({ data }) => {
+        alert("List updated.");
+        getUserLists();
+      })
+      .catch((error) => {})
+      .finally(() => {
+        setOpenList("");
+        setListId("");
+        setListName("");
+        setItems([]);
+        setIsSaveLoading(false);
       });
   };
 
@@ -317,7 +352,38 @@ const ShoppingList = () => {
           <>
             {userLists?.length > 0 &&
               userLists?.map((list, i) => (
-                <List key={i} name={list?.name} items={list?.items} />
+                <List
+                  key={i}
+                  name={list?.name}
+                  items={list?.items}
+                  open={openList === list?.name}
+                  setOpen={() => {
+                    if (openList === list?.name) {
+                      setOpenList("");
+                      setItems([]);
+                      setListName("");
+                      setListId("");
+                    } else {
+                      setOpenList(list?.name);
+                      setListName(list?.name);
+                      setItems(list?.items);
+                      setListId(list?._id);
+                    }
+                  }}
+                  itemSchema={itemSchema}
+                  handleAddItemToList={handleAddItemToList}
+                  handleEditItem={handleEditItem}
+                  handleDeleteItem={handleDeleteItem}
+                  localItem={localItem}
+                  localItems={items}
+                  setLocalItem={setLocalItem}
+                  showAddAItem={showAddAItem}
+                  setShowAddAItem={setShowAddAItem}
+                  isSaveLoading={isSaveLoading}
+                  handleUpdateList={handleUpdateList}
+                  isShareLoading={isShareLoading}
+                  handleShareList={handleShareList}
+                />
               ))}
           </>
         )}

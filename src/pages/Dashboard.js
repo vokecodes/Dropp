@@ -1,30 +1,37 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ShoppingList from "../components/ShoppingList";
 import UserDetails from "../components/UserDetails";
 import { Images } from "../config/images";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
-  const getUser = useCallback(async () => {
+  const getUser = useCallback(() => {
     const result = sessionStorage.getItem("auth");
-    const { token, data } = JSON.parse(result);
 
-    axios
-      .get(
-        `https://dropp-backend.herokuapp.com/api/v1/user/${data?.user?._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then(({ data }) => {
-        if (data?.success) setUser(data?.user);
-      })
-      .catch((error) => {});
+    if (result) {
+      const { token, data } = JSON.parse(result);
+
+      axios
+        .get(
+          `https://dropp-backend.herokuapp.com/api/v1/user/${data?.user?._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(({ data }) => {
+          if (data?.success) setUser(data?.user);
+        })
+        .catch((error) => {});
+    } else {
+      navigate("/");
+    }
   }, []);
 
   useEffect(() => {

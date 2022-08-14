@@ -1,19 +1,24 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { connect } from "react-redux";
 import Home from "../pages/Home";
-import Market from "../pages/Market";
 import Dashboard from "../pages/Dashboard";
 
-const Navigation = () => {
+const Navigation = ({ auth }) => {
+  // console.log(auth);
   return (
     <Router>
       <Routes>
-        <Route path="/market" element={<Market />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="*" element={<Home />} />
         <Route path="/" element={<Home />}></Route>
       </Routes>
     </Router>
   );
 };
 
-export default Navigation;
+const mapStateToProps = (state) => ({
+  auth: state.authReducer.auth,
+});
+
+export default connect(mapStateToProps, {})(Navigation);
