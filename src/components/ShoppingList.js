@@ -108,8 +108,6 @@ const ShoppingList = () => {
     if (items?.length <= 0) return;
 
     setIsShareLoading(true);
-    const result = sessionStorage.getItem("auth");
-    const { token, data } = JSON.parse(result);
 
     const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my shopping list ${JSON.stringify(
       {
@@ -118,29 +116,14 @@ const ShoppingList = () => {
       }
     )}`;
 
-    axios
-      .post(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/shopper/${data?.user?._id}`,
-        { name: listName, items },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then(({ data }) => {
-        window.open(whatsAppLink);
-        handleSelectList("my");
-        getUserLists();
-      })
-      .catch((error) => {})
-      .finally(() => {
-        setOpenList("");
-        setListId("");
-        setListName("");
-        setItems([]);
-        setIsShareLoading(false);
-      });
+    window.open(whatsAppLink);
+    handleSelectList("my");
+    getUserLists();
+    setOpenList("");
+    setListId("");
+    setListName("");
+    setItems([]);
+    setIsShareLoading(false);
   };
 
   const handleUpdateList = () => {
@@ -182,7 +165,7 @@ const ShoppingList = () => {
         </div>
         <div className="flex bg_list p-2 rounded-full mt-2 lg:mt-0">
           <button
-            className={`h-8 w-32 rounded-full text-xs font_normal font-bold ${
+            className={`h-8 w-1/2 lg:w-32 rounded-full text-xs font_normal font-bold ${
               selectedList === "create" && "bg_yellow"
             }`}
             onClick={() => handleSelectList("create")}
@@ -190,7 +173,7 @@ const ShoppingList = () => {
             Create a new list
           </button>
           <button
-            className={`h-8 w-32 rounded-full text-xs font_normal font-bold ${
+            className={`h-8 w-1/2 lg:w-32 rounded-full text-xs font_normal font-bold ${
               selectedList === "my" && "bg_yellow"
             } `}
             onClick={() => handleSelectList("my")}
@@ -319,7 +302,7 @@ const ShoppingList = () => {
 
             <div className="lg:flex">
               <button
-                className="w-full lg:w-32 h-14 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text_save_list font_medium bg_save_list mr-10"
+                className="w-full lg:w-32 h-14 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text_save_list font_bold bg_save_list mr-10"
                 disabled={isSaveLoading}
                 onClick={handleSaveList}
               >

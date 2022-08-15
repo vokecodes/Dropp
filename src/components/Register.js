@@ -9,7 +9,7 @@ import { Images } from "../config/images";
 import { AUTH_DATA } from "../reducers/type";
 
 const Register = ({ showModal, setShowModal }) => {
-  const [authType, setAuthType] = useState(true);
+  const [authType, setAuthType] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -91,13 +91,24 @@ const Register = ({ showModal, setShowModal }) => {
   return showModal ? (
     <>
       <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 register_bg h-3/4 overflow-hidden mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+        <div
+          className={`relative w-4/5 lg:w-1/4 register_bg overflow-hidden mt-20 mb-6 mx-auto rounded-3xl shadow-lg ${
+            authType ? "h-3/4" : "h-auto"
+          }`}
+        >
           <div>
-            <img
-              src={authType ? Images.register_banner : Images.login_banner}
-              alt="register_banner"
-              className="rounded-t-3xl"
-            />
+            <div>
+              <img
+                src={Images.auth_banner}
+                alt="register_banner"
+                className="rounded-t-3xl"
+              />
+              <div className="absolute inset-10">
+                <h1 className="text-2xl text-white font_bold">
+                  {authType ? "Welcome to Dropp!" : "Welcome back!"}
+                </h1>
+              </div>
+            </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 cursor-pointer absolute top-5 right-5"

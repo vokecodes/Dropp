@@ -48,7 +48,7 @@ const Navbar = ({ user, setShowModal }) => {
               className="w-24 lg:w-40 ml-5 font_bold py-3 border border-transparent text-sm rounded-xl shadow-sm text-white bg_primary"
               onClick={() => setShowModal(true)}
             >
-              Sign up
+              Sign up / Login
             </button>
           </>
         )}

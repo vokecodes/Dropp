@@ -52,7 +52,7 @@ const Dashboard = () => {
         <>
           <Navbar user={user} />
 
-          <div className="w-4/5 lg:w-4/6 mx-auto pt-5 lg:flex lg:justify-between">
+          <div className="w-11/12 lg:w-4/6 mx-auto pt-5 lg:flex lg:justify-between">
             <ShoppingList />
             <UserDetails
               user={user}
