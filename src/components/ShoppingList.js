@@ -158,7 +158,7 @@ const ShoppingList = () => {
   };
 
   return (
-    <div className="lg:w-1/2 lg:mr-5 bg_shopping p-8 rounded-3xl shadow-sm mb-10 lg:mb-0">
+    <div className="lg:w-1/2 lg:mr-5 bg_shopping p-4 lg:p-8 rounded-3xl shadow-sm mb-10 lg:mb-0">
       <div className="lg:flex items-center">
         <div className="flex-1">
           <h2 className="text-xl font_bold">My Shopping list</h2>
@@ -185,7 +185,7 @@ const ShoppingList = () => {
 
       <div className="my-8">
         {selectedList === "create" && (
-          <div className="bg-white px-6 py-6 rounded-2xl">
+          <div className="bg-white p-3 lg:p-6 rounded-2xl">
             {/* <h1 className="text-xl text-center gray_title font_medium">
               List name
             </h1> */}
