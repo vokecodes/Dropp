@@ -25,9 +25,7 @@ const Header = ({ itemsImage, setShowModal }) => {
           <div className="text-center lg:text-left">
             <button
               className="w-80 lg:w-60 font_bold py-5 button border border-transparent text-lg rounded-xl shadow-sm text-center text-white bg_primary"
-              onClick={() =>
-                window.open("https://wa.me/message/YKVHYMI6AXGUC1")
-              }
+              onClick={() => setShowModal(true)}
             >
               Try Dropp now!
             </button>

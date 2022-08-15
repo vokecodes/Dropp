@@ -91,7 +91,7 @@ const Register = ({ showModal, setShowModal }) => {
   return showModal ? (
     <>
       <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 register_bg overflow-scroll mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+        <div className="relative w-4/5 lg:w-1/4 register_bg h-3/4 overflow-scroll mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
           <div className="relative flex flex-col w-full outline-none focus:outline-none">
             <div className="flex flex-col justify-center">
               <img
