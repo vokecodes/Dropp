@@ -509,3 +509,16 @@
 .blur-bg {
   filter: blur(4px);
 }
+
+.css-1rhbuit-multiValue {
+  background-color: #ffc044 !important;
+  border-radius: 15px !important;
+}
+
+.css-12jo7m5 {
+  font-size: 13px !important;
+}
+
+.bg_success {
+  background-color: #d3feea;
+}

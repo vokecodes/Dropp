@@ -1,6 +1,6 @@
 import { Images } from "../config/images";
 
-const UserDetails = ({ user }) => {
+const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
   return (
     <div className="lg:w-1/2">
       <img src={Images.dashboard_banner} alt="dashboard_banner" />
@@ -9,11 +9,12 @@ const UserDetails = ({ user }) => {
           <div className="flex-1">
             <h1 className="text-2xl font_bold">Hi, {user?.firstName} </h1>
           </div>
-          {/* <div className="">
-            <button className="bg_yellow h-8 w-24 rounded-full text-xs font_bold">
-              Edit
-            </button>
-          </div> */}
+          <button
+            className="bg_yellow h-8 w-24 rounded-full text-xs font_bold"
+            onClick={() => setShowProfileModal(true)}
+          >
+            Edit
+          </button>
         </div>
         <div className="my-5">
           <div className="flex dashboard_hr py-3">
@@ -73,25 +74,28 @@ const UserDetails = ({ user }) => {
                   **********
                 </p>
               </div>
-              {/* <div className="flex">
-      <p className="text-xs font_normal light_gray">
-        Change password
-      </p>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-4 w-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="#918d77"
-        strokeWidth={2}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 5l7 7-7 7"
-        />
-      </svg>
-    </div> */}
+              <div
+                className="flex cursor-pointer"
+                onClick={() => setShowPasswordModal(true)}
+              >
+                <p className="text-xs font_normal light_gray">
+                  Change password
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="#918d77"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>

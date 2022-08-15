@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ShoppingList from "../components/ShoppingList";
 import UserDetails from "../components/UserDetails";
+import Profile from "../components/Profile";
+import ChangePassword from "../components/ChangePassword";
 import { Images } from "../config/images";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const getUser = useCallback(() => {
     const result = sessionStorage.getItem("auth");
@@ -32,7 +36,7 @@ const Dashboard = () => {
     } else {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (!user) getUser();
@@ -50,8 +54,22 @@ const Dashboard = () => {
 
           <div className="w-4/5 lg:w-4/6 mx-auto pt-5 lg:flex lg:justify-between">
             <ShoppingList />
-            <UserDetails user={user} />
+            <UserDetails
+              user={user}
+              setShowProfileModal={setShowProfileModal}
+              setShowPasswordModal={setShowPasswordModal}
+            />
           </div>
+          <Profile
+            user={user}
+            showProfileModal={showProfileModal}
+            setShowProfileModal={setShowProfileModal}
+          />
+          <ChangePassword
+            user={user}
+            showPasswordModal={showPasswordModal}
+            setShowPasswordModal={setShowPasswordModal}
+          />
         </>
       )}
     </>
