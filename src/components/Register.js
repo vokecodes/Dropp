@@ -91,32 +91,31 @@ const Register = ({ showModal, setShowModal }) => {
   return showModal ? (
     <>
       <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 register_bg mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
-          <div className="relative flex flex-col w-full outline-none focus:outline-none">
-            <div className="flex flex-col justify-center">
-              <img
-                src={authType ? Images.register_banner : Images.login_banner}
-                alt="register_banner"
-                className="rounded-t-3xl"
+        <div className="relative w-4/5 lg:w-1/4 register_bg h-3/4 overflow-hidden mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+          <div>
+            <img
+              src={authType ? Images.register_banner : Images.login_banner}
+              alt="register_banner"
+              className="rounded-t-3xl"
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 cursor-pointer absolute top-5 right-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              onClick={() => setShowModal(false)}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
               />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 cursor-pointer absolute top-5 right-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-                onClick={() => setShowModal(false)}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </div>
-
-            <div className="h-1/4 overflow-scroll pt-5 px-8">
+            </svg>
+          </div>
+          <div className="relative w-full h-4/5 overflow-scroll justify-center outline-none focus:outline-none">
+            <div className="pt-5 px-8">
               {authType ? (
                 <Formik
                   initialValues={{
