@@ -91,7 +91,7 @@ const Register = ({ showModal, setShowModal }) => {
   return showModal ? (
     <>
       <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 register_bg h-4/5 overflow-scroll mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+        <div className="relative w-4/5 lg:w-1/4 register_bg mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
           <div className="relative flex flex-col w-full outline-none focus:outline-none">
             <div className="flex flex-col justify-center">
               <img
@@ -114,336 +114,336 @@ const Register = ({ showModal, setShowModal }) => {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
+            </div>
 
-              <div className="pt-5 px-8">
-                {authType ? (
-                  <Formik
-                    initialValues={{
-                      firstName: "",
-                      lastName: "",
-                      email: "",
-                      phoneNumber: "",
-                      password: "",
-                      shoppingWeek: "",
-                      address: "",
-                      referralCode: "",
-                    }}
-                    validationSchema={registerSchema}
-                    onSubmit={(values, formikBag) => {
-                      registerUser(values, formikBag);
-                    }}
-                  >
-                    {(props) => (
-                      <Form onSubmit={props.handleSubmit}>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="firstName"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            First name
-                          </label>
+            <div className="h-1/4 overflow-scroll pt-5 px-8">
+              {authType ? (
+                <Formik
+                  initialValues={{
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    phoneNumber: "",
+                    password: "",
+                    shoppingWeek: "",
+                    address: "",
+                    referralCode: "",
+                  }}
+                  validationSchema={registerSchema}
+                  onSubmit={(values, formikBag) => {
+                    registerUser(values, formikBag);
+                  }}
+                >
+                  {(props) => (
+                    <Form onSubmit={props.handleSubmit}>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="firstName"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          First name
+                        </label>
+                        <Field
+                          type="text"
+                          name="firstName"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input"
+                        />
+                        <ErrorMessage
+                          name="firstName"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="lastName"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Last name
+                        </label>
+                        <Field
+                          type="text"
+                          name="lastName"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="lastName"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Email
+                        </label>
+                        <Field
+                          type="email"
+                          name="email"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="phoneNumber"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Phone number
+                        </label>
+                        <Field
+                          type="text"
+                          name="phoneNumber"
+                          maxLength="11"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="phoneNumber"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="password"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Password
+                        </label>
+                        <div className="flex">
                           <Field
-                            type="text"
-                            name="firstName"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input"
-                          />
-                          <ErrorMessage
-                            name="firstName"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="lastName"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Last name
-                          </label>
-                          <Field
-                            type="text"
-                            name="lastName"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
-                          />
-                          <ErrorMessage
-                            name="lastName"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Email
-                          </label>
-                          <Field
-                            type="email"
-                            name="email"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
-                          />
-                          <ErrorMessage
-                            name="email"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="phoneNumber"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Phone number
-                          </label>
-                          <Field
-                            type="text"
-                            name="phoneNumber"
-                            maxLength="11"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
-                          />
-                          <ErrorMessage
-                            name="phoneNumber"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Password
-                          </label>
-                          <div className="flex">
-                            <Field
-                              type={showRegisterPassword ? "text" : "password"}
-                              name="password"
-                              className="block w-full shadow-sm bg-transparent outline-none register_input "
-                            />
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 absolute right-10"
-                              viewBox="0 0 20 20"
-                              fill="#6C7072"
-                              onClick={() =>
-                                setShowRegisterPassword(!showRegisterPassword)
-                              }
-                            >
-                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <ErrorMessage
+                            type={showRegisterPassword ? "text" : "password"}
                             name="password"
-                            component="span"
-                            className="text-sm text-red-500"
+                            className="block w-full shadow-sm bg-transparent outline-none register_input "
                           />
-                        </div>
-                        <div className="mb-7">
-                          <label
-                            htmlFor="shoppingWeek"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            My shopping week
-                          </label>
-                          <Select
-                            isMulti
-                            classNamePrefix="custom_select"
-                            onChange={(value) =>
-                              props.setFieldValue(
-                                "shoppingWeek",
-                                value.map((v) => v.value)
-                              )
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 absolute right-10"
+                            viewBox="0 0 20 20"
+                            fill="#6C7072"
+                            onClick={() =>
+                              setShowRegisterPassword(!showRegisterPassword)
                             }
-                            options={options}
-                          />
-                          <ErrorMessage
-                            name="shoppingWeek"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="address"
-                            className="block text-sm font-medium text-gray-700 mb-1"
                           >
-                            Address
-                          </label>
-                          <Field
-                            type="text"
-                            name="address"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
-                          />
-                          <ErrorMessage
-                            name="address"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="referralCode"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Referral code (optional)
-                          </label>
-                          <Field
-                            type="text"
-                            name="referralCode"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
-                          />
-                        </div>
-
-                        <button
-                          type="submit"
-                          className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
-                          disabled={props.isSubmitting}
-                        >
-                          {props.isSubmitting ? (
-                            <svg
-                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="#fff"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                fill="#06c16b"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                          ) : (
-                            "Register now"
-                          )}
-                        </button>
-                      </Form>
-                    )}
-                  </Formik>
-                ) : (
-                  <Formik
-                    initialValues={{
-                      email: "",
-                      password: "",
-                    }}
-                    validationSchema={loginSchema}
-                    onSubmit={(values, formikBag) => {
-                      loginUser(values, formikBag);
-                    }}
-                  >
-                    {(props) => (
-                      <Form onSubmit={props.handleSubmit}>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Email
-                          </label>
-                          <Field
-                            type="email"
-                            name="email"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
-                          />
-                          <ErrorMessage
-                            name="email"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                          >
-                            Password
-                          </label>
-                          <div className="flex">
-                            <Field
-                              type={showLoginPassword ? "text" : "password"}
-                              name="password"
-                              className="block w-full shadow-sm bg-transparent outline-none register_input "
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path
+                              fillRule="evenodd"
+                              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                              clipRule="evenodd"
                             />
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 absolute right-10"
-                              viewBox="0 0 20 20"
-                              fill="#6C7072"
-                              onClick={() =>
-                                setShowLoginPassword(!showLoginPassword)
-                              }
-                            >
-                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <ErrorMessage
-                            name="password"
-                            component="span"
-                            className="text-sm text-red-500"
-                          />
+                          </svg>
                         </div>
-                        <button
-                          type="submit"
-                          className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
-                          disabled={props.isSubmitting}
+                        <ErrorMessage
+                          name="password"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-7">
+                        <label
+                          htmlFor="shoppingWeek"
+                          className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                          {props.isSubmitting ? (
-                            <svg
-                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="#fff"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                fill="#06c16b"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                          ) : (
-                            "Login"
-                          )}
-                        </button>
-                      </Form>
-                    )}
-                  </Formik>
-                )}
+                          My shopping week
+                        </label>
+                        <Select
+                          isMulti
+                          classNamePrefix="custom_select"
+                          onChange={(value) =>
+                            props.setFieldValue(
+                              "shoppingWeek",
+                              value.map((v) => v.value)
+                            )
+                          }
+                          options={options}
+                        />
+                        <ErrorMessage
+                          name="shoppingWeek"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="address"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Address
+                        </label>
+                        <Field
+                          type="text"
+                          name="address"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="address"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="referralCode"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Referral code (optional)
+                        </label>
+                        <Field
+                          type="text"
+                          name="referralCode"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                      </div>
 
-                <div className="flex justify-center items-center mt-3 mb-5">
-                  <p
-                    className="text-gray-500 cursor-pointer"
-                    onClick={() => setAuthType(!authType)}
-                  >
-                    {authType
-                      ? "Already have an account?"
-                      : "Don't have an account?"}
-                    <span className="text-black font_bold">
-                      {authType ? " Login" : " Register"}
-                    </span>
-                  </p>
-                </div>
+                      <button
+                        type="submit"
+                        className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
+                        disabled={props.isSubmitting}
+                      >
+                        {props.isSubmitting ? (
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="#fff"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              fill="#06c16b"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        ) : (
+                          "Register now"
+                        )}
+                      </button>
+                    </Form>
+                  )}
+                </Formik>
+              ) : (
+                <Formik
+                  initialValues={{
+                    email: "",
+                    password: "",
+                  }}
+                  validationSchema={loginSchema}
+                  onSubmit={(values, formikBag) => {
+                    loginUser(values, formikBag);
+                  }}
+                >
+                  {(props) => (
+                    <Form onSubmit={props.handleSubmit}>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Email
+                        </label>
+                        <Field
+                          type="email"
+                          name="email"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="password"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Password
+                        </label>
+                        <div className="flex">
+                          <Field
+                            type={showLoginPassword ? "text" : "password"}
+                            name="password"
+                            className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 absolute right-10"
+                            viewBox="0 0 20 20"
+                            fill="#6C7072"
+                            onClick={() =>
+                              setShowLoginPassword(!showLoginPassword)
+                            }
+                          >
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path
+                              fillRule="evenodd"
+                              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <ErrorMessage
+                          name="password"
+                          component="span"
+                          className="text-sm text-red-500"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
+                        disabled={props.isSubmitting}
+                      >
+                        {props.isSubmitting ? (
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="#fff"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              fill="#06c16b"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        ) : (
+                          "Login"
+                        )}
+                      </button>
+                    </Form>
+                  )}
+                </Formik>
+              )}
+
+              <div className="flex justify-center items-center mt-3 mb-5">
+                <p
+                  className="text-gray-500 cursor-pointer"
+                  onClick={() => setAuthType(!authType)}
+                >
+                  {authType
+                    ? "Already have an account?"
+                    : "Don't have an account?"}
+                  <span className="text-black font_bold">
+                    {authType ? " Login" : " Register"}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
