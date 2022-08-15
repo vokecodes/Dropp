@@ -67,7 +67,7 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
             <div className="w-2/5">
               <p className="text-sm label_color font_bold">Account password</p>
             </div>
-            <div className="w-3/5 ml-2 flex items-center">
+            <div className="w-3/5 ml-2 lg:flex items-center">
               <div className="flex-1 flex items-center">
                 <img src={Images.lock} alt="settings phone" className="mr-2" />
                 <p className="text-base text-black font_bold mt-2">

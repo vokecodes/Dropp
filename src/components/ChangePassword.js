@@ -48,7 +48,7 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
   return showPasswordModal ? (
     <>
       <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-4/5 lg:w-1/4 bg-white h-3/4 overflow-hidden mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
+        <div className="relative w-4/5 lg:w-1/4 bg-white h-3/5 overflow-hidden mt-20 mb-6 mx-auto rounded-3xl shadow-lg ">
           <div className="mt-10 mb-5">
             <h1 className="text-2xl font_bold text-black text-center">
               {updateSuccessful ? "Success" : "Change Password"}
@@ -69,7 +69,7 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
               />
             </svg>
           </div>
-          <div className="relative w-full h-4/5 overflow-scroll justify-center outline-none focus:outline-none">
+          <div className="relative w-full justify-center outline-none focus:outline-none">
             <div className="pt-5 px-8">
               <Formik
                 initialValues={{
@@ -183,7 +183,7 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
 
                     {updateSuccessful ? (
                       <button
-                        className="absolute bottom-1 mt-8 w-96 ml-3 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
+                        className="mt-56 lg:mt-32 w-full ml-3 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
                         onClick={() => setShowPasswordModal(false)}
                       >
                         Close
@@ -191,7 +191,7 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
                     ) : (
                       <button
                         type="submit"
-                        className="absolute bottom-1 mt-8 w-96 ml-3 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
+                        className="mt-56 lg:mt-32 w-full ml-3 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
                         disabled={props.isSubmitting}
                       >
                         {props.isSubmitting ? (
