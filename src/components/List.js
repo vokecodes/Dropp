@@ -104,57 +104,57 @@ const List = ({
                     <div className="mb-3">
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                       >
                         Item name
                       </label>
                       <Field
                         type="text"
                         name="name"
-                        className="block w-full shadow-sm bg-transparent outline-none item_input"
+                        className="block w-full shadow-sm bg-transparent outline-none item_input font_regular"
                       />
                       <ErrorMessage
                         name="name"
                         component="span"
-                        className="text-red-500"
+                        className="text-red-500 font_regular"
                       />
                     </div>
                     <div className="mb-3">
                       <label
                         htmlFor="quantity"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                       >
                         Quantity
                       </label>
                       <Field
                         type="number"
                         name="quantity"
-                        className="block w-full shadow-sm bg-transparent outline-none item_input"
+                        className="block w-full shadow-sm bg-transparent outline-none item_input font_regular"
                       />
                       <ErrorMessage
                         name="quantity"
                         component="span"
-                        className="text-red-500"
+                        className="text-red-500 font_regular"
                       />
                     </div>
                     <div className="mb-3">
                       <label
                         htmlFor="measurement"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                       >
                         Measurement
                       </label>
                       <Field
                         type="text"
                         name="measurement"
-                        className="block w-full shadow-sm bg-transparent outline-none item_input"
+                        className="block w-full shadow-sm bg-transparent outline-none item_input font_regular"
                       />
                       <ErrorMessage
                         name="measurement"
                         component="span"
-                        className="text-red-500"
+                        className="text-red-500 font_regular"
                       />
-                      <span className="block text-sm helper_text">
+                      <span className="block text-sm helper_text font_regular">
                         E.g Pieces, kg, packs, bags.
                       </span>
                     </div>
@@ -210,7 +210,7 @@ const List = ({
               )}
             </button>
             <button
-              className="mt-3 lg:mt-0 w-full h-14 lg:w-96 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-sm lg:text-lg text-center text-white font_bold bg_primary"
+              className="mt-3 lg:mt-0 w-full h-14 lg:w-96 flex justify-center items-center py-3 border border-transparent rounded-xl shadow-sm text-sm lg:text-lg text-center text-white font_bold bg_primary"
               disabled={isShareLoading}
               onClick={handleShareList}
             >

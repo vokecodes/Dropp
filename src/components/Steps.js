@@ -1,7 +1,7 @@
 import React from "react";
 import { Images } from "../config/images";
 
-const Steps = ({ bannerImage, businesses }) => {
+const Steps = ({ bannerImage, businesses, setShowModal }) => {
   return (
     <section className="header_bg">
       <div className="lg:w-4/6 mx-auto pt-40 lg:pt-12">
@@ -114,9 +114,7 @@ const Steps = ({ bannerImage, businesses }) => {
               <div className="text-center lg:text-left">
                 <button
                   className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary"
-                  onClick={() =>
-                    window.open("https://wa.me/message/YKVHYMI6AXGUC1")
-                  }
+                  onClick={() => setShowModal(true)}
                 >
                   Schedule a Dropp!
                 </button>

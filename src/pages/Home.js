@@ -240,7 +240,11 @@ const Home = () => {
         <Supermarkets supermartkets={supermartkets} galley={galley} />
 
         {/* Steps */}
-        <Steps bannerImage={Images.boy} businesses={businesses} />
+        <Steps
+          bannerImage={Images.boy}
+          businesses={businesses}
+          setShowModal={setShowModal}
+        />
 
         {/* Banner */}
         {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}

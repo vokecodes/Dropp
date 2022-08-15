@@ -4,10 +4,10 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
   return (
     <div className="lg:w-1/2">
       <img src={Images.dashboard_banner} alt="dashboard_banner" />
-      <div className="my-10 register_bg rounded-3xl p-6">
+      <div className="my-10 w-full register_bg rounded-3xl p-6">
         <div className="flex">
           <div className="flex-1">
-            <h1 className="text-2xl font_bold">Hi, {user?.firstName} </h1>
+            <h1 className="text-2xl font_bold shrink">Hi, {user?.firstName}</h1>
           </div>
           <button
             className="bg_yellow h-8 w-24 rounded-full text-xs font_bold"
@@ -18,10 +18,10 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
         </div>
         <div className="my-5">
           <div className="flex dashboard_hr py-3">
-            <div className="w-2/5">
+            <div className="w-1/4">
               <p className="text-sm label_color font_bold">Phone</p>
             </div>
-            <div className="w-3/5 ml-2  flex items-center">
+            <div className="w-3/4 ml-2  flex items-center">
               <img
                 src={Images.settings_phone}
                 alt="settings phone"
@@ -33,19 +33,22 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
             </div>
           </div>
           <div className="flex dashboard_hr py-3">
-            <div className="w-2/5">
+            <div className="w-1/4">
               <p className="text-sm label_color font_bold">Email</p>
             </div>
-            <div className="w-3/5 ml-2 flex items-center">
+            <div className="w-3/4 ml-2 flex items-center">
               <img src={Images.mail} alt="settings phone" className="mr-2" />
-              <p className="text-base text-black font_bold">{user?.email}</p>
+              <p className="text-base text-black font_bold shrink">
+                ferricoolcreativity@gmail.com
+                {/* {user?.email} */}
+              </p>
             </div>
           </div>
           <div className="flex dashboard_hr py-3">
-            <div className="w-2/5">
+            <div className="w-1/4">
               <p className="text-sm label_color font_bold">My shopping week</p>
             </div>
-            <div className="w-3/5 ml-2 flex items-center">
+            <div className="w-3/4 ml-2 flex items-center">
               <img
                 src={Images.shopping_cart}
                 alt="settings phone"
@@ -64,10 +67,10 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
             </div>
           </div>
           <div className="flex dashboard_hr py-3">
-            <div className="w-2/5">
+            <div className="w-1/4">
               <p className="text-sm label_color font_bold">Account password</p>
             </div>
-            <div className="w-3/5 ml-2 lg:flex items-center">
+            <div className="w-3/4 ml-2 lg:flex items-center">
               <div className="flex-1 flex items-center">
                 <img src={Images.lock} alt="settings phone" className="mr-2" />
                 <p className="text-base text-black font_bold mt-2">

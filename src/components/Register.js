@@ -149,61 +149,61 @@ const Register = ({ showModal, setShowModal }) => {
                       <div className="mb-3">
                         <label
                           htmlFor="firstName"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           First name
                         </label>
                         <Field
                           type="text"
                           name="firstName"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input"
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                         <ErrorMessage
                           name="firstName"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="lastName"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Last name
                         </label>
                         <Field
                           type="text"
                           name="lastName"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                         <ErrorMessage
                           name="lastName"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Email
                         </label>
                         <Field
                           type="email"
                           name="email"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                         <ErrorMessage
                           name="email"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="phoneNumber"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Phone number
                         </label>
@@ -211,18 +211,18 @@ const Register = ({ showModal, setShowModal }) => {
                           type="text"
                           name="phoneNumber"
                           maxLength="11"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                         <ErrorMessage
                           name="phoneNumber"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="password"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Password
                         </label>
@@ -230,7 +230,7 @@ const Register = ({ showModal, setShowModal }) => {
                           <Field
                             type={showRegisterPassword ? "text" : "password"}
                             name="password"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
+                            className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                           />
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -252,13 +252,13 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="password"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-7">
                         <label
                           htmlFor="shoppingWeek"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           My shopping week
                         </label>
@@ -276,38 +276,38 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="shoppingWeek"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="address"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Address
                         </label>
                         <Field
                           type="text"
                           name="address"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                         <ErrorMessage
                           name="address"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="referralCode"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Referral code (optional)
                         </label>
                         <Field
                           type="text"
                           name="referralCode"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                       </div>
 
@@ -358,25 +358,25 @@ const Register = ({ showModal, setShowModal }) => {
                       <div className="mb-3">
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Email
                         </label>
                         <Field
                           type="email"
                           name="email"
-                          className="block w-full shadow-sm bg-transparent outline-none register_input "
+                          className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                         />
                         <ErrorMessage
                           name="email"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <div className="mb-3">
                         <label
                           htmlFor="password"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="block text-sm font-medium text-gray-700 mb-1 font_regular"
                         >
                           Password
                         </label>
@@ -384,7 +384,7 @@ const Register = ({ showModal, setShowModal }) => {
                           <Field
                             type={showLoginPassword ? "text" : "password"}
                             name="password"
-                            className="block w-full shadow-sm bg-transparent outline-none register_input "
+                            className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
                           />
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -406,7 +406,7 @@ const Register = ({ showModal, setShowModal }) => {
                         <ErrorMessage
                           name="password"
                           component="span"
-                          className="text-sm text-red-500"
+                          className="text-sm text-red-500 font_regular"
                         />
                       </div>
                       <button
@@ -444,7 +444,7 @@ const Register = ({ showModal, setShowModal }) => {
 
               <div className="flex justify-center items-center mt-3 mb-5">
                 <p
-                  className="text-gray-500 cursor-pointer"
+                  className="text-gray-500 cursor-pointer font_regular"
                   onClick={() => setAuthType(!authType)}
                 >
                   {authType
