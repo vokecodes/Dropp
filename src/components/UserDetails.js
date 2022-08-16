@@ -27,7 +27,7 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
                 alt="settings phone"
                 className="mr-2"
               />
-              <p className="text-base text-black font_bold">
+              <p className="text-sm text-black font_bold">
                 {user?.phoneNumber}
               </p>
             </div>
@@ -38,9 +38,8 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
             </div>
             <div className="w-3/4 ml-2 flex items-center">
               <img src={Images.mail} alt="settings phone" className="mr-2" />
-              <p className="text-base text-black font_bold shrink">
-                ferricoolcreativity@gmail.com
-                {/* {user?.email} */}
+              <p className="text-sm text-black font_bold shrink">
+                {user?.email}
               </p>
             </div>
           </div>
@@ -81,7 +80,7 @@ const UserDetails = ({ user, setShowProfileModal, setShowPasswordModal }) => {
                 className="flex cursor-pointer"
                 onClick={() => setShowPasswordModal(true)}
               >
-                <p className="text-xs font_normal light_gray">
+                <p className="text-sm font_normal light_gray">
                   Change password
                 </p>
                 <svg
