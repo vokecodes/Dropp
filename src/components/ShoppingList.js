@@ -37,6 +37,9 @@ const ShoppingList = () => {
     let index = local.indexOf(item);
     local.splice(index, 1);
     setItems(local);
+    if (local.length <= 0 && selectedList === "my") {
+      handleDeleteList();
+    }
   };
 
   const handleEditItem = (item) => {
@@ -154,6 +157,32 @@ const ShoppingList = () => {
         setListName("");
         setItems([]);
         setIsSaveLoading(false);
+      });
+  };
+
+  const handleDeleteList = () => {
+    const result = sessionStorage.getItem("auth");
+    const { token, data } = JSON.parse(result);
+
+    axios
+      .delete(
+        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(({ data }) => {
+        alert("List deleted.");
+        getUserLists();
+      })
+      .catch((error) => {})
+      .finally(() => {
+        setOpenList("");
+        setListId("");
+        setListName("");
+        setItems([]);
       });
   };
 
