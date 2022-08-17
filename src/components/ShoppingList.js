@@ -331,7 +331,7 @@ const ShoppingList = () => {
 
             <div className="lg:flex">
               <button
-                className="w-full lg:w-32 h-14 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text_save_list font_bold bg_save_list mr-10"
+                className="w-full lg:w-32 h-14 flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text_save_list font_medium bg_save_list mr-10"
                 disabled={isSaveLoading}
                 onClick={handleSaveList}
               >
@@ -398,15 +398,15 @@ const ShoppingList = () => {
                   key={i}
                   name={list?.name}
                   items={list?.items}
-                  open={openList === list?.name}
+                  open={openList === list?._id}
                   setOpen={() => {
-                    if (openList === list?.name) {
+                    if (openList === list?._id) {
                       setOpenList("");
                       setItems([]);
                       setListName("");
                       setListId("");
                     } else {
-                      setOpenList(list?.name);
+                      setOpenList(list?._id);
                       setListName(list?.name);
                       setItems(list?.items);
                       setListId(list?._id);
