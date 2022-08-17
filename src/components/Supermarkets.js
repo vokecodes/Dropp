@@ -46,8 +46,8 @@ const Supermarkets = ({ supermartkets, galley }) => {
             {/* <div style={{ width: "100000px" }}> */}
             <div className="galley">
               <div className="flex flex-row ">
-                {galley?.map((pic) => (
-                  <img src={pic} alt="gallery" className="mr-5" />
+                {galley?.map((pic, i) => (
+                  <img key={i} src={pic} alt="gallery" className="mr-5" />
                 ))}
               </div>
             </div>

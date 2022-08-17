@@ -1,6 +1,6 @@
 import React from "react";
 
-const NeedSomething = ({ items }) => {
+const NeedSomething = ({ items, setShowModal }) => {
   return (
     <section className="w-4/5 lg:w-4/6 mx-auto pt-5 pb-20">
       <div className="flex-1 lg:mt-20">
@@ -35,7 +35,7 @@ const NeedSomething = ({ items }) => {
         <a href="#stores">
           <button
             className="w-80 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary"
-            onClick={() => window.open("https://wa.me/message/YKVHYMI6AXGUC1")}
+            onClick={() => setShowModal(true)}
           >
             Schedule a Dropp!
           </button>

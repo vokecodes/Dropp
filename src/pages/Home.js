@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactGA from "react-ga4";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import Login from "../components/Login";
+import Register from "../components/Register";
 import NeedSomething from "../components/NeedSomething";
 import Supermarkets from "../components/Supermarkets";
 import Steps from "../components/Steps";
@@ -93,42 +94,42 @@ const supermartkets = [
     image: Images.justrite_sm,
   },
   {
-    id: 6,
+    id: 7,
     title: "Supermark Nigeria",
     image: Images.supermart_sm,
   },
   {
-    id: 7,
+    id: 8,
     title: "The Hygiene Supermarket",
     image: Images.hygiene_sm,
   },
   {
-    id: 8,
+    id: 9,
     title: "Twins Faja Supermarket",
     image: Images.twins_faja_sm,
   },
   {
-    id: 9,
+    id: 10,
     title: "Bargains Supermarket",
     image: Images.bargains_sm,
   },
   {
-    id: 10,
+    id: 11,
     title: "Emel Supermarket Solutions",
     image: Images.emel_sm,
   },
   {
-    id: 11,
+    id: 12,
     title: "Buy 4 Less Supermarket",
     image: Images.buy_4_less_sm,
   },
   {
-    id: 12,
+    id: 13,
     title: "CMart Stores",
     image: Images.cmart_sm,
   },
   {
-    id: 13,
+    id: 14,
     title: "Market Square",
     image: Images.market_square_sm,
   },
@@ -155,30 +156,6 @@ const galley = [
   Images.gImage9,
 ];
 
-const steps = [
-  {
-    id: 1,
-    image: Images.step01,
-    number: "01.",
-    title: `Create a shopping list. \n Very simple.`,
-    description: `Fill your shopping list with everything from \n groceries to pharmacy essentials and more.`,
-  },
-  // {
-  //   id: 2,
-  //   image: Images.step02,
-  //   number: "02.",
-  //   title: `Have your shopping taken \ncare of by a Dropper.`,
-  //   description: `Forget to add something? Just send your \nDropper a message through the app.`,
-  // },
-  // {
-  //   id: 3,
-  //   image: Images.step03,
-  //   number: "03.",
-  //   title: `Get it when you \nneed it.`,
-  //   description: `Need an order delivered later? \nSchedule it for later.`,
-  // },
-];
-
 const businesses = [
   { id: 0, title: "Paga", image: Images.paga, mobileImage: Images.paga_mobile },
   {
@@ -202,14 +179,10 @@ const businesses = [
 ];
 
 const Home = () => {
-  useEffect(() => {
-    ReactGA.initialize("G-EHK6CS7TX2");
-    ReactGA.send(window.location.pathname + window.location.search);
-  }, []);
-
-  const [step1Class] = useState(false);
-  const [step2Class] = useState(false);
-  const [step3Class] = useState(false);
+  // useEffect(() => {
+  //   ReactGA.initialize("G-EHK6CS7TX2");
+  //   ReactGA.send(window.location.pathname + window.location.search);
+  // }, []);
 
   // useEffect(() => {
   //   window.addEventListener("scroll", pop);
@@ -236,32 +209,54 @@ const Home = () => {
   //   }
   // };
 
+  const navigate = useNavigate();
+
+  const getUser = useCallback(() => {
+    const result = sessionStorage.getItem("auth");
+
+    if (result) navigate("/dashboard");
+  }, [navigate]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      {/* Header */}
-      <Header itemsImage={Images.itemsGif} />
+      <div className={showModal ? "blur-bg" : ""}>
+        {/* Header */}
+        <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
-      {/* Need Something */}
-      <NeedSomething items={items} title="Dropp" />
+        {/* Need Something */}
+        <NeedSomething
+          items={items}
+          title="Dropp"
+          setShowModal={setShowModal}
+        />
 
-      {/* Supermarkets */}
-      <Supermarkets supermartkets={supermartkets} galley={galley} />
+        {/* Supermarkets */}
+        <Supermarkets supermartkets={supermartkets} galley={galley} />
 
-      {/* Steps */}
-      <Steps bannerImage={Images.boy} businesses={businesses} />
+        {/* Steps */}
+        <Steps
+          bannerImage={Images.boy}
+          businesses={businesses}
+          setShowModal={setShowModal}
+        />
 
-      {/* Banner */}
-      {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
+        {/* Banner */}
+        {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
 
-      {/* Testimonials */}
-      <Testimonials />
+        {/* Testimonials */}
+        <Testimonials setShowModal={setShowModal} />
 
-      {/* Footer */}
-      <Footer logo={Images.logo} />
+        {/* Footer */}
+        <Footer logo={Images.logo} />
+      </div>
 
-      {/* <Login showModal={showModal} setShowModal={setShowModal} /> */}
+      <Register showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 };
