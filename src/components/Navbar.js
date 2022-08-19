@@ -57,16 +57,18 @@ const Navbar = ({ user, setShowModal }) => {
               alt="dropp_logo"
             />
           </Link>
-          <div className="hidden lg:block ml-5">
-            <div className="absolute mt-4 ml-5">
-              <img src={Images.carbon_location} alt="location" className="" />
+          {user && (
+            <div className="hidden lg:block ml-5">
+              <div className="absolute mt-4 ml-5">
+                <img src={Images.carbon_location} alt="location" className="" />
+              </div>
+              <input
+                className="px-12 py-4 w_483 address_input rounded-2xl outline-none focus:outline-none"
+                value={address}
+                onChange={(e) => handleChangeAddress(e.target.value)}
+              />
             </div>
-            <input
-              className="px-12 py-4 w_483 address_input rounded-2xl outline-none focus:outline-none"
-              value={address}
-              onChange={(e) => handleChangeAddress(e.target.value)}
-            />
-          </div>
+          )}
         </div>
         <div className="lg:flex">
           {user ? (
@@ -96,16 +98,18 @@ const Navbar = ({ user, setShowModal }) => {
           )}
         </div>
       </nav>
-      <div className="lg:hidden">
-        <div className="absolute mt-4 ml-5">
-          <img src={Images.carbon_location} alt="location" className="" />
+      {user && (
+        <div className="lg:hidden">
+          <div className="absolute mt-4 ml-5">
+            <img src={Images.carbon_location} alt="location" className="" />
+          </div>
+          <input
+            className="px-12 py-4 w-full address_input rounded-2xl outline-none focus:outline-none"
+            value={address}
+            onChange={(e) => handleChangeAddress(e.target.value)}
+          />
         </div>
-        <input
-          className="px-12 py-4 w-full address_input rounded-2xl outline-none focus:outline-none"
-          value={address}
-          onChange={(e) => handleChangeAddress(e.target.value)}
-        />
-      </div>
+      )}
     </div>
   );
 };
