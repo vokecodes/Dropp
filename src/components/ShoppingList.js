@@ -107,18 +107,24 @@ const ShoppingList = () => {
   const handleShareList = () => {
     if (!listName) {
       setListNameError("List name can not be empty.");
+      return;
     }
     if (items?.length <= 0) return;
 
     setIsShareLoading(true);
 
-    const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my shopping list ${JSON.stringify(
-      {
-        name: listName,
-        items,
-      }
-    )}`;
+    let text = "";
+    for (let i = 0; i < items.length; i++) {
+      text +=
+        items[i].name +
+        " " +
+        items[i].quantity +
+        " " +
+        items[i].measurement +
+        " ";
+    }
 
+    const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my ${listName} shopping list. Items are ${text}. Thanks!`;
     window.open(whatsAppLink);
     handleSelectList("my");
     getUserLists();
