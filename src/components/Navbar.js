@@ -21,28 +21,23 @@ const Navbar = ({ user, setShowModal }) => {
   };
 
   const handleChangeAddress = (value) => {
-    // console.log(value);
     setAddress(value);
 
-    // const result = sessionStorage.getItem("auth");
-    // const { token, data } = JSON.parse(result);
+    const result = sessionStorage.getItem("auth");
+    const { token, data } = JSON.parse(result);
 
-    // axios
-    //   .patch(
-    //     `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
-    //     { address },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   )
-    //   .then(({ data }) => {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .patch(
+        `https://dropp-backend.herokuapp.com/api/v1/user/${data?.user?._id}/address`,
+        { address: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(({ data }) => {})
+      .catch((error) => {});
   };
 
   return (
