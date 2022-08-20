@@ -21,14 +21,11 @@ const Dashboard = () => {
       const { token, data } = JSON.parse(result);
 
       axios
-        .get(
-          `https://dropp-backend.herokuapp.com/api/v1/user/${data?.user?._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        .get(`${process.env.REACT_APP_BASE_URL}/user/${data?.user?._id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then(({ data }) => {
           if (data?.success) setUser(data?.user);
         })

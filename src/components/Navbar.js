@@ -28,7 +28,7 @@ const Navbar = ({ user, setShowModal }) => {
 
     axios
       .patch(
-        `https://dropp-backend.herokuapp.com/api/v1/user/${data?.user?._id}/address`,
+        `${process.env.REACT_APP_BASE_URL}/user/${data?.user?._id}/address`,
         { address: value },
         {
           headers: {

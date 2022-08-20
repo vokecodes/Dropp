@@ -54,7 +54,7 @@ const ShoppingList = () => {
 
     axios
       .get(
-        `https://dropp-backend.herokuapp.com/api/v1/user/shopper/${data?.user?._id}/lists`,
+        `${process.env.REACT_APP_BASE_URL}/user/shopper/${data?.user?._id}/lists`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,7 +83,7 @@ const ShoppingList = () => {
 
     axios
       .post(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/shopper/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/shoppingList/shopper/${data?.user?._id}`,
         { name: listName, items },
         {
           headers: {
@@ -144,7 +144,7 @@ const ShoppingList = () => {
 
     axios
       .patch(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
         { name: listName, items },
         {
           headers: {
@@ -172,7 +172,7 @@ const ShoppingList = () => {
 
     axios
       .delete(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

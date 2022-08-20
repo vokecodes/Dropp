@@ -25,7 +25,7 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
 
     axios
       .patch(
-        `https://dropp-backend.herokuapp.com/api/v1/auth/changePassword/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/auth/changePassword/${data?.user?._id}`,
         {
           ...values,
         },
