@@ -113,6 +113,9 @@ const ShoppingList = () => {
 
     setIsShareLoading(true);
 
+    const result = sessionStorage.getItem("auth");
+    const { token, data } = JSON.parse(result);
+
     let text = "";
     for (let i = 0; i < items.length; i++) {
       text +=
@@ -124,15 +127,40 @@ const ShoppingList = () => {
         " ";
     }
 
-    const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my ${listName} shopping list. Items are ${text}. Thanks!`;
-    window.open(whatsAppLink);
-    handleSelectList("my");
-    getUserLists();
-    setOpenList("");
-    setListId("");
-    setListName("");
-    setItems([]);
-    setIsShareLoading(false);
+    const body = {
+      shopperFirstName: data.user.firstName,
+      shopperLastName: data.user.lastName,
+      shopperAddress: data.user.address,
+      shopperList: listName + " " + text,
+    };
+
+    axios
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/dropper/order`,
+        { ...body },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(({ data }) => {
+        console.log("Oikss", data);
+        const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my ${listName} shopping list. Items are ${text}. Thanks!`;
+        window.open(whatsAppLink);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        handleSelectList("my");
+        getUserLists();
+        setOpenList("");
+        setListId("");
+        setListName("");
+        setItems([]);
+        setIsShareLoading(false);
+      });
   };
 
   const handleUpdateList = () => {

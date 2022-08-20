@@ -50,6 +50,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
         }
       )
       .then(({ data }) => {
+        sessionStorage.setItem("auth", JSON.stringify(data.user));
         setShowProfileModal(false);
         navigate("/");
       })

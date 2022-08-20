@@ -36,7 +36,9 @@ const Navbar = ({ user, setShowModal }) => {
           },
         }
       )
-      .then(({ data }) => {})
+      .then(({ data }) => {
+        sessionStorage.setItem("auth", JSON.stringify(data.updatedUser));
+      })
       .catch((error) => {});
   };
 
