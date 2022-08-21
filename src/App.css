@@ -522,3 +522,10 @@
 .bg_success {
   background-color: #d3feea;
 }
+
+.address_input {
+  border: 1px solid #ececec;
+}
+.w_483 {
+  width: 483px;
+}

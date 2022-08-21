@@ -54,7 +54,7 @@ const ShoppingList = () => {
 
     axios
       .get(
-        `https://dropp-backend.herokuapp.com/api/v1/user/shopper/${data?.user?._id}/lists`,
+        `${process.env.REACT_APP_BASE_URL}/user/shopper/${data?.user?._id}/lists`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,7 +83,7 @@ const ShoppingList = () => {
 
     axios
       .post(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/shopper/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/shoppingList/shopper/${data?.user?._id}`,
         { name: listName, items },
         {
           headers: {
@@ -107,26 +107,67 @@ const ShoppingList = () => {
   const handleShareList = () => {
     if (!listName) {
       setListNameError("List name can not be empty.");
+      return;
     }
     if (items?.length <= 0) return;
 
     setIsShareLoading(true);
 
-    const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my shopping list ${JSON.stringify(
-      {
-        name: listName,
-        items,
-      }
-    )}`;
+    const result = sessionStorage.getItem("auth");
+    const { token, data } = JSON.parse(result);
 
-    window.open(whatsAppLink);
-    handleSelectList("my");
-    getUserLists();
-    setOpenList("");
-    setListId("");
-    setListName("");
-    setItems([]);
-    setIsShareLoading(false);
+    let text = "";
+    for (let i = 0; i < items.length; i++) {
+      if (i === items.length - 1) {
+        text +=
+          items[i].name +
+          " " +
+          items[i].quantity +
+          " " +
+          items[i].measurement +
+          "";
+      } else {
+        text +=
+          items[i].name +
+          " " +
+          items[i].quantity +
+          " " +
+          items[i].measurement +
+          ", ";
+      }
+    }
+
+    const body = {
+      shopperFirstName: data.user.firstName,
+      shopperLastName: data.user.lastName,
+      shopperAddress: data.user.address,
+      shopperList: listName + " " + text,
+    };
+
+    axios
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/dropper/order`,
+        { ...body },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(({ data }) => {
+        const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for  ${listName} shopping list. Items are ${text}. Thanks!`;
+        window.open(whatsAppLink);
+      })
+      .catch((error) => {})
+      .finally(() => {
+        handleSelectList("my");
+        getUserLists();
+        setOpenList("");
+        setListId("");
+        setListName("");
+        setItems([]);
+        setIsShareLoading(false);
+      });
   };
 
   const handleUpdateList = () => {
@@ -138,7 +179,7 @@ const ShoppingList = () => {
 
     axios
       .patch(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
         { name: listName, items },
         {
           headers: {
@@ -166,7 +207,7 @@ const ShoppingList = () => {
 
     axios
       .delete(
-        `https://dropp-backend.herokuapp.com/api/v1/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

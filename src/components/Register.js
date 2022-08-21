@@ -47,12 +47,9 @@ const Register = ({ showModal, setShowModal }) => {
 
   const registerUser = (values, formikBag) => {
     axios
-      .post(
-        `https://dropp-backend.herokuapp.com/api/v1/auth/shopper/register`,
-        {
-          ...values,
-        }
-      )
+      .post(`${process.env.REACT_APP_BASE_URL}/auth/shopper/register`, {
+        ...values,
+      })
       .then(({ data }) => {
         dispatch({
           type: AUTH_DATA,
@@ -70,7 +67,7 @@ const Register = ({ showModal, setShowModal }) => {
 
   const loginUser = (values, formikBag) => {
     axios
-      .post(`https://dropp-backend.herokuapp.com/api/v1/auth/login`, {
+      .post(`${process.env.REACT_APP_BASE_URL}/auth/login`, {
         ...values,
       })
       .then(({ data }) => {

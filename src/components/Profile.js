@@ -39,7 +39,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
 
     axios
       .patch(
-        `https://dropp-backend.herokuapp.com/api/v1/user/${user?._id}`,
+        `${process.env.REACT_APP_BASE_URL}/user/${user?._id}`,
         {
           ...values,
         },
@@ -50,6 +50,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
         }
       )
       .then(({ data }) => {
+        sessionStorage.setItem("auth", JSON.stringify(data.user));
         setShowProfileModal(false);
         navigate("/");
       })
