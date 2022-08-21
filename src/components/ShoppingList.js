@@ -118,13 +118,23 @@ const ShoppingList = () => {
 
     let text = "";
     for (let i = 0; i < items.length; i++) {
-      text +=
-        items[i].name +
-        " " +
-        items[i].quantity +
-        " " +
-        items[i].measurement +
-        " ";
+      if (i === items.length - 1) {
+        text +=
+          items[i].name +
+          " " +
+          items[i].quantity +
+          " " +
+          items[i].measurement +
+          "";
+      } else {
+        text +=
+          items[i].name +
+          " " +
+          items[i].quantity +
+          " " +
+          items[i].measurement +
+          ", ";
+      }
     }
 
     const body = {
@@ -145,13 +155,10 @@ const ShoppingList = () => {
         }
       )
       .then(({ data }) => {
-        console.log("Oikss", data);
-        const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for my ${listName} shopping list. Items are ${text}. Thanks!`;
+        const whatsAppLink = `https://wa.me/+2349061494881?text=Yo ! I’d love to schedule a Dropp for  ${listName} shopping list. Items are ${text}. Thanks!`;
         window.open(whatsAppLink);
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      .catch((error) => {})
       .finally(() => {
         handleSelectList("my");
         getUserLists();
