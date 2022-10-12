@@ -33,11 +33,15 @@ const Options = ({ user, setShowShoppingList }) => {
   ];
   return (
     <div>
-      <h1 className="text-2xl font_bold shrink">Hi, {user?.firstName}</h1>
-      <h1 className="text-5xl text-black font_bold mt-5 mb-10">
-        How would you love <br />
-        to shop? 🛒
-      </h1>
+      <div className="ml-6 lg:ml-0">
+        <h1 className="text-2xl font_bold shrink">
+          Hi, <span className="capitalize">{user?.firstName}</span>
+        </h1>
+        <h1 className="text-4xl lg:text-5xl text-black font_bold mt-5 mb-10">
+          How would you love <br />
+          to shop? 🛒
+        </h1>
+      </div>
       <div className="bg_shopping p-4 lg:p-8 rounded-3xl shadow-sm mb-10 lg:mb-0">
         {options?.map((option) => (
           <OptionCard
