@@ -6,6 +6,7 @@ import ShoppingList from "../components/ShoppingList";
 import UserDetails from "../components/UserDetails";
 import Profile from "../components/Profile";
 import ChangePassword from "../components/ChangePassword";
+import Options from "../components/Options";
 import { Images } from "../config/images";
 
 const Dashboard = () => {
@@ -13,6 +14,7 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showShoppingList, setShowShoppingList] = useState(false);
 
   const getUser = useCallback(() => {
     const result = sessionStorage.getItem("auth");
@@ -27,6 +29,7 @@ const Dashboard = () => {
           },
         })
         .then(({ data }) => {
+          console.log("dataRF", data);
           if (data?.success) setUser(data?.user);
         })
         .catch((error) => {});
@@ -50,11 +53,21 @@ const Dashboard = () => {
           <Navbar user={user} />
 
           <div className="w-11/12 lg:w-4/6 mx-auto pt-5 lg:flex lg:justify-between">
-            <ShoppingList />
+            <div className="lg:w-1/2 lg:mr-5">
+              {showShoppingList ? (
+                <ShoppingList setShowShoppingList={setShowShoppingList} />
+              ) : (
+                <Options
+                  user={user}
+                  setShowShoppingList={setShowShoppingList}
+                />
+              )}
+            </div>
             <UserDetails
               user={user}
               setShowProfileModal={setShowProfileModal}
               setShowPasswordModal={setShowPasswordModal}
+              getUser={getUser}
             />
           </div>
           <Profile
