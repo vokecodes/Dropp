@@ -169,8 +169,8 @@ const UserDetails = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-row mb-7">
-        <div className="mr-3">
+      <div className="lg:flex lg:flex-row mb-7">
+        <div className="mb-3 lg:mb-0 lg:mr-3">
           <div>
             <div>
               <div className="absolute p-6">
@@ -187,15 +187,15 @@ const UserDetails = ({
         <img src={Images.enjoyBanner} alt="enjoy_banner" />
       </div>
       <div>
-        <div className="absolute p-6">
-          <p className="text-3xl text-black font_medium">
+        <div className="absolute p-4 lg:p-6">
+          <p className="text-2xl lg:text-3xl text-black font_medium">
             Invite friends & earn.
           </p>
-          <p className="text-sm font_bold my-2">
+          <p className="text-xs lg:text-sm font_bold lg:my-2">
             Invite your friends & we’ll credit you both <br /> N200 when they
             register with your referral code.
           </p>
-          <button className="bg-black h-8 w-40 rounded-full text-xs text-white font_bold">
+          <button className="bg-black h-6 lg:h-8 w-28 lg:w-40 rounded-full text-xs text-white font_bold">
             Invite a friend
           </button>
         </div>

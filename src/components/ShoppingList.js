@@ -252,7 +252,7 @@ const ShoppingList = ({ setShowShoppingList }) => {
       </div>
       <div className="mb-3">
         <div>
-          <h2 className="text-2xl text-black font_bold absolute p-12">
+          <h2 className="text-xl lg:text-2xl text-black font_bold absolute p-4 lg:p-12">
             Create, save or share <br />
             your shopping list.
           </h2>
