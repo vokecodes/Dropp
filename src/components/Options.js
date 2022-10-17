@@ -34,8 +34,8 @@ const Options = ({ user, setShowShoppingList }) => {
   return (
     <div>
       <div className="ml-6 lg:ml-0">
-        <h1 className="text-2xl font_bold shrink">
-          Hi, <span className="capitalize">{user?.firstName}</span>
+        <h1 className="text-2xl font_semibold shrink">
+          Hi, <span className="capitalize">{user?.firstName},</span>
         </h1>
         <h1 className="text-4xl lg:text-5xl text-black font_bold mt-5 mb-10">
           How would you love <br />

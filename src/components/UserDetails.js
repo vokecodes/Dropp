@@ -169,22 +169,29 @@ const UserDetails = ({
           </div>
         </div>
       </div>
-      <div className="lg:flex lg:flex-row mb-7">
-        <div className="mb-3 lg:mb-0 lg:mr-3">
-          <div>
-            <div>
-              <div className="absolute p-6">
-                <p className="text-base text_red font_bold">
-                  My referral <br />
-                  credit balance:
-                </p>
-                <p className="text-2xl font_bold">N{user?.referralBonus}</p>
-              </div>
-              <img src={Images.referralBalanceBanner} alt="referralBanner" />
-            </div>
+      <div className="lg:flex lg:flex-row mb-5">
+        <div className="mb-3 lg:mb-0  h-44 lg:mr-3">
+          <div className="absolute p-6">
+            <p className="text-base text_red font_bold">
+              My referral <br />
+              credit balance:
+            </p>
+            <p className="text-2xl font_bold">N{user?.referralBonus}</p>
           </div>
+          <img
+            src={Images.referralBalanceBanner}
+            alt="referralBanner"
+            className="h-44"
+          />
         </div>
-        <img src={Images.enjoyBanner} alt="enjoy_banner" />
+        <div className="h-44">
+          <div className="absolute p-6">
+            <p className="text-xl text-white font_bold">
+              Enjoy free delivery <br /> on your first Dropp!
+            </p>
+          </div>
+          <img src={Images.enjoyBanner} alt="enjoy_banner" className="h-44" />
+        </div>
       </div>
       <div>
         <div className="absolute p-4 lg:p-6">
