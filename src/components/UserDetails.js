@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Images } from "../config/images";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -11,6 +12,7 @@ const UserDetails = ({
 }) => {
   const referralBonusCheck = user?.referralCode;
   const [loading, setLoading] = useState(false);
+  const [textCopied, setTextCopied] = useState(false);
 
   const getReferralCode = () => {
     setLoading(true);
@@ -128,7 +130,28 @@ const UserDetails = ({
                 </button>
               )}
               {referralBonusCheck && (
-                <img src={Images.copy} alt="copy" className="ml-2" />
+                <>
+                  <CopyToClipboard
+                    text={user?.referralCode}
+                    onCopy={() => {
+                      setTextCopied(true);
+                      setTimeout(() => {
+                        setTextCopied(false);
+                      }, 1000);
+                    }}
+                  >
+                    <img
+                      src={Images.copy}
+                      alt="copy"
+                      className="ml-2 cursor-pointer"
+                    />
+                  </CopyToClipboard>
+                  {textCopied && (
+                    <p className="ml-3 text-xs font-bold text_light_orange">
+                      Copied!
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -170,19 +193,62 @@ const UserDetails = ({
         </div>
       </div>
       <div className="lg:flex lg:flex-row mb-5">
-        <div className="mb-3 lg:mb-0  h-44 lg:mr-3">
-          <div className="absolute p-6">
-            <p className="text-base text_red font_bold">
-              My referral <br />
-              credit balance:
-            </p>
-            <p className="text-2xl font_bold">N{user?.referralBonus}</p>
+        <div className="mb-3 lg:mb-0 lg:mr-3">
+          <div className="hidden lg:block h-44">
+            <div className="absolute p-6">
+              <p className="text-base text_red font_bold">
+                My referral <br />
+                credit balance:
+              </p>
+              <p className="text-xs text_red font_bold underline cursor-pointer">
+                Learn more here
+              </p>
+              <p className="mt-3 text-2xl font_medium">
+                N{user?.referralBonus}
+              </p>
+            </div>
+            <img
+              src={Images.referralBalanceBanner}
+              alt="referralBanner"
+              className="h-44"
+            />
           </div>
-          <img
-            src={Images.referralBalanceBanner}
-            alt="referralBanner"
-            className="h-44"
-          />
+          <div className="lg:hidden">
+            <div className="absolute p-6">
+              <div className="flex flex-row">
+                <p className="flex-1 text-sm text_red font_bold">
+                  My referral credit balance:
+                </p>
+                <div className="ml-12 flex flex-row items-center">
+                  <p className="text-xs text_red font_bold cursor-pointer">
+                    Learn more here
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="3"
+                    stroke="#750000"
+                    class="w-4 h-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-2xl font_medium mt-2">
+                N{user?.referralBonus}
+              </p>
+            </div>
+            <img
+              src={Images.mReferralBalanceBanner}
+              alt="referralBanner"
+              className=""
+            />
+          </div>
         </div>
         <div className="h-44">
           <div className="absolute p-6">
@@ -193,12 +259,12 @@ const UserDetails = ({
           <img src={Images.enjoyBanner} alt="enjoy_banner" className="h-44" />
         </div>
       </div>
-      <div>
+      <div className="hidden lg:block">
         <div className="absolute p-4 lg:p-6">
-          <p className="text-2xl lg:text-3xl text-black font_medium">
+          <p className="text-3xl text-black font_medium">
             Invite friends & earn.
           </p>
-          <p className="text-xs lg:text-sm font_bold lg:my-2">
+          <p className="text-xs lg:text-sm lg:my-2">
             Invite your friends & we’ll credit you both <br /> N200 when they
             register with your referral code.
           </p>
@@ -207,6 +273,21 @@ const UserDetails = ({
           </button>
         </div>
         <img src={Images.referralBanner} alt="referralBanner" />
+      </div>
+      <div className="lg:hidden">
+        <div className="absolute p-4 lg:p-6">
+          <p className="text-xl text-black font_medium">
+            Invite friends & earn.
+          </p>
+          <p className="text-sm">
+            Invite your friends & we’ll credit you <br /> both N200 when they
+            register with <br /> your referral code.
+          </p>
+          <button className="mt-2 bg-black h-8 w-28 rounded-full text-xs text-white font_bold">
+            Invite a friend
+          </button>
+        </div>
+        <img src={Images.mReferralBanner} alt="referralBanner" />
       </div>
     </div>
   );

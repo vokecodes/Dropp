@@ -35,9 +35,9 @@ const Options = ({ user, setShowShoppingList }) => {
     <div>
       <div className="ml-6 lg:ml-0">
         <h1 className="text-2xl font_semibold shrink">
-          Hi, <span className="capitalize">{user?.firstName},</span>
+          Hi <span className="capitalize">{user?.firstName},</span>
         </h1>
-        <h1 className="text-4xl lg:text-5xl text-black font_bold mt-5 mb-10">
+        <h1 className="text-4xl lg:text-5xl text-black font_medium mt-5 mb-10">
           How would you love <br />
           to shop? 🛒
         </h1>

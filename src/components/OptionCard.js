@@ -6,8 +6,10 @@ const OptionCard = ({ image, title, description, onClick }) => {
     >
       <img src={image} alt={title} />
       <div className="mx-10">
-        <h3 className="text-xl text-black font_bold">{title}</h3>
-        <p className="text-sm font_medium text_gray mt-3">{description}</p>
+        <h3 className="text-sm lg:text-xl text-black font_bold">{title}</h3>
+        <p className="text-xs lg:text-sm font_medium text_gray mt-3">
+          {description}
+        </p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

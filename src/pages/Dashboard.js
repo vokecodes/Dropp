@@ -29,7 +29,6 @@ const Dashboard = () => {
           },
         })
         .then(({ data }) => {
-          console.log("dataRF", data);
           if (data?.success) setUser(data?.user);
         })
         .catch((error) => {});

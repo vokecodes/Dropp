@@ -86,5 +86,8 @@ export const Images = {
   copy: require("../images/copy.png"),
   shoppingBanner: require("../images/shoppingBanner.svg").default,
   referralBalanceBanner: require("../images/referralBalanceBanner.svg").default,
+  mReferralBalanceBanner: require("../images/m-referralBalanceBanner.svg")
+    .default,
   referralBanner: require("../images/referralBanner.svg").default,
+  mReferralBanner: require("../images/m-referralBanner.svg").default,
 };
