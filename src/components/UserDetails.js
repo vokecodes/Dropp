@@ -200,9 +200,14 @@ const UserDetails = ({
                 My referral <br />
                 credit balance:
               </p>
-              <p className="text-xs text_red font_bold underline cursor-pointer">
+              <a
+                href="https://opposite-pet-88e.notion.site/Dropp-Referral-Cedit-How-it-works-122ef8aab7e440598468567a51a1b14a"
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs text_red font_bold underline cursor-pointer"
+              >
                 Learn more here
-              </p>
+              </a>
               <p className="mt-3 text-2xl font_medium">
                 N{user?.referralBonus}
               </p>
@@ -220,9 +225,14 @@ const UserDetails = ({
                   My referral credit balance:
                 </p>
                 <div className="ml-12 flex flex-row items-center">
-                  <p className="text-xs text_red font_bold cursor-pointer">
+                  <a
+                    href="https://opposite-pet-88e.notion.site/Dropp-Referral-Cedit-How-it-works-122ef8aab7e440598468567a51a1b14a"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs text_red font_bold cursor-pointer"
+                  >
                     Learn more here
-                  </p>
+                  </a>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
