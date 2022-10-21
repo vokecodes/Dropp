@@ -3,6 +3,7 @@ import ReactGA from "react-ga4";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Register from "../components/Register";
+import ResetPassword from "../components/ResetPassword";
 import NeedSomething from "../components/NeedSomething";
 import Supermarkets from "../components/Supermarkets";
 import Steps from "../components/Steps";
@@ -222,6 +223,7 @@ const Home = () => {
   }, [getUser]);
 
   const [showModal, setShowModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   return (
     <>
@@ -256,7 +258,16 @@ const Home = () => {
         <Footer logo={Images.logo} />
       </div>
 
-      <Register showModal={showModal} setShowModal={setShowModal} />
+      <Register
+        showModal={showModal}
+        setShowModal={setShowModal}
+        setShowResetModal={setShowResetModal}
+      />
+      <ResetPassword
+        showResetModal={showResetModal}
+        setShowResetModal={setShowResetModal}
+        setShowModal={setShowModal}
+      />
     </>
   );
 };

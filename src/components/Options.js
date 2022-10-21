@@ -5,8 +5,7 @@ const Options = ({ user, setShowShoppingList }) => {
   const options = [
     {
       _id: 1,
-      title: `Create & share 
-            your shopping list.`,
+      title: `Create & share \nyour shopping list.`,
       description: `Curate your list. Share with a dropper. 
             Save for later.`,
       image: Images.create,
@@ -14,8 +13,7 @@ const Options = ({ user, setShowShoppingList }) => {
     },
     {
       _id: 2,
-      title: `Shop from 
-            Dropp mart.`,
+      title: `Shop from \nDropp mart.`,
       description: `Explore & shop from 
             1000+ items.`,
       image: Images.shop,
@@ -23,8 +21,7 @@ const Options = ({ user, setShowShoppingList }) => {
     },
     {
       _id: 3,
-      title: `Chat with your 
-            personal dropper.`,
+      title: `Chat with your \npersonal dropper.`,
       description: `Hi, I’m Alex. I’m here to do 
             your shopping.`,
       image: Images.chat,

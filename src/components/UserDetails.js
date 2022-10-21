@@ -192,9 +192,9 @@ const UserDetails = ({
           </div>
         </div>
       </div>
-      <div className="lg:flex lg:flex-row mb-5">
-        <div className="mb-3 lg:mb-0 lg:mr-3">
-          <div className="hidden lg:block h-44">
+      <div className="lg:flex lg:flex-row mb-7">
+        <div className="mb-7 lg:mb-0 lg:mr-3">
+          <div className="hidden lg:block">
             <div className="absolute p-6">
               <p className="text-base text_red font_bold">
                 My referral <br />
@@ -204,7 +204,7 @@ const UserDetails = ({
                 href="https://opposite-pet-88e.notion.site/Dropp-Referral-Cedit-How-it-works-122ef8aab7e440598468567a51a1b14a"
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs text_red font_bold underline cursor-pointer"
+                className="text-xs text_red font_medium underline cursor-pointer"
               >
                 Learn more here
               </a>
@@ -215,7 +215,7 @@ const UserDetails = ({
             <img
               src={Images.referralBalanceBanner}
               alt="referralBanner"
-              className="h-44"
+              className=""
             />
           </div>
           <div className="lg:hidden">
@@ -229,7 +229,7 @@ const UserDetails = ({
                     href="https://opposite-pet-88e.notion.site/Dropp-Referral-Cedit-How-it-works-122ef8aab7e440598468567a51a1b14a"
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs text_red font_bold cursor-pointer"
+                    className="text-xs text_red font_medium cursor-pointer"
                   >
                     Learn more here
                   </a>
@@ -260,13 +260,13 @@ const UserDetails = ({
             />
           </div>
         </div>
-        <div className="h-44">
+        <div className="">
           <div className="absolute p-6">
             <p className="text-xl text-white font_bold">
               Enjoy free delivery <br /> on your first Dropp!
             </p>
           </div>
-          <img src={Images.enjoyBanner} alt="enjoy_banner" className="h-44" />
+          <img src={Images.enjoyBanner} alt="enjoy_banner" className="" />
         </div>
       </div>
       <div className="hidden lg:block">
@@ -274,9 +274,10 @@ const UserDetails = ({
           <p className="text-3xl text-black font_medium">
             Invite friends & earn.
           </p>
-          <p className="text-xs lg:text-sm lg:my-2">
-            Invite your friends & we’ll credit you both <br /> N200 when they
-            register with your referral code.
+          <p className="text-xs lg:text-sm lg:my-2 font_medium">
+            Invite your friends & we’ll credit you both <br />{" "}
+            <span className="font_bold">N200</span> when they register with your
+            referral code.
           </p>
           <button className="bg-black h-6 lg:h-8 w-28 lg:w-40 rounded-full text-xs text-white font_bold">
             Invite a friend
@@ -289,9 +290,10 @@ const UserDetails = ({
           <p className="text-xl text-black font_medium">
             Invite friends & earn.
           </p>
-          <p className="text-sm">
-            Invite your friends & we’ll credit you <br /> both N200 when they
-            register with <br /> your referral code.
+          <p className="text-sm font_meidum">
+            Invite your friends & we’ll credit you <br /> both{" "}
+            <span className="font_bold">N200</span> when they register with{" "}
+            <br /> your referral code.
           </p>
           <button className="mt-2 bg-black h-8 w-28 rounded-full text-xs text-white font_bold">
             Invite a friend

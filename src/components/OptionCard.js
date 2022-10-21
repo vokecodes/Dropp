@@ -5,8 +5,10 @@ const OptionCard = ({ image, title, description, onClick }) => {
       onClick={onClick}
     >
       <img src={image} alt={title} />
-      <div className="mx-10">
-        <h3 className="text-sm lg:text-xl text-black font_bold">{title}</h3>
+      <div className="ml-4 lg:mx-10">
+        <h3 className="text-md lg:text-2xl text-black font_bold whitespace-pre-line">
+          {title}
+        </h3>
         <p className="text-xs lg:text-sm font_medium text_gray mt-3">
           {description}
         </p>
