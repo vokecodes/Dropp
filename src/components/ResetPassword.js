@@ -1,24 +1,15 @@
 import React, { useState } from "react";
 import { Field, Formik, Form, ErrorMessage } from "formik";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
-import Select from "react-select";
-import { Images } from "../config/images";
-import { AUTH_DATA } from "../reducers/type";
 
 const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
   const [authType, setAuthType] = useState(null);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const params = useParams();
-
-  console.log(params && params.split("/"));
 
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
+  const [isResendLoading, setIsResendLoading] = useState(false);
 
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email().required("Email is required."),
@@ -32,46 +23,74 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
   });
 
   const emailCheck = (email, formikBag) => {
+    setErrorMessage();
     axios
       .post(`${process.env.REACT_APP_BASE_URL}/auth/password/forgot`, {
         email,
       })
       .then(({ data }) => {
-        console.log(data);
-        const { message } = data;
-        if (message) alert(message);
-        setAuthType("OTP");
+        const { success } = data;
+        if (success) {
+          setAuthType("OTP");
+        }
       })
       .catch((error) => {
-        const { message } = error.response.data;
-        if (message) alert(message);
+        console.log(error.response.data);
+
+        const { success, message } = error?.response?.data;
+        if (success) {
+          setAuthType("OTP");
+        } else {
+          setErrorMessage(message);
+        }
       })
       .finally(() => formikBag.setSubmitting(false));
   };
 
   const otpCheck = (values, formikBag) => {
+    setErrorMessage();
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/login`, {
+      .post(`${process.env.REACT_APP_BASE_URL}/auth/password/reset`, {
         ...values,
       })
       .then(({ data }) => {
-        dispatch({
-          type: AUTH_DATA,
-          payload: data,
-        });
-        sessionStorage.setItem("auth", JSON.stringify(data));
-        navigate("/dashboard");
+        console.log(data);
+
+        const { success, message } = data;
+        if (success) {
+          setSuccess(true);
+        } else {
+          setErrorMessage(message);
+        }
       })
       .catch((error) => {
-        const { message } = error.response.data;
-        if (message) alert(message);
+        console.log(error.response.data);
+
+        const { success, message } = error?.response?.data;
+        if (success) {
+          setAuthType("OTP");
+        } else {
+          setErrorMessage(message);
+        }
       })
       .finally(() => formikBag.setSubmitting(false));
   };
 
   const goToLogin = () => {
     setShowResetModal(false);
+    setSuccess(false);
+    setAuthType("");
+    setErrorMessage();
     setShowModal(true);
+  };
+
+  const handleResendPassword = (e, email) => {
+    e.preventDefault();
+    setIsResendLoading(true);
+    emailCheck(email);
+    setTimeout(() => {
+      setIsResendLoading(false);
+    }, 2000);
   };
 
   return showResetModal ? (
@@ -158,7 +177,7 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
                     {(props) => (
                       <Form onSubmit={props.handleSubmit}>
                         {authType === "OTP" ? (
-                          <>
+                          <div className="mt-10">
                             <div className="mb-3">
                               <label
                                 htmlFor="otp"
@@ -169,13 +188,15 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
                               <Field
                                 type="text"
                                 name="otp"
-                                className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
+                                className="block w-full shadow-sm bg-transparent outline-none register_input font_regular text-danger-500"
                               />
-                              <ErrorMessage
-                                name="otp"
-                                component="span"
-                                className="text-sm text-red-500 font_regular"
-                              />
+                              {props.touched && (
+                                <ErrorMessage
+                                  name="otp"
+                                  component="span"
+                                  className="text-sm text-red-500 font_regular"
+                                />
+                              )}
                             </div>
                             <div className="mb-3">
                               <label
@@ -205,23 +226,48 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
                                   />
                                 </svg>
                               </div>
-                              <ErrorMessage
-                                name="password"
-                                component="span"
-                                className="text-sm text-red-500 font_regular"
-                              />
+                              {props.touched && (
+                                <ErrorMessage
+                                  name="password"
+                                  component="span"
+                                  className="text-sm text-red-500 font_regular"
+                                />
+                              )}
                               <div>
                                 <button
                                   className="mt-5 bg_yellow h-8 w-24 rounded-full text-xs font_bold"
-                                  // onClick={() => setShowProfileModal(true)}
+                                  onClick={async (e) =>
+                                    handleResendPassword(e, props.values.email)
+                                  }
                                 >
-                                  Resend OTP
+                                  {isResendLoading ? (
+                                    <svg
+                                      className="animate-spin h-5 w-5 ml-8"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="#fff"
+                                        strokeWidth="4"
+                                      ></circle>
+                                      <path
+                                        fill="#fec62e"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                      ></path>
+                                    </svg>
+                                  ) : (
+                                    "Resend OTP"
+                                  )}
                                 </button>
                               </div>
                             </div>
-                          </>
+                          </div>
                         ) : (
-                          <div className="mb-3">
+                          <div className="mt-10 mb-3">
                             <label
                               htmlFor="email"
                               className="block text-sm font-medium text-gray-700 mb-1 font_regular"
@@ -231,16 +277,22 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
                             <Field
                               type="email"
                               name="email"
-                              className="block w-full shadow-sm bg-transparent outline-none register_input font_regular"
+                              className="block w-full shadow-sm bg-transparent outline-none register_input font_regular text-danger-500"
                             />
-                            <ErrorMessage
-                              name="email"
-                              component="span"
-                              className="text-sm text-red-500 font_regular"
-                            />
+                            {props.touched && (
+                              <ErrorMessage
+                                name="email"
+                                component="span"
+                                className="text-sm text-red-500 font_regular"
+                              />
+                            )}
                           </div>
                         )}
-
+                        {errorMessage !== "" && (
+                          <p className="text-center text-red-500 text-lg mt-10">
+                            {errorMessage}
+                          </p>
+                        )}
                         <button
                           type="submit"
                           className="mt-40 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
