@@ -90,4 +90,5 @@ export const Images = {
     .default,
   referralBanner: require("../images/referralBanner.svg").default,
   mReferralBanner: require("../images/m-referralBanner.svg").default,
+  instagramIcon: require("../images/instagram.png"),
 };

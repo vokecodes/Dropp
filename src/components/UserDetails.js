@@ -1,6 +1,16 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  FacebookMessengerShareButton,
+  FacebookMessengerIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  WhatsappShareButton,
+  TwitterShareButton,
+} from "react-share";
 import { Images } from "../config/images";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -13,6 +23,7 @@ const UserDetails = ({
   const referralBonusCheck = user?.referralCode;
   const [loading, setLoading] = useState(false);
   const [textCopied, setTextCopied] = useState(false);
+  const [showShareButtons, setShowShareButtons] = useState(false);
 
   const getReferralCode = () => {
     setLoading(true);
@@ -35,6 +46,82 @@ const UserDetails = ({
       .catch((error) => {})
       .finally(() => setLoading(false));
   };
+
+  const handleInvite = () => setShowShareButtons(!showShareButtons);
+
+  const renderShareButtons = () => (
+    <>
+      {showShareButtons && (
+        <div className="mt-2 flex flex-row">
+          <FacebookShareButton url="https://www.getdropp.com/" className="mr-2">
+            <FacebookIcon size={32} round={true} />
+          </FacebookShareButton>
+          <FacebookMessengerShareButton
+            url="https://www.getdropp.com/"
+            className="mr-2"
+          >
+            <FacebookMessengerIcon size={32} round={true} />
+          </FacebookMessengerShareButton>
+          <WhatsappShareButton url="https://www.getdropp.com/" className="mr-2">
+            <WhatsappIcon size={32} round={true} />
+          </WhatsappShareButton>
+          <div
+            onClick={() =>
+              window.open("https://www.instagram.com/getdropp/?hl=en")
+            }
+            className="cursor-pointer mr-2"
+          >
+            <img
+              src={Images.instagramIcon}
+              alt="instagram"
+              width={32}
+              height={32}
+            />
+          </div>
+          <TwitterShareButton url="https://www.getdropp.com/">
+            <TwitterIcon size={32} round={true} />
+          </TwitterShareButton>
+        </div>
+      )}
+    </>
+  );
+
+  const renderMobileShareButtons = () => (
+    <>
+      {showShareButtons && (
+        <div className="mt-2 flex flex-row">
+          <FacebookShareButton url="https://www.getdropp.com/" className="mr-2">
+            <FacebookIcon size={24} round={true} />
+          </FacebookShareButton>
+          <FacebookMessengerShareButton
+            url="https://www.getdropp.com/"
+            className="mr-2"
+          >
+            <FacebookMessengerIcon size={24} round={true} />
+          </FacebookMessengerShareButton>
+          <WhatsappShareButton url="https://www.getdropp.com/" className="mr-2">
+            <WhatsappIcon size={24} round={true} />
+          </WhatsappShareButton>
+          <div
+            onClick={() =>
+              window.open("https://www.instagram.com/getdropp/?hl=en")
+            }
+            className="cursor-pointer mr-2"
+          >
+            <img
+              src={Images.instagramIcon}
+              alt="instagram"
+              width={24}
+              height={24}
+            />
+          </div>
+          <TwitterShareButton url="https://www.getdropp.com/">
+            <TwitterIcon size={24} round={true} />
+          </TwitterShareButton>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <div className="lg:w-1/2">
@@ -279,25 +366,33 @@ const UserDetails = ({
             <span className="font_bold">N200</span> when they register with your
             referral code.
           </p>
-          <button className="bg-black h-6 lg:h-8 w-28 lg:w-40 rounded-full text-xs text-white font_bold">
+          <button
+            className="bg-black h-6 lg:h-8 w-28 lg:w-40 rounded-full text-xs text-white font_bold cursor-pointer"
+            onClick={() => handleInvite()}
+          >
             Invite a friend
           </button>
+          {renderShareButtons()}
         </div>
         <img src={Images.referralBanner} alt="referralBanner" />
       </div>
       <div className="lg:hidden">
         <div className="absolute p-4 lg:p-6">
-          <p className="text-xl text-black font_medium">
+          <p className="text-lg text-black font_medium">
             Invite friends & earn.
           </p>
-          <p className="text-sm font_meidum">
+          <p className="text-xs font_meidum">
             Invite your friends & we’ll credit you <br /> both{" "}
             <span className="font_bold">N200</span> when they register with{" "}
             <br /> your referral code.
           </p>
-          <button className="mt-2 bg-black h-8 w-28 rounded-full text-xs text-white font_bold">
+          <button
+            className="mt-2 bg-black h-6 w-28 rounded-full text-xs text-white font_bold cursor-pointer"
+            onClick={() => handleInvite()}
+          >
             Invite a friend
           </button>
+          {renderMobileShareButtons()}
         </div>
         <img src={Images.mReferralBanner} alt="referralBanner" />
       </div>

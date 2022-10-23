@@ -35,8 +35,6 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
         }
       })
       .catch((error) => {
-        console.log(error.response.data);
-
         const { success, message } = error?.response?.data;
         if (success) {
           setAuthType("OTP");
@@ -54,8 +52,6 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
         ...values,
       })
       .then(({ data }) => {
-        console.log(data);
-
         const { success, message } = data;
         if (success) {
           setSuccess(true);
@@ -64,8 +60,6 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
         }
       })
       .catch((error) => {
-        console.log(error.response.data);
-
         const { success, message } = error?.response?.data;
         if (success) {
           setAuthType("OTP");
