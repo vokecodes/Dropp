@@ -314,8 +314,8 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
                           ) : (
                             <>
                               {authType === "OTP"
-                                ? "Confirm OTP"
-                                : "Reset password"}
+                                ? "Reset Password"
+                                : "Verify Email"}
                             </>
                           )}
                         </button>
@@ -326,7 +326,7 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
                     className="mt-7 mb-10 gray_title cursor-pointer text-center font_bold"
                     onClick={() => goToLogin()}
                   >
-                    Back to login
+                    Back to Login
                   </p>
                 </>
               )}
