@@ -53,7 +53,11 @@ const UserDetails = ({
     <>
       {showShareButtons && (
         <div className="mt-2 flex flex-row">
-          <FacebookShareButton url="https://www.getdropp.com/" className="mr-2">
+          <FacebookShareButton
+            url="https://www.getdropp.com/"
+            quote={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
+            className="mr-2"
+          >
             <FacebookIcon size={32} round={true} />
           </FacebookShareButton>
           <FacebookMessengerShareButton
@@ -62,23 +66,17 @@ const UserDetails = ({
           >
             <FacebookMessengerIcon size={32} round={true} />
           </FacebookMessengerShareButton>
-          <WhatsappShareButton url="https://www.getdropp.com/" className="mr-2">
+          <WhatsappShareButton
+            url="https://www.getdropp.com/"
+            className="mr-2"
+            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
+          >
             <WhatsappIcon size={32} round={true} />
           </WhatsappShareButton>
-          <div
-            onClick={() =>
-              window.open("https://www.instagram.com/getdropp/?hl=en")
-            }
-            className="cursor-pointer mr-2"
+          <TwitterShareButton
+            url="https://www.getdropp.com/"
+            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
           >
-            <img
-              src={Images.instagramIcon}
-              alt="instagram"
-              width={32}
-              height={32}
-            />
-          </div>
-          <TwitterShareButton url="https://www.getdropp.com/">
             <TwitterIcon size={32} round={true} />
           </TwitterShareButton>
         </div>
@@ -102,19 +100,6 @@ const UserDetails = ({
           <WhatsappShareButton url="https://www.getdropp.com/" className="mr-2">
             <WhatsappIcon size={24} round={true} />
           </WhatsappShareButton>
-          <div
-            onClick={() =>
-              window.open("https://www.instagram.com/getdropp/?hl=en")
-            }
-            className="cursor-pointer mr-2"
-          >
-            <img
-              src={Images.instagramIcon}
-              alt="instagram"
-              width={24}
-              height={24}
-            />
-          </div>
           <TwitterShareButton url="https://www.getdropp.com/">
             <TwitterIcon size={24} round={true} />
           </TwitterShareButton>
@@ -377,7 +362,7 @@ const UserDetails = ({
         <img src={Images.referralBanner} alt="referralBanner" />
       </div>
       <div className="lg:hidden">
-        <div className="absolute p-4 lg:p-6">
+        <div className="absolute px-4 py-2 lg:p-6">
           <p className="text-lg text-black font_medium">
             Invite friends & earn.
           </p>
