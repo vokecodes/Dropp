@@ -88,7 +88,11 @@ const UserDetails = ({
     <>
       {showShareButtons && (
         <div className="mt-2 flex flex-row">
-          <FacebookShareButton url="https://www.getdropp.com/" className="mr-2">
+          <FacebookShareButton
+            url="https://www.getdropp.com/"
+            quote={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
+            className="mr-2"
+          >
             <FacebookIcon size={24} round={true} />
           </FacebookShareButton>
           <FacebookMessengerShareButton
@@ -97,10 +101,17 @@ const UserDetails = ({
           >
             <FacebookMessengerIcon size={24} round={true} />
           </FacebookMessengerShareButton>
-          <WhatsappShareButton url="https://www.getdropp.com/" className="mr-2">
+          <WhatsappShareButton
+            url="https://www.getdropp.com/"
+            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
+            className="mr-2"
+          >
             <WhatsappIcon size={24} round={true} />
           </WhatsappShareButton>
-          <TwitterShareButton url="https://www.getdropp.com/">
+          <TwitterShareButton
+            url="https://www.getdropp.com/"
+            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
+          >
             <TwitterIcon size={24} round={true} />
           </TwitterShareButton>
         </div>
