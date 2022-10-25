@@ -524,8 +524,12 @@
 }
 
 .address_input {
-  border: 1px solid #ececec;
+  border: 3px solid #ececec;
 }
 .w_483 {
   width: 483px;
+}
+
+.text_red {
+  color: #750000;
 }

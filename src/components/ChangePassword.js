@@ -19,7 +19,6 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
   });
 
   const updatePassword = (values, formikBag) => {
-    console.log(values);
     const result = sessionStorage.getItem("auth");
     const { token, data } = JSON.parse(result);
 

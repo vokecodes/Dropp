@@ -96,7 +96,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
               >
                 {(props) => (
                   <Form onSubmit={props.handleSubmit}>
-                    <div className="mb-3">
+                    <div className="mb-5">
                       <label
                         htmlFor="firstName"
                         className="block text-sm font-medium text-gray-700 mb-1"
@@ -114,7 +114,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
                         className="text-sm text-red-500"
                       />
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-5">
                       <label
                         htmlFor="lastName"
                         className="block text-sm font-medium text-gray-700 mb-1"
@@ -132,7 +132,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
                         className="text-sm text-red-500"
                       />
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-5">
                       <label
                         htmlFor="email"
                         className="block text-sm font-medium text-gray-700 mb-1"
@@ -150,7 +150,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
                         className="text-sm text-red-500"
                       />
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-5">
                       <label
                         htmlFor="phoneNumber"
                         className="block text-sm font-medium text-gray-700 mb-1"

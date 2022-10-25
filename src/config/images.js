@@ -78,4 +78,17 @@ export const Images = {
   lock: require("../images/lock.png"),
   invite: require("../images/invite.png"),
   carbon_location: require("../images/carbon_location.png"),
+  create: require("../images/options/create.png"),
+  shop: require("../images/options/shop.png"),
+  chat: require("../images/options/chat.png"),
+  shareRound: require("../images/share-round.png"),
+  enjoyBanner: require("../images/enjoyBanner.png"),
+  copy: require("../images/copy.png"),
+  shoppingBanner: require("../images/shoppingBanner.svg").default,
+  referralBalanceBanner: require("../images/referralBalanceBanner.svg").default,
+  mReferralBalanceBanner: require("../images/m-referralBalanceBanner.svg")
+    .default,
+  referralBanner: require("../images/referralBanner.svg").default,
+  mReferralBanner: require("../images/m-referralBanner.svg").default,
+  instagramIcon: require("../images/instagram.png"),
 };

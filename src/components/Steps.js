@@ -62,9 +62,7 @@ const Steps = ({ bannerImage, businesses, setShowModal }) => {
                       <div className="text-center lg:text-left">
                         <button
                           className="w-80 lg:w-72 font_bold py-5 border border-transparent text-lg rounded-xl shadow-sm text-white bg_primary"
-                          onClick={() =>
-                            window.open("https://wa.me/message/YKVHYMI6AXGUC1")
-                          }
+                          onClick={() => setShowModal(true)}
                         >
                           Schedule a Dropp!
                         </button>
