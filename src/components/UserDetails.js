@@ -50,73 +50,71 @@ const UserDetails = ({
   const handleInvite = () => setShowShareButtons(!showShareButtons);
 
   const renderShareButtons = () => (
-    <>
-      {showShareButtons && (
-        <div className="mt-2 flex flex-row">
-          <FacebookShareButton
-            url="https://www.getdropp.com/"
-            quote={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
-            className="mr-2"
-          >
-            <FacebookIcon size={32} round={true} />
-          </FacebookShareButton>
-          <FacebookMessengerShareButton
-            url="https://www.getdropp.com/"
-            className="mr-2"
-          >
-            <FacebookMessengerIcon size={32} round={true} />
-          </FacebookMessengerShareButton>
-          <WhatsappShareButton
-            url="https://www.getdropp.com/"
-            className="mr-2"
-            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
-          >
-            <WhatsappIcon size={32} round={true} />
-          </WhatsappShareButton>
-          <TwitterShareButton
-            url="https://www.getdropp.com/"
-            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
-          >
-            <TwitterIcon size={32} round={true} />
-          </TwitterShareButton>
-        </div>
-      )}
-    </>
+    <div className="mt-2 flex flex-row">
+      <FacebookShareButton
+        url="https://www.getdropp.com/"
+        quote={`Use my referral code ${user?.referralCode} and get N200.`}
+        className="mr-2"
+      >
+        <FacebookIcon size={32} round={true} />
+      </FacebookShareButton>
+      <FacebookMessengerShareButton
+        url="https://www.getdropp.com/"
+        className="mr-2"
+      >
+        <FacebookMessengerIcon size={32} round={true} />
+      </FacebookMessengerShareButton>
+      <WhatsappShareButton
+        url="https://www.getdropp.com/"
+        className="mr-2"
+        title={`Use my referral code ${user?.referralCode} and get N200.`}
+      >
+        <WhatsappIcon size={32} round={true} />
+      </WhatsappShareButton>
+      <TwitterShareButton
+        url="https://www.getdropp.com/"
+        title={`Use my referral code ${user?.referralCode} and get N200.`}
+      >
+        <TwitterIcon size={32} round={true} />
+      </TwitterShareButton>
+    </div>
   );
 
   const renderMobileShareButtons = () => (
-    <>
-      {showShareButtons && (
-        <div className="mt-2 flex flex-row">
-          <FacebookShareButton
-            url="https://www.getdropp.com/"
-            quote={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
-            className="mr-2"
-          >
-            <FacebookIcon size={24} round={true} />
-          </FacebookShareButton>
-          <FacebookMessengerShareButton
-            url="https://www.getdropp.com/"
-            className="mr-2"
-          >
-            <FacebookMessengerIcon size={24} round={true} />
-          </FacebookMessengerShareButton>
-          <WhatsappShareButton
-            url="https://www.getdropp.com/"
-            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
-            className="mr-2"
-          >
-            <WhatsappIcon size={24} round={true} />
-          </WhatsappShareButton>
-          <TwitterShareButton
-            url="https://www.getdropp.com/"
-            title={`Use my referral code ${user?.referralCode} to register at www.getdropp.com and get N200.`}
-          >
-            <TwitterIcon size={24} round={true} />
-          </TwitterShareButton>
-        </div>
-      )}
-    </>
+    <div className="mt-2 flex flex-row">
+      <FacebookShareButton
+        url="https://www.getdropp.com/"
+        quote={`Use my referral code ${user?.referralCode} and get N200.`}
+        className="mr-2"
+      >
+        <FacebookIcon size={24} round={true} />
+      </FacebookShareButton>
+      <FacebookMessengerShareButton
+        url="https://www.getdropp.com/"
+        className="mr-2"
+      >
+        <FacebookMessengerIcon size={24} round={true} />
+      </FacebookMessengerShareButton>
+      <WhatsappShareButton
+        url="https://www.getdropp.com/"
+        title={`Use my referral code ${user?.referralCode} and get N200.`}
+        className="mr-2"
+      >
+        <WhatsappIcon size={24} round={true} />
+      </WhatsappShareButton>
+      <TwitterShareButton
+        url="https://www.getdropp.com/"
+        title={`Use my referral code ${user?.referralCode} and get N200.`}
+      >
+        <TwitterIcon size={24} round={true} />
+      </TwitterShareButton>
+    </div>
+  );
+
+  const renderNoReferralCodeText = () => (
+    <p className="text-xs lg:text-sm font_bold whitespace-pre-line lg:whitespace-normal mt-1">
+      {`Get your referral code to invite \nyour friends above.`}
+    </p>
   );
 
   return (
@@ -368,7 +366,13 @@ const UserDetails = ({
           >
             Invite a friend
           </button>
-          {renderShareButtons()}
+          {showShareButtons && (
+            <>
+              {user?.referralCode
+                ? renderShareButtons()
+                : renderNoReferralCodeText()}
+            </>
+          )}
         </div>
         <img src={Images.referralBanner} alt="referralBanner" />
       </div>
@@ -388,7 +392,13 @@ const UserDetails = ({
           >
             Invite a friend
           </button>
-          {renderMobileShareButtons()}
+          {showShareButtons && (
+            <>
+              {user?.referralCode
+                ? renderMobileShareButtons()
+                : renderNoReferralCodeText()}
+            </>
+          )}
         </div>
         <img src={Images.mReferralBanner} alt="referralBanner" />
       </div>
