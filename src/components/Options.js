@@ -17,7 +17,7 @@ const Options = ({ user, setShowShoppingList }) => {
       description: `Explore & shop from 
             1000+ items.`,
       image: Images.shop,
-      onClick: () => window.open("https://paystack.shop/droppaddide"),
+      onClick: () => window.open("https://paystack.shop/droppmart"),
     },
     {
       _id: 3,
