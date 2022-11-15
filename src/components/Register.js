@@ -148,7 +148,8 @@ const Register = ({ showModal, setShowModal, setShowResetModal }) => {
                     </div>
                   </div>
                   <p className="text-md text-center font_medium gray_title">
-                    Email verification link sent to your mail.
+                    {/* Email verification link sent to your mail. */}
+                    Thanks for signing up. Welcome to Dropp!
                   </p>
                   <button
                     type="submit"
