@@ -1,11 +1,42 @@
 import React from "react";
 import Navbar from "./Navbar";
+import OutlineButton from "./OutlineButton";
+import Button from "./Button";
 
 const Header = ({ itemsImage, setShowModal }) => {
   return (
     <section className="header_bg">
       <Navbar setShowModal={setShowModal} />
-      <main className="w-4/5 lg:w-4/6 mx-auto pt-5 lg:flex flex-row">
+      <div className="mt-24 flex flex-col items-center">
+        <div
+          style={{
+            backgroundImage: `url('/images/yellow-mark.svg')`,
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <div className="-mt-8">
+            <p className="text-6xl text_black text-center font_bold">
+              Making growth
+            </p>
+            <p className="mt-5 text-6xl text_black text-center font_bold">
+              easy for restaurants
+            </p>
+          </div>
+        </div>
+
+        <p className="text-xl text-[#4A443A] text-center my-5 font_medium">
+          Dropp empowers you with all the tools you need to work smarter, <br />
+          earn more & automate for efficiency all in one place.
+        </p>
+        <div className="flex justify-center gap-4 mt-5">
+          <OutlineButton title="Book a Demo" />
+          <Button title="Get started" />
+        </div>
+        <div className="mt-5">
+          <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
+        </div>
+      </div>
+      {/* <main className="w-4/5 lg:w-4/6 mx-auto pt-5 lg:flex flex-row">
         <div className="lg:flex-1 lg:mt-20">
           <h1 className="hidden lg:block lg:text-6xl text-4xl font_bold text_black1">
             Groceries delivered <br /> to your doorstep, <br /> same day.
@@ -41,7 +72,7 @@ const Header = ({ itemsImage, setShowModal }) => {
             <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" />
           </div>
         </div>
-      </main>
+      </main> */}
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactGA from "react-ga4";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -11,6 +11,122 @@ import Banner from "../components/Banner";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import { Images } from "../config/images";
+import Button from "../components/Button";
+
+const CATEGORIES = [
+  "Dine-In",
+  "Private Chef",
+  "Bar & Lounge",
+  "Cafe",
+  "Food Truck",
+  "Fast Casual",
+];
+
+const CATEGORIES_POST = [
+  {
+    image: "/images/restaurant.png",
+    title: "Dine-In",
+    subtitle: "Serve up a memorable dining experience.",
+    description:
+      "Greet and seat new guests like regulars and efficiently manage and optimize your tables.",
+  },
+  {
+    image: "/images/private-chefs.png",
+    title: "PRIVATE CHEFS",
+    subtitle: "Succeed on your own terms.",
+    description:
+      "Attract new customers & build your personal brand with hospitality-driven software that works hard on your behalf.",
+  },
+  {
+    image: "/images/bar-lounge.png",
+    title: "BAR & LOUNGE",
+    subtitle: "Your bartenders' best friend.",
+    description:
+      "Get the right drinks out before the ice melt, and keep your space packed with thirsty customers.",
+  },
+  {
+    image: "/images/morning_rush.png",
+    title: "CAFE & BAKERY",
+    subtitle: "The morning rush doesn’t have to feel so rushed.",
+    description:
+      "Give your margins a jolt and become a part of your customers daily rituals.",
+  },
+  {
+    image: "/images/food-truck.png",
+    title: "FOOD TRUCK",
+    subtitle: "Software that's built for the road.",
+    description:
+      "Excite your crowd with food truck-friendly ways to order and pay, and intuitive menus you’ll pick up fast.",
+  },
+  {
+    image: "/images/fast-casual.png",
+    title: "FAST CASUAL",
+    subtitle: "Fire up efficiency.",
+    description:
+      "Turn up your volume, and get orders from counter to customer in record time.",
+  },
+];
+
+const FAQS = [
+  {
+    id: 1,
+    title: "What is Dropp?",
+    description:
+      " Dropp is the ultimate modern food business platform, making it easy to start, grow and scale your food business.",
+  },
+  {
+    id: 2,
+    title: "What makes Dropp different from traditional POS systems?",
+    description:
+      "Unlike conventional POS systems, which mainly focuses on processing transactions, Dropp is an all-in-one solution that enhances restaurants to sell more, streamline operations and automate for efficiency. It incorporates advanced features like a robust loyalty program and real-time analytics to help food business owners make make data driven decision.",
+  },
+  {
+    id: 3,
+    title: "How quickly can Dropp be up and running in my restaurant?",
+    description:
+      "Dropp is designed for quick and efficient onboarding. All you need is to decide, our team works diligently to ensure a smooth and speedy setup. Timelines is within 24hrs to a few days depending on the size and needs of your restaurant. Our goal is to minimize disruption.",
+  },
+  {
+    id: 4,
+    title: "Does Dropp support multi-location restaurants?",
+    description:
+      "Absolutely! Dropp is built with multi-location functionality in mind, making it an ideal choice for restaurant chains & franchises. The platform allows for centralised control over menus, promotions and pricing, while also offering the flexibility for individual customisations in these locations.",
+  },
+  {
+    id: 5,
+    title: "For which types of businesses is Dropp best suited?",
+    description:
+      "Whether you’re running a small café, a boutique restaurant, bars & lounge, food truck, fast casuals, ghost or commercial kitchens, corporate food companies, or a private chef, Dropp simplifies your business so you can focus on your craft and customers.",
+  },
+  {
+    id: 6,
+    title:
+      "How secure is the Dropp system, particularly concerning customer data?",
+    description:
+      "Security is top priority for Dropp especially when it comes to protecting customer data. We employ robust methods and comply with local laws and regulations to safeguard all the information passing through our system.",
+  },
+];
+
+const FEATURES = [
+  {
+    image: "/images/save_time.svg",
+    subtitle: "SAVE TIME",
+    title: "2hrs",
+    description: "ON AVERAGE PER DAY",
+  },
+  {
+    image: "/images/increase_satisfaction.svg",
+    subtitle: "INCREASE SATISFACTION",
+    title: "4.4/5",
+    description: "SATISFACTION SCORE FROM DROPP USERS",
+  },
+  {
+    image: "/images/increase_revenue.svg",
+    subtitle: "INCREASE REVENUE",
+    title: "20%",
+    description: "OF OUR RESTAURANTS REPORT INCREASED REVENUE",
+  },
+];
 
 const items = [
   {
@@ -225,34 +341,680 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
 
+  const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
+
+  const [selectedFaq, setSelectedFaq] = useState(FAQS[0]);
+
+  const categoryPostReef = useRef(null);
+
+  const scrollPostLeft = () => {
+    if (categoryPostReef.current) {
+      categoryPostReef.current.scrollLeft -= 500;
+    }
+  };
+
+  const scrollPostRight = () => {
+    if (categoryPostReef.current) {
+      categoryPostReef.current.scrollLeft += 500;
+    }
+  };
+
   return (
     <>
       <div className={showModal ? "blur-bg" : ""}>
         {/* Header */}
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
+        <div
+          className="bg-[#24412C] lg:py-32 h-[1060px] lg:h-[960px] p-6 relative"
+          id="restaurant"
+        >
+          <div className="lg:px-32">
+            <p className="text-white text-4xl font_bold">
+              A Dropp™ for every food business.
+            </p>
+            <div className="w-full h-full relative">
+              <div className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container">
+                {CATEGORIES.map((cat, i) => (
+                  <div
+                    key={i}
+                    className={`${
+                      selectedCategory === cat ? "bg-[#FEC828]" : "bg-[#06C167]"
+                    } flex-shrink-0 px-4 py-2 rounded-full cursor-pointer`}
+                    onClick={() => setSelectedCategory(cat)}
+                  >
+                    <p className="text-[#385C44] font_bold text-lg uppercase">
+                      {cat}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="z-30 absolute w-[82%] lg:mx-auto lg:left-40 top-48 lg:top-64">
+            <div className="flex items-center relative">
+              <div
+                className="absolute -left-5 lg:-left-10 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                onClick={scrollPostLeft}
+              >
+                <img src="/images/arrow-left.svg" alt="arrow-left" />
+              </div>
+              <div
+                className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container"
+                ref={categoryPostReef}
+              >
+                {CATEGORIES_POST.map((cat, i) => (
+                  <div
+                    key={i}
+                    className="w-full lg:w-[80%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5"
+                  >
+                    <div className="w-[280px] h-[245px] lg:w-[445px] lg:h-[516px]">
+                      <img
+                        src={cat.image}
+                        alt="restaurant"
+                        className="w-[280px] h-[245px] lg:w-[445px] lg:h-[516px] object-cover rounded-2xl"
+                      />
+                    </div>
+                    <div className="flex-1 flex flex-col justify-center bg-white lg:shadow-2xl rounded-2xl">
+                      <div className="w-full lg:px-16 px-3 py-8 lg:py-0">
+                        <p className="text-2xl font_bold text-[#06C16B] tracking-wider">
+                          {cat.title}
+                        </p>
+                        <p className="text-3xl font_bold text-[#385C44]">
+                          {cat.subtitle}
+                        </p>
+                        <p className="mt-4 text-2xl font_medium text-[#8F8F8F] leading-">
+                          {cat.description}
+                        </p>
+                        <div className="mt-6">
+                          <Button
+                            title="Get started"
+                            showIcon
+                            extraClasses="px-4 justify-between w-44"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div
+                className="absolute -right-5 lg:right-40 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                onClick={scrollPostRight}
+              >
+                <img src="/images/arrow-right.svg" alt="arrow-right" />
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute bottom-16 lg:bottom-10">
+            <img src="/images/restaurants-logo.svg" alt="restaurants-logo" />
+          </div>
+        </div>
+
+        <div
+          className="lg:px-32 px-6 pt-32 pb-24"
+          style={{
+            backgroundImage: `url('/images/home-banner-vec.svg')`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        >
+          <div className="flex flex-col items-center">
+            <div
+              style={{
+                backgroundImage: `url('/images/yellow-mark.svg')`,
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <div className="-mt-10">
+                <p className="text-4xl text_black text-center font_bold">
+                  All the tools you need to succeed in <br /> one place!
+                </p>
+                <p className="text-xl text-[#4A443A] text-center my-3">
+                  Dropp gives you the power to connect the front and back of
+                  house while <br />
+                  freeing you up to focus on the customer experience.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12">
+            <div
+              className="bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0 mb-10"
+              id="ordering-tools"
+            >
+              <div className="">
+                <img src="/images/phone-mock.svg" alt="phone_mock" />
+              </div>
+              <div className="flex flex-col justify-center">
+                <p className="text-5xl text-[#00170C] font_bold mb-5">
+                  Ordering <br /> tools!
+                </p>
+                <div className="flex items-center">
+                  <p className="text-lg text-[#00170C] font_medium">
+                    QR digital menu
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </div>
+                <div className="flex items-center">
+                  <p className="text-lg text-[#00170C] font_medium">
+                    Online ordering link
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </div>
+                <p className="text-lg text-[#00170C] font_medium">
+                  Dropp takeout™ (coming soon)
+                </p>
+                <button
+                  type="submit"
+                  className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                  onClick={() => {}}
+                >
+                  Get started
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              className="bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              id="operation-tools"
+            >
+              <div className="flex flex-col justify-center">
+                <p className="text-5xl text-white font_bold mb-5">
+                  Operations <br /> tools!
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Kitchen Display System (KDS)
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Waiter & Staff Mgt.
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Menu & Order Mgt.
+                </p>
+                <button
+                  type="submit"
+                  className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                  onClick={() => {}}
+                >
+                  Get started
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div>
+                <img src="/images/laptop-mock.svg" alt="laptop-mock" />
+              </div>
+            </div>
+            <div
+              className="bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              id="marketing-tools"
+            >
+              <div className="">
+                <img src="/images/dash-mock.svg" alt="dash-mock" />
+              </div>
+              <div className="flex flex-col justify-center">
+                <p className="text-5xl text-white font_bold mb-5">
+                  Marketing <br /> tools!
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Discounts & Loyalty
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Customised Website
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Customer engagement tools
+                </p>
+                <p className="text-lg text-white font_medium">
+                  Homemade by Dropp™
+                </p>
+                <button
+                  type="submit"
+                  className="mt-6 inline-flex bg-white w-44 text-[#9E6A55] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                  onClick={() => {}}
+                >
+                  Get started
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              className="bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              id="analytics-insight"
+            >
+              <div className="flex flex-col justify-center">
+                <p className="text-5xl text-[#00170C] font_bold mb-5">
+                  Analytics &
+                  <br /> Insights!
+                </p>
+                <p className="text-lg text-[#00170C] font_medium">
+                  Tools to earn more
+                </p>
+                <p className="text-lg text-[#00170C] font_medium">
+                  Tools to save more
+                </p>
+                <p className="text-lg text-[#00170C] font_medium">
+                  Tools to understand your customer
+                </p>
+                <button
+                  type="submit"
+                  className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                  onClick={() => {}}
+                >
+                  Get started
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div>
+                <img src="/images/laptop-mock2.svg" alt="laptop-mock" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative mb-20 pb-96 lg:pb-60 mb-96 lg:mb-20 w-full ">
+          <img
+            src="/images/restaurant2.png"
+            alt="restaurant2"
+            className="w-full h-[451px] lg:h-full object-cover"
+          />
+
+          <div className="w-full absolute top-64 lg:top-2/3">
+            <div className="w-4/5 mx-auto lg:flex gap-3 lg:gap-5">
+              {FEATURES.map((f, i) => (
+                <div
+                  key={i}
+                  className="lg:w-[33%] bg-white rounded-3xl p-11 shadow-2xl mb-3 lg:mb-8"
+                >
+                  <img src={f.image} alt="save_time" className="w-28 h-28" />
+                  <p className="text-xl uppercase text-[#99C446] font_bold tracking-wider mt-10">
+                    {f.subtitle}
+                  </p>
+                  <div className="ms-2">
+                    <p className="text-6xl text-[#99C446] font_heavy mt-5">
+                      {f.title}
+                    </p>
+                    <p className="text-base uppercase text-[#8F8F8F] font_bold">
+                      {f.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:px-32 px-6 pt-96 lg:pt-32 pb-32 header_bg">
+          <div className="flex flex-col items-center">
+            <div
+              style={{
+                backgroundImage: `url('/images/yellow-mark.svg')`,
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <div className="-mt-4">
+                <p className="hidden lg:block text-4xl text_black text-center font_bold">
+                  150+ food businesses use <br /> Dropp to get the job done.
+                </p>
+                <p className="lg:hidden text-4xl text_black text-center font_bold">
+                  150+ food businesses use Dropp to get the job done.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="my-20 flex space-x-4 overflow-x-auto my-scroll-container">
+            <div className="flex-shrink-0">
+              <img src="/images/pappies-group.png" alt="pappies" />
+            </div>
+            <div className="flex-shrink-0">
+              <img src="/images/funmi.svg" alt="funmi" />
+            </div>
+            <div className="flex-shrink-0">
+              <img src="/images/feli.png" alt="feli" />
+            </div>
+            <div className="flex-shrink-0">
+              <img src="/images/bola.png" alt="bola" />
+            </div>
+            <div className="flex-shrink-0">
+              <img src="/images/okonkwo.png" alt="okonkwo" />
+            </div>
+          </div>
+          <div className="mt-20 flex justify-center">
+            <Button title="join them!" extraClasses="w-52" />
+          </div>
+        </div>
+
+        <div className="relative bg-[#24412C] z-50" id="pricing">
+          <div className="lg:px-32 lg:pt-32 p-6">
+            <p className="text-5xl text-white font_bold text-center">
+              Built for growth, grows with you.{" "}
+            </p>
+            <p className="text-xl text-white text-center my-3">
+              Flexible plans to make it easy to start or switch.
+            </p>
+
+            <div className="lg:w-4/5 mx-auto mt-10">
+              <div className="lg:flex justify-center gap-8">
+                <div className="bg-[#99C446] rounded-2xl p-8 mb-10 relative">
+                  <p className="lg:text-5xl text-3xl text-[#24412C] font_bold">
+                    Restaurants
+                  </p>
+                  <p className="text-xl text-[#4A443A] font_medium my-3">
+                    For all type and size of restaurants looking to boost
+                    revenue and streamline operations.
+                  </p>
+                  <div>
+                    <p className="text-white text-5xl font_bold">
+                      N20,000/<span className="text-lg">month</span>
+                    </p>
+                    <p className="text-white text-xl font_bold">
+                      +2.5% commission fee
+                    </p>
+                    <div className="border border-white my-3" />
+                  </div>
+                  <div className="mt-5 mb-20">
+                    <ul className="list-disc pl-5">
+                      <li className="text-lg text-[#4A443A]">
+                        Menu management
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Customised website
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Kitchen display system
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Sales reports and insights
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Payment collection
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Online ordering
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Customer management
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Loyalty features
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        QR digital menu
+                      </li>
+                      <li className="text-lg text-[#4A443A]">Pay at table</li>
+                    </ul>
+                  </div>
+                  <button className="absolute bottom-5 w-[84%] bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
+                    Get started
+                  </button>
+                </div>
+                <div className="bg-[#99C446] rounded-2xl p-8 mb-10 relative">
+                  <p className="text-5xl text-[#24412C] font_bold">
+                    Private Chefs
+                  </p>
+                  <p className="text-xl text-[#4A443A] font_medium my-3">
+                    For all type and size of restaurants looking to boost
+                    revenue and streamline operations.
+                  </p>
+                  <div>
+                    <p className="text-white text-5xl font_bold uppercase">
+                      Free
+                    </p>
+                    <p className="text-white text-xl font_bold">
+                      +15% commission fee
+                    </p>
+                    <div className="border border-white my-3" />
+                  </div>
+                  <div className="mt-5 mb-20">
+                    <ul className="list-disc pl-5">
+                      <li className="text-lg text-[#4A443A]">
+                        Menu management
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Customised website
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Payment collection
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Online ordering
+                      </li>
+                      <li className="text-lg text-[#4A443A]">
+                        Customer management
+                      </li>
+                    </ul>
+                  </div>
+                  <button className="absolute bottom-5 w-[84%] bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
+                    Get started
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="lg:w-4/5 mx-auto">
+              <div className="bg-white rounded-2xl lg:p-20 p-6">
+                <p className="lg:text-5xl text-3xl text_black font_bold text-center">
+                  Get a free online demo from our <br /> team of restaurant
+                  pros.
+                </p>
+                <p className="lg:text-xl text-lg text-[#4A443A] font_medium text-center my-3">
+                  We’ll follow up within 24 hours to find a convenient time for
+                  you.
+                </p>
+                <div className="mt-12">
+                  <div className="lg:flex gap-5 justify-between">
+                    <input
+                      placeholder="First Name"
+                      className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                    />
+                    <input
+                      placeholder="Last Name"
+                      className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                    />
+                  </div>
+                  <input
+                    placeholder="Email"
+                    className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                  />
+                  <input
+                    placeholder="Phone Number"
+                    className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                  />
+                  <input
+                    placeholder="Restaurant Name"
+                    className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                  />
+                  <Button title="Get a Demo" extraClasses="mt-5 w-60 py-3" />
+                </div>
+              </div>
+            </div>
+            <div className="lg:w-4/5 mx-auto mt-10 z-50">
+              <div className="bg-white rounded-2xl lg:p-20 p-6">
+                <p className="lg:text-5xl lg:pt-0 pt-10 text-3xl text_black font_bold text-center">
+                  FAQs
+                </p>
+                <div className="lg:mt-16 mt-8">
+                  {FAQS.map((f, i) => (
+                    <div
+                      key={i}
+                      className={`${
+                        FAQS.length - 1 !== i && "border-b border-[#BDBDBD]"
+                      } p-6 cursor-pointer`}
+                      onClick={() => setSelectedFaq(f)}
+                    >
+                      <div className="flex justify-between">
+                        <p className="text-2xl text-black font_medium">
+                          {f.title}
+                        </p>
+                        <div>
+                          {selectedFaq.id === f.id ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="#33A36D"
+                              width={25}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 12h14"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="#33A36D"
+                              width={25}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 4.5v15m7.5-7.5h-15"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                      </div>
+                      {selectedFaq.id === f.id && (
+                        <p className="text-lg text-[#6F6F6F] font_medium my-5">
+                          {f.description}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute -bottom-32 w-full z-10">
+            <div className="">
+              <img
+                src="/images/restaurants-logo2.svg"
+                className="w-full object-cover"
+                alt=""
+              />
+              <img
+                src="/images/restaurants-logo2.svg"
+                className="w-full object-cover"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Need Something */}
-        <NeedSomething
+        {/* <NeedSomething
           items={items}
           title="Dropp"
           setShowModal={setShowModal}
-        />
+        /> */}
 
         {/* Supermarkets */}
-        <Supermarkets supermartkets={supermartkets} galley={galley} />
+        {/* <Supermarkets supermartkets={supermartkets} galley={galley} /> */}
 
         {/* Steps */}
-        <Steps
+        {/* <Steps
           bannerImage={Images.boy}
           businesses={businesses}
           setShowModal={setShowModal}
-        />
+        /> */}
 
         {/* Banner */}
         {/* <Banner bannerImage={Images.boy} businesses={businesses} /> */}
 
         {/* Testimonials */}
-        <Testimonials setShowModal={setShowModal} />
+        {/* <Testimonials setShowModal={setShowModal} /> */}
 
         {/* Footer */}
         <Footer logo={Images.logo} />
