@@ -24,13 +24,13 @@ const Header = ({ itemsImage, setShowModal }) => {
           </div>
         </div>
 
-        <p className="text-xl text-[#4A443A] text-center my-5 font_medium">
+        <p className="px-5 lg:px-0 text-xl text-[#4A443A] text-center my-5 font_medium">
           Dropp empowers you with all the tools you need to work smarter, <br />
           earn more & automate for efficiency all in one place.
         </p>
         <div className="flex justify-center gap-4 mt-5">
-          <OutlineButton title="Book a Demo" />
-          <Button title="Get started" />
+          <OutlineButton title="Book a Demo" extraClasses="w-36 lg:w-full" />
+          <Button title="Get started" extraClasses="w-36 lg:w-full" />
         </div>
         <div className="mt-5">
           <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />

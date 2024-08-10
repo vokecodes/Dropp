@@ -877,3 +877,76 @@ html {
 .my-scroll-container::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+.animate-scroll {
+  animation: scrollRight 10s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused; /* Pause on hover */
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% + 100vw));
+  }
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(calc(-100% + 100vw));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* .overlapping-cards-container {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+.overlapping-card {
+  flex-shrink: 0;
+  transition: transform 0.5s ease, z-index 0.5s ease;
+}
+
+.overlapping-card:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.overlapping-card:nth-child(odd) {
+  margin-top: 20px;
+}
+
+.overlapping-card:nth-child(even) {
+  margin-bottom: 20px;
+} */
+
+.overlapping-cards-container {
+  position: relative;
+  height: 600px; /* Adjust the height as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.overlapping-card {
+  position: relative;
+  margin-bottom: -100px; /* Adjust for overlap */
+  transition: transform 0.5s ease, z-index 0.5s ease;
+}
+
+.overlapping-card:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}

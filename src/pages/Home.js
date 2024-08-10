@@ -345,31 +345,119 @@ const Home = () => {
 
   const [selectedFaq, setSelectedFaq] = useState(FAQS[0]);
 
-  const categoryPostReef = useRef(null);
+  const categoryPostRef = useRef(null);
+  const [scrollDirection, setScrollDirection] = useState(1); // 1 for right, -1 for left
+
+  const businessesRef = useRef(null);
+  const [businessScrollDirection, setBusinessScrollDirection] = useState(1); // 1 for right, -1 for left
 
   const scrollPostLeft = () => {
-    if (categoryPostReef.current) {
-      categoryPostReef.current.scrollLeft -= 500;
+    if (categoryPostRef.current) {
+      categoryPostRef.current.scrollLeft -= 500;
     }
   };
 
   const scrollPostRight = () => {
-    if (categoryPostReef.current) {
-      categoryPostReef.current.scrollLeft += 500;
+    if (categoryPostRef.current) {
+      categoryPostRef.current.scrollLeft += 500;
     }
   };
 
+  useEffect(() => {
+    const scrollContainer = categoryPostRef.current;
+    const scrollSpeed = 1.5; // Adjust the scroll speed
+    let scrollInterval;
+
+    const startScroll = () => {
+      scrollInterval = setInterval(() => {
+        // Scroll in the current direction
+        scrollContainer.scrollLeft += scrollSpeed * scrollDirection;
+
+        // Check if we've reached the end of the scroll (right or left)
+        if (
+          scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+          scrollContainer.scrollWidth
+        ) {
+          setScrollDirection(-1); // Switch to left
+        } else if (scrollContainer.scrollLeft <= 0) {
+          setScrollDirection(1); // Switch to right
+        }
+      }, 20);
+    };
+
+    const stopScroll = () => {
+      clearInterval(scrollInterval);
+    };
+
+    scrollContainer.addEventListener("mouseenter", stopScroll);
+    scrollContainer.addEventListener("mouseleave", startScroll);
+
+    startScroll();
+
+    return () => {
+      stopScroll();
+      scrollContainer.removeEventListener("mouseenter", stopScroll);
+      scrollContainer.removeEventListener("mouseleave", startScroll);
+    };
+  }, [scrollDirection]);
+
+  useEffect(() => {
+    const businessScrollContainer = businessesRef.current;
+    const businessScrollSpeed = 1.5; // Adjust the scroll speed
+    let businessScrollInterval;
+
+    const startBusinessScroll = () => {
+      businessScrollInterval = setInterval(() => {
+        // Scroll in the current direction
+        businessScrollContainer.scrollLeft +=
+          businessScrollSpeed * businessScrollDirection;
+
+        // Check if we've reached the end of the scroll (right or left)
+        if (
+          businessScrollContainer.scrollLeft +
+            businessScrollContainer.clientWidth >=
+          businessScrollContainer.scrollWidth
+        ) {
+          setBusinessScrollDirection(-1); // Switch to left
+        } else if (businessScrollContainer.scrollLeft <= 0) {
+          setBusinessScrollDirection(1); // Switch to right
+        }
+      }, 20);
+    };
+
+    const stopBusinessScroll = () => {
+      clearInterval(businessScrollInterval);
+    };
+
+    businessScrollContainer.addEventListener("mouseenter", stopBusinessScroll);
+    businessScrollContainer.addEventListener("mouseleave", startBusinessScroll);
+
+    startBusinessScroll();
+
+    return () => {
+      stopBusinessScroll();
+      businessScrollContainer.removeEventListener(
+        "mouseenter",
+        stopBusinessScroll
+      );
+      businessScrollContainer.removeEventListener(
+        "mouseleave",
+        startBusinessScroll
+      );
+    };
+  }, [businessScrollDirection]);
+
   return (
     <>
-      <div className={showModal ? "blur-bg" : ""}>
+      <div className={`overflow-x-hidden ${showModal ? "blur-bg" : ""}`}>
         {/* Header */}
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
         <div
-          className="bg-[#24412C] lg:py-32 h-[1060px] lg:h-[960px] p-6 relative"
+          className="bg-[#24412C] lg:py-32 h-[1060px] lg:h-[960px] relative"
           id="restaurant"
         >
-          <div className="lg:px-32">
+          <div className="lg:px-32 px-6">
             <p className="text-white text-4xl font_bold">
               A Dropp™ for every food business.
             </p>
@@ -392,22 +480,24 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="z-30 absolute w-[82%] lg:mx-auto lg:left-40 top-48 lg:top-64">
+          <div className="z-30 absolute w-full lg:mx-auto top-48 lg:top-64">
             <div className="flex items-center relative">
               <div
-                className="absolute -left-5 lg:-left-10 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-20 left-3 lg:left-10 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostLeft}
               >
                 <img src="/images/arrow-left.svg" alt="arrow-left" />
               </div>
               <div
-                className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container"
-                ref={categoryPostReef}
+                className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container animate-scroll"
+                ref={categoryPostRef}
               >
                 {CATEGORIES_POST.map((cat, i) => (
                   <div
                     key={i}
-                    className="w-full lg:w-[80%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5"
+                    className={`w-full lg:w-[80%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
+                      i === 0 ? "ml-5 lg:ml-20" : ""
+                    }`}
                   >
                     <div className="w-[280px] h-[245px] lg:w-[445px] lg:h-[516px]">
                       <img
@@ -440,7 +530,7 @@ const Home = () => {
                 ))}
               </div>
               <div
-                className="absolute -right-5 lg:right-40 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-10 -right-5 lg:right-40 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostRight}
               >
                 <img src="/images/arrow-right.svg" alt="arrow-right" />
@@ -448,7 +538,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="absolute bottom-16 lg:bottom-10">
+          <div className="absolute z-10 bottom-16 lg:bottom-10">
             <img src="/images/restaurants-logo.svg" alt="restaurants-logo" />
           </div>
         </div>
@@ -462,27 +552,20 @@ const Home = () => {
           }}
         >
           <div className="flex flex-col items-center">
-            <div
-              style={{
-                backgroundImage: `url('/images/yellow-mark.svg')`,
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <div className="-mt-10">
-                <p className="text-4xl text_black text-center font_bold">
-                  All the tools you need to succeed in <br /> one place!
-                </p>
-                <p className="text-xl text-[#4A443A] text-center my-3">
-                  Dropp gives you the power to connect the front and back of
-                  house while <br />
-                  freeing you up to focus on the customer experience.
-                </p>
-              </div>
+            <div className="-mt-10">
+              <p className="text-4xl text_black text-center font_bold">
+                All the tools you need to succeed in <br /> one place!
+              </p>
+              <p className="text-xl text-[#4A443A] text-center my-3">
+                Dropp gives you the power to connect the front and back of house
+                while <br />
+                freeing you up to focus on the customer experience.
+              </p>
             </div>
           </div>
-          <div className="mt-12">
+          <div className="mt-12 overlapping-cards-container">
             <div
-              className="bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0 mb-10"
+              className="overlapping-card bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0 mb-10"
               id="ordering-tools"
             >
               <div className="">
@@ -560,7 +643,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              className="overlapping-card bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
               id="operation-tools"
             >
               <div className="flex flex-col justify-center">
@@ -604,7 +687,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              className="overlapping-card bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
               id="marketing-tools"
             >
               <div className="">
@@ -651,7 +734,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              className="overlapping-card bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
               id="analytics-insight"
             >
               <div className="flex flex-col justify-center">
@@ -702,10 +785,10 @@ const Home = () => {
           <img
             src="/images/restaurant2.png"
             alt="restaurant2"
-            className="w-full h-[451px] lg:h-full object-cover"
+            className="w-full h-[451px] lg:h-[764px] object-cover"
           />
 
-          <div className="w-full absolute top-64 lg:top-2/3">
+          <div className="w-full absolute top-72 lg:top-[56%]">
             <div className="w-4/5 mx-auto lg:flex gap-3 lg:gap-5">
               {FEATURES.map((f, i) => (
                 <div
@@ -730,8 +813,8 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="lg:px-32 px-6 pt-96 lg:pt-32 pb-32 header_bg">
-          <div className="flex flex-col items-center">
+        <div className="pt-96 lg:pt-32 pb-32 header_bg">
+          <div className="lg:px-32 px-6 flex flex-col items-center">
             <div
               style={{
                 backgroundImage: `url('/images/yellow-mark.svg')`,
@@ -748,7 +831,10 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="my-20 flex space-x-4 overflow-x-auto my-scroll-container">
+          <div
+            className="my-20 flex space-x-4 overflow-x-auto my-scroll-container animate-scroll"
+            ref={businessesRef}
+          >
             <div className="flex-shrink-0">
               <img src="/images/pappies-group.png" alt="pappies" />
             </div>
@@ -770,8 +856,8 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="relative bg-[#24412C] z-50" id="pricing">
-          <div className="lg:px-32 lg:pt-32 p-6">
+        <div className="relative bg-[#24412C]" id="pricing">
+          <div className="lg:px-32 lg:pt-32 p-6 relative z-50">
             <p className="text-5xl text-white font_bold text-center">
               Built for growth, grows with you.{" "}
             </p>
@@ -913,7 +999,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="lg:w-4/5 mx-auto mt-10 z-50">
+            <div className="lg:w-4/5 mx-auto mt-10">
               <div className="bg-white rounded-2xl lg:p-20 p-6">
                 <p className="lg:text-5xl lg:pt-0 pt-10 text-3xl text_black font_bold text-center">
                   FAQs
@@ -977,16 +1063,11 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="absolute -bottom-32 w-full z-10">
+          <div className="absolute bottom-[-4rem] lg:bottom-[-20rem] w-full z-10">
             <div className="">
               <img
                 src="/images/restaurants-logo2.svg"
-                className="w-full object-cover"
-                alt=""
-              />
-              <img
-                src="/images/restaurants-logo2.svg"
-                className="w-full object-cover"
+                className="w-full"
                 alt=""
               />
             </div>
