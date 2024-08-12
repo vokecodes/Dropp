@@ -79,6 +79,11 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
     { name: "Marketplace", href: "", current: false },
   ];
 
+  const mobileNavigation = [
+    { name: "Pricing", href: "#pricing", current: false },
+    { name: "Marketplace", href: "", current: false },
+  ];
+
   const restaurantNavigation = [
     { name: "Dine-in", href: "#restaurant" },
     { name: "Private Chef", href: "#restaurant" },
@@ -203,13 +208,13 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                 </div>
                 <MenuItems
                   transition
-                  className="absolute right-0 z-20 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="absolute right-0 z-20 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   {restaurantNavigation.map((item) => (
                     <MenuItem key={item.name}>
                       <a
                         href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                        className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
                         onClick={() => setSelectedCategory(item.name)}
                       >
                         {item.name}
@@ -253,13 +258,13 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                 </div>
                 <MenuItems
                   transition
-                  className="absolute right-0 z-20 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="absolute right-0 z-20 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   {productNavigation.map((item) => (
                     <MenuItem key={item.name}>
                       <a
                         href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                        className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
                       >
                         {item.name}
                       </a>
@@ -313,7 +318,78 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
 
       <DisclosurePanel as="nav" aria-label="Global" className="lg:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item) => (
+          <Disclosure as="div" className="">
+            <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
+              Restaurant
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="#4A443A"
+                width={16}
+                height={16}
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </DisclosureButton>
+            <DisclosurePanel className="mt-2 space-y-2">
+              {restaurantNavigation.map((item) => (
+                <DisclosureButton
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  className="block rounded-lg py-2 pl-6 pr-3 text-sm font_medium leading-7 text-gray-900 hover:bg-gray-50"
+                >
+                  {item.name}
+                </DisclosureButton>
+              ))}
+            </DisclosurePanel>
+          </Disclosure>
+          <DisclosureButton
+            as="a"
+            href=""
+            className="block rounded-md px-3 py-2 text-lg text-[#4A443A] font_medium"
+          >
+            Private Chef
+          </DisclosureButton>
+          <Disclosure as="div" className="">
+            <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
+              Product
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="#4A443A"
+                width={16}
+                height={16}
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </DisclosureButton>
+            <DisclosurePanel className="mt-2 space-y-2">
+              {productNavigation.map((item) => (
+                <DisclosureButton
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  className="block rounded-lg py-2 pl-6 pr-3 text-sm font_medium leading-7 text-gray-900 hover:bg-gray-50"
+                >
+                  {item.name}
+                </DisclosureButton>
+              ))}
+            </DisclosurePanel>
+          </Disclosure>
+          {mobileNavigation.map((item) => (
             <DisclosureButton
               key={item.name}
               as="a"

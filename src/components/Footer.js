@@ -12,14 +12,18 @@ const Footer = ({ logo }) => {
               <img className="h-6 w-auto" src="/images/logo-white.svg" alt="" />
             </Link>
             <div>
-              <p className="text-base text-white font_bold mt-3">
+              <p className="hidden lg:block text-base text-white font_bold mt-3">
                 {new Date().getFullYear()} ©️ Roseto Labs Limited. All rights
                 reserved.
+              </p>
+              <p className="lg:hidden text-base text-white font_bold mt-3">
+                {new Date().getFullYear()} ©️ Roseto Labs Limited. <br /> All
+                rights reserved.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-row items-start justify-between gap-x-10">
+          <div className="hidden lg:block flex flex-row items-start justify-between gap-x-10">
             <div className="min-w-24">
               <h1 className="text-white text-lg font_bold">Products</h1>
               <p className="text-base text-white font_regular mt-3">
@@ -84,6 +88,74 @@ const Footer = ({ logo }) => {
                 Twitter
               </a>
             </div>
+          </div>
+
+          <div className="w-full">
+            <h1 className="text-white text-lg font_bold">Products</h1>
+            <p className="text-base text-white font_regular mt-1">
+              Ordering tools
+            </p>
+            <p className="text-base text-white font_regular mt-1">
+              Restaurant operations tools
+            </p>
+            <p className="text-base text-white font_regular mt-1">
+              Marketing tools
+            </p>
+            <p className="text-base text-white font_regular mt-1">
+              Analytics & Insight
+            </p>
+          </div>
+
+          <div className="lg:hidden flex flex-row items-start justify-between gap-x-10">
+            <div className="min-w-24">
+              <h1 className="text-white text-lg font_bold">Legal</h1>
+              <Link to="#">
+                <p className="text-base text-white font_regular mt-1">
+                  Terms of use
+                </p>
+              </Link>
+              <Link to="#">
+                <p className="text-base text-white font_regular mt-1">
+                  Privacy policy
+                </p>
+              </Link>
+            </div>
+            <div className="min-w-24">
+              <h1 className="text-white text-lg font_bold">Contact</h1>
+              <p className="text-base text-white font_regular mt-1">
+                +2348068424478
+              </p>
+              <p className="text-base text-white font_regular mt-1">
+                hello@getdropp.com
+              </p>
+            </div>
+          </div>
+          <div className="w-full flex items-center gap-3">
+            <h1 className="text-white text-lg font_bold">Social media:</h1>
+            <a
+              href="https://www.linkedin.com/company/homemade-by-dropp?trk=profile-position"
+              target="_blank"
+              rel="noreferrer"
+              className="block text-base text-white font_regular underline"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://www.instagram.com/try.homemade/"
+              target="_blank"
+              rel="noreferrer"
+              className="block text-base text-white font_regular underline"
+            >
+              Instagram
+            </a>
+            <a
+              href="https://twitter.com/tryhomemade"
+              target="_blank"
+              rel="noreferrer"
+              className="block text-base text-white font_regular underline"
+            >
+              Twitter
+            </a>
           </div>
         </div>
       </div>

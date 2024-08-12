@@ -363,43 +363,55 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    const scrollContainer = categoryPostRef.current;
-    const scrollSpeed = 1.5; // Adjust the scroll speed
-    let scrollInterval;
+  const scrollBusinessesPostLeft = () => {
+    if (businessesRef.current) {
+      businessesRef.current.scrollLeft -= 500;
+    }
+  };
 
-    const startScroll = () => {
-      scrollInterval = setInterval(() => {
-        // Scroll in the current direction
-        scrollContainer.scrollLeft += scrollSpeed * scrollDirection;
+  const scrollBusinessesPostRight = () => {
+    if (businessesRef.current) {
+      businessesRef.current.scrollLeft += 500;
+    }
+  };
 
-        // Check if we've reached the end of the scroll (right or left)
-        if (
-          scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-          scrollContainer.scrollWidth
-        ) {
-          setScrollDirection(-1); // Switch to left
-        } else if (scrollContainer.scrollLeft <= 0) {
-          setScrollDirection(1); // Switch to right
-        }
-      }, 20);
-    };
+  // useEffect(() => {
+  //   const scrollContainer = categoryPostRef.current;
+  //   const scrollSpeed = 1.5; // Adjust the scroll speed
+  //   let scrollInterval;
 
-    const stopScroll = () => {
-      clearInterval(scrollInterval);
-    };
+  //   const startScroll = () => {
+  //     scrollInterval = setInterval(() => {
+  //       // Scroll in the current direction
+  //       scrollContainer.scrollLeft += scrollSpeed * scrollDirection;
 
-    scrollContainer.addEventListener("mouseenter", stopScroll);
-    scrollContainer.addEventListener("mouseleave", startScroll);
+  //       // Check if we've reached the end of the scroll (right or left)
+  //       if (
+  //         scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+  //         scrollContainer.scrollWidth
+  //       ) {
+  //         setScrollDirection(-1); // Switch to left
+  //       } else if (scrollContainer.scrollLeft <= 0) {
+  //         setScrollDirection(1); // Switch to right
+  //       }
+  //     }, 20);
+  //   };
 
-    startScroll();
+  //   const stopScroll = () => {
+  //     clearInterval(scrollInterval);
+  //   };
 
-    return () => {
-      stopScroll();
-      scrollContainer.removeEventListener("mouseenter", stopScroll);
-      scrollContainer.removeEventListener("mouseleave", startScroll);
-    };
-  }, [scrollDirection]);
+  //   scrollContainer.addEventListener("mouseenter", stopScroll);
+  //   scrollContainer.addEventListener("mouseleave", startScroll);
+
+  //   startScroll();
+
+  //   return () => {
+  //     stopScroll();
+  //     scrollContainer.removeEventListener("mouseenter", stopScroll);
+  //     scrollContainer.removeEventListener("mouseleave", startScroll);
+  //   };
+  // }, [scrollDirection]);
 
   useEffect(() => {
     const businessScrollContainer = businessesRef.current;
@@ -454,11 +466,11 @@ const Home = () => {
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
         <div
-          className="bg-[#24412C] lg:py-32 h-[1060px] lg:h-[960px] relative"
+          className="bg-[#24412C] pt-20 lg:py-32 h-[960px] lg:h-[760px] relative"
           id="restaurant"
         >
           <div className="lg:px-32 px-6">
-            <p className="text-white text-4xl font_bold">
+            <p className="text-white text-center text-3xl lg:text-5xl font_bold">
               A Dropp™ for every food business.
             </p>
             <div className="w-full h-full relative">
@@ -480,44 +492,44 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="z-30 absolute w-full lg:mx-auto top-48 lg:top-64">
+          <div className="z-30 absolute w-full lg:mx-auto top-64">
             <div className="flex items-center relative">
               <div
-                className="absolute z-20 left-3 lg:left-10 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-20 left-3 lg:left-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostLeft}
               >
                 <img src="/images/arrow-left.svg" alt="arrow-left" />
               </div>
               <div
-                className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container animate-scroll"
+                className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container"
                 ref={categoryPostRef}
               >
                 {CATEGORIES_POST.map((cat, i) => (
                   <div
                     key={i}
-                    className={`w-full lg:w-[80%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
+                    className={`w-full lg:w-[36%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
                       i === 0 ? "ml-5 lg:ml-20" : ""
                     }`}
                   >
-                    <div className="w-[280px] h-[245px] lg:w-[445px] lg:h-[516px]">
+                    <div className="w-[280px] h-[245px] lg:w-[200px] lg:h-[336px]">
                       <img
                         src={cat.image}
                         alt="restaurant"
-                        className="w-[280px] h-[245px] lg:w-[445px] lg:h-[516px] object-cover rounded-2xl"
+                        className="w-[280px] h-[245px] lg:w-[200px] lg:h-[336px] object-cover rounded-2xl"
                       />
                     </div>
                     <div className="flex-1 flex flex-col justify-center bg-white lg:shadow-2xl rounded-2xl">
                       <div className="w-full lg:px-16 px-3 py-8 lg:py-0">
-                        <p className="text-2xl font_bold text-[#06C16B] tracking-wider">
+                        <p className="text-xl font_bold text-[#06C16B] tracking-wider">
                           {cat.title}
                         </p>
-                        <p className="text-3xl font_bold text-[#385C44]">
+                        <p className="text-2xl font_bold text-[#385C44]">
                           {cat.subtitle}
                         </p>
-                        <p className="mt-4 text-2xl font_medium text-[#8F8F8F] leading-">
+                        <p className="mt-2 text-xl font_medium text-[#8F8F8F] leading-">
                           {cat.description}
                         </p>
-                        <div className="mt-6">
+                        <div className="my-3">
                           <Button
                             title="Get started"
                             showIcon
@@ -530,7 +542,7 @@ const Home = () => {
                 ))}
               </div>
               <div
-                className="absolute z-10 -right-5 lg:right-40 w-[91px] h-[91px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-10 -right-5 lg:right-40 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostRight}
               >
                 <img src="/images/arrow-right.svg" alt="arrow-right" />
@@ -538,7 +550,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="absolute z-10 bottom-16 lg:bottom-10">
+          <div className="absolute z-10 bottom-8 lg:bottom-10">
             <img src="/images/restaurants-logo.svg" alt="restaurants-logo" />
           </div>
         </div>
@@ -553,10 +565,10 @@ const Home = () => {
         >
           <div className="flex flex-col items-center">
             <div className="-mt-10">
-              <p className="text-4xl text_black text-center font_bold">
+              <p className="text-3xl lg:text-5xl text_black text-center font_bold">
                 All the tools you need to succeed in <br /> one place!
               </p>
-              <p className="text-xl text-[#4A443A] text-center my-3">
+              <p className="text-lg lg:text-xl text-[#4A443A] text-center my-3">
                 Dropp gives you the power to connect the front and back of house
                 while <br />
                 freeing you up to focus on the customer experience.
@@ -781,19 +793,19 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="relative mb-20 pb-96 lg:pb-60 mb-96 lg:mb-20 w-full ">
+        <div className="relative w-full ">
           <img
             src="/images/restaurant2.png"
             alt="restaurant2"
-            className="w-full h-[451px] lg:h-[764px] object-cover"
+            className="w-full h-[451px] lg:h-[502px] object-cover"
           />
 
-          <div className="w-full absolute top-72 lg:top-[56%]">
-            <div className="w-4/5 mx-auto lg:flex gap-3 lg:gap-5">
+          <div className="w-full absolute top-72 lg:top-80">
+            <div className="w-4/5 mx-auto lg:flex lg:justify-center gap-3 lg:gap-5">
               {FEATURES.map((f, i) => (
                 <div
                   key={i}
-                  className="lg:w-[33%] bg-white rounded-3xl p-11 shadow-2xl mb-3 lg:mb-8"
+                  className="lg:w-[26%] bg-white rounded-3xl p-11 shadow-2xl mb-3 lg:mb-8"
                 >
                   <img src={f.image} alt="save_time" className="w-28 h-28" />
                   <p className="text-xl uppercase text-[#99C446] font_bold tracking-wider mt-10">
@@ -813,42 +825,47 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="pt-96 lg:pt-32 pb-32 header_bg">
+        <div className="pt-96 lg:pt-96 pb-32 header_bg">
           <div className="lg:px-32 px-6 flex flex-col items-center">
+            <p className="hidden lg:block text-3xl lg:text-5xl text_black text-center font_bold">
+              150+ food businesses use <br /> Dropp to get the job done.
+            </p>
+            <p className="lg:hidden text-3xl lg:text-5xl text_black text-center font_bold">
+              150+ food businesses use Dropp to get the job done.
+            </p>
+          </div>
+          <div className="flex items-center relative">
             <div
-              style={{
-                backgroundImage: `url('/images/yellow-mark.svg')`,
-                backgroundRepeat: "no-repeat",
-              }}
+              className="absolute z-20 left-3 lg:left-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+              onClick={scrollBusinessesPostLeft}
             >
-              <div className="-mt-4">
-                <p className="hidden lg:block text-4xl text_black text-center font_bold">
-                  150+ food businesses use <br /> Dropp to get the job done.
-                </p>
-                <p className="lg:hidden text-4xl text_black text-center font_bold">
-                  150+ food businesses use Dropp to get the job done.
-                </p>
+              <img src="/images/arrow-left.svg" alt="arrow-left" />
+            </div>
+            <div
+              className="my-20 flex space-x-4 overflow-x-auto my-scroll-container animate-scroll"
+              ref={businessesRef}
+            >
+              <div className="flex-shrink-0">
+                <img src="/images/pappies-group.png" alt="pappies" />
+              </div>
+              <div className="flex-shrink-0">
+                <img src="/images/funmi.svg" alt="funmi" />
+              </div>
+              <div className="flex-shrink-0">
+                <img src="/images/feli.png" alt="feli" />
+              </div>
+              <div className="flex-shrink-0">
+                <img src="/images/bola.png" alt="bola" />
+              </div>
+              <div className="flex-shrink-0">
+                <img src="/images/okonkwo.png" alt="okonkwo" />
               </div>
             </div>
-          </div>
-          <div
-            className="my-20 flex space-x-4 overflow-x-auto my-scroll-container animate-scroll"
-            ref={businessesRef}
-          >
-            <div className="flex-shrink-0">
-              <img src="/images/pappies-group.png" alt="pappies" />
-            </div>
-            <div className="flex-shrink-0">
-              <img src="/images/funmi.svg" alt="funmi" />
-            </div>
-            <div className="flex-shrink-0">
-              <img src="/images/feli.png" alt="feli" />
-            </div>
-            <div className="flex-shrink-0">
-              <img src="/images/bola.png" alt="bola" />
-            </div>
-            <div className="flex-shrink-0">
-              <img src="/images/okonkwo.png" alt="okonkwo" />
+            <div
+              className="absolute z-10 -right-5 lg:right-40 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+              onClick={scrollBusinessesPostRight}
+            >
+              <img src="/images/arrow-right.svg" alt="arrow-right" />
             </div>
           </div>
           <div className="mt-20 flex justify-center">
@@ -858,10 +875,10 @@ const Home = () => {
 
         <div className="relative bg-[#24412C]" id="pricing">
           <div className="lg:px-32 lg:pt-32 p-6 relative z-50">
-            <p className="text-5xl text-white font_bold text-center">
+            <p className="text-3xl lg:text-5xl text-white font_bold text-center">
               Built for growth, grows with you.{" "}
             </p>
-            <p className="text-xl text-white text-center my-3">
+            <p className="text-lg lg:text-xl text-white text-center my-3">
               Flexible plans to make it easy to start or switch.
             </p>
 
@@ -871,15 +888,15 @@ const Home = () => {
                   <p className="lg:text-5xl text-3xl text-[#24412C] font_bold">
                     Restaurants
                   </p>
-                  <p className="text-xl text-[#4A443A] font_medium my-3">
+                  <p className="text-lg lg:text-xl text-[#4A443A] font_medium my-3">
                     For all type and size of restaurants looking to boost
                     revenue and streamline operations.
                   </p>
                   <div>
-                    <p className="text-white text-5xl font_bold">
+                    <p className="text-white text-3xl lg:text-5xl font_bold">
                       N20,000/<span className="text-lg">month</span>
                     </p>
-                    <p className="text-white text-xl font_bold">
+                    <p className="text-white text-lg lg:text-xl font_bold">
                       +2.5% commission fee
                     </p>
                     <div className="border border-white my-3" />
@@ -921,18 +938,18 @@ const Home = () => {
                   </button>
                 </div>
                 <div className="bg-[#99C446] rounded-2xl p-8 mb-10 relative">
-                  <p className="text-5xl text-[#24412C] font_bold">
+                  <p className="text-3xl lg:text-5xl text-[#24412C] font_bold">
                     Private Chefs
                   </p>
-                  <p className="text-xl text-[#4A443A] font_medium my-3">
+                  <p className="text-lg lg:text-xl text-[#4A443A] font_medium my-3">
                     For all type and size of restaurants looking to boost
                     revenue and streamline operations.
                   </p>
                   <div>
-                    <p className="text-white text-5xl font_bold uppercase">
+                    <p className="text-white text-3xl lg:text-5xl font_bold uppercase">
                       Free
                     </p>
-                    <p className="text-white text-xl font_bold">
+                    <p className="text-white text-lg lg:text-xl font_bold">
                       +15% commission fee
                     </p>
                     <div className="border border-white my-3" />
@@ -1014,7 +1031,7 @@ const Home = () => {
                       onClick={() => setSelectedFaq(f)}
                     >
                       <div className="flex justify-between">
-                        <p className="text-2xl text-black font_medium">
+                        <p className="text-lg lg:text-2xl text-black font_medium">
                           {f.title}
                         </p>
                         <div>
@@ -1052,7 +1069,7 @@ const Home = () => {
                         </div>
                       </div>
                       {selectedFaq.id === f.id && (
-                        <p className="text-lg text-[#6F6F6F] font_medium my-5">
+                        <p className="text-base lg:text-lg text-[#6F6F6F] font_medium my-5">
                           {f.description}
                         </p>
                       )}
