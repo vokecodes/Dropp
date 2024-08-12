@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactGA from "react-ga4";
 import { useNavigate } from "react-router-dom";
+import { useTransform, useScroll, motion } from "framer-motion";
 import Header from "../components/Header";
 import Register from "../components/Register";
 import ResetPassword from "../components/ResetPassword";
@@ -12,6 +13,9 @@ import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import { Images } from "../config/images";
 import Button from "../components/Button";
+// import Lenis from "@studio-freight/lenis/types";
+import OptionCard from "../components/OptionCard";
+import OverlapCard from "../components/OverlapCard";
 
 const CATEGORIES = [
   "Dine-In",
@@ -125,6 +129,49 @@ const FEATURES = [
     subtitle: "INCREASE REVENUE",
     title: "20%",
     description: "OF OUR RESTAURANTS REPORT INCREASED REVENUE",
+  },
+];
+
+const PROJECTS = [
+  {
+    title: "Matthias Leidinger",
+    description:
+      "Originally hailing from Austria, Berlin-based photographer Matthias Leindinger is a young creative brimming with talent and ideas.",
+    src: "rock.jpg",
+    link: "https://www.ignant.com/2023/03/25/ad2186-matthias-leidingers-photographic-exploration-of-awe-and-wonder/",
+    color: "#BBACAF",
+  },
+  {
+    title: "Clément Chapillon",
+    description:
+      "This is a story on the border between reality and imaginary, about the contradictory feelings that the insularity of a rocky, arid, and wild territory provokes”—so French photographer Clément Chapillon describes his latest highly captivating project Les rochers fauves (French for ‘The tawny rocks’).",
+    src: "tree.jpg",
+    link: "https://www.ignant.com/2022/09/30/clement-chapillon-questions-geographical-and-mental-isolation-with-les-rochers-fauves/",
+    color: "#977F6D",
+  },
+  {
+    title: "Zissou",
+    description:
+      "Though he views photography as a medium for storytelling, Zissou’s images don’t insist on a narrative. Both crisp and ethereal, they’re encoded with an ambiguity—a certain tension—that lets the viewer find their own story within them.",
+    src: "water.jpg",
+    link: "https://www.ignant.com/2023/10/28/capturing-balis-many-faces-zissou-documents-the-sacred-and-the-mundane-of-a-fragile-island/",
+    color: "#C2491D",
+  },
+  {
+    title: "Mathias Svold and Ulrik Hasemann",
+    description:
+      "The coastlines of Denmark are documented in tonal colors in a pensive new series by Danish photographers Ulrik Hasemann and Mathias Svold; an ongoing project investigating how humans interact with and disrupt the Danish coast.",
+    src: "house.jpg",
+    link: "https://www.ignant.com/2019/03/13/a-photographic-series-depicting-the-uncertain-future-of-denmarks-treasured-coastlines/",
+    color: "#B62429",
+  },
+  {
+    title: "Mark Rammers",
+    description:
+      "Dutch photographer Mark Rammers has shared with IGNANT the first chapter of his latest photographic project, ‘all over again’—captured while in residency at Hektor, an old farm in Los Valles, Lanzarote. Titled ‘Beginnings’, the mesmerizing collection of images is a visual and meditative journey into the origins of regrets and the uncertainty of stepping into new unknowns.",
+    src: "cactus.jpg",
+    link: "https://www.ignant.com/2023/04/12/mark-rammers-all-over-again-is-a-study-of-regret-and-the-willingness-to-move-forward/",
+    color: "#88A28D",
   },
 ];
 
@@ -309,6 +356,48 @@ const Home = () => {
     };
   }, [businessScrollDirection]);
 
+  const actionsContainerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: actionsContainerRef,
+
+    offset: ["start end", "start start"],
+  });
+
+  const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1]);
+
+  // useEffect(() => {
+  //   const lenis = new Lenis();
+
+  //   function raf(time) {
+  //     lenis.raf(time);
+  //     requestAnimationFrame(raf);
+  //   }
+
+  //   requestAnimationFrame(raf);
+  // });
+
+  const [activeCard, setActiveCard] = useState(0);
+
+  const handleScroll = () => {
+    const cards = document.querySelectorAll(".parallax-card");
+    let windowHeight = window.innerHeight;
+
+    cards.forEach((card, index) => {
+      const cardTop = card.getBoundingClientRect().top;
+      if (cardTop >= 0 && cardTop < windowHeight) {
+        setActiveCard(index);
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <div className={`overflow-x-hidden ${showModal ? "blur-bg" : ""}`}>
@@ -429,9 +518,11 @@ const Home = () => {
               </p>
             </div>
           </div>
-          <div className="mt-12 overlapping-cards-container">
+          <div className=" mt-12 flex flex-col items-center overlapping-cards-container parallax-content">
             <div
-              className="overlapping-card bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0 mb-10"
+              className={`${
+                activeCard === 0 ? "active" : ""
+              } overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0 mb-10`}
               id="ordering-tools"
             >
               <div className="">
@@ -509,7 +600,9 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="overlapping-card bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              className={`${
+                activeCard === 1 ? "active" : ""
+              } overlapping-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10`}
               id="operation-tools"
             >
               <div className="flex flex-col justify-center">
@@ -553,7 +646,9 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="overlapping-card bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              className={`${
+                activeCard === 2 ? "active" : ""
+              } overlapping-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10`}
               id="marketing-tools"
             >
               <div className="">
@@ -600,7 +695,9 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="overlapping-card bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10"
+              className={`${
+                activeCard === 3 ? "active" : ""
+              } overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10`}
               id="analytics-insight"
             >
               <div className="flex flex-col justify-center">

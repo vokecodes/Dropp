@@ -940,13 +940,127 @@ html {
   scrollbar-width: none; /* Firefox */
 }
 
+/* .overlapping-cards-container {
+  position: relative;
+  margin-top: 50vh;
+} */
+/* 
+.overlapping-cardContainer {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0px;
+  .card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: -25%;
+    height: 500px;
+    width: 1000px;
+    border-radius: 25px;
+    padding: 50px;
+    transform-origin: top;
+    h2 {
+      text-align: center;
+      margin: 0px;
+      font-size: 28px;
+    }
+    .body {
+      display: flex;
+      height: 100%;
+      margin-top: 50px;
+      gap: 50px;
+
+      .description {
+        width: 40%;
+        position: relative;
+        top: 10%;
+        p {
+          font-size: 16px;
+          &::first-letter {
+            font-size: 28px;
+            font-family: "Title";
+          }
+        }
+        span {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          a {
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .imageContainer {
+        position: relative;
+        width: 60%;
+        height: 100%;
+        border-radius: 25px;
+        overflow: hidden;
+        .inner {
+          width: 100%;
+          height: 100%;
+        }
+        img {
+          object-fit: cover;
+        }
+      }
+    }
+  }
+} */
+
 .overlapping-card {
   position: relative;
-  margin-bottom: -100px; /* Adjust for overlap */
+  margin-bottom: -100px;
   transition: transform 0.5s ease, z-index 0.5s ease;
 }
 
 .overlapping-card:hover {
   transform: scale(1.05);
   z-index: 10;
+}
+
+.parallax-container {
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+  perspective: 1px;
+}
+
+.parallax-card {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.parallax-card:nth-child(1) {
+  z-index: 4;
+}
+
+.parallax-card:nth-child(2) {
+  z-index: 3;
+}
+
+.parallax-card:nth-child(3) {
+  z-index: 2;
+}
+
+/* Adjust to create an overlapping effect */
+.parallax-card.active {
+  transform: translateZ(0px) scale(1);
+  z-index: 10;
+}
+
+.parallax-card:not(.active) {
+  transform: translateZ(-500px) scale(0.8);
 }
