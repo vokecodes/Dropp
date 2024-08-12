@@ -128,173 +128,6 @@ const FEATURES = [
   },
 ];
 
-const items = [
-  {
-    id: 0,
-    title: "Fruits",
-    image: Images.fruits,
-    mobileImage: Images.fruits_mobile,
-  },
-  {
-    id: 1,
-    title: "Drinks",
-    image: Images.drinks,
-    mobileImage: Images.drinks_mobile,
-  },
-  {
-    id: 2,
-    title: "Canned food",
-    image: Images.canned_food,
-    mobileImage: Images.canned_food_mobile,
-  },
-  {
-    id: 3,
-    title: "Snacks",
-    image: Images.snacks,
-    mobileImage: Images.snacks_mobile,
-  },
-  {
-    id: 4,
-    title: "Bread & Bakery",
-    image: Images.bread_bakery,
-    mobileImage: Images.bread_bakery_mobile,
-  },
-  {
-    id: 5,
-    title: "Spices",
-    image: Images.spices,
-    mobileImage: Images.spices_mobile,
-  },
-  {
-    id: 6,
-    title: "Condiments",
-    image: Images.condiments,
-    mobileImage: Images.condiments_mobile,
-  },
-  {
-    id: 7,
-    title: "More",
-    image: Images.more,
-    mobileImage: Images.more_mobile,
-  },
-];
-
-const supermartkets = [
-  {
-    id: 1,
-    title: "Addide Supermarket",
-    image: Images.addide_sm,
-  },
-  {
-    id: 2,
-    title: "Next Cash & Carry",
-    image: Images.next_cash_carry_sm,
-  },
-  {
-    id: 3,
-    title: "Spar Market",
-    image: Images.spar_sm,
-  },
-  {
-    id: 4,
-    title: "FoodCo",
-    image: Images.foodco_sm,
-  },
-  {
-    id: 5,
-    title: "Jendol Superstores",
-    image: Images.jendol_sm,
-  },
-  {
-    id: 6,
-    title: "Justrite Superstore",
-    image: Images.justrite_sm,
-  },
-  {
-    id: 7,
-    title: "Supermark Nigeria",
-    image: Images.supermart_sm,
-  },
-  {
-    id: 8,
-    title: "The Hygiene Supermarket",
-    image: Images.hygiene_sm,
-  },
-  {
-    id: 9,
-    title: "Twins Faja Supermarket",
-    image: Images.twins_faja_sm,
-  },
-  {
-    id: 10,
-    title: "Bargains Supermarket",
-    image: Images.bargains_sm,
-  },
-  {
-    id: 11,
-    title: "Emel Supermarket Solutions",
-    image: Images.emel_sm,
-  },
-  {
-    id: 12,
-    title: "Buy 4 Less Supermarket",
-    image: Images.buy_4_less_sm,
-  },
-  {
-    id: 13,
-    title: "CMart Stores",
-    image: Images.cmart_sm,
-  },
-  {
-    id: 14,
-    title: "Market Square",
-    image: Images.market_square_sm,
-  },
-];
-
-const galley = [
-  Images.gImage1,
-  Images.gImage2,
-  Images.gImage3,
-  Images.gImage4,
-  Images.gImage5,
-  Images.gImage6,
-  Images.gImage7,
-  Images.gImage8,
-  Images.gImage9,
-  Images.gImage1,
-  Images.gImage2,
-  Images.gImage3,
-  Images.gImage4,
-  Images.gImage5,
-  Images.gImage6,
-  Images.gImage7,
-  Images.gImage8,
-  Images.gImage9,
-];
-
-const businesses = [
-  { id: 0, title: "Paga", image: Images.paga, mobileImage: Images.paga_mobile },
-  {
-    id: 1,
-    title: "Eight Studio",
-    image: Images.studio8,
-    mobileImage: Images.studio8_mobile,
-  },
-  {
-    id: 2,
-    title: "Vvend",
-    image: Images.vvend,
-    mobileImage: Images.vvend_mobile,
-  },
-  {
-    id: 3,
-    title: "Remotely",
-    image: Images.remotely,
-    mobileImage: Images.remotely_mobile,
-  },
-];
-
 const Home = () => {
   // useEffect(() => {
   //   ReactGA.initialize("G-EHK6CS7TX2");
@@ -346,7 +179,24 @@ const Home = () => {
   const [selectedFaq, setSelectedFaq] = useState(FAQS[0]);
 
   const categoryPostRef = useRef(null);
-  const [scrollDirection, setScrollDirection] = useState(1); // 1 for right, -1 for left
+  const categoryRefs = useRef([]);
+
+  const scrollToCategoryPost = (index) => {
+    const postElement = categoryRefs.current[index];
+
+    if (postElement && categoryPostRef.current) {
+      const offsetLeft = postElement.offsetLeft;
+
+      console.log({ offsetLeft });
+
+      categoryPostRef.current.scrollTo({
+        left: offsetLeft,
+        behavior: "smooth",
+      });
+    } else {
+      console.error(`No element found for index: ${index}`);
+    }
+  };
 
   const businessesRef = useRef(null);
   const [businessScrollDirection, setBusinessScrollDirection] = useState(1); // 1 for right, -1 for left
@@ -481,7 +331,10 @@ const Home = () => {
                     className={`${
                       selectedCategory === cat ? "bg-[#FEC828]" : "bg-[#06C167]"
                     } flex-shrink-0 px-4 py-2 rounded-full cursor-pointer`}
-                    onClick={() => setSelectedCategory(cat)}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      scrollToCategoryPost(i);
+                    }}
                   >
                     <p className="text-[#385C44] font_bold text-lg uppercase">
                       {cat}
@@ -507,6 +360,7 @@ const Home = () => {
                 {CATEGORIES_POST.map((cat, i) => (
                   <div
                     key={i}
+                    ref={(el) => (categoryRefs.current[i] = el)}
                     className={`w-full lg:w-[36%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
                       i === 0 ? "ml-5 lg:ml-20" : ""
                     }`}
