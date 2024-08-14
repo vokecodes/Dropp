@@ -11,7 +11,7 @@ const OutlineButton = ({
   return (
     <button
       type="submit"
-      className={`inline-flex items-center h-11 px-10 py-2 justify-center whitespace-nowrap bg-transparent border-2 border-[#313130] text-base font_bold text_black shadow-sm cursor-pointer rounded-xl ${extraClasses}`}
+      className={`inline-flex items-center px-10 py-3 justify-center whitespace-nowrap bg-transparent border-2 border-[#313130] text-base font_bold text_black shadow-sm cursor-pointer rounded-xl ${extraClasses}`}
       onClick={onClick}
       disabled={disabled || loading}
     >

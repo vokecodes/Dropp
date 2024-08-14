@@ -5,8 +5,8 @@ const Footer = ({ logo }) => {
   return (
     <div className="bg-[#24412C]">
       <div className="relative px-6 lg:px-32 lg:pt-60">
-        <div className="w-full flex flex-col lg:flex-row justify-between gap-y-10 py-14">
-          <div>
+        <div className="w-4/5 mx-auto flex flex-col lg:flex-row justify-center gap-y-10 py-14">
+          <div className="w-full">
             <Link to="/">
               <span className="sr-only">Dropp</span>
               <img className="h-6 w-auto" src="/images/logo-white.svg" alt="" />
@@ -23,120 +23,51 @@ const Footer = ({ logo }) => {
             </div>
           </div>
 
-          <div className="hidden lg:block flex flex-row items-start justify-between gap-x-10">
-            <div className="min-w-24">
-              <h1 className="text-white text-lg font_bold">Products</h1>
-              <p className="text-base text-white font_regular mt-3">
-                Ordering tools
-              </p>
-              <p className="text-base text-white font_regular mt-3">
-                Restaurant operations tools
-              </p>
-              <p className="text-base text-white font_regular mt-3">
-                Marketing tools
-              </p>
-              <p className="text-base text-white font_regular mt-3">
-                Analytics & Insight
-              </p>
-            </div>
-            <div className="min-w-24">
-              <h1 className="text-white text-lg font_bold">Legal</h1>
-              <Link to="#">
-                <p className="text-base text-white font_regular mt-3">
-                  Terms of use
-                </p>
-              </Link>
-              <Link to="#">
-                <p className="text-base text-white font_regular mt-3">
-                  Privacy policy
-                </p>
-              </Link>
-            </div>
-            <div className="min-w-24">
-              <h1 className="text-white text-lg font_bold">Contact</h1>
-              <p className="text-base text-white font_regular mt-3">
-                +2348068424478
-              </p>
-              <p className="text-base text-white font_regular mt-3">
-                hello@getdropp.com
-              </p>
-            </div>
-            <div className="min-w-24">
-              <h1 className="text-white text-lg font_bold">Social media</h1>
-              <a
-                href="https://www.linkedin.com/company/homemade-by-dropp?trk=profile-position"
-                target="_blank"
-                rel="noreferrer"
-                className="block text-base text-white font_regular mt-3"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://www.instagram.com/try.homemade/"
-                target="_blank"
-                rel="noreferrer"
-                className="block text-base text-white font_regular mt-3"
-              >
-                Instagram
-              </a>
-              <a
-                href="https://twitter.com/tryhomemade"
-                target="_blank"
-                rel="noreferrer"
-                className="block text-base text-white font_regular mt-3"
-              >
-                Twitter
-              </a>
-            </div>
-          </div>
-
           <div className="w-full">
             <h1 className="text-white text-lg font_bold">Products</h1>
-            <p className="text-base text-white font_regular mt-1">
+            <p className="text-base text-white font_regular mt-3">
               Ordering tools
             </p>
-            <p className="text-base text-white font_regular mt-1">
+            <p className="text-base text-white font_regular mt-3">
               Restaurant operations tools
             </p>
-            <p className="text-base text-white font_regular mt-1">
+            <p className="text-base text-white font_regular mt-3">
               Marketing tools
             </p>
-            <p className="text-base text-white font_regular mt-1">
+            <p className="text-base text-white font_regular mt-3">
               Analytics & Insight
             </p>
           </div>
 
-          <div className="lg:hidden flex flex-row items-start justify-between gap-x-10">
-            <div className="min-w-24">
-              <h1 className="text-white text-lg font_bold">Legal</h1>
-              <Link to="#">
-                <p className="text-base text-white font_regular mt-1">
-                  Terms of use
-                </p>
-              </Link>
-              <Link to="#">
-                <p className="text-base text-white font_regular mt-1">
-                  Privacy policy
-                </p>
-              </Link>
-            </div>
-            <div className="min-w-24">
-              <h1 className="text-white text-lg font_bold">Contact</h1>
-              <p className="text-base text-white font_regular mt-1">
-                +2348068424478
+          <div className="w-full">
+            <h1 className="text-white text-lg font_bold">Legal</h1>
+            <Link to="#">
+              <p className="text-base text-white font_regular mt-3">
+                Terms of use
               </p>
-              <p className="text-base text-white font_regular mt-1">
-                hello@getdropp.com
+            </Link>
+            <Link to="#">
+              <p className="text-base text-white font_regular mt-3">
+                Privacy policy
               </p>
-            </div>
+            </Link>
           </div>
-          <div className="w-full flex items-center gap-3">
-            <h1 className="text-white text-lg font_bold">Social media:</h1>
+          <div className="w-full">
+            <h1 className="text-white text-lg font_bold">Contact</h1>
+            <p className="text-base text-white font_regular mt-3">
+              +2348068424478
+            </p>
+            <p className="text-base text-white font_regular mt-3">
+              hello@getdropp.com
+            </p>
+          </div>
+          <div className="w-full">
+            <h1 className="text-white text-lg font_bold">Social media</h1>
             <a
               href="https://www.linkedin.com/company/homemade-by-dropp?trk=profile-position"
               target="_blank"
               rel="noreferrer"
-              className="block text-base text-white font_regular underline"
+              className="block text-base text-white font_regular mt-3"
             >
               LinkedIn
             </a>
@@ -144,7 +75,7 @@ const Footer = ({ logo }) => {
               href="https://www.instagram.com/try.homemade/"
               target="_blank"
               rel="noreferrer"
-              className="block text-base text-white font_regular underline"
+              className="block text-base text-white font_regular mt-3"
             >
               Instagram
             </a>
@@ -152,7 +83,7 @@ const Footer = ({ logo }) => {
               href="https://twitter.com/tryhomemade"
               target="_blank"
               rel="noreferrer"
-              className="block text-base text-white font_regular underline"
+              className="block text-base text-white font_regular mt-3"
             >
               Twitter
             </a>

@@ -21,7 +21,7 @@ const CATEGORIES = [
   "Dine-In",
   "Private Chef",
   "Bar & Lounge",
-  "Cafe",
+  "Cafe & Bakery",
   "Food Truck",
   "Fast Casual",
 ];
@@ -36,35 +36,35 @@ const CATEGORIES_POST = [
   },
   {
     image: "/images/private-chefs.png",
-    title: "PRIVATE CHEFS",
+    title: "Private Chef",
     subtitle: "Succeed on your own terms.",
     description:
       "Attract new customers & build your personal brand with hospitality-driven software that works hard on your behalf.",
   },
   {
     image: "/images/bar-lounge.png",
-    title: "BAR & LOUNGE",
+    title: "Bar & Lounge",
     subtitle: "Your bartenders' best friend.",
     description:
       "Get the right drinks out before the ice melt, and keep your space packed with thirsty customers.",
   },
   {
     image: "/images/morning_rush.png",
-    title: "CAFE & BAKERY",
+    title: "Cafe & Bakery",
     subtitle: "The morning rush doesn’t have to feel so rushed.",
     description:
       "Give your margins a jolt and become a part of your customers daily rituals.",
   },
   {
     image: "/images/food-truck.png",
-    title: "FOOD TRUCK",
+    title: "Food Truck",
     subtitle: "Software that's built for the road.",
     description:
       "Excite your crowd with food truck-friendly ways to order and pay, and intuitive menus you’ll pick up fast.",
   },
   {
     image: "/images/fast-casual.png",
-    title: "FAST CASUAL",
+    title: "Fast Casual",
     subtitle: "Fire up efficiency.",
     description:
       "Turn up your volume, and get orders from counter to customer in record time.",
@@ -405,7 +405,7 @@ const Home = () => {
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
         <div
-          className="bg-[#24412C] pt-20 lg:py-32 h-[960px] lg:h-[760px] relative"
+          className="bg-[#24412C] pt-20 lg:py-32 h-[960px] lg:h-[960px] relative"
           id="restaurant"
         >
           <div className="lg:px-32 px-6">
@@ -419,7 +419,7 @@ const Home = () => {
                     key={i}
                     className={`${
                       selectedCategory === cat ? "bg-[#FEC828]" : "bg-[#06C167]"
-                    } flex-shrink-0 px-4 py-2 rounded-full cursor-pointer`}
+                    } flex-shrink-0 px-4 py-2 rounded-full cursor-pointer ease-out duration-300`}
                     onClick={() => {
                       setSelectedCategory(cat);
                       scrollToCategoryPost(i);
@@ -434,7 +434,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="z-30 absolute w-full lg:mx-auto top-64">
+          <div className="z-30 absolute w-full h-full lg:mx-auto top-64">
             <div className="flex items-center relative">
               <div
                 className="absolute z-20 left-3 lg:left-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
@@ -463,7 +463,7 @@ const Home = () => {
                     </div>
                     <div className="flex-1 flex flex-col justify-center bg-white lg:shadow-2xl rounded-2xl">
                       <div className="w-full lg:px-16 px-3 py-8 lg:py-0">
-                        <p className="text-xl font_bold text-[#06C16B] tracking-wider">
+                        <p className="text-xl font_bold text-[#06C16B] uppercase tracking-wider">
                           {cat.title}
                         </p>
                         <p className="text-2xl font_bold text-[#385C44]">
@@ -820,7 +820,7 @@ const Home = () => {
             </div>
           </div>
           <div className="mt-20 flex justify-center">
-            <Button title="join them!" extraClasses="w-52" />
+            <Button title="Join them!" extraClasses="w-52" />
           </div>
         </div>
 
@@ -963,7 +963,7 @@ const Home = () => {
                     placeholder="Restaurant Name"
                     className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
                   />
-                  <Button title="Get a Demo" extraClasses="mt-5 w-60 py-3" />
+                  <Button title="Book a Demo" extraClasses="mt-5 w-60 py-3" />
                 </div>
               </div>
             </div>
