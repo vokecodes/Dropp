@@ -413,7 +413,7 @@ const Home = () => {
               A Dropp™ for every food business.
             </p>
             <div className="w-full h-full relative">
-              <div className="w-full my-5 flex space-x-4 overflow-x-auto my-scroll-container">
+              <div className="w-full my-5 flex justify-center space-x-4 overflow-x-auto my-scroll-container">
                 {CATEGORIES.map((cat, i) => (
                   <div
                     key={i}

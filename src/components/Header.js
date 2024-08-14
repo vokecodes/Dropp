@@ -32,7 +32,7 @@ const Header = ({ itemsImage, setShowModal }) => {
           </div> */}
         </div>
 
-        <div className="lg:w-4/5 mt-10 lg:mt-0">
+        <div className="lg:w-4/5 lg:flex lg:justify-center lg:items-center mt-10">
           {/* <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" /> */}
           <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
         </div>
