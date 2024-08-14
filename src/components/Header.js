@@ -5,22 +5,22 @@ import Button from "./Button";
 
 const Header = ({ itemsImage, setShowModal }) => {
   return (
-    <section className="header_bg">
+    <section className="header_bg lg:pb-20">
       <Navbar setShowModal={setShowModal} />
 
-      <main className="w-4/5 lg:w-4/6 mx-auto pt-5 lg:flex flex-row">
-        <div className="lg:flex-1 lg:mt-20">
-          <h1 className="lg:text-6xl text-4xl font_bold text_black1">
-            Making growth easy for restaurants
+      <main className="w-4/5 lg:w-5/6 mx-auto pt-5 lg:flex flex-row items-center">
+        <div className="lg:w-3/5 lg:flex-1">
+          <h1 className="lg:text-6xl text-4xl font_bold text_black">
+            Making growth <br /> easy for restaurants
           </h1>
-          <p className="my-7 font_regular text_black1 text-lg text-left">
+          <p className="my-7 font_regular text_black text-lg">
             Dropp empowers you with all the tools you need to work smarter,{" "}
             <br />
             earn more & automate for efficiency all in one place.
           </p>
-          <div className="flex justify-center gap-4 mt-5">
-            <OutlineButton title="Book a Demo" extraClasses="w-36 lg:w-full" />
-            <Button title="Get started" extraClasses="w-36 lg:w-full" />
+          <div className="flex gap-4 mt-5">
+            <OutlineButton title="Book a Demo" extraClasses="w-36 lg:w-2/6" />
+            <Button title="Get started" extraClasses="w-36 lg:w-2/6" />
           </div>
           {/* <div className="text-center lg:text-left">
             <button
@@ -32,7 +32,7 @@ const Header = ({ itemsImage, setShowModal }) => {
           </div> */}
         </div>
 
-        <div className="lg:w-4/5 lg:flex lg:justify-center lg:items-center mt-10">
+        <div className="lg:w-3/6 lg:mt-20">
           {/* <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" /> */}
           <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
         </div>

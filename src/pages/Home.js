@@ -379,24 +379,24 @@ const Home = () => {
 
   const [activeCard, setActiveCard] = useState(0);
 
-  const handleScroll = () => {
-    const cards = document.querySelectorAll(".parallax-card");
-    let windowHeight = window.innerHeight;
+  // const handleScroll = () => {
+  //   const cards = document.querySelectorAll(".parallax-card");
+  //   let windowHeight = window.innerHeight;
 
-    cards.forEach((card, index) => {
-      const cardTop = card.getBoundingClientRect().top;
-      if (cardTop >= 0 && cardTop < windowHeight) {
-        setActiveCard(index);
-      }
-    });
-  };
+  //   cards.forEach((card, index) => {
+  //     const cardTop = card.getBoundingClientRect().top;
+  //     if (cardTop >= 0 && cardTop < windowHeight) {
+  //       setActiveCard(index);
+  //     }
+  //   });
+  // };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -405,7 +405,7 @@ const Home = () => {
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
         <div
-          className="bg-[#24412C] pt-20 lg:py-32 h-[960px] lg:h-[960px] relative"
+          className="bg-[#24412C] pt-20 lg:pt-32 h-[960px] lg:h-[820px] relative"
           id="restaurant"
         >
           <div className="lg:px-32 px-6">
@@ -450,7 +450,7 @@ const Home = () => {
                   <div
                     key={i}
                     ref={(el) => (categoryRefs.current[i] = el)}
-                    className={`w-full lg:w-[36%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
+                    className={`category-post-card w-full lg:w-[36%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
                       i === 0 ? "ml-5 lg:ml-20" : ""
                     }`}
                   >
@@ -485,7 +485,7 @@ const Home = () => {
                 ))}
               </div>
               <div
-                className="absolute z-10 -right-5 lg:right-40 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-10 right-3 lg:right-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostRight}
               >
                 <img src="/images/arrow-right.svg" alt="arrow-right" />
@@ -493,13 +493,15 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="absolute z-10 bottom-8 lg:bottom-10">
-            <img src="/images/restaurants-logo.svg" alt="restaurants-logo" />
+          <div className="absolute lg:w-full z-10 bottom-8 lg:bottom-10">
+            <div className="lg:flex lg:justify-center lg:items-center">
+              <img src="/images/restaurants-logo.svg" alt="restaurants-logo" />
+            </div>
           </div>
         </div>
 
         <div
-          className="lg:px-32 px-6 pt-32 pb-24"
+          className="lg:px-32 px-6 pt-32 pb-10"
           style={{
             backgroundImage: `url('/images/home-banner-vec.svg')`,
             backgroundRepeat: "no-repeat",
@@ -518,11 +520,12 @@ const Home = () => {
               </p>
             </div>
           </div>
-          <div className=" mt-12 flex flex-col items-center overlapping-cards-container parallax-content">
+        </div>
+
+        <div className="pb-24">
+          <div className="flex flex-col items-center overlapping-cards-container parallax-content">
             <div
-              className={`${
-                activeCard === 0 ? "active" : ""
-              } overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0 mb-10`}
+              className={`overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
               id="ordering-tools"
             >
               <div className="">
@@ -534,46 +537,16 @@ const Home = () => {
                 </p>
                 <div className="flex items-center">
                   <p className="text-lg text-[#00170C] font_medium">
-                    QR digital menu
+                    QR Digital Menu
                   </p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    width={16}
-                    height={16}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
                 </div>
                 <div className="flex items-center">
                   <p className="text-lg text-[#00170C] font_medium">
-                    Online ordering link
+                    Online Ordering Link
                   </p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    width={16}
-                    height={16}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
                 </div>
                 <p className="text-lg text-[#00170C] font_medium">
-                  Dropp takeout™ (coming soon)
+                  Dropp Takeout™ (coming soon)
                 </p>
                 <button
                   type="submit"
@@ -600,9 +573,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className={`${
-                activeCard === 1 ? "active" : ""
-              } overlapping-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10`}
+              className={`overlapping-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0`}
               id="operation-tools"
             >
               <div className="flex flex-col justify-center">
@@ -646,9 +617,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className={`${
-                activeCard === 2 ? "active" : ""
-              } overlapping-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10`}
+              className={`overlapping-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0`}
               id="marketing-tools"
             >
               <div className="">
@@ -665,7 +634,7 @@ const Home = () => {
                   Customised Website
                 </p>
                 <p className="text-lg text-white font_medium">
-                  Customer engagement tools
+                  Customer Engagement Tools
                 </p>
                 <p className="text-lg text-white font_medium">
                   Homemade by Dropp™
@@ -695,9 +664,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className={`${
-                activeCard === 3 ? "active" : ""
-              } overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0 mb-10`}
+              className={`overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0`}
               id="analytics-insight"
             >
               <div className="flex flex-col justify-center">
@@ -813,7 +780,7 @@ const Home = () => {
               </div>
             </div>
             <div
-              className="absolute z-10 -right-5 lg:right-40 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+              className="absolute z-10 right-3 lg:right-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
               onClick={scrollBusinessesPostRight}
             >
               <img src="/images/arrow-right.svg" alt="arrow-right" />

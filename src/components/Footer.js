@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 const Footer = ({ logo }) => {
   return (
     <div className="bg-[#24412C]">
-      <div className="relative px-6 lg:px-32 lg:pt-60">
+      <div className="relative lg:pt-60">
         <div className="w-4/5 mx-auto flex flex-col lg:flex-row justify-center gap-y-10 py-14">
-          <div className="w-full">
+          <div className="w-full lg:mr-20">
             <Link to="/">
               <span className="sr-only">Dropp</span>
               <img className="h-6 w-auto" src="/images/logo-white.svg" alt="" />

@@ -930,16 +930,6 @@ html {
   margin-bottom: 20px;
 } */
 
-.overlapping-cards-container {
-  position: relative;
-  height: 600px; /* Adjust the height as needed */
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
-}
-
 /* .overlapping-cards-container {
   position: relative;
   margin-top: 50vh;
@@ -1016,11 +1006,22 @@ html {
 
 .overlapping-card {
   position: relative;
-  margin-bottom: -100px;
   transition: transform 0.5s ease, z-index 0.5s ease;
+  margin-bottom: 20px; /* Negative margin to create the overlap effect */
+  z-index: 1;
 }
 
 .overlapping-card:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+/* Optional: To hide the scrollbar */
+.overlapping-cards-container::-webkit-scrollbar {
+  display: none;
+}
+
+.category-post-card:hover {
   transform: scale(1.05);
   z-index: 10;
 }
