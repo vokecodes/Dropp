@@ -400,7 +400,7 @@ const Home = () => {
 
   return (
     <>
-      <div className={`overflow-x-hidden ${showModal ? "blur-bg" : ""}`}>
+      <div className={`${showModal ? "blur-bg" : ""}`}>
         {/* Header */}
         <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
 
@@ -501,7 +501,7 @@ const Home = () => {
         </div>
 
         <div
-          className="lg:px-32 px-6 pt-32 pb-10"
+          className="lg:px-32 px-6 pt-32"
           style={{
             backgroundImage: `url('/images/home-banner-vec.svg')`,
             backgroundRepeat: "no-repeat",
@@ -523,189 +523,197 @@ const Home = () => {
         </div>
 
         <div className="pb-24">
-          <div className="flex flex-col items-center overlapping-cards-container parallax-content">
-            <div
-              className={`overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
-              id="ordering-tools"
-            >
-              <div className="">
-                <img src="/images/phone-mock.svg" alt="phone_mock" />
-              </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-5xl text-[#00170C] font_bold mb-5">
-                  Ordering <br /> tools!
-                </p>
-                <div className="flex items-center">
-                  <p className="text-lg text-[#00170C] font_medium">
-                    QR Digital Menu
-                  </p>
+          <div className="overlapping-cards-container">
+            <div className="overlapping-card">
+              <div
+                className={`category-post-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                id="ordering-tools"
+              >
+                <div className="">
+                  <img src="/images/phone-mock.svg" alt="phone_mock" />
                 </div>
-                <div className="flex items-center">
-                  <p className="text-lg text-[#00170C] font_medium">
-                    Online Ordering Link
+                <div className="flex flex-col justify-center">
+                  <p className="text-5xl text-[#00170C] font_bold mb-5">
+                    Ordering <br /> tools!
                   </p>
+                  <div className="flex items-center">
+                    <p className="text-lg text-[#00170C] font_medium">
+                      QR Digital Menu
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <p className="text-lg text-[#00170C] font_medium">
+                      Online Ordering Link
+                    </p>
+                  </div>
+                  <p className="text-lg text-[#00170C] font_medium">
+                    Dropp Takeout™ (coming soon)
+                  </p>
+                  <button
+                    type="submit"
+                    className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                    onClick={() => {}}
+                  >
+                    Get started
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      stroke="currentColor"
+                      width={16}
+                      height={16}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <p className="text-lg text-[#00170C] font_medium">
-                  Dropp Takeout™ (coming soon)
-                </p>
-                <button
-                  type="submit"
-                  className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                  onClick={() => {}}
-                >
-                  Get started
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    width={16}
-                    height={16}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
               </div>
             </div>
-            <div
-              className={`overlapping-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0`}
-              id="operation-tools"
-            >
-              <div className="flex flex-col justify-center">
-                <p className="text-5xl text-white font_bold mb-5">
-                  Operations <br /> tools!
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Kitchen Display System (KDS)
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Waiter & Staff Mgt.
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Menu & Order Mgt.
-                </p>
-                <button
-                  type="submit"
-                  className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                  onClick={() => {}}
-                >
-                  Get started
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    width={16}
-                    height={16}
+            <div className="overlapping-card">
+              <div
+                className={`category-post-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                id="operation-tools"
+              >
+                <div className="flex flex-col justify-center">
+                  <p className="text-5xl text-white font_bold mb-5">
+                    Operations <br /> tools!
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Kitchen Display System (KDS)
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Waiter & Staff Mgt.
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Menu & Order Mgt.
+                  </p>
+                  <button
+                    type="submit"
+                    className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                    onClick={() => {}}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div>
-                <img src="/images/laptop-mock.svg" alt="laptop-mock" />
+                    Get started
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      stroke="currentColor"
+                      width={16}
+                      height={16}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div>
+                  <img src="/images/laptop-mock.svg" alt="laptop-mock" />
+                </div>
               </div>
             </div>
-            <div
-              className={`overlapping-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0`}
-              id="marketing-tools"
-            >
-              <div className="">
-                <img src="/images/dash-mock.svg" alt="dash-mock" />
-              </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-5xl text-white font_bold mb-5">
-                  Marketing <br /> tools!
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Discounts & Loyalty
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Customised Website
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Customer Engagement Tools
-                </p>
-                <p className="text-lg text-white font_medium">
-                  Homemade by Dropp™
-                </p>
-                <button
-                  type="submit"
-                  className="mt-6 inline-flex bg-white w-44 text-[#9E6A55] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                  onClick={() => {}}
-                >
-                  Get started
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    width={16}
-                    height={16}
+            <div className="overlapping-card">
+              <div
+                className={`category-post-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                id="marketing-tools"
+              >
+                <div className="">
+                  <img src="/images/dash-mock.svg" alt="dash-mock" />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <p className="text-5xl text-white font_bold mb-5">
+                    Marketing <br /> tools!
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Discounts & Loyalty
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Customised Website
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Customer Engagement Tools
+                  </p>
+                  <p className="text-lg text-white font_medium">
+                    Homemade by Dropp™
+                  </p>
+                  <button
+                    type="submit"
+                    className="mt-6 inline-flex bg-white w-44 text-[#9E6A55] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                    onClick={() => {}}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
+                    Get started
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      stroke="currentColor"
+                      width={16}
+                      height={16}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-            <div
-              className={`overlapping-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 py-6 lg:py-0`}
-              id="analytics-insight"
-            >
-              <div className="flex flex-col justify-center">
-                <p className="text-5xl text-[#00170C] font_bold mb-5">
-                  Analytics &
-                  <br /> Insights!
-                </p>
-                <p className="text-lg text-[#00170C] font_medium">
-                  Tools to earn more
-                </p>
-                <p className="text-lg text-[#00170C] font_medium">
-                  Tools to save more
-                </p>
-                <p className="text-lg text-[#00170C] font_medium">
-                  Tools to understand your customer
-                </p>
-                <button
-                  type="submit"
-                  className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                  onClick={() => {}}
-                >
-                  Get started
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    width={16}
-                    height={16}
+            <div className="overlapping-card">
+              <div
+                className={`category-post-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                id="analytics-insight"
+              >
+                <div className="flex flex-col justify-center">
+                  <p className="text-5xl text-[#00170C] font_bold mb-5">
+                    Analytics &
+                    <br /> Insights!
+                  </p>
+                  <p className="text-lg text-[#00170C] font_medium">
+                    Tools to earn more
+                  </p>
+                  <p className="text-lg text-[#00170C] font_medium">
+                    Tools to save more
+                  </p>
+                  <p className="text-lg text-[#00170C] font_medium">
+                    Tools to understand your customer
+                  </p>
+                  <button
+                    type="submit"
+                    className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                    onClick={() => {}}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div>
-                <img src="/images/laptop-mock2.svg" alt="laptop-mock" />
+                    Get started
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                      stroke="currentColor"
+                      width={16}
+                      height={16}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div>
+                  <img src="/images/laptop-mock2.svg" alt="laptop-mock" />
+                </div>
               </div>
             </div>
           </div>
