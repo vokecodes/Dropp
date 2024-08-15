@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector, shallowEqual } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Disclosure,
   DisclosureButton,
@@ -12,21 +10,9 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { BsChatDots } from "react-icons/bs";
-import { RiWallet3Line } from "react-icons/ri";
-import { CgFileDocument } from "react-icons/cg";
-import { CiForkAndKnife } from "react-icons/ci";
-import { MdHomeFilled, MdOutlineFoodBank } from "react-icons/md";
-import { CiUser } from "react-icons/ci";
-import { AiOutlineSearch, AiFillSetting } from "react-icons/ai";
-import { GrFavorite } from "react-icons/gr";
-import { RxStarFilled } from "react-icons/rx";
 import Button from "./Button";
 import OutlineButton from "./OutlineButton";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { FaSquarePollVertical } from "react-icons/fa6";
-import { GiKnifeFork } from "react-icons/gi";
-
 import axios from "axios";
 import { Images } from "../config/images";
 import { AUTH_DATA } from "../reducers/type";
@@ -308,7 +294,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               extraClasses="w-24"
             />
             <Button
-              title=" Sign up"
+              title="Sign up"
               onClick={() => setShowModal(true)}
               extraClasses="w-24"
             />
@@ -414,7 +400,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               />
             </div>
           )}
-          <div className="flex flex-col mt-3 space-y-3 px-2">
+          <div className="flex mt-3 gap-5 px-4">
             <OutlineButton
               title="Log in"
               onClick={() => setShowModal(true)}
