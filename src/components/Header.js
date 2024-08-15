@@ -19,8 +19,16 @@ const Header = ({ itemsImage, setShowModal }) => {
             earn more & automate for efficiency all in one place.
           </p>
           <div className="flex gap-4 mt-5">
-            <OutlineButton title="Book a Demo" extraClasses="w-36 lg:w-2/6" />
-            <Button title="Get started" extraClasses="w-36 lg:w-2/6" />
+            <OutlineButton
+              title="Book a Demo"
+              extraClasses="w-36 lg:w-2/6"
+              onClick={() => setShowModal(true)}
+            />
+            <Button
+              title="Get started"
+              extraClasses="w-36 lg:w-2/6"
+              onClick={() => setShowModal(true)}
+            />
           </div>
           {/* <div className="text-center lg:text-left">
             <button
@@ -32,9 +40,11 @@ const Header = ({ itemsImage, setShowModal }) => {
           </div> */}
         </div>
 
-        <div className="lg:w-3/6 lg:mt-20">
+        <div className="lg:w-3/6">
           {/* <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" /> */}
-          <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
+          <div className="lg:mt-20">
+            <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
+          </div>
         </div>
       </main>
     </section>
