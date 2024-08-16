@@ -163,9 +163,9 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
           <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
             <nav
               aria-label="Global"
-              className="hidden lg:flex lg:space-x-8 lg:py-2"
+              className="hidden lg:flex lg:flex-wrap lg:py-2"
             >
-              <Menu as="div" className="relative ml-4 flex-shrink-0 z-20">
+              <Menu as="div" className="relative flex-shrink-0 z-20">
                 <div>
                   <MenuButton className="relative flex">
                     <span className="absolute -inset-1.5" />
