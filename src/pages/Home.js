@@ -412,7 +412,7 @@ const Home = () => {
             <p className="text-white text-center text-3xl lg:text-5xl font_bold">
               A Dropp™ for every food business.
             </p>
-            <div className="w-full h-full relative">
+            <div className="hidden lg:block w-full h-full relative">
               <div className="w-full my-5 flex justify-center space-x-4 overflow-x-auto my-scroll-container">
                 {CATEGORIES.map((cat, i) => (
                   <div
@@ -434,6 +434,27 @@ const Home = () => {
             </div>
           </div>
 
+          <div className="lg:hidden w-full h-full relative">
+            <div className="w-full my-5 flex justify-center space-x-4 overflow-x-auto my-scroll-container">
+              {CATEGORIES.map((cat, i) => (
+                <div
+                  key={i}
+                  className={`${
+                    selectedCategory === cat ? "bg-[#FEC828]" : "bg-[#06C167]"
+                  } flex-shrink-0 px-4 py-2 rounded-full cursor-pointer ease-out duration-300`}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    scrollToCategoryPost(i);
+                  }}
+                >
+                  <p className="text-[#385C44] font_bold text-lg uppercase">
+                    {cat}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="z-30 absolute w-full h-full lg:mx-auto top-64">
             <div className="flex items-center relative">
               <div
@@ -450,7 +471,7 @@ const Home = () => {
                   <div
                     key={i}
                     ref={(el) => (categoryRefs.current[i] = el)}
-                    className={`category-post-card w-full lg:w-[36%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
+                    className={`category-post-card w-[344px] lg:w-[36%] flex-shrink-0 bg-white p-6 rounded-2xl lg:flex gap-5 ${
                       i === 0 ? "ml-5 lg:ml-20" : ""
                     }`}
                   >
@@ -526,7 +547,7 @@ const Home = () => {
           <div className="overlapping-cards-container">
             <div className="overlapping-card">
               <div
-                className={`category-post-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                className={`category-post-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 pt-8 lg:pt-12 pb-10 lg:pb-0`}
                 id="ordering-tools"
               >
                 <div className="">
@@ -576,7 +597,7 @@ const Home = () => {
             </div>
             <div className="overlapping-card">
               <div
-                className={`category-post-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                className={`category-post-card w-full lg:w-[1148px] bg-[#385C44] rounded-2xl lg:flex lg:justify-around px-11 pt-8 lg:pt-12 pb-10 lg:pb-0`}
                 id="operation-tools"
               >
                 <div className="flex flex-col justify-center">
@@ -622,7 +643,7 @@ const Home = () => {
             </div>
             <div className="overlapping-card">
               <div
-                className={`category-post-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                className={`category-post-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 pt-8 lg:lg:pt-12 pb-10 lg:pb-0`}
                 id="marketing-tools"
               >
                 <div className="">
@@ -671,7 +692,7 @@ const Home = () => {
             </div>
             <div className="overlapping-card">
               <div
-                className={`category-post-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 lg:pt-12 pb-10 lg:pb-0`}
+                className={`category-post-card w-full lg:w-[1148px] bg-[#99C446] rounded-2xl lg:flex lg:justify-around px-11 pt-8 lg:lg:pt-12 pb-10 lg:pb-0`}
                 id="analytics-insight"
               >
                 <div className="flex flex-col justify-center">
@@ -751,7 +772,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="pt-96 lg:pt-96 pb-32 header_bg">
+        <div className="pt-[72rem] lg:pt-96 pb-16 lg:pb-32 header_bg">
           <div className="lg:px-32 px-6 flex flex-col items-center">
             <p className="hidden lg:block text-3xl lg:text-5xl text_black text-center font_bold">
               150+ food businesses use <br /> Dropp to get the job done.
@@ -794,17 +815,17 @@ const Home = () => {
               <img src="/images/arrow-right.svg" alt="arrow-right" />
             </div>
           </div>
-          <div className="mt-20 flex justify-center">
+          <div className="lg:mt-20 flex justify-center">
             <Button title="Join them!" extraClasses="w-52" />
           </div>
         </div>
 
         <div className="relative bg-[#24412C]" id="pricing">
-          <div className="lg:px-32 lg:pt-32 p-6 relative z-50">
+          <div className="lg:px-32 pt-16 lg:pt-32 p-6 relative z-50">
             <p className="text-3xl lg:text-5xl text-white font_bold text-center">
               Built for growth, grows with you.{" "}
             </p>
-            <p className="text-lg lg:text-xl text-white text-center my-3">
+            <p className="text-lg lg:text-xl text-white font_regular text-center my-3">
               Flexible plans to make it easy to start or switch.
             </p>
 
@@ -868,8 +889,8 @@ const Home = () => {
                     Private Chefs
                   </p>
                   <p className="text-lg lg:text-xl text-[#4A443A] font_medium my-3">
-                    For all type and size of restaurants looking to boost
-                    revenue and streamline operations.
+                    Ideal for private/independent chefs who just want to take
+                    online orders.
                   </p>
                   <div>
                     <p className="text-white text-3xl lg:text-5xl font_bold uppercase">

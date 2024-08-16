@@ -12,9 +12,9 @@ const Button = ({
   return (
     <button
       type="submit"
-      className={`inline-flex items-center justify-center px-10 py-3 whitespace-nowrap text-lg text-white shadow-sm cursor-pointer ${extraClasses} rounded-xl ${
+      className={`inline-flex items-center justify-center px-10 py-3 whitespace-nowrap text-lg text-white shadow-sm cursor-pointer rounded-xl ${
         disabled ? "bg_disabled" : bgColor ? bgColor : "primary_bg_color"
-      }  font_medium
+      } font_medium ${extraClasses}
       `}
       onClick={onClick}
       disabled={disabled || loading}

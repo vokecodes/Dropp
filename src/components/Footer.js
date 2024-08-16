@@ -54,9 +54,14 @@ const Footer = ({ logo }) => {
           </div>
           <div className="w-full">
             <h1 className="text-white text-lg font_bold">Contact</h1>
-            <p className="text-base text-white font_regular mt-3">
+            <a
+              href="https://api.whatsapp.com/send?phone=+2348068424478&text=Hello, I have a question for Dropp https://paystack.shop/dropp"
+              target="_blank"
+              rel="noreferrer"
+              className="text-base text-white font_regular mt-3"
+            >
               +2348068424478
-            </p>
+            </a>
             <p className="text-base text-white font_regular mt-3">
               hello@getdropp.com
             </p>
@@ -64,7 +69,7 @@ const Footer = ({ logo }) => {
           <div className="w-full">
             <h1 className="text-white text-lg font_bold">Social media</h1>
             <a
-              href="https://www.linkedin.com/company/homemade-by-dropp?trk=profile-position"
+              href="https://www.linkedin.com/company/getdropp"
               target="_blank"
               rel="noreferrer"
               className="block text-base text-white font_regular mt-3"
@@ -72,7 +77,7 @@ const Footer = ({ logo }) => {
               LinkedIn
             </a>
             <a
-              href="https://www.instagram.com/try.homemade/"
+              href="https://www.instagram.com/getdropp/"
               target="_blank"
               rel="noreferrer"
               className="block text-base text-white font_regular mt-3"
@@ -80,7 +85,7 @@ const Footer = ({ logo }) => {
               Instagram
             </a>
             <a
-              href="https://twitter.com/tryhomemade"
+              href="https://twitter.com/getdropp?s=11"
               target="_blank"
               rel="noreferrer"
               className="block text-base text-white font_regular mt-3"

@@ -10,14 +10,25 @@ const Header = ({ itemsImage, setShowModal }) => {
 
       <main className="w-4/5 lg:w-5/6 mx-auto pt-5 lg:flex flex-row items-center">
         <div className="lg:w-3/5 lg:flex-1">
-          <h1 className="lg:text-6xl text-4xl font_bold text_black">
-            Making growth <br /> easy for restaurants
-          </h1>
-          <p className="my-7 font_regular text_black text-lg">
-            Dropp empowers you with all the tools you need to work smarter,{" "}
-            <br />
-            earn more & automate for efficiency all in one place.
-          </p>
+          <div className="hidden lg:block">
+            <h1 className="lg:text-6xl text-4xl font_bold text_black">
+              Making growth <br /> easy for restaurants
+            </h1>
+            <p className="my-7 font_regular text_black text-lg">
+              Dropp empowers you with all the tools you need to work smarter,{" "}
+              <br />
+              earn more & automate for efficiency all in one place.
+            </p>
+          </div>
+          <div className="lg:hidden mt-10">
+            <h1 className="lg:text-6xl text-4xl font_bold text_black text-center">
+              Making growth easy for restaurants
+            </h1>
+            <p className="my-7 font_regular text_black text-lg  text-center">
+              Dropp empowers you with all the tools you need to work smarter,
+              earn more & automate for efficiency all in one place.
+            </p>
+          </div>
           <div className="flex gap-4 mt-5">
             <OutlineButton
               title="Book a Demo"
@@ -42,7 +53,7 @@ const Header = ({ itemsImage, setShowModal }) => {
 
         <div className="lg:w-3/6">
           {/* <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" /> */}
-          <div className="lg:mt-20">
+          <div className="mt-10 lg:mt-20">
             <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
           </div>
         </div>
