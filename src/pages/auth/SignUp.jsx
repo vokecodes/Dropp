@@ -93,7 +93,7 @@ const SignUpPage = () => {
 
   const registerUser = (values, formikBag) => {
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/dropp-user/register`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/dropp-user/register`, {
         ...values,
       })
       .then(({ data }) => {

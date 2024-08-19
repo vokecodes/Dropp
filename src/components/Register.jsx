@@ -48,7 +48,7 @@ const Register = ({ showModal, setShowModal, setShowResetModal }) => {
 
   const registerUser = (values, formikBag) => {
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/shopper/register`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/shopper/register`, {
         ...values,
       })
       .then(({ data }) => {
@@ -70,7 +70,7 @@ const Register = ({ showModal, setShowModal, setShowResetModal }) => {
 
   const loginUser = (values, formikBag) => {
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/login`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
         ...values,
       })
       .then(({ data }) => {

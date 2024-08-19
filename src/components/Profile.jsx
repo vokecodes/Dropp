@@ -39,7 +39,7 @@ const Profile = ({ user, showProfileModal, setShowProfileModal }) => {
 
     axios
       .patch(
-        `${process.env.REACT_APP_BASE_URL}/user/${user?._id}`,
+        `${import.meta.env.VITE_BASE_URL}/user/${user?._id}`,
         {
           ...values,
         },

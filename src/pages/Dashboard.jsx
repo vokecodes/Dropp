@@ -24,7 +24,7 @@ const Dashboard = () => {
       const { success, data } = JSON.parse(result);
 
       axios
-        .get(`${process.env.REACT_APP_BASE_URL}/droppuser/${data?.user?._id}`, {
+        .get(`${import.meta.env.VITE_BASE_URL}/droppuser/${data?.user?._id}`, {
           headers: {
             Authorization: `Bearer ${data?.token}`,
           },
