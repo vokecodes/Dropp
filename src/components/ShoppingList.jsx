@@ -55,7 +55,7 @@ const ShoppingList = ({ setShowShoppingList }) => {
 
     axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/user/shopper/${data?.user?._id}/lists`,
+        `${import.meta.env.VITE_BASE_URL}/user/shopper/${data?.user?._id}/lists`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ const ShoppingList = ({ setShowShoppingList }) => {
 
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}/shoppingList/shopper/${data?.user?._id}`,
+        `${import.meta.env.VITE_BASE_URL}/shoppingList/shopper/${data?.user?._id}`,
         { name: listName, items },
         {
           headers: {
@@ -147,7 +147,7 @@ const ShoppingList = ({ setShowShoppingList }) => {
 
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}/dropper/order`,
+        `${import.meta.env.VITE_BASE_URL}/dropper/order`,
         { ...body },
         {
           headers: {
@@ -180,7 +180,7 @@ const ShoppingList = ({ setShowShoppingList }) => {
 
     axios
       .patch(
-        `${process.env.REACT_APP_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        `${import.meta.env.VITE_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
         { name: listName, items },
         {
           headers: {
@@ -208,7 +208,7 @@ const ShoppingList = ({ setShowShoppingList }) => {
 
     axios
       .delete(
-        `${process.env.REACT_APP_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
+        `${import.meta.env.VITE_BASE_URL}/shoppingList/${listId}/shopper/${data?.user?._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

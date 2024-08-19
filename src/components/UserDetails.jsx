@@ -32,7 +32,7 @@ const UserDetails = ({
 
     axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/user/shopper/${data?.user?._id}/referralCode`,
+        `${import.meta.env.VITE_BASE_URL}/user/shopper/${data?.user?._id}/referralCode`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -16,24 +16,20 @@ const ForgotPasswordPage = () => {
     email: Yup.string().email().required("Email is required."),
   });
 
-  const userForgotPassword = (values, formikBag) => {
-    axios
-      // .post(`http://localhost:4000/api/v1/auth/dropp-user/forgot-password`, {
-      .post(
-        `${process.env.REACT_APP_BASE_URL}/auth/dropp-user/forgot-password`,
-        {
-          ...values,
-        }
-      )
-      .then(({ data }) => {
-        navigate("/auth/reset-password");
-      })
-      .catch((error) => {
-        const { message } = error.response.data;
-        if (message) setErrorMessage(message);
-      })
-      .finally(() => formikBag.setSubmitting(false));
-  };
+    const userForgotPassword = (values, formikBag) => {
+        axios
+          .post(`${import.meta.env.VITE_BASE_URL}/auth/dropp-user/forgot-password`, {
+            ...values,
+          })
+          .then(({ data }) => {
+            navigate("/auth/reset-password");
+          })
+          .catch((error) => {
+            const { message } = error.response.data;
+            if (message) setErrorMessage(message);
+          })
+          .finally(() => formikBag.setSubmitting(false));
+      };
 
   return (
     <section className="w-screen h-screen flex flex-col items-center justify-between header_bg">

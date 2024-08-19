@@ -24,7 +24,7 @@ const ChangePassword = ({ showPasswordModal, setShowPasswordModal }) => {
 
     axios
       .patch(
-        `${process.env.REACT_APP_BASE_URL}/auth/changePassword/${data?.user?._id}`,
+        `${import.meta.env.VITE_BASE_URL}/auth/changePassword/${data?.user?._id}`,
         {
           ...values,
         },
