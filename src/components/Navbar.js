@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Disclosure,
   DisclosureButton,
@@ -86,6 +86,8 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
     { name: "Analytics & Insight", href: "#analytics-insight" },
   ];
 
+  // console.log('userNav= ', user)
+
   return (
     // <div className="w-4/5 lg:w-4/6 mx-auto">
     //   <nav className="flex lg:items-center justify-between py-10">
@@ -152,20 +154,20 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
     //     </div>
     //   )}
     // </div>
-    <Disclosure as="header" className="pt-8 z-30">
+    <Disclosure as="header" className="pt-8 z-50 w-full">
       <div className="px-2 sm:px-4 lg:px-32">
         <div className="relative flex h-16 justify-between">
-          <div className="relative z-10 flex px-2 lg:px-0">
+          <div className="relative z-50 flex px-2 lg:px-0">
             <div className="flex flex-shrink-0 items-center">
               <img alt="Dropp" src={Images.logo} className="h-8 w-auto" />
             </div>
           </div>
-          <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+          <div className="relative z-50 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
             <nav
               aria-label="Global"
               className="hidden lg:flex lg:flex-wrap lg:py-2"
             >
-              <Menu as="div" className="relative flex-shrink-0 z-20">
+              <Menu as="div" className="relative flex-shrink-0 z-50">
                 <div>
                   <MenuButton className="relative flex">
                     <span className="absolute -inset-1.5" />
@@ -178,14 +180,14 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="2"
+                        strokeWidth="2"
                         stroke="#4A443A"
                         width={16}
                         height={16}
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="m19.5 8.25-7.5 7.5-7.5-7.5"
                         />
                       </svg>
@@ -194,7 +196,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                 </div>
                 <MenuItems
                   transition
-                  className="absolute left-0 z-20 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
                 >
                   {restaurantNavigation.map((item) => (
                     <MenuItem key={item.name}>
@@ -215,7 +217,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               >
                 Private Chef
               </a>
-              <Menu as="div" className="relative ml-4 flex-shrink-0 z-20">
+              <Menu as="div" className="relative ml-4 flex-shrink-0 z-50">
                 <div>
                   <MenuButton className="relative flex">
                     <span className="absolute -inset-1.5" />
@@ -228,14 +230,14 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="2"
+                        strokeWidth="2"
                         stroke="#4A443A"
                         width={16}
                         height={16}
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="m19.5 8.25-7.5 7.5-7.5-7.5"
                         />
                       </svg>
@@ -244,7 +246,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                 </div>
                 <MenuItems
                   transition
-                  className="absolute left-0 z-20 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
                 >
                   {productNavigation.map((item) => (
                     <MenuItem key={item.name}>
@@ -272,7 +274,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               </a>
             </nav>
           </div>
-          <div className="relative z-10 flex items-center lg:hidden">
+          <div className="relative z-50 flex items-center lg:hidden">
             {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
               <span className="absolute -inset-0.5" />
@@ -287,17 +289,33 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               />
             </DisclosureButton>
           </div>
-          <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:gap-3 lg:items-center">
-            <OutlineButton
-              title=" Log in"
-              onClick={() => setShowModal(true)}
-              extraClasses="w-24"
-            />
-            <Button
-              title="Sign up"
-              onClick={() => setShowModal(true)}
-              extraClasses="w-24"
-            />
+          <div className="hidden lg:relative lg:z-50 lg:ml-4 lg:flex lg:gap-3 lg:items-center">
+            {
+              user ? (
+                <Button
+                  title="Log out"
+                  onClick={() => handleLogout()}
+                  extraClasses="w-24"
+                />
+              ) : (
+                <>
+                  <Link to={'/auth/login'}>
+                    <OutlineButton
+                      title="Log in"
+                      // onClick={() => setShowModal(true)}
+                      extraClasses="w-24"
+                    />
+                  </Link>
+                  <Link to={'/auth/register'}>
+                    <Button
+                      title="Sign up"
+                      // onClick={() => setShowModal(true)}
+                      extraClasses="w-24"
+                    />
+                  </Link>
+                </>
+              )
+            }
           </div>
         </div>
       </div>
@@ -311,14 +329,14 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="#4A443A"
                 width={16}
                 height={16}
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="m19.5 8.25-7.5 7.5-7.5-7.5"
                 />
               </svg>
@@ -350,14 +368,14 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="#4A443A"
                 width={16}
                 height={16}
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="m19.5 8.25-7.5 7.5-7.5-7.5"
                 />
               </svg>
@@ -400,17 +418,33 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               />
             </div>
           )}
-          <div className="flex mt-3 gap-5 px-4">
-            <OutlineButton
-              title="Log in"
-              onClick={() => setShowModal(true)}
-              extraClasses="w-44"
-            />
-            <Button
-              title="Sign up"
-              onClick={() => setShowModal(true)}
-              extraClasses="w-44"
-            />
+          <div className="flex flex-col items-center justify-start mt-3 gap-5 px-4">
+            {
+              user ? (
+                <Button
+                  title="Log out"
+                  onClick={() => handleLogout()}
+                  extraClasses="w-24"
+                />
+              ) : (
+                <>
+                  <Link to={'/auth/login'}>
+                    <OutlineButton
+                      title="Log in"
+                      // onClick={() => setShowModal(true)}
+                      extraClasses="w-44"
+                    />
+                  </Link>
+                  <Link to={'/auth/register'}>
+                    <Button
+                      title="Sign up"
+                      // onClick={() => setShowModal(true)}
+                      extraClasses="w-44"
+                    />
+                  </Link>
+                </>
+              )
+            }
           </div>
         </div>
       </DisclosurePanel>

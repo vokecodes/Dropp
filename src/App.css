@@ -458,7 +458,7 @@
 .custom_select__control {
   background-color: transparent !important;
   border: none !important;
-  border-bottom: 1px solid #e0d4bb !important;
+  /* border-bottom: 1px solid #e0d4bb !important; */
   outline: none !important;
 }
 
