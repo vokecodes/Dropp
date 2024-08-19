@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import Navbar from '../../components/Navbar';
+import React, { useState } from "react";
+import Navbar from "../../components/Navbar";
 import * as Yup from "yup";
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { AUTH_DATA } from "../../reducers/type";
-
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -22,18 +21,22 @@ const SignUpPage = () => {
     lastName: Yup.string().required("Last name is required."),
     email: Yup.string().email().required("Email is required."),
     password: Yup.string()
-    .min(8, "Password must be minimum of 8 letters.")
-    .required("Password is required."),
+      .min(8, "Password must be minimum of 8 letters.")
+      .required("Password is required."),
     confirmPassword: Yup.string()
-    .required("Confirm password is required.")
-    .oneOf([Yup.ref("password")], "Passwords do not match"),
+      .required("Confirm password is required.")
+      .oneOf([Yup.ref("password")], "Passwords do not match"),
     phoneNumber: Yup.string()
       .min(11, "Phone number is not valid.")
       .required("Phone number is required."),
     restaurantName: Yup.string().required("Restaurant name is required."),
     restaurantType: Yup.string().required("Restaurant type is required."),
-    restaurantLocation: Yup.string().required("Restaurant location is required."),
-    restaurantLocationNum: Yup.string().required("Number of restaurant locations is required."),
+    restaurantLocation: Yup.string().required(
+      "Restaurant location is required."
+    ),
+    restaurantLocationNum: Yup.string().required(
+      "Number of restaurant locations is required."
+    ),
     referral: Yup.string().optional(),
   });
 
@@ -45,26 +48,26 @@ const SignUpPage = () => {
     { value: "Food Truck", label: "Food Truck" },
     { value: "Fast Casual", label: "Fast Casual" },
     { value: "Others", label: "Others" },
-  ]
+  ];
 
-  const [restaurantType, setRestaurantType] = useState('') 
+  const [restaurantType, setRestaurantType] = useState("");
   const chooseResType = (resType) => {
-    setRestaurantType(resType)
-  }
-  
+    setRestaurantType(resType);
+  };
+
   const restaurantLocations = [
     { value: "Lagos", label: "Lagos" },
     { value: "Abuja", label: "Abuja" },
     { value: "Ibadan", label: "Ibadan" },
     { value: "Port Harcourt", label: "Port Harcourt" },
     { value: "Others", label: "Others" },
-  ]
+  ];
 
-  const [restaurantLocation, setRestaurantLocation] = useState('') 
+  const [restaurantLocation, setRestaurantLocation] = useState("");
   const chooseResLocation = (resLocation) => {
-    setRestaurantLocation(resLocation)
-  }
-  
+    setRestaurantLocation(resLocation);
+  };
+
   const restaurantNums = [
     { value: "1", label: "1" },
     { value: "2 - 5", label: "2 - 5" },
@@ -72,12 +75,12 @@ const SignUpPage = () => {
     { value: "11 - 25", label: "11 - 25" },
     { value: "25 - 50", label: "25 - 50" },
     { value: "+ 50", label: "+ 50" },
-  ]
+  ];
 
-  const [restaurantNum, setRestaurantNum] = useState('') 
+  const [restaurantNum, setRestaurantNum] = useState("");
   const chooseResNum = (resNum) => {
-    setRestaurantNum(resNum)
-  }
+    setRestaurantNum(resNum);
+  };
 
   const options = [
     { value: "Referral", label: "Referral" },
@@ -90,13 +93,13 @@ const SignUpPage = () => {
 
   const registerUser = (values, formikBag) => {
     axios
-      .post(`http://localhost:4000/api/v1/auth/dropp-user/register`, {
-      // .post(`https://homemade.herokuapp.com/api/v1/auth/dropp-user/register`, {
-        ...values,
-      })
-      // .post(`${process.env.REACT_APP_BASE_URL}/auth/shopper/register`, {
+      // .post(`http://localhost:4000/api/v1/auth/dropp-user/register`, {
+      // // .post(`https://homemade.herokuapp.com/api/v1/auth/dropp-user/register`, {
       //   ...values,
       // })
+      .post(`${process.env.REACT_APP_BASE_URL}/auth/shopper/register`, {
+        ...values,
+      })
       .then(({ data }) => {
         const { success } = data;
         if (success) setSuccess(true);
@@ -114,14 +117,13 @@ const SignUpPage = () => {
       .finally(() => formikBag.setSubmitting(false));
   };
 
-  
   return (
     <section className="w-full h-full header_bg lg:pb-20">
       <Navbar />
 
       <main className="bg-white rounded-3xl w-11/12 lg:w-1/3 mx-auto pt-5 lg:flex flex-row items-center">
         <div className="relative pt-5 px-3 lg:px-8">
-          <p className='text-center font_bold text-xl mb-5'>Get Started</p>
+          <p className="text-center font_bold text-xl mb-5">Get Started</p>
           <Formik
             initialValues={{
               firstName: "",
@@ -143,9 +145,12 @@ const SignUpPage = () => {
             }}
           >
             {(props) => (
-              <Form onSubmit={props.handleSubmit} className='flex flex-col gap-y-2'>
+              <Form
+                onSubmit={props.handleSubmit}
+                className="flex flex-col gap-y-2"
+              >
                 {/* names */}
-                <div className='w-full flex flex-col lg:flex-row items-start justify-between gap-x-3'>
+                <div className="w-full flex flex-col lg:flex-row items-start justify-between gap-x-3">
                   <div className="mb-3 w-full">
                     <Field
                       type="text"
@@ -190,56 +195,74 @@ const SignUpPage = () => {
                     className="text-xs text-red-500 font_regular"
                   />
                 </div>
-                
+
                 {/* password */}
                 <div className="mb-3">
                   <div className="flex items-center justify-between">
                     <Field
-                      type={
-                        showRegisterPassword ? "text" : "password"
-                      }
+                      type={showRegisterPassword ? "text" : "password"}
                       name="password"
                       placeholder="Password"
                       className="block w-full shadow-sm bg-neutral-100 outline-none font_regular text-black text-xs p-5 rounded-lg focus:bg-neutral-200"
                     />
-                    {
-                      showRegisterPassword ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 absolute right-10 cursor-pointer"
-                          viewBox="0 0 20 20"
-                          fill="#6C7072"
-                          onClick={() =>
-                            setShowRegisterPassword(!showRegisterPassword)
-                          }
-                        >
-                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    {showRegisterPassword ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 absolute right-10 cursor-pointer"
+                        viewBox="0 0 20 20"
+                        fill="#6C7072"
+                        onClick={() =>
+                          setShowRegisterPassword(!showRegisterPassword)
+                        }
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 absolute right-10 cursor-pointer"
+                        fill="none"
+                        onClick={() =>
+                          setShowRegisterPassword(!showRegisterPassword)
+                        }
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
                           <path
-                            fillRule="evenodd"
-                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      ) : (
-                        <svg 
-                          viewBox="0 0 24 24" 
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 absolute right-10 cursor-pointer"
-                          fill="none"
-                          onClick={() =>
-                            setShowRegisterPassword(!showRegisterPassword)
-                          }
-                        >
-                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                          <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                          <g id="SVGRepo_iconCarrier"> 
-                            <path d="M2 2L22 22" stroke="#6C7072" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                            <path d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335" stroke="#6C7072" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                            <path d="M14 14.2362C13.4692 14.7112 12.7684 15.0001 12 15.0001C10.3431 15.0001 9 13.657 9 12.0001C9 11.1764 9.33193 10.4303 9.86932 9.88818" stroke="#6C7072" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                          </g>
-                        </svg>
-                      )
-                    }
+                            d="M2 2L22 22"
+                            stroke="#6C7072"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                          <path
+                            d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335"
+                            stroke="#6C7072"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                          <path
+                            d="M14 14.2362C13.4692 14.7112 12.7684 15.0001 12 15.0001C10.3431 15.0001 9 13.657 9 12.0001C9 11.1764 9.33193 10.4303 9.86932 9.88818"
+                            stroke="#6C7072"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                        </g>
+                      </svg>
+                    )}
                   </div>
                   <ErrorMessage
                     name="password"
@@ -247,56 +270,74 @@ const SignUpPage = () => {
                     className="text-xs text-red-500 font_regular"
                   />
                 </div>
-                
+
                 {/* confirm password */}
                 <div className="mb-3">
                   <div className="flex items-center justify-between">
                     <Field
-                      type={
-                        showRegisterPassword ? "text" : "password"
-                      }
+                      type={showRegisterPassword ? "text" : "password"}
                       name="confirmPassword"
                       placeholder="Confirm password"
                       className="block w-full shadow-sm bg-neutral-100 outline-none font_regular text-black text-xs p-5 rounded-lg focus:bg-neutral-200"
                     />
-                      {
-                        showRegisterPassword ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 absolute right-10 cursor-pointer"
-                            viewBox="0 0 20 20"
-                            fill="#6C7072"
-                            onClick={() =>
-                              setShowRegisterPassword(!showRegisterPassword)
-                            }
-                          >
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                            <path
-                              fillRule="evenodd"
-                              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        ) : (
-                          <svg 
-                            viewBox="0 0 24 24" 
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 absolute right-10 cursor-pointer"
-                            fill="none"
-                            onClick={() =>
-                              setShowRegisterPassword(!showRegisterPassword)
-                            }
-                          >
-                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier"> 
-                              <path d="M2 2L22 22" stroke="#6C7072" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                              <path d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335" stroke="#6C7072" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                              <path d="M14 14.2362C13.4692 14.7112 12.7684 15.0001 12 15.0001C10.3431 15.0001 9 13.657 9 12.0001C9 11.1764 9.33193 10.4303 9.86932 9.88818" stroke="#6C7072" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                            </g>
-                          </svg>
-                        )
-                      }
+                    {showRegisterPassword ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 absolute right-10 cursor-pointer"
+                        viewBox="0 0 20 20"
+                        fill="#6C7072"
+                        onClick={() =>
+                          setShowRegisterPassword(!showRegisterPassword)
+                        }
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 absolute right-10 cursor-pointer"
+                        fill="none"
+                        onClick={() =>
+                          setShowRegisterPassword(!showRegisterPassword)
+                        }
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          <path
+                            d="M2 2L22 22"
+                            stroke="#6C7072"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                          <path
+                            d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335"
+                            stroke="#6C7072"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                          <path
+                            d="M14 14.2362C13.4692 14.7112 12.7684 15.0001 12 15.0001C10.3431 15.0001 9 13.657 9 12.0001C9 11.1764 9.33193 10.4303 9.86932 9.88818"
+                            stroke="#6C7072"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                        </g>
+                      </svg>
+                    )}
                   </div>
                   <ErrorMessage
                     name="confirmPassword"
@@ -338,21 +379,26 @@ const SignUpPage = () => {
 
                 {/* restaurant type */}
                 <div className="mb-3">
-                  <p className='font_regular mb-3'>Select your Restaurant type</p>
-                  <div className='w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap'>
-                    {
-                      restaurantTypes.map((item, i) => (
-                        <div key={item.value} className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${restaurantType == item.value ? 'bg_primary text-white hover:bg-bg_primary' : 'hover:bg-neutral-100'} `} onClick={() => {
-                          chooseResType(item.value)
-                          props.setFieldValue(
-                            "restaurantType",
-                            item.value
-                          )
-                        }}>
-                          <p className='font_regular text-sm'>{item.label}</p>
-                        </div>
-                      ))
-                    }
+                  <p className="font_regular mb-3">
+                    Select your Restaurant type
+                  </p>
+                  <div className="w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap">
+                    {restaurantTypes.map((item, i) => (
+                      <div
+                        key={item.value}
+                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
+                          restaurantType == item.value
+                            ? "bg_primary text-white hover:bg-bg_primary"
+                            : "hover:bg-neutral-100"
+                        } `}
+                        onClick={() => {
+                          chooseResType(item.value);
+                          props.setFieldValue("restaurantType", item.value);
+                        }}
+                      >
+                        <p className="font_regular text-sm">{item.label}</p>
+                      </div>
+                    ))}
                   </div>
                   <ErrorMessage
                     name="restaurantType"
@@ -360,24 +406,27 @@ const SignUpPage = () => {
                     className="text-xs text-red-500 font_regular"
                   />
                 </div>
-                
+
                 {/* restaurant location */}
                 <div className="mb-3">
-                  <p className='font_regular mb-3'>Restaurant location</p>
-                  <div className='w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap'>
-                    {
-                      restaurantLocations.map((item, i) => (
-                        <div key={item.value} className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${restaurantLocation == item.value ? 'bg_primary text-white hover:bg-bg_primary' : 'hover:bg-neutral-100'} `} onClick={() => {
-                          chooseResLocation(item.value)
-                          props.setFieldValue(
-                            "restaurantLocation",
-                            item.value
-                          )
-                        }}>
-                          <p className='font_regular text-sm'>{item.label}</p>
-                        </div>
-                      ))
-                    }
+                  <p className="font_regular mb-3">Restaurant location</p>
+                  <div className="w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap">
+                    {restaurantLocations.map((item, i) => (
+                      <div
+                        key={item.value}
+                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
+                          restaurantLocation == item.value
+                            ? "bg_primary text-white hover:bg-bg_primary"
+                            : "hover:bg-neutral-100"
+                        } `}
+                        onClick={() => {
+                          chooseResLocation(item.value);
+                          props.setFieldValue("restaurantLocation", item.value);
+                        }}
+                      >
+                        <p className="font_regular text-sm">{item.label}</p>
+                      </div>
+                    ))}
                   </div>
                   <ErrorMessage
                     name="restaurantLocation"
@@ -385,24 +434,30 @@ const SignUpPage = () => {
                     className="text-xs text-red-500 font_regular"
                   />
                 </div>
-                
+
                 {/* restaurant location num*/}
                 <div className="mb-3">
-                  <p className='font_regular mb-3'>Number of locations</p>
-                  <div className='w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap'>
-                    {
-                      restaurantNums.map((item, i) => (
-                        <div key={item.value} className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${restaurantNum == item.value ? 'bg_primary text-white hover:bg-bg_primary' : 'hover:bg-neutral-100'} `} onClick={() => {
-                          chooseResNum(item.value)
+                  <p className="font_regular mb-3">Number of locations</p>
+                  <div className="w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap">
+                    {restaurantNums.map((item, i) => (
+                      <div
+                        key={item.value}
+                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
+                          restaurantNum == item.value
+                            ? "bg_primary text-white hover:bg-bg_primary"
+                            : "hover:bg-neutral-100"
+                        } `}
+                        onClick={() => {
+                          chooseResNum(item.value);
                           props.setFieldValue(
                             "restaurantLocationNum",
                             item.value
-                          )
-                        }}>
-                          <p className='font_regular text-sm'>{item.label}</p>
-                        </div>
-                      ))
-                    }
+                          );
+                        }}
+                      >
+                        <p className="font_regular text-sm">{item.label}</p>
+                      </div>
+                    ))}
                   </div>
                   <ErrorMessage
                     name="restaurantLocationNum"
@@ -414,27 +469,24 @@ const SignUpPage = () => {
                 {/* HEAR ABOUT US */}
                 <div className="mb-7">
                   <Select
-                    className='block w-full shadow-sm bg-neutral-100 outline-none font_regular text-black text-xs p-3 rounded-lg focus:bg-neutral-200'
+                    className="block w-full shadow-sm bg-neutral-100 outline-none font_regular text-black text-xs p-3 rounded-lg focus:bg-neutral-200"
                     classNamePrefix="custom_select"
                     onChange={(value) => {
                       // console.log('value select= ', value)
-                      props.setFieldValue(
-                        "referral",
-                        value.value
-                      )
+                      props.setFieldValue("referral", value.value);
                     }}
                     placeholder="How did you hear about us?"
                     options={options}
                   />
                 </div>
 
-                {
-                  errorMessage && (
-                    <div className='w-full py-2'>
-                      <p className='text-center text-xs text-red-400'>{ errorMessage }</p>
-                    </div>
-                  )
-                }
+                {errorMessage && (
+                  <div className="w-full py-2">
+                    <p className="text-center text-xs text-red-400">
+                      {errorMessage}
+                    </p>
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -473,16 +525,14 @@ const SignUpPage = () => {
               // onClick={() => setAuthType(!authType)}
             >
               Already have an account?
-              <Link to={'login/'}>
-                <span className="text-black font_bold">
-                  Log In
-                </span>
+              <Link to={"login/"}>
+                <span className="text-black font_bold">Log In</span>
               </Link>
             </p>
           </div>
           <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
-            By creating an account, I confirm that I have read and
-            understood the Dropp{" "}
+            By creating an account, I confirm that I have read and understood
+            the Dropp{" "}
             <a
               href="https://opposite-pet-88e.notion.site/Terms-of-Service-750a370ccc434a16b2b80c3f277f4968"
               target="_blank"
@@ -495,7 +545,7 @@ const SignUpPage = () => {
         </div>
       </main>
     </section>
-  )
-}
+  );
+};
 
-export default SignUpPage
+export default SignUpPage;
