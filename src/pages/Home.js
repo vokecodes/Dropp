@@ -16,6 +16,7 @@ import Button from "../components/Button";
 // import Lenis from "@studio-freight/lenis/types";
 import OptionCard from "../components/OptionCard";
 import OverlapCard from "../components/OverlapCard";
+import { smoothScrollTo } from "../util/scrollIntoView";
 
 const CATEGORIES = [
   "Dine-In",
@@ -398,11 +399,16 @@ const Home = () => {
   //   };
   // }, []);
 
+  const handleScrollTo = (id) => {
+    smoothScrollTo(id);
+  };
+  
+
   return (
     <>
       <div className={`${showModal ? "blur-bg" : ""}`}>
         {/* Header */}
-        <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} />
+        <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} handleScrollTo={handleScrollTo} />
 
         <div
           className="bg-[#24412C] pt-20 lg:pt-32 h-[960px] lg:h-[820px] relative"
@@ -926,7 +932,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="lg:w-4/5 mx-auto">
+            <div id="demoForm" className="lg:w-4/5 mx-auto">
               <div className="bg-white rounded-2xl lg:p-20 p-6">
                 <p className="lg:text-5xl text-3xl text_black font_bold text-center">
                   Get a free online demo from our <br /> team of restaurant

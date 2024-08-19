@@ -23,8 +23,7 @@ const LoginPage = () => {
 
     const loginUser = (values, formikBag) => {
         axios
-        .post(`http://localhost:4000/api/v1/auth/dropp-user/login`, {
-        //   .post(`${process.env.REACT_APP_BASE_URL}/auth/login`, {
+          .post(`${process.env.REACT_APP_BASE_URL}/auth/dropp-user/login`, {
             ...values,
           })
           .then(({ data }) => {
@@ -182,17 +181,17 @@ const LoginPage = () => {
                     )}
                 </Formik>
                 <div className="flex justify-center items-center mt-3 mb-5">
-                    <p
-                    className="text-gray-500 cursor-pointer font_regular"
-                    // onClick={() => setAuthType(!authType)}
-                    >
-                    Don't have an account?
                     <Link to={'/auth/register'}>
-                        <span className="text-black font_bold">
-                            Register
-                        </span>
+                        <p
+                        className="text-gray-500 cursor-pointer font_regular"
+                        // onClick={() => setAuthType(!authType)}
+                        >
+                        Don't have an account?
+                            <span className="text-black font_bold">
+                                Register
+                            </span>
+                        </p>
                     </Link>
-                    </p>
                 </div>
                 <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
                     By creating an account, I confirm that I have read and
