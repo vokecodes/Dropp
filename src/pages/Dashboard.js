@@ -18,14 +18,16 @@ const Dashboard = () => {
 
   const getUser = useCallback(() => {
     const result = sessionStorage.getItem("auth");
+    // console.log('result= ', result)
 
     if (result) {
-      const { token, data } = JSON.parse(result);
+      const { success, data } = JSON.parse(result);
 
       axios
-        .get(`${process.env.REACT_APP_BASE_URL}/user/${data?.user?._id}`, {
+        .get(`http://localhost:4000/api/v1/droppuser/${data?.user?._id}`, {
+        // .get(`${process.env.REACT_APP_BASE_URL}/user/${data?.user?._id}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${data?.token}`,
           },
         })
         .then(({ data }) => {
@@ -40,6 +42,8 @@ const Dashboard = () => {
   useEffect(() => {
     if (!user) getUser();
   }, [getUser, user]);
+
+  // console.log('user= ', user)
 
   return (
     <>
