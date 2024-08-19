@@ -154,15 +154,17 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
     //     </div>
     //   )}
     // </div>
-    <Disclosure as="header" className="pt-8 z-50 w-full">
+    <Disclosure as="header" className="pt-8 z-40 w-full">
       <div className="px-2 sm:px-4 lg:px-32">
         <div className="relative flex h-16 justify-between">
           <div className="relative z-50 flex px-2 lg:px-0">
             <div className="flex flex-shrink-0 items-center">
-              <img alt="Dropp" src={Images.logo} className="h-8 w-auto" />
+              <Link to={'/'}>
+                <img alt="Dropp" src={Images.logo} className="h-8 w-auto z-50" />
+              </Link>
             </div>
           </div>
-          <div className="relative z-50 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+          <div className="relative z-40 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
             <nav
               aria-label="Global"
               className="hidden lg:flex lg:flex-wrap lg:py-2"
@@ -274,7 +276,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
               </a>
             </nav>
           </div>
-          <div className="relative z-50 flex items-center lg:hidden">
+          <div className="relative z-40 flex items-center lg:hidden">
             {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
               <span className="absolute -inset-0.5" />

@@ -93,11 +93,7 @@ const SignUpPage = () => {
 
   const registerUser = (values, formikBag) => {
     axios
-      // .post(`http://localhost:4000/api/v1/auth/dropp-user/register`, {
-      // // .post(`https://homemade.herokuapp.com/api/v1/auth/dropp-user/register`, {
-      //   ...values,
-      // })
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/shopper/register`, {
+      .post(`${process.env.REACT_APP_BASE_URL}/auth/dropp-user/register`, {
         ...values,
       })
       .then(({ data }) => {
@@ -520,15 +516,17 @@ const SignUpPage = () => {
             )}
           </Formik>
           <div className="flex justify-center items-center mt-3 mb-5">
-            <p
-              className="text-gray-500 cursor-pointer font_regular"
-              // onClick={() => setAuthType(!authType)}
-            >
-              Already have an account?
-              <Link to={"login/"}>
-                <span className="text-black font_bold">Log In</span>
-              </Link>
-            </p>
+            <Link to={'/auth/login'}>
+              <p
+                className="text-gray-500 cursor-pointer font_regular"
+                // onClick={() => setAuthType(!authType)}
+              >
+                Already have an account?
+                  <span className="text-black font_bold">
+                    Log In
+                  </span>
+              </p>
+            </Link>
           </div>
           <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
             By creating an account, I confirm that I have read and understood
