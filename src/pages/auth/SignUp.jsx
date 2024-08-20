@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import * as Yup from "yup";
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { AUTH_DATA } from "../../reducers/type";
 
@@ -15,6 +15,12 @@ const SignUpPage = () => {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   const registerSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required."),
@@ -31,7 +37,7 @@ const SignUpPage = () => {
       .required("Phone number is required."),
     restaurantName: Yup.string().required("Restaurant name is required."),
     restaurantType: Yup.string().required("Restaurant type is required."),
-    restaurantLocation: Yup.string().required(
+    restaurantLocation: Yup.array(Yup.string()).required(
       "Restaurant location is required."
     ),
     restaurantLocationNum: Yup.string().required(
@@ -63,10 +69,21 @@ const SignUpPage = () => {
     { value: "Others", label: "Others" },
   ];
 
-  const [restaurantLocation, setRestaurantLocation] = useState("");
+  const [restaurantLocation, setRestaurantLocation] = useState([]);
   const chooseResLocation = (resLocation) => {
-    setRestaurantLocation(resLocation);
+    let temp = [...restaurantLocation]
+
+    if(restaurantLocation.includes(resLocation)){
+      temp = temp.filter(item => item !== resLocation)
+    }else{
+      temp.push(resLocation)
+    }
+
+    setRestaurantLocation(temp);
+    return temp
   };
+
+  console.log('first', restaurantLocation)
 
   const restaurantNums = [
     { value: "1", label: "1" },
@@ -130,13 +147,13 @@ const SignUpPage = () => {
               phoneNumber: "",
               restaurantName: "",
               restaurantType: "",
-              restaurantLocation: "",
+              restaurantLocation: [],
               restaurantLocationNum: "",
               referral: "",
             }}
             validationSchema={registerSchema}
             onSubmit={(values, formikBag) => {
-              // console.log('values= ', values)
+              console.log('values= ', values);
               registerUser(values, formikBag);
             }}
           >
@@ -411,13 +428,13 @@ const SignUpPage = () => {
                       <div
                         key={item.value}
                         className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
-                          restaurantLocation == item.value
+                          restaurantLocation && restaurantLocation.includes(item.value)
                             ? "bg_primary text-white hover:bg-bg_primary"
                             : "hover:bg-neutral-100"
                         } `}
                         onClick={() => {
-                          chooseResLocation(item.value);
-                          props.setFieldValue("restaurantLocation", item.value);
+                          const locations = chooseResLocation(item.value);
+                          props.setFieldValue("restaurantLocation", locations);
                         }}
                       >
                         <p className="font_regular text-sm">{item.label}</p>
