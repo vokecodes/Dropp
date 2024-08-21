@@ -2,8 +2,9 @@ import React from "react";
 import Navbar from "./Navbar";
 import OutlineButton from "./OutlineButton";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
-const Header = ({ itemsImage, setShowModal }) => {
+const Header = ({ itemsImage, setShowModal, handleScrollTo }) => {
   return (
     <section className="header_bg lg:pb-20">
       <Navbar setShowModal={setShowModal} />
@@ -30,16 +31,20 @@ const Header = ({ itemsImage, setShowModal }) => {
             </p>
           </div>
           <div className="flex gap-4 mt-5">
-            <OutlineButton
-              title="Book a Demo"
-              extraClasses="w-36 lg:w-2/6"
-              onClick={() => setShowModal(true)}
-            />
-            <Button
-              title="Get started"
-              extraClasses="w-36 lg:w-2/6"
-              onClick={() => setShowModal(true)}
-            />
+            {/* <a href="#demoForm" className=""> */}
+              <OutlineButton
+                title="Book a Demo"
+                extraClasses="w-36 lg:w-2/6"
+                onClick={() => handleScrollTo('demoForm')}
+              />
+            {/* </a> */}
+            <Link to={'/auth/register'} className="w-36 lg:w-2/6">
+              <Button
+                title="Get started"
+                extraClasses="w-full h-full"
+                // onClick={() => setShowModal(true)}
+              />
+            </Link>
           </div>
           {/* <div className="text-center lg:text-left">
             <button

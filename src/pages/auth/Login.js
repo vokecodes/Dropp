@@ -21,26 +21,25 @@ const LoginPage = () => {
       .required("Password is required."),
   });
 
-  const loginUser = (values, formikBag) => {
-    axios
-      // .post(`http://localhost:4000/api/v1/auth/dropp-user/login`, {
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/dropp-user/login`, {
-        ...values,
-      })
-      .then(({ data }) => {
-        dispatch({
-          type: AUTH_DATA,
-          payload: data,
-        });
-        sessionStorage.setItem("auth", JSON.stringify(data));
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        const { message } = error.response.data;
-        if (message) setErrorMessage(message);
-      })
-      .finally(() => formikBag.setSubmitting(false));
-  };
+    const loginUser = (values, formikBag) => {
+        axios
+          .post(`${process.env.REACT_APP_BASE_URL}/auth/dropp-user/login`, {
+            ...values,
+          })
+          .then(({ data }) => {
+            dispatch({
+              type: AUTH_DATA,
+              payload: data,
+            });
+            sessionStorage.setItem("auth", JSON.stringify(data));
+            navigate("/dashboard");
+          })
+          .catch((error) => {
+            const { message } = error.response.data;
+            if (message) setErrorMessage(message);
+          })
+          .finally(() => formikBag.setSubmitting(false));
+      };
   return (
     <section className="w-screen h-screen flex flex-col items-center justify-between header_bg">
       <Navbar />
@@ -131,6 +130,7 @@ const LoginPage = () => {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             ></path>
+<<<<<<< HEAD
                             <path
                               d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335"
                               stroke="#6C7072"
@@ -216,6 +216,41 @@ const LoginPage = () => {
                   <span className="text-black font_bold">Register</span>
                 </Link>
               </p>
+=======
+                            </svg>
+                        ) : (
+                            "Login"
+                        )}
+                        </button>
+                    </Form>
+                    )}
+                </Formik>
+                <div className="flex justify-center items-center mt-3 mb-5">
+                    <Link to={'/auth/register'}>
+                        <p
+                        className="text-gray-500 cursor-pointer font_regular"
+                        // onClick={() => setAuthType(!authType)}
+                        >
+                        Don't have an account?
+                            <span className="text-black font_bold">
+                                Register
+                            </span>
+                        </p>
+                    </Link>
+                </div>
+                <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
+                    By creating an account, I confirm that I have read and
+                    understood the Dropp{" "}
+                    <a
+                    href="https://opposite-pet-88e.notion.site/Terms-of-Service-750a370ccc434a16b2b80c3f277f4968"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline"
+                    >
+                    Terms of Use
+                    </a>
+                </p>
+>>>>>>> 12d4f42632f27bc80da22fd3f64b8c667dc77ccf
             </div>
             <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
               By creating an account, I confirm that I have read and understood
