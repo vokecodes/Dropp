@@ -19,7 +19,7 @@ const ForgotPasswordPage = () => {
   const userForgotPassword = (values, formikBag) => {
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}/auth/dropp-user/forgot-password`,
+        `${import.meta.env.VITE_BASE_URL}/auth/dropp-user/forgot-password`,
         {
           ...values,
         }

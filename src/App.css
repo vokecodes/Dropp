@@ -163,7 +163,7 @@
 }
 
 .header_bg {
-  background-image: url("./images/hero.svg");
+  background-image: url("/images/hero.svg");
   background-size: cover;
 }
 
@@ -217,7 +217,7 @@
   overflow: hidden;
 }
 .images {
-  background: url("./images/testimonials/afolabi.png");
+  background: url("/images/testimonials/afolabi.png");
   position: absolute;
   left: 0;
   top: 0;
@@ -246,7 +246,7 @@
 .logos-slideshow > div {
   /* height: 200px; */
   width: 2526px;
-  background: url("./images/slideshow/logos.png");
+  background: url("/images/slideshow/logos.png");
   position: absolute;
   top: 0;
   left: 0;
@@ -288,7 +288,7 @@
 .tech-slideshow > div {
   /* height: 200px; */
   width: 2526px;
-  background: url("./images/slideshow/Images.png");
+  background: url("/images/slideshow/Images.png");
   position: absolute;
   top: 0;
   left: 0;
@@ -391,7 +391,7 @@
 }
 
 .steps_img_bg {
-  background-image: url("./images/steps/step_01.svg");
+  background-image: url("/images/steps/step_01.svg");
   background-repeat: no-repeat;
   height: 763px;
 }

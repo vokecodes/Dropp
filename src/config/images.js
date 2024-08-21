@@ -1,94 +1,185 @@
+// Import images
+import logo from '../images/dropp_logo.svg';
+import items from '../images/items.svg';
+import itemsGif from '../images/droppItems.gif';
+import plus from '../images/plus.svg';
+import check from '../images/check.svg';
+import location from '../images/location.svg';
+import DROPP from '../images/dropp_vector.svg';
+import afolabi from '../images/testimonials/afolabi.png';
+import alex from '../images/testimonials/alex.png';
+import yetunde from '../images/testimonials/yetunde.png';
+import lolade from '../images/testimonials/lolade.png';
+import taiwo from '../images/testimonials/taiwo.png';
+import victor from '../images/testimonials/victor.png';
+import foodco from '../images/foodco.svg';
+import addide from '../images/addide.svg';
+import next from '../images/next.svg';
+import spar from '../images/spar.svg';
+import jendol from '../images/jendol.svg';
+import fruits from '../images/items/fruits.svg';
+import fruits_mobile from '../images/items/fruits_mobile.svg';
+import drinks from '../images/items/drinks.svg';
+import drinks_mobile from '../images/items/drinks_mobile.svg';
+import canned_food from '../images/items/canned_food.svg';
+import canned_food_mobile from '../images/items/canned_food_mobile.svg';
+import snacks from '../images/items/snacks.svg';
+import snacks_mobile from '../images/items/snacks_mobile.svg';
+import bread_bakery from '../images/items/bread_bakery.svg';
+import bread_bakery_mobile from '../images/items/bread_bakery_mobile.svg';
+import spices from '../images/items/spices.svg';
+import spices_mobile from '../images/items/spices_mobile.svg';
+import condiments from '../images/items/condiments.svg';
+import condiments_mobile from '../images/items/condiments_mobile.svg';
+import more from '../images/items/more.svg';
+import more_mobile from '../images/items/more_mobile.svg';
+import addide_sm from '../images/addide_sm.svg';
+import next_cash_carry_sm from '../images/next_cash_carry_sm.svg';
+import spar_sm from '../images/spar_sm.svg';
+import foodco_sm from '../images/foodco_sm.svg';
+import jendol_sm from '../images/jendol_sm.svg';
+import justrite_sm from '../images/justrite_sm.svg';
+import supermart_sm from '../images/supermart_sm.svg';
+import hygiene_sm from '../images/hygiene_sm.svg';
+import twins_faja_sm from '../images/twins_faja_sm.svg';
+import bargains_sm from '../images/bargains_sm.svg';
+import emel_sm from '../images/emel_sm.svg';
+import buy_4_less_sm from '../images/buy_4_less_sm.svg';
+import cmart_sm from '../images/cmart_sm.svg';
+import market_square_sm from '../images/market_square_sm.svg';
+import gImage1 from '../images/gallery/image1.png';
+import gImage2 from '../images/gallery/image2.png';
+import gImage3 from '../images/gallery/image3.png';
+import gImage4 from '../images/gallery/image4.png';
+import gImage5 from '../images/gallery/image5.png';
+import gImage6 from '../images/gallery/image6.png';
+import gImage7 from '../images/gallery/image7.png';
+import gImage8 from '../images/gallery/image8.png';
+import gImage9 from '../images/gallery/image9.png';
+import step01 from '../images/steps/step_01.svg';
+import step02 from '../images/steps/step_02.png';
+import step03 from '../images/steps/step_03.png';
+import boy from '../images/boy.png';
+import paga from '../images/brands/paga.svg';
+import paga_mobile from '../images/brands/paga_mobile.svg';
+import studio8 from '../images/brands/8studio.svg';
+import studio8_mobile from '../images/brands/8studio_mobile.svg';
+import vvend from '../images/brands/vvend.svg';
+import vvend_mobile from '../images/brands/vvend_mobile.svg';
+import remotely from '../images/brands/remotely.svg';
+import remotely_mobile from '../images/brands/remotely_mobile.svg';
+import hero from '../images/hero.svg';
+import auth_banner from '../images/auth_banner.png';
+import dashboard_banner from '../images/dashboard_banner.png';
+import settings_phone from '../images/settings-phone.png';
+import mail from '../images/mail.png';
+import shopping_cart from '../images/shopping-cart.png';
+import lock from '../images/lock.png';
+import invite from '../images/invite.png';
+import carbon_location from '../images/carbon_location.png';
+import create from '../images/options/create.png';
+import shop from '../images/options/shop.png';
+import chat from '../images/options/chat.png';
+import shareRound from '../images/share-round.png';
+import enjoyBanner from '../images/enjoyBanner.png';
+import copy from '../images/copy.png';
+import shoppingBanner from '../images/shoppingBanner.svg';
+import referralBalanceBanner from '../images/referralBalanceBanner.svg';
+import mReferralBalanceBanner from '../images/m-referralBalanceBanner.svg';
+import referralBanner from '../images/referralBanner.svg';
+import mReferralBanner from '../images/m-referralBanner.svg';
+import instagramIcon from '../images/instagram.png';
+
+// Export images as an object
 export const Images = {
-  logo: require("../images/dropp_logo.svg").default,
-  items: require("../images/items.svg").default,
-  itemsGif: require("../images/droppItems.gif"),
-  plus: require("../images/plus.svg").default,
-  check: require("../images/check.svg").default,
-  location: require("../images/location.svg").default,
-  DROPP: require("../images/dropp_vector.svg").default,
-  afolabi: require("../images/testimonials/afolabi.png"),
-  alex: require("../images/testimonials/alex.png"),
-  yetunde: require("../images/testimonials/yetunde.png"),
-  lolade: require("../images/testimonials/lolade.png"),
-  taiwo: require("../images/testimonials/taiwo.png"),
-  victor: require("../images/testimonials/victor.png"),
-  foodco: require("../images/foodco.svg").default,
-  addide: require("../images/addide.svg").default,
-  next: require("../images/next.svg").default,
-  spar: require("../images/spar.svg").default,
-  jendol: require("../images/jendol.svg").default,
-  fruits: require("../images/items/fruits.svg").default,
-  fruits_mobile: require("../images/items/fruits_mobile.svg").default,
-  drinks: require("../images/items/drinks.svg").default,
-  drinks_mobile: require("../images/items/drinks_mobile.svg").default,
-  canned_food: require("../images/items/canned_food.svg").default,
-  canned_food_mobile: require("../images/items/canned_food_mobile.svg").default,
-  snacks: require("../images/items/snacks.svg").default,
-  snacks_mobile: require("../images/items/snacks_mobile.svg").default,
-  bread_bakery: require("../images/items/bread_bakery.svg").default,
-  bread_bakery_mobile: require("../images/items/bread_bakery_mobile.svg")
-    .default,
-  spices: require("../images/items/spices.svg").default,
-  spices_mobile: require("../images/items/spices_mobile.svg").default,
-  condiments: require("../images/items/condiments.svg").default,
-  condiments_mobile: require("../images/items/condiments_mobile.svg").default,
-  more: require("../images/items/more.svg").default,
-  more_mobile: require("../images/items/more_mobile.svg").default,
-  addide_sm: require("../images/addide_sm.svg").default,
-  next_cash_carry_sm: require("../images/next_cash_carry_sm.svg").default,
-  spar_sm: require("../images/spar_sm.svg").default,
-  foodco_sm: require("../images/foodco_sm.svg").default,
-  jendol_sm: require("../images/jendol_sm.svg").default,
-  justrite_sm: require("../images/justrite_sm.svg").default,
-  supermart_sm: require("../images/supermart_sm.svg").default,
-  hygiene_sm: require("../images/hygiene_sm.svg").default,
-  twins_faja_sm: require("../images/twins_faja_sm.svg").default,
-  bargains_sm: require("../images/bargains_sm.svg").default,
-  emel_sm: require("../images/emel_sm.svg").default,
-  buy_4_less_sm: require("../images/buy_4_less_sm.svg").default,
-  cmart_sm: require("../images/cmart_sm.svg").default,
-  market_square_sm: require("../images/market_square_sm.svg").default,
-  gImage1: require("../images/gallery/image1.png"),
-  gImage2: require("../images/gallery/image2.png"),
-  gImage3: require("../images/gallery/image3.png"),
-  gImage4: require("../images/gallery/image4.png"),
-  gImage5: require("../images/gallery/image5.png"),
-  gImage6: require("../images/gallery/image6.png"),
-  gImage7: require("../images/gallery/image7.png"),
-  gImage8: require("../images/gallery/image8.png"),
-  gImage9: require("../images/gallery/image9.png"),
-  step01: require("../images/steps/step_01.svg").default,
-  step02: require("../images/steps/step_02.png"),
-  step03: require("../images/steps/step_03.png"),
-  boy: require("../images/boy.png"),
-  paga: require("../images/brands/paga.svg").default,
-  paga_mobile: require("../images/brands/paga_mobile.svg").default,
-  studio8: require("../images/brands/8studio.svg").default,
-  studio8_mobile: require("../images/brands/8studio_mobile.svg").default,
-  vvend: require("../images/brands/vvend.svg").default,
-  vvend_mobile: require("../images/brands/vvend_mobile.svg").default,
-  remotely: require("../images/brands/remotely.svg").default,
-  remotely_mobile: require("../images/brands/remotely_mobile.svg").default,
-  hero: require("../images/hero.svg").default,
-  auth_banner: require("../images/auth_banner.png"),
-  dashboard_banner: require("../images/dashboard_banner.png"),
-  settings_phone: require("../images/settings-phone.png"),
-  mail: require("../images/mail.png"),
-  shopping_cart: require("../images/shopping-cart.png"),
-  lock: require("../images/lock.png"),
-  invite: require("../images/invite.png"),
-  carbon_location: require("../images/carbon_location.png"),
-  create: require("../images/options/create.png"),
-  shop: require("../images/options/shop.png"),
-  chat: require("../images/options/chat.png"),
-  shareRound: require("../images/share-round.png"),
-  enjoyBanner: require("../images/enjoyBanner.png"),
-  copy: require("../images/copy.png"),
-  shoppingBanner: require("../images/shoppingBanner.svg").default,
-  referralBalanceBanner: require("../images/referralBalanceBanner.svg").default,
-  mReferralBalanceBanner: require("../images/m-referralBalanceBanner.svg")
-    .default,
-  referralBanner: require("../images/referralBanner.svg").default,
-  mReferralBanner: require("../images/m-referralBanner.svg").default,
-  instagramIcon: require("../images/instagram.png"),
+  logo,
+  items,
+  itemsGif,
+  plus,
+  check,
+  location,
+  DROPP,
+  afolabi,
+  alex,
+  yetunde,
+  lolade,
+  taiwo,
+  victor,
+  foodco,
+  addide,
+  next,
+  spar,
+  jendol,
+  fruits,
+  fruits_mobile,
+  drinks,
+  drinks_mobile,
+  canned_food,
+  canned_food_mobile,
+  snacks,
+  snacks_mobile,
+  bread_bakery,
+  bread_bakery_mobile,
+  spices,
+  spices_mobile,
+  condiments,
+  condiments_mobile,
+  more,
+  more_mobile,
+  addide_sm,
+  next_cash_carry_sm,
+  spar_sm,
+  foodco_sm,
+  jendol_sm,
+  justrite_sm,
+  supermart_sm,
+  hygiene_sm,
+  twins_faja_sm,
+  bargains_sm,
+  emel_sm,
+  buy_4_less_sm,
+  cmart_sm,
+  market_square_sm,
+  gImage1,
+  gImage2,
+  gImage3,
+  gImage4,
+  gImage5,
+  gImage6,
+  gImage7,
+  gImage8,
+  gImage9,
+  step01,
+  step02,
+  step03,
+  boy,
+  paga,
+  paga_mobile,
+  studio8,
+  studio8_mobile,
+  vvend,
+  vvend_mobile,
+  remotely,
+  remotely_mobile,
+  hero,
+  auth_banner,
+  dashboard_banner,
+  settings_phone,
+  mail,
+  shopping_cart,
+  lock,
+  invite,
+  carbon_location,
+  create,
+  shop,
+  chat,
+  shareRound,
+  enjoyBanner,
+  copy,
+  shoppingBanner,
+  referralBalanceBanner,
+  mReferralBalanceBanner,
+  referralBanner,
+  mReferralBanner,
+  instagramIcon,
 };

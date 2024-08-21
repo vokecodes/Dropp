@@ -25,7 +25,7 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
   const emailCheck = (email, formikBag) => {
     setErrorMessage();
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/password/forgot`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/password/forgot`, {
         email,
       })
       .then(({ data }) => {
@@ -48,7 +48,7 @@ const ResetPassword = ({ showResetModal, setShowResetModal, setShowModal }) => {
   const otpCheck = (values, formikBag) => {
     setErrorMessage();
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/password/reset`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/password/reset`, {
         ...values,
       })
       .then(({ data }) => {

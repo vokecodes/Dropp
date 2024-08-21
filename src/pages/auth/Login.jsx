@@ -23,7 +23,7 @@ const LoginPage = () => {
 
     const loginUser = (values, formikBag) => {
         axios
-          .post(`${process.env.REACT_APP_BASE_URL}/auth/dropp-user/login`, {
+          .post(`${import.meta.env.VITE_BASE_URL}/auth/dropp-user/login`, {
             ...values,
           })
           .then(({ data }) => {
@@ -175,33 +175,37 @@ const LoginPage = () => {
                     </div>
                   )}
 
-                  <button
-                    type="submit"
-                    className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
-                    disabled={props.isSubmitting}
-                  >
-                    {props.isSubmitting ? (
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="#fff"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          fill="#06c16b"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                    ) : (
-                      "Login"
+                        <button
+                            type="submit"
+                            className="mt-8 w-full flex justify-center py-3 border border-transparent rounded-xl shadow-sm text-lg text-center text-white font_bold bg_primary"
+                            disabled={props.isSubmitting}
+                        >
+                        {props.isSubmitting ? (
+                            <svg
+                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="#fff"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                fill="#06c16b"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                            </svg>
+                        ) : (
+                            "Login"
+                        )}
+                        </button>
+                    </Form>
                     )}
+<<<<<<< HEAD:src/pages/auth/Login.js
                   </button>
                 </Form>
               )}
@@ -224,6 +228,8 @@ const LoginPage = () => {
                         </button>
                     </Form>
                     )}
+=======
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/Login.jsx
                 </Formik>
                 <div className="flex justify-center items-center mt-3 mb-5">
                     <Link to={'/auth/register'}>
@@ -250,21 +256,11 @@ const LoginPage = () => {
                     Terms of Use
                     </a>
                 </p>
+<<<<<<< HEAD:src/pages/auth/Login.js
 >>>>>>> 12d4f42632f27bc80da22fd3f64b8c667dc77ccf
+=======
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/Login.jsx
             </div>
-            <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
-              By creating an account, I confirm that I have read and understood
-              the Dropp{" "}
-              <a
-                href="https://opposite-pet-88e.notion.site/Terms-of-Service-750a370ccc434a16b2b80c3f277f4968"
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
-                Terms of Use
-              </a>
-            </p>
-          </div>
         </div>
       </main>
     </section>

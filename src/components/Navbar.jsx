@@ -39,7 +39,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }) => {
 
     axios
       .patch(
-        `${process.env.REACT_APP_BASE_URL}/user/${data?.user?._id}/address`,
+        `${import.meta.env.VITE_BASE_URL}/user/${data?.user?._id}/address`,
         { address: value },
         {
           headers: {

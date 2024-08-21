@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactGA from "react-ga4";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTransform, useScroll, motion } from "framer-motion";
 import Header from "../components/Header";
 import Register from "../components/Register";
@@ -177,36 +177,6 @@ const PROJECTS = [
 ];
 
 const Home = () => {
-  // useEffect(() => {
-  //   ReactGA.initialize("G-EHK6CS7TX2");
-  //   ReactGA.send(window.location.pathname + window.location.search);
-  // }, []);
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", pop);
-
-  //   return () => window.removeEventListener("scroll", pop);
-  // }, []);
-
-  // const pop = () => {
-  //   if (window.scrollY > 2500) {
-  //     // setX(classes.Swipe);
-  //     setStep1Class(true);
-  //   }
-
-  //   if (window.scrollY > 2700) {
-  //     // setNavColor('red');
-  //     setStep2Class(true);
-  //     console.log("2600");
-  //   }
-
-  //   if (window.scrollY > 2800) {
-  //     // setNavColor('red');
-  //     setStep3Class(true);
-  //     console.log("2700");
-  //   }
-  // };
-
   const navigate = useNavigate();
 
   const getUser = useCallback(() => {
@@ -273,44 +243,6 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const scrollContainer = categoryPostRef.current;
-  //   const scrollSpeed = 1.5; // Adjust the scroll speed
-  //   let scrollInterval;
-
-  //   const startScroll = () => {
-  //     scrollInterval = setInterval(() => {
-  //       // Scroll in the current direction
-  //       scrollContainer.scrollLeft += scrollSpeed * scrollDirection;
-
-  //       // Check if we've reached the end of the scroll (right or left)
-  //       if (
-  //         scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-  //         scrollContainer.scrollWidth
-  //       ) {
-  //         setScrollDirection(-1); // Switch to left
-  //       } else if (scrollContainer.scrollLeft <= 0) {
-  //         setScrollDirection(1); // Switch to right
-  //       }
-  //     }, 20);
-  //   };
-
-  //   const stopScroll = () => {
-  //     clearInterval(scrollInterval);
-  //   };
-
-  //   scrollContainer.addEventListener("mouseenter", stopScroll);
-  //   scrollContainer.addEventListener("mouseleave", startScroll);
-
-  //   startScroll();
-
-  //   return () => {
-  //     stopScroll();
-  //     scrollContainer.removeEventListener("mouseenter", stopScroll);
-  //     scrollContainer.removeEventListener("mouseleave", startScroll);
-  //   };
-  // }, [scrollDirection]);
-
   useEffect(() => {
     const businessScrollContainer = businessesRef.current;
     const businessScrollSpeed = 1.5; // Adjust the scroll speed
@@ -367,37 +299,13 @@ const Home = () => {
 
   const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1]);
 
-  // useEffect(() => {
-  //   const lenis = new Lenis();
-
-  //   function raf(time) {
-  //     lenis.raf(time);
-  //     requestAnimationFrame(raf);
-  //   }
-
-  //   requestAnimationFrame(raf);
-  // });
 
   const [activeCard, setActiveCard] = useState(0);
 
-  // const handleScroll = () => {
-  //   const cards = document.querySelectorAll(".parallax-card");
-  //   let windowHeight = window.innerHeight;
-
-  //   cards.forEach((card, index) => {
-  //     const cardTop = card.getBoundingClientRect().top;
-  //     if (cardTop >= 0 && cardTop < windowHeight) {
-  //       setActiveCard(index);
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  const handleScrollTo = (id) => {
+    smoothScrollTo(id);
+  };
+  
 
   const handleScrollTo = (id) => {
     smoothScrollTo(id);
@@ -500,11 +408,13 @@ const Home = () => {
                           {cat.description}
                         </p>
                         <div className="my-3">
-                          <Button
-                            title="Get started"
-                            showIcon
-                            extraClasses="px-4 justify-between w-44"
-                          />
+                          <Link to={'/auth/register'} className="w-44">
+                            <Button
+                              title="Get started"
+                              showIcon
+                              extraClasses="px-4 justify-between"
+                            />
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -576,28 +486,30 @@ const Home = () => {
                   <p className="text-lg text-[#00170C] font_medium">
                     Dropp Takeout™ (coming soon)
                   </p>
-                  <button
-                    type="submit"
-                    className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                    onClick={() => {}}
-                  >
-                    Get started
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2.5"
-                      stroke="currentColor"
-                      width={16}
-                      height={16}
+                  <Link to={'/auth/register'} className="w-44">
+                    <button
+                      type="submit"
+                      className="mt-6 inline-flex bg-white text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                      onClick={() => {}}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
-                  </button>
+                      Get started
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2.5"
+                        stroke="currentColor"
+                        width={16}
+                        height={16}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -619,28 +531,30 @@ const Home = () => {
                   <p className="text-lg text-white font_medium">
                     Menu & Order Mgt.
                   </p>
-                  <button
-                    type="submit"
-                    className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                    onClick={() => {}}
-                  >
-                    Get started
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2.5"
-                      stroke="currentColor"
-                      width={16}
-                      height={16}
+                  <Link to={'/auth/register'} className="w-44">
+                    <button
+                      type="submit"
+                      className="mt-6 inline-flex bg-white text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                      onClick={() => {}}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
-                  </button>
+                      Get started
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2.5"
+                        stroke="currentColor"
+                        width={16}
+                        height={16}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                  </Link>
                 </div>
                 <div>
                   <img src="/images/laptop-mock.svg" alt="laptop-mock" />
@@ -671,28 +585,30 @@ const Home = () => {
                   <p className="text-lg text-white font_medium">
                     Homemade by Dropp™
                   </p>
-                  <button
-                    type="submit"
-                    className="mt-6 inline-flex bg-white w-44 text-[#9E6A55] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                    onClick={() => {}}
-                  >
-                    Get started
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2.5"
-                      stroke="currentColor"
-                      width={16}
-                      height={16}
+                  <Link to={'/auth/register'} className="w-44">
+                    <button
+                      type="submit"
+                      className="mt-6 inline-flex bg-white text-[#9E6A55] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                      onClick={() => {}}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
-                  </button>
+                      Get started
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2.5"
+                        stroke="currentColor"
+                        width={16}
+                        height={16}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -715,28 +631,30 @@ const Home = () => {
                   <p className="text-lg text-[#00170C] font_medium">
                     Tools to understand your customer
                   </p>
-                  <button
-                    type="submit"
-                    className="mt-6 inline-flex bg-white w-44 text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
-                    onClick={() => {}}
-                  >
-                    Get started
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2.5"
-                      stroke="currentColor"
-                      width={16}
-                      height={16}
+                  <Link to={'/auth/register'} className="w-44">
+                    <button
+                      type="submit"
+                      className="mt-6 inline-flex bg-white text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
+                      onClick={() => {}}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
-                  </button>
+                      Get started
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2.5"
+                        stroke="currentColor"
+                        width={16}
+                        height={16}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                  </Link>
                 </div>
                 <div>
                   <img src="/images/laptop-mock2.svg" alt="laptop-mock" />
@@ -822,7 +740,9 @@ const Home = () => {
             </div>
           </div>
           <div className="lg:mt-20 flex justify-center">
-            <Button title="Join them!" extraClasses="w-52" />
+            <Link to={'/auth/register'} className="w-52">
+              <Button title="Join them!" extraClasses="" />
+            </Link>
           </div>
         </div>
 
@@ -886,9 +806,11 @@ const Home = () => {
                       <li className="text-lg text-[#4A443A]">Pay at table</li>
                     </ul>
                   </div>
-                  <button className="absolute bottom-5 w-[84%] bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
-                    Get started
-                  </button>
+                  <Link to={'/auth/register'} className="w-[84%]">
+                    <button className="absolute bottom-5 bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
+                      Get started
+                    </button>
+                  </Link>
                 </div>
                 <div className="bg-[#99C446] rounded-2xl p-8 mb-10 relative">
                   <p className="text-3xl lg:text-5xl text-[#24412C] font_bold">
@@ -926,9 +848,11 @@ const Home = () => {
                       </li>
                     </ul>
                   </div>
-                  <button className="absolute bottom-5 w-[84%] bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
-                    Get started
-                  </button>
+                  <Link to={'/auth/register'} className="w-[84%]">
+                    <button className="absolute bottom-5 bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
+                      Get started
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
