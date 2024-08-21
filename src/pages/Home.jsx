@@ -957,6 +957,13 @@ const Home = () => {
                           </p>
                         </div>
                       )}
+                      {success && (
+                        <div className="w-full py-2">
+                          <p className="text-center text-lg text-green-800">
+                            Demo booked.
+                          </p>
+                        </div>
+                      )}
                       <Button
                         title="Book a Demo"
                         extraClasses="mt-5 w-60 py-3"
