@@ -71,19 +71,19 @@ const SignUpPage = () => {
 
   const [restaurantLocation, setRestaurantLocation] = useState([]);
   const chooseResLocation = (resLocation) => {
-    let temp = [...restaurantLocation]
+    let temp = [...restaurantLocation];
 
-    if(restaurantLocation.includes(resLocation)){
-      temp = temp.filter(item => item !== resLocation)
-    }else{
-      temp.push(resLocation)
+    if (restaurantLocation.includes(resLocation)) {
+      temp = temp.filter((item) => item !== resLocation);
+    } else {
+      temp.push(resLocation);
     }
 
     setRestaurantLocation(temp);
-    return temp
+    return temp;
   };
 
-  console.log('first', restaurantLocation)
+  console.log("first", restaurantLocation);
 
   const restaurantNums = [
     { value: "1", label: "1" },
@@ -110,7 +110,7 @@ const SignUpPage = () => {
 
   const registerUser = (values, formikBag) => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/auth/dropp-user/register`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/restaurant/register`, {
         ...values,
       })
       .then(({ data }) => {
@@ -153,7 +153,7 @@ const SignUpPage = () => {
             }}
             validationSchema={registerSchema}
             onSubmit={(values, formikBag) => {
-              console.log('values= ', values);
+              console.log("values= ", values);
               registerUser(values, formikBag);
             }}
           >
@@ -428,7 +428,8 @@ const SignUpPage = () => {
                       <div
                         key={item.value}
                         className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
-                          restaurantLocation && restaurantLocation.includes(item.value)
+                          restaurantLocation &&
+                          restaurantLocation.includes(item.value)
                             ? "bg_primary text-white hover:bg-bg_primary"
                             : "hover:bg-neutral-100"
                         } `}
@@ -533,35 +534,15 @@ const SignUpPage = () => {
             )}
           </Formik>
           <div className="flex justify-center items-center mt-3 mb-5">
-<<<<<<< HEAD:src/pages/auth/SignUp.js
-<<<<<<< HEAD
-            <p
-              className="text-gray-500 cursor-pointer font_regular"
-              // onClick={() => setAuthType(!authType)}
-            >
-              Already have an account?
-              <Link to={"login/"}>
-                <span className="text-black font_bold">Log In</span>
-              </Link>
-            </p>
-=======
-=======
->>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/SignUp.jsx
-            <Link to={'/auth/login'}>
+            <Link to={"/auth/login"}>
               <p
                 className="text-gray-500 cursor-pointer font_regular"
                 // onClick={() => setAuthType(!authType)}
               >
                 Already have an account?
-                  <span className="text-black font_bold">
-                    Log In
-                  </span>
+                <span className="text-black font_bold">Log In</span>
               </p>
             </Link>
-<<<<<<< HEAD:src/pages/auth/SignUp.js
->>>>>>> 12d4f42632f27bc80da22fd3f64b8c667dc77ccf
-=======
->>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/SignUp.jsx
           </div>
           <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
             By creating an account, I confirm that I have read and understood

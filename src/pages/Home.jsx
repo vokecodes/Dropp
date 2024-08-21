@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactGA from "react-ga4";
 import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import { Field, Formik, Form, ErrorMessage } from "formik";
 import { useTransform, useScroll, motion } from "framer-motion";
 import Header from "../components/Header";
 import Register from "../components/Register";
@@ -13,10 +15,10 @@ import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import { Images } from "../config/images";
 import Button from "../components/Button";
-// import Lenis from "@studio-freight/lenis/types";
 import OptionCard from "../components/OptionCard";
 import OverlapCard from "../components/OverlapCard";
 import { smoothScrollTo } from "../util/scrollIntoView";
+import axios from "axios";
 
 const CATEGORIES = [
   "Dine-In",
@@ -130,49 +132,6 @@ const FEATURES = [
     subtitle: "INCREASE REVENUE",
     title: "20%",
     description: "OF OUR RESTAURANTS REPORT INCREASED REVENUE",
-  },
-];
-
-const PROJECTS = [
-  {
-    title: "Matthias Leidinger",
-    description:
-      "Originally hailing from Austria, Berlin-based photographer Matthias Leindinger is a young creative brimming with talent and ideas.",
-    src: "rock.jpg",
-    link: "https://www.ignant.com/2023/03/25/ad2186-matthias-leidingers-photographic-exploration-of-awe-and-wonder/",
-    color: "#BBACAF",
-  },
-  {
-    title: "Clément Chapillon",
-    description:
-      "This is a story on the border between reality and imaginary, about the contradictory feelings that the insularity of a rocky, arid, and wild territory provokes”—so French photographer Clément Chapillon describes his latest highly captivating project Les rochers fauves (French for ‘The tawny rocks’).",
-    src: "tree.jpg",
-    link: "https://www.ignant.com/2022/09/30/clement-chapillon-questions-geographical-and-mental-isolation-with-les-rochers-fauves/",
-    color: "#977F6D",
-  },
-  {
-    title: "Zissou",
-    description:
-      "Though he views photography as a medium for storytelling, Zissou’s images don’t insist on a narrative. Both crisp and ethereal, they’re encoded with an ambiguity—a certain tension—that lets the viewer find their own story within them.",
-    src: "water.jpg",
-    link: "https://www.ignant.com/2023/10/28/capturing-balis-many-faces-zissou-documents-the-sacred-and-the-mundane-of-a-fragile-island/",
-    color: "#C2491D",
-  },
-  {
-    title: "Mathias Svold and Ulrik Hasemann",
-    description:
-      "The coastlines of Denmark are documented in tonal colors in a pensive new series by Danish photographers Ulrik Hasemann and Mathias Svold; an ongoing project investigating how humans interact with and disrupt the Danish coast.",
-    src: "house.jpg",
-    link: "https://www.ignant.com/2019/03/13/a-photographic-series-depicting-the-uncertain-future-of-denmarks-treasured-coastlines/",
-    color: "#B62429",
-  },
-  {
-    title: "Mark Rammers",
-    description:
-      "Dutch photographer Mark Rammers has shared with IGNANT the first chapter of his latest photographic project, ‘all over again’—captured while in residency at Hektor, an old farm in Los Valles, Lanzarote. Titled ‘Beginnings’, the mesmerizing collection of images is a visual and meditative journey into the origins of regrets and the uncertainty of stepping into new unknowns.",
-    src: "cactus.jpg",
-    link: "https://www.ignant.com/2023/04/12/mark-rammers-all-over-again-is-a-study-of-regret-and-the-willingness-to-move-forward/",
-    color: "#88A28D",
   },
 ];
 
@@ -299,24 +258,51 @@ const Home = () => {
 
   const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1]);
 
-
   const [activeCard, setActiveCard] = useState(0);
 
   const handleScrollTo = (id) => {
     smoothScrollTo(id);
   };
-  
 
-  const handleScrollTo = (id) => {
-    smoothScrollTo(id);
+  const bookDemoSchema = Yup.object().shape({
+    firstName: Yup.string().required("First name is required."),
+    lastName: Yup.string().required("Last name is required."),
+    email: Yup.string().email().required("Email is required."),
+    phoneNumber: Yup.string()
+      .min(11, "Phone number is not valid.")
+      .required("Phone number is required."),
+    restaurantName: Yup.string().required("Restaurant name is required."),
+    message: Yup.string().optional(),
+  });
+
+  const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
+
+  const bookADemo = (values, formikBag) => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/dropp-book-demo`, {
+        ...values,
+      })
+      .then(({ data }) => {
+        const { success } = data;
+        if (success) setSuccess(true);
+      })
+      .catch((error) => {
+        const { message } = error.response.data;
+        if (message) setErrorMessage(message);
+      })
+      .finally(() => formikBag.setSubmitting(false));
   };
-  
 
   return (
     <>
       <div className={`${showModal ? "blur-bg" : ""}`}>
         {/* Header */}
-        <Header itemsImage={Images.itemsGif} setShowModal={setShowModal} handleScrollTo={handleScrollTo} />
+        <Header
+          itemsImage={Images.itemsGif}
+          setShowModal={setShowModal}
+          handleScrollTo={handleScrollTo}
+        />
 
         <div
           className="bg-[#24412C] pt-20 lg:pt-32 h-[960px] lg:h-[820px] relative"
@@ -408,7 +394,7 @@ const Home = () => {
                           {cat.description}
                         </p>
                         <div className="my-3">
-                          <Link to={'/auth/register'} className="w-44">
+                          <Link to={"/auth/register"} className="w-44">
                             <Button
                               title="Get started"
                               showIcon
@@ -486,7 +472,7 @@ const Home = () => {
                   <p className="text-lg text-[#00170C] font_medium">
                     Dropp Takeout™ (coming soon)
                   </p>
-                  <Link to={'/auth/register'} className="w-44">
+                  <Link to={"/auth/register"} className="w-44">
                     <button
                       type="submit"
                       className="mt-6 inline-flex bg-white text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
@@ -531,7 +517,7 @@ const Home = () => {
                   <p className="text-lg text-white font_medium">
                     Menu & Order Mgt.
                   </p>
-                  <Link to={'/auth/register'} className="w-44">
+                  <Link to={"/auth/register"} className="w-44">
                     <button
                       type="submit"
                       className="mt-6 inline-flex bg-white text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
@@ -585,7 +571,7 @@ const Home = () => {
                   <p className="text-lg text-white font_medium">
                     Homemade by Dropp™
                   </p>
-                  <Link to={'/auth/register'} className="w-44">
+                  <Link to={"/auth/register"} className="w-44">
                     <button
                       type="submit"
                       className="mt-6 inline-flex bg-white text-[#9E6A55] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
@@ -631,7 +617,7 @@ const Home = () => {
                   <p className="text-lg text-[#00170C] font_medium">
                     Tools to understand your customer
                   </p>
-                  <Link to={'/auth/register'} className="w-44">
+                  <Link to={"/auth/register"} className="w-44">
                     <button
                       type="submit"
                       className="mt-6 inline-flex bg-white text-[#00170C] items-center justify-between px-4 py-2 whitespace-nowrap text-base shadow-sm cursor-pointer rounded-lg font_bold"
@@ -740,7 +726,7 @@ const Home = () => {
             </div>
           </div>
           <div className="lg:mt-20 flex justify-center">
-            <Link to={'/auth/register'} className="w-52">
+            <Link to={"/auth/register"} className="w-52">
               <Button title="Join them!" extraClasses="" />
             </Link>
           </div>
@@ -806,7 +792,7 @@ const Home = () => {
                       <li className="text-lg text-[#4A443A]">Pay at table</li>
                     </ul>
                   </div>
-                  <Link to={'/auth/register'} className="w-[84%]">
+                  <Link to={"/auth/register"} className="w-[84%]">
                     <button className="absolute bottom-5 bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
                       Get started
                     </button>
@@ -848,7 +834,7 @@ const Home = () => {
                       </li>
                     </ul>
                   </div>
-                  <Link to={'/auth/register'} className="w-[84%]">
+                  <Link to={"/auth/register"} className="w-[84%]">
                     <button className="absolute bottom-5 bg-white inline-flex items-center justify-center px-10 py-2 font_bold whitespace-nowrap text-base text-[#24412C] shadow-sm cursor-pointer rounded-full">
                       Get started
                     </button>
@@ -866,31 +852,120 @@ const Home = () => {
                   We’ll follow up within 24 hours to find a convenient time for
                   you.
                 </p>
-                <div className="mt-12">
-                  <div className="lg:flex gap-5 justify-between">
-                    <input
-                      placeholder="First Name"
-                      className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
-                    />
-                    <input
-                      placeholder="Last Name"
-                      className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
-                    />
-                  </div>
-                  <input
-                    placeholder="Email"
-                    className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
-                  />
-                  <input
-                    placeholder="Phone Number"
-                    className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
-                  />
-                  <input
-                    placeholder="Restaurant Name"
-                    className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
-                  />
-                  <Button title="Book a Demo" extraClasses="mt-5 w-60 py-3" />
-                </div>
+                <Formik
+                  initialValues={{
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    phoneNumber: "",
+                    restaurantName: "",
+                    message: "",
+                  }}
+                  validationSchema={bookDemoSchema}
+                  onSubmit={(values, formikBag) => {
+                    console.log("values= ", values);
+                    bookADemo(values, formikBag);
+                  }}
+                >
+                  {(props) => (
+                    <div className="mt-12">
+                      <div className="w-full flex flex-col lg:flex-row items-start justify-between gap-x-3">
+                        <div className="mb-3 w-full">
+                          <Field
+                            type="text"
+                            name="firstName"
+                            placeholder="First name"
+                            className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                          />
+                          <ErrorMessage
+                            name="firstName"
+                            component="span"
+                            className="text-xs text-red-500 font_regular"
+                          />
+                        </div>
+
+                        <div className="mb-3 w-full">
+                          <Field
+                            type="text"
+                            name="lastName"
+                            placeholder="Last name"
+                            className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                          />
+                          <ErrorMessage
+                            name="lastName"
+                            component="span"
+                            className="text-xs text-red-500 font_regular"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Field
+                          type="text"
+                          name="email"
+                          placeholder="Email"
+                          className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="text-xs text-red-500 font_regular"
+                        />
+                      </div>
+                      <div>
+                        <Field
+                          type="text"
+                          name="phoneNumber"
+                          placeholder="Phone Number"
+                          className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                        />
+                        <ErrorMessage
+                          name="phoneNumber"
+                          component="span"
+                          className="text-xs text-red-500 font_regular"
+                        />
+                      </div>
+                      <div>
+                        <Field
+                          type="text"
+                          name="restaurantName"
+                          placeholder="Restaurant Name"
+                          className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                        />
+                        <ErrorMessage
+                          name="restaurantName"
+                          component="span"
+                          className="text-xs text-red-500 font_regular"
+                        />
+                      </div>
+                      <div>
+                        <Field
+                          as="textarea"
+                          name="message"
+                          placeholder="Message"
+                          className="block w-full bg-[#F1F1F1] rounded-xl font_medium py-5 pl-8 pr-4 text-xl outline-none mb-3"
+                        />
+                        <ErrorMessage
+                          name="message"
+                          component="span"
+                          className="text-xs text-red-500 font_regular"
+                        />
+                      </div>
+                      {errorMessage && (
+                        <div className="w-full py-2">
+                          <p className="text-center text-xs text-red-400">
+                            {errorMessage}
+                          </p>
+                        </div>
+                      )}
+                      <Button
+                        title="Book a Demo"
+                        extraClasses="mt-5 w-60 py-3"
+                        loading={props.isSubmitting}
+                        onClick={props.handleSubmit}
+                      />
+                    </div>
+                  )}
+                </Formik>
               </div>
             </div>
             <div className="lg:w-4/5 mx-auto mt-10">

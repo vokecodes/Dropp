@@ -24,7 +24,7 @@ const ResetPasswordPage = () => {
 
   const userResetPassword = (values, formikBag) => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/auth/dropp-user/reset-password`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/auth/restaurant/reset-password`, {
         ...values,
       })
       .then(({ data }) => {
