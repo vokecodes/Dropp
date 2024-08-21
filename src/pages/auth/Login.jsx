@@ -130,6 +130,7 @@ const LoginPage = () => {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             ></path>
+<<<<<<< HEAD
                             <path
                               d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335"
                               stroke="#6C7072"
@@ -204,6 +205,31 @@ const LoginPage = () => {
                         </button>
                     </Form>
                     )}
+<<<<<<< HEAD:src/pages/auth/Login.js
+                  </button>
+                </Form>
+              )}
+            </Formik>
+            <div className="flex justify-center items-center mt-3 mb-5">
+              <p
+                className="text-gray-500 cursor-pointer font_regular"
+                // onClick={() => setAuthType(!authType)}
+              >
+                Don't have an account?
+                <Link to={"/auth/register"}>
+                  <span className="text-black font_bold">Register</span>
+                </Link>
+              </p>
+=======
+                            </svg>
+                        ) : (
+                            "Login"
+                        )}
+                        </button>
+                    </Form>
+                    )}
+=======
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/Login.jsx
                 </Formik>
                 <div className="flex justify-center items-center mt-3 mb-5">
                     <Link to={'/auth/register'}>
@@ -230,6 +256,10 @@ const LoginPage = () => {
                     Terms of Use
                     </a>
                 </p>
+<<<<<<< HEAD:src/pages/auth/Login.js
+>>>>>>> 12d4f42632f27bc80da22fd3f64b8c667dc77ccf
+=======
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/Login.jsx
             </div>
         </div>
       </main>

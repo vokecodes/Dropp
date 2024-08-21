@@ -24,7 +24,11 @@ const Dashboard = () => {
       const { success, data } = JSON.parse(result);
 
       axios
+<<<<<<< HEAD:src/pages/Dashboard.js
+        .get(`${process.env.REACT_APP_BASE_URL}/droppuser/${data?.user?._id}`, {
+=======
         .get(`${import.meta.env.VITE_BASE_URL}/droppuser/${data?.user?._id}`, {
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/Dashboard.jsx
           headers: {
             Authorization: `Bearer ${data?.token}`,
           },

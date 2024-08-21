@@ -533,6 +533,20 @@ const SignUpPage = () => {
             )}
           </Formik>
           <div className="flex justify-center items-center mt-3 mb-5">
+<<<<<<< HEAD:src/pages/auth/SignUp.js
+<<<<<<< HEAD
+            <p
+              className="text-gray-500 cursor-pointer font_regular"
+              // onClick={() => setAuthType(!authType)}
+            >
+              Already have an account?
+              <Link to={"login/"}>
+                <span className="text-black font_bold">Log In</span>
+              </Link>
+            </p>
+=======
+=======
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/SignUp.jsx
             <Link to={'/auth/login'}>
               <p
                 className="text-gray-500 cursor-pointer font_regular"
@@ -544,6 +558,10 @@ const SignUpPage = () => {
                   </span>
               </p>
             </Link>
+<<<<<<< HEAD:src/pages/auth/SignUp.js
+>>>>>>> 12d4f42632f27bc80da22fd3f64b8c667dc77ccf
+=======
+>>>>>>> 25cd31dc8d79ac7ccb05c43053e3ac306c7a7502:src/pages/auth/SignUp.jsx
           </div>
           <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
             By creating an account, I confirm that I have read and understood

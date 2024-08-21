@@ -307,6 +307,11 @@ const Home = () => {
   };
   
 
+  const handleScrollTo = (id) => {
+    smoothScrollTo(id);
+  };
+  
+
   return (
     <>
       <div className={`${showModal ? "blur-bg" : ""}`}>
