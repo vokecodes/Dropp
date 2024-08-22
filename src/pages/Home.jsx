@@ -31,7 +31,7 @@ const CATEGORIES = [
 
 const CATEGORIES_POST = [
   {
-    image: "/images/restaurant.png",
+    image: "/images/Restaurant.png",
     title: "Dine-In",
     subtitle: "Serve up a memorable dining experience.",
     description:
@@ -45,28 +45,28 @@ const CATEGORIES_POST = [
       "Attract new customers & build your personal brand with hospitality-driven software that works hard on your behalf.",
   },
   {
-    image: "/images/bar-lounge.png",
+    image: "/images/Bar.png",
     title: "Bar & Lounge",
     subtitle: "Your bartenders' best friend.",
     description:
       "Get the right drinks out before the ice melt, and keep your space packed with thirsty customers.",
   },
   {
-    image: "/images/morning_rush.png",
+    image: "/images/Cafe.png",
     title: "Cafe & Bakery",
     subtitle: "The morning rush doesn’t have to feel so rushed.",
     description:
       "Give your margins a jolt and become a part of your customers daily rituals.",
   },
   {
-    image: "/images/food-truck.png",
+    image: "/images/Food_truck.png",
     title: "Food Truck",
     subtitle: "Software that's built for the road.",
     description:
       "Excite your crowd with food truck-friendly ways to order and pay, and intuitive menus you’ll pick up fast.",
   },
   {
-    image: "/images/fast-casual.png",
+    image: "/images/Casual.png",
     title: "Fast Casual",
     subtitle: "Fire up efficiency.",
     description:
@@ -453,7 +453,7 @@ const Home = () => {
                 id="ordering-tools"
               >
                 <div className="">
-                  <img src="/images/phone-mock.svg" alt="phone_mock" />
+                  <img src="/images/Ordering.png" alt="Ordering" />
                 </div>
                 <div className="flex flex-col justify-center">
                   <p className="text-5xl text-[#00170C] font_bold mb-5">
@@ -543,7 +543,7 @@ const Home = () => {
                   </Link>
                 </div>
                 <div>
-                  <img src="/images/laptop-mock.svg" alt="laptop-mock" />
+                  <img src="/images/Operation.png" alt="Operation" />
                 </div>
               </div>
             </div>
@@ -553,7 +553,7 @@ const Home = () => {
                 id="marketing-tools"
               >
                 <div className="">
-                  <img src="/images/dash-mock.svg" alt="dash-mock" />
+                  <img src="/images/Marketing.png" alt="Marketing" />
                 </div>
                 <div className="flex flex-col justify-center">
                   <p className="text-5xl text-white font_bold mb-5">
@@ -643,7 +643,7 @@ const Home = () => {
                   </Link>
                 </div>
                 <div>
-                  <img src="/images/laptop-mock2.svg" alt="laptop-mock" />
+                  <img src="/images/Analytics.png" alt="Analytics" />
                 </div>
               </div>
             </div>
@@ -706,7 +706,7 @@ const Home = () => {
                 <img src="/images/pappies-group.png" alt="pappies" />
               </div>
               <div className="flex-shrink-0">
-                <img src="/images/funmi.svg" alt="funmi" />
+                <img src="/images/funmi.png" alt="funmi" />
               </div>
               <div className="flex-shrink-0">
                 <img src="/images/feli.png" alt="feli" />

@@ -32,13 +32,13 @@ const Header = ({ itemsImage, setShowModal, handleScrollTo }) => {
           </div>
           <div className="flex gap-4 mt-5">
             {/* <a href="#demoForm" className=""> */}
-              <OutlineButton
-                title="Book a Demo"
-                extraClasses="w-36 lg:w-2/6"
-                onClick={() => handleScrollTo('demoForm')}
-              />
+            <OutlineButton
+              title="Book a Demo"
+              extraClasses="w-36 lg:w-2/6"
+              onClick={() => handleScrollTo("demoForm")}
+            />
             {/* </a> */}
-            <Link to={'/auth/register'} className="w-36 lg:w-2/6">
+            <Link to={"/auth/register"} className="w-36 lg:w-2/6">
               <Button
                 title="Get started"
                 extraClasses="w-full h-full"
@@ -59,7 +59,7 @@ const Header = ({ itemsImage, setShowModal, handleScrollTo }) => {
         <div className="lg:w-3/6">
           {/* <img src={itemsImage} alt="items" className="pb-20 lg:ml-20" /> */}
           <div className="mt-10 lg:mt-20">
-            <img src="/images/dashbord_mock.svg" alt="dashbord_mock" />
+            <img src="/images/dashboard_mock.png" alt="dashboard_mock" />
           </div>
         </div>
       </main>
