@@ -89,7 +89,7 @@ const SubscriptionOrderItem = ({
                 className="w-11 h-11 rounded-full"
               />
             ) : (
-              <CiUser size={28} color="#e85666" />
+              <CiUser size={28} color="#06c167" />
             )}
             <div className="ml-3">
               <p className="text-lg font-bold font_regular text-black">
@@ -136,7 +136,7 @@ const SubscriptionOrderItem = ({
                   className="w-11 h-11 rounded-full"
                 />
               ) : (
-                <CiUser size={28} color="#e85666" />
+                <CiUser size={28} color="#06c167" />
               )}
               <div className="ml-3">
                 <p className="text-lg font-bold font_regular text-black">
@@ -176,7 +176,7 @@ const SubscriptionOrderItem = ({
                   className="w-11 h-11 rounded-full"
                 />
               ) : (
-                <CiUser size={28} color="#e85666" />
+                <CiUser size={28} color="#06c167" />
               )}
               <div className="ml-3">
                 <p className="text-lg font-bold font_regular text-black">

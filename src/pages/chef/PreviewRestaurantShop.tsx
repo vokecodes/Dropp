@@ -125,7 +125,7 @@ const PreviewRestaurantShop = () => {
                               />
                             ) : (
                               <GiCook
-                                color="#e85666"
+                                color="#06c167"
                                 className="w-20 lg:w-40 h-20 lg:h-40 rounded-full p-4"
                               />
                             )}

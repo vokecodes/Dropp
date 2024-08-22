@@ -208,7 +208,7 @@ const Events = () => {
                                 />
                               ) : (
                                 <GiCook
-                                  color="#e85666"
+                                  color="#06c167"
                                   className="w-12 h-12 rounded-full"
                                 />
                               )}

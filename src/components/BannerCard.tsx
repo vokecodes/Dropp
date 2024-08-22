@@ -85,7 +85,7 @@ const BannerCard = ({
                     <button
                       type="button"
                       className="text-black hover:text-black border border-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2 text-center dark:border-black dark:text-black dark:hover:text-black dark:hover:bg-gray-200 dark:focus:ring-gray-200 flex flex-row items-center justify-between"
-                      style={{ borderColor: "#e85666" }}
+                      style={{ borderColor: "#06c167" }}
                       onClick={onClickText4}
                     >
                       Export History

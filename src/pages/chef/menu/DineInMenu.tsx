@@ -51,8 +51,8 @@ import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -171,7 +171,7 @@ const DineInMenu = () => {
         }))(values);
         await dispatch(addDineInMenu(copiedValues, closeCopyMenuModal));
       } else {
-        console.log("values= ", values)
+        console.log("values= ", values);
         await dispatch(addDineInMenu(values, closeMenuModal));
       }
       setEditMenu("");
@@ -547,7 +547,7 @@ const DineInMenu = () => {
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
-                            stroke="#E85666"
+                            stroke="#06c167"
                             className="w-6 h-6"
                           >
                             <path
@@ -567,7 +567,7 @@ const DineInMenu = () => {
                   <>
                     {!(values.images && values.images.length > 0) && (
                       <>
-                        <BiImages size={50} color="#e85666" />
+                        <BiImages size={50} color="#06c167" />
                         <p className="flex-1 text-xl text-center font_regular sec_black_color mt-1">
                           Add an image of the food
                         </p>
@@ -591,7 +591,7 @@ const DineInMenu = () => {
                         <p className="text-lg primary_txt_color font_medium text-center">
                           Choose file
                         </p>
-                        <FiChevronRight size={20} color="#e85666" />
+                        <FiChevronRight size={20} color="#06c167" />
                       </div>
                     </div>
 
@@ -696,15 +696,29 @@ const DineInMenu = () => {
                   id="ingredients"
                   // name="ingredients"
                   options={dinningMenuTags.map((option) => option.value)}
-                  defaultValue={values.ingredients.split(', ')}
+                  defaultValue={values.ingredients.split(", ")}
                   onChange={(event: any, newValue: any) => {
-                    console.log("Pingredients", values.ingredients, newValue, 'seStru= ', newValue.toString().split(',').join(', '))
-                    setFieldValue("ingredients", newValue.toString().split(',').join(', '));
+                    console.log(
+                      "Pingredients",
+                      values.ingredients,
+                      newValue,
+                      "seStru= ",
+                      newValue.toString().split(",").join(", ")
+                    );
+                    setFieldValue(
+                      "ingredients",
+                      newValue.toString().split(",").join(", ")
+                    );
                   }}
                   freeSolo
                   renderTags={(value: readonly string[], getTagProps) =>
                     value.map((option: string, index: number) => (
-                      <Chip key={index} variant="outlined" label={option} {...getTagProps({ index })} />
+                      <Chip
+                        key={index}
+                        variant="outlined"
+                        label={option}
+                        {...getTagProps({ index })}
+                      />
                     ))
                   }
                   renderInput={(params) => (
@@ -749,7 +763,7 @@ const DineInMenu = () => {
                       } else {
                         setFieldValue("discount", "");
                       }
-                      console.log("ingredients", values.ingredients)
+                      console.log("ingredients", values.ingredients);
                       handleSubmit();
                     }}
                   />
@@ -804,7 +818,7 @@ const DineInMenu = () => {
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
-                            stroke="#E85666"
+                            stroke="#06c167"
                             className="w-6 h-6"
                           >
                             <path
@@ -824,7 +838,7 @@ const DineInMenu = () => {
                   <>
                     {!(values.images && values.images.length > 0) && (
                       <>
-                        <BiImages size={50} color="#e85666" />
+                        <BiImages size={50} color="#06c167" />
                         <p className="flex-1 text-xl text-center font_regular sec_black_color mt-1">
                           Add an image of the food
                         </p>
@@ -848,7 +862,7 @@ const DineInMenu = () => {
                         <p className="text-lg primary_txt_color font_medium text-center">
                           Choose file
                         </p>
-                        <FiChevronRight size={20} color="#e85666" />
+                        <FiChevronRight size={20} color="#06c167" />
                       </div>
                     </div>
 
@@ -952,14 +966,22 @@ const DineInMenu = () => {
                   multiple
                   id="ingredients"
                   options={dinningMenuTags.map((option) => option.value)}
-                  defaultValue={values.ingredients.split(', ')}
+                  defaultValue={values.ingredients.split(", ")}
                   onChange={(event: any, newValue: any) => {
-                    setFieldValue("ingredients", newValue.toString().split(',').join(', '));
+                    setFieldValue(
+                      "ingredients",
+                      newValue.toString().split(",").join(", ")
+                    );
                   }}
                   freeSolo
                   renderTags={(value: readonly string[], getTagProps) =>
                     value.map((option: string, index: number) => (
-                      <Chip key={index} variant="outlined" label={option} {...getTagProps({ index })} />
+                      <Chip
+                        key={index}
+                        variant="outlined"
+                        label={option}
+                        {...getTagProps({ index })}
+                      />
                     ))
                   }
                   renderInput={(params) => (

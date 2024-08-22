@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../redux/hooks";
 import { CompanyCheckItemProps } from "../../utils/Interfaces";
 
-const defaultStyles = ["primary_bg_color", "to bottom, #e85666, #fff"];
+const defaultStyles = ["primary_bg_color", "to bottom, #06c167, #fff"];
 const completedStyles = ["bg-green-500", "#fff, #BDBDBD, #fff"];
 const inCompleteStyles = ["bg-gray-950", "#fff, #BDBDBD, #fff"];
 
@@ -43,10 +43,12 @@ const CompanyCheckItem = ({
   return (
     <>
       {
-        <Link to={checked ? "#" : to ? to : "#"} className="w-full p-0 m-0 h-fit">
+        <Link
+          to={checked ? "#" : to ? to : "#"}
+          className="w-full p-0 m-0 h-fit"
+        >
           <div className="flex flex-row items-stretch justify-around gap-x-1 pl-2 py-2 w-full">
             <div className="w-1/6 flex flex-col gap-y-0.5">
-              
               <div
                 className={`p-3 mb-1 rounded-full w-1 h-1 ${styles[0]} flex justify-around items-center mx-auto`}
               >
@@ -61,10 +63,8 @@ const CompanyCheckItem = ({
               >
                 &nbsp;
               </div>
-
             </div>
             <div className="w-5/6 grow flex flex-col gap-y-1.5">
-
               <div>
                 <p className="font-semibold text-base mb-3">{title}</p>
               </div>
@@ -73,10 +73,9 @@ const CompanyCheckItem = ({
                 <button
                   className={`rounded-full primary_bg_color text-white py-1.5 px-3 text-xs mb-8`}
                 >
-                  <span>{ action }</span>
+                  <span>{action}</span>
                 </button>
               </div>
-
             </div>
           </div>
         </Link>

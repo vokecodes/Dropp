@@ -13,7 +13,12 @@ import Input from "../../components/CustomInput";
 import Button from "../../components/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { fundEmployeesCompany, removeEmployeesCompany, freezeEmployeesCompany, unfreezeEmployeesCompany } from "../../_redux/employees/employeeCrud";
+import {
+  fundEmployeesCompany,
+  removeEmployeesCompany,
+  freezeEmployeesCompany,
+  unfreezeEmployeesCompany,
+} from "../../_redux/employees/employeeCrud";
 import { getCompanyEmployees } from "../../_redux/employees/employeeAction";
 
 const EmployeeListItem = ({
@@ -34,7 +39,6 @@ const EmployeeListItem = ({
   const dispatch = useAppDispatch();
   const [selectedOrder, setSelectedOrder] = useState<any>();
 
-
   const [isLoading, setIsLoading] = useState(false);
 
   const openModal = (flag: string) => {
@@ -47,7 +51,7 @@ const EmployeeListItem = ({
     if (flag === "fund") {
       setFundEmployeeModal(false);
       setFundingSuccessful(false);
-      values.amount = ""
+      values.amount = "";
     }
     if (flag === "freeze") {
       setFreezeEmployeeModal(false);
@@ -61,33 +65,28 @@ const EmployeeListItem = ({
     dispatch(getCompanyEmployees());
   };
 
-
   // FREEZE LOGIC
   // TEMP
-  const [frozen, setFrozen] = useState(status == 'freeze');
+  const [frozen, setFrozen] = useState(status == "freeze");
 
-  useEffect(() => {
-    
-  }, [frozen])
+  useEffect(() => {}, [frozen]);
 
   const [freezeEmployeeModal, setFreezeEmployeeModal] = useState(false);
   const [freezeSuccessful, setFreezeSuccessful] = useState(false);
-
 
   const handleFreeze = async () => {
     setIsLoading(true);
 
     try {
-      const { data } =  frozen ? 
-        await unfreezeEmployeesCompany({
-          employeeId: id,
-        })
-       : 
-        await freezeEmployeesCompany({
-          employeeId: id,
-        })
+      const { data } = frozen
+        ? await unfreezeEmployeesCompany({
+            employeeId: id,
+          })
+        : await freezeEmployeesCompany({
+            employeeId: id,
+          });
       setFreezeSuccessful(true);
-      setFrozen(!frozen)
+      setFrozen(!frozen);
     } catch (error) {
       alert("Something went wrong, please try again");
     } finally {
@@ -95,15 +94,14 @@ const EmployeeListItem = ({
     }
   };
 
-
   // REMOVE LOGIC
   const [removeEmployeeModal, setRemoveEmployeeModal] = useState(false);
   const [removeSuccessful, setRemoveSuccessful] = useState(false);
 
   const handleRemove = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const { data } =  await removeEmployeesCompany(id)
+      const { data } = await removeEmployeesCompany(id);
       setRemoveSuccessful(true);
     } catch (error) {
       alert("Something went wrong, please try again");
@@ -118,7 +116,6 @@ const EmployeeListItem = ({
   const [fundingSuccessful, setFundingSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 
-
   const handleFundEmployee = async () => {
     setIsLoading(true);
 
@@ -132,7 +129,6 @@ const EmployeeListItem = ({
       alert("Something went wrong, please try again");
     } finally {
       setIsLoading(false);
-      
     }
   };
 
@@ -162,22 +158,41 @@ const EmployeeListItem = ({
 
   return (
     <>
-      <div className={`my-7 ${selectedView === 'Active' && preEmail !== '' ? 'hidden' : selectedView === 'Frozen' && status !== 'freeze' ? 'hidden' : selectedView === 'Pending' && !!firstName ? 'hidden' : ''}`}>
+      <div
+        className={`my-7 ${
+          selectedView === "Active" && preEmail !== ""
+            ? "hidden"
+            : selectedView === "Frozen" && status !== "freeze"
+            ? "hidden"
+            : selectedView === "Pending" && !!firstName
+            ? "hidden"
+            : ""
+        }`}
+      >
         <div className="block">
-          <div className={extraClasses[0]} style={{ minWidth:`${homeDash ? '500px' : '800px'}`, }}>
+          <div
+            className={extraClasses[0]}
+            style={{ minWidth: `${homeDash ? "500px" : "800px"}` }}
+          >
             <div className={extraClasses[1]}>
               <div className="w-fit h-fit m-0 p-0 rounded-full">
-                { image ? (
-                  <img src={`${ image }`} alt="employee" className="rounded-full w-14 h-14 p-2" />
-                  ) : (
-                  <CiUser className="w-14 h-14 p-2" color="#e85666" />
-                ) }
+                {image ? (
+                  <img
+                    src={`${image}`}
+                    alt="employee"
+                    className="rounded-full w-14 h-14 p-2"
+                  />
+                ) : (
+                  <CiUser className="w-14 h-14 p-2" color="#06c167" />
+                )}
               </div>
               <div className="ml-3">
                 <p className="text-base font-bold font_regular text-black">
-                  {
-                    preEmail && preEmail.length > 0 ? (<span className="text-red-300">User not registered!</span>) : (`${firstName} ${lastName}`)
-                  }
+                  {preEmail && preEmail.length > 0 ? (
+                    <span className="text-red-300">User not registered!</span>
+                  ) : (
+                    `${firstName} ${lastName}`
+                  )}
                 </p>
                 <p className="text-sm font_regular sec_gray_color">
                   {preEmail && preEmail.length > 0 ? preEmail : email}
@@ -193,8 +208,14 @@ const EmployeeListItem = ({
             {employeeDash && (
               <div className={extraClasses[3]}>
                 <button
-                  className="px-2 md:px-3 py-1 md:py-2 text-xs text-white rounded-lg cursor-pointer" disabled={preEmail && preEmail.length > 0 ? true : false}
-                  style={{ backgroundColor: preEmail && preEmail.length > 0 ? "rgb(0 0 0 / 53%)" : "#000" }}
+                  className="px-2 md:px-3 py-1 md:py-2 text-xs text-white rounded-lg cursor-pointer"
+                  disabled={preEmail && preEmail.length > 0 ? true : false}
+                  style={{
+                    backgroundColor:
+                      preEmail && preEmail.length > 0
+                        ? "rgb(0 0 0 / 53%)"
+                        : "#000",
+                  }}
                   onClick={() => openModal("fund")}
                 >
                   Fund&nbsp;Balance
@@ -204,12 +225,18 @@ const EmployeeListItem = ({
                   <button
                     className="flex flex-row flex-nowrap justify-between items-center px-2 md:px-3 py-1 md:py-2 text-xs text-white rounded-lg gap-x-2 cursor-pointer"
                     disabled={preEmail && preEmail.length > 0 ? true : false}
-                    style={{ backgroundColor: preEmail && preEmail.length > 0 ? "rgb(242 249 254 / 48%)" : "rgb(217 238 252)", color: "#61676A" }}
+                    style={{
+                      backgroundColor:
+                        preEmail && preEmail.length > 0
+                          ? "rgb(242 249 254 / 48%)"
+                          : "rgb(217 238 252)",
+                      color: "#61676A",
+                    }}
                     onClick={() => {
-                      openModal("freeze")
+                      openModal("freeze");
                     }}
                   >
-                    {!frozen ? ("Freeze") : ("Unfreeze") }
+                    {!frozen ? "Freeze" : "Unfreeze"}
                     {!frozen ? (
                       <AiFillPauseCircle color="#61676A" size={20} />
                     ) : (
@@ -259,7 +286,10 @@ const EmployeeListItem = ({
       >
         <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
           <div className="flex flex-col justify-between items-center p-0 h-full">
-            <div className="h-fit my-3 w-100 w-full flex flex-col gap-y-10" style={{ minHeight: '80%', }}>
+            <div
+              className="h-fit my-3 w-100 w-full flex flex-col gap-y-10"
+              style={{ minHeight: "80%" }}
+            >
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
                   Fund Employee
@@ -274,14 +304,17 @@ const EmployeeListItem = ({
                 />
               </div>
 
-              <div className="flex flex-col justify-center items-center h-full w-full mb-5" style={{ minHeight: '80%', }}>
+              <div
+                className="flex flex-col justify-center items-center h-full w-full mb-5"
+                style={{ minHeight: "80%" }}
+              >
                 {fundingSuccessful ? (
                   <div className="flex flex-col justify-center items-center w-full">
                     <div className="my-6 w-28 h-28 rounded-full suc_withdraw_bg flex justify-center items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        fill="#E85666"
+                        fill="#06c167"
                         className="w-14 h-14"
                       >
                         <path
@@ -298,8 +331,7 @@ const EmployeeListItem = ({
                       <span className="font_bold">
                         ₦{formatPrice(values.amount)}
                       </span>{" "}
-                      has been added to <br /> {firstName}'s wallet
-                      balance.
+                      has been added to <br /> {firstName}'s wallet balance.
                     </p>
 
                     {/* <div className="absolute bottom-10 w-5/6 left-8 lg:left-12">
@@ -321,13 +353,15 @@ const EmployeeListItem = ({
                             className="w-20 h-20 rounded-full"
                           />
                         ) : (
-                          <CiUser className="w-14 h-14 p-2" size={28} color="#e85666" />
+                          <CiUser
+                            className="w-14 h-14 p-2"
+                            size={28}
+                            color="#06c167"
+                          />
                         )}
                       </div>
                       <p className="font-semibold text-xl">
-                        {firstName}
-                        {" "}
-                        {lastName}
+                        {firstName} {lastName}
                       </p>
                       <p className="font-light text-gray-500 text-base">
                         {email}
@@ -396,7 +430,10 @@ const EmployeeListItem = ({
       >
         <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
           <div className="flex flex-col justify-between items-center p-0 h-full">
-            <div className="h-fit my-3 w-100 w-full flex flex-col gap-y-10" style={{ minHeight: '80%', }}>
+            <div
+              className="h-fit my-3 w-100 w-full flex flex-col gap-y-10"
+              style={{ minHeight: "80%" }}
+            >
               <div className="flex w-full justify-end">
                 <IoMdClose
                   size={24}
@@ -408,14 +445,17 @@ const EmployeeListItem = ({
                 />
               </div>
 
-              <div className="flex flex-col justify-center items-center h-full w-full mb-5" style={{ minHeight: '80%', }}>
+              <div
+                className="flex flex-col justify-center items-center h-full w-full mb-5"
+                style={{ minHeight: "80%" }}
+              >
                 {freezeSuccessful ? (
                   <div className="flex flex-col justify-center items-center w-full">
                     <div className="my-6 w-28 h-28 rounded-full suc_withdraw_bg flex justify-center items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        fill="#E85666"
+                        fill="#06c167"
                         className="w-14 h-14"
                       >
                         <path
@@ -429,7 +469,8 @@ const EmployeeListItem = ({
                       Account {frozen ? "Frozen" : "Unfrozen"}
                     </p>
                     <p className="text-lg text-black font_medium text-center">
-                      {firstName}'s account has been {frozen ? "frozen" : "unfrozen"}.
+                      {firstName}'s account has been{" "}
+                      {frozen ? "frozen" : "unfrozen"}.
                     </p>
                   </div>
                 ) : (
@@ -443,13 +484,15 @@ const EmployeeListItem = ({
                             className="w-20 h-20 rounded-full"
                           />
                         ) : (
-                          <CiUser className="w-14 h-14 p-2" size={28} color="#e85666" />
+                          <CiUser
+                            className="w-14 h-14 p-2"
+                            size={28}
+                            color="#06c167"
+                          />
                         )}
                       </div>
                       <p className="font-semibold text-xl">
-                        {firstName}
-                        {" "}
-                        {lastName}
+                        {firstName} {lastName}
                       </p>
                       <p className="font-light text-gray-500 text-base">
                         {email}
@@ -458,11 +501,12 @@ const EmployeeListItem = ({
 
                     <div className="text-center px-3 font-sans">
                       <h3 className="font-bold text-2xl mb-3">
-                        Are you sure you want to {frozen ? "unfreeze" : "freeze"} {firstName} {lastName}
+                        Are you sure you want to{" "}
+                        {frozen ? "unfreeze" : "freeze"} {firstName} {lastName}
                       </h3>
                       <p className="font-semibold text-sm">
-                        {firstName} will {frozen ? "now be" : "not be"} able to spend the
-                        money in his balance
+                        {firstName} will {frozen ? "now be" : "not be"} able to
+                        spend the money in his balance
                       </p>
                     </div>
                   </>
@@ -516,7 +560,10 @@ const EmployeeListItem = ({
       >
         <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
           <div className="flex flex-col justify-between items-center p-0 h-full">
-            <div className="h-fit my-3 w-100 w-full flex flex-col gap-y-10" style={{ minHeight: '80%', }}>
+            <div
+              className="h-fit my-3 w-100 w-full flex flex-col gap-y-10"
+              style={{ minHeight: "80%" }}
+            >
               <div className="flex w-full justify-end">
                 <IoMdClose
                   size={24}
@@ -528,14 +575,17 @@ const EmployeeListItem = ({
                 />
               </div>
 
-              <div className="flex flex-col justify-center items-center h-full w-full mb-5" style={{ minHeight: '80%', }}>
+              <div
+                className="flex flex-col justify-center items-center h-full w-full mb-5"
+                style={{ minHeight: "80%" }}
+              >
                 {removeSuccessful ? (
                   <div className="flex flex-col justify-center items-center w-full">
                     <div className="my-6 w-28 h-28 rounded-full suc_withdraw_bg flex justify-center items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        fill="#E85666"
+                        fill="#06c167"
                         className="w-14 h-14"
                       >
                         <path
@@ -563,11 +613,15 @@ const EmployeeListItem = ({
                             className="w-20 h-20 rounded-full"
                           />
                         ) : (
-                          <CiUser className="w-14 h-14 p-2" size={28} color="#e85666" />
+                          <CiUser
+                            className="w-14 h-14 p-2"
+                            size={28}
+                            color="#06c167"
+                          />
                         )}
                       </div>
                       <p className="font-semibold text-xl">
-                        {firstName}{" "}{lastName}
+                        {firstName} {lastName}
                       </p>
                       <p className="font-light text-gray-500 text-base">
                         {email}
@@ -579,8 +633,8 @@ const EmployeeListItem = ({
                         Are you sure you want to Delete {firstName}
                       </h3>
                       <p className="font-semibold text-sm">
-                        {firstName} will not be able to spend the
-                        money in his balance
+                        {firstName} will not be able to spend the money in his
+                        balance
                       </p>
                     </div>
                   </>

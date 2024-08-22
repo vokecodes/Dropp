@@ -52,7 +52,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompany
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -67,7 +67,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanyEmployees
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -82,7 +82,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanyWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -97,7 +97,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanySettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -114,7 +114,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
           }
         />
       ),
@@ -128,7 +128,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -143,7 +143,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -158,7 +158,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -173,7 +173,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -188,7 +188,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -205,7 +205,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
           }
         />
       ),
@@ -219,7 +219,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefReports
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -234,7 +234,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -249,9 +249,9 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefDineIn
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefTableManagement
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -268,11 +268,11 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={28}
           color={
             location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -290,7 +290,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkKitchen
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -305,7 +305,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -320,7 +320,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -335,7 +335,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -360,7 +360,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomer ||
             location?.pathname === CUSTOMER_ROUTES.linkCustomerOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -377,7 +377,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -392,7 +392,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerFavourites
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -407,7 +407,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -422,7 +422,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerSubscription
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -437,7 +437,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -455,11 +455,11 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={28}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChef
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -477,7 +477,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -492,7 +492,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefTableManagement
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -507,7 +507,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -796,7 +796,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === COMPANY_ROUTES.linkCompany
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -811,7 +811,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === COMPANY_ROUTES.linkCompanyEmployees
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -826,7 +826,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === COMPANY_ROUTES.linkCompanyWallet
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -841,7 +841,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === COMPANY_ROUTES.linkCompanySettings
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -858,7 +858,7 @@ export default TopNav;
 //         <MdHomeFilled
 //           size={24}
 //           color={
-//             location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+//             location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
 //           }
 //         />
 //       ),
@@ -872,7 +872,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefOrders
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -887,7 +887,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefMenu
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -902,7 +902,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefWallet
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -917,7 +917,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefChat
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -932,7 +932,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefSettings
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -949,7 +949,7 @@ export default TopNav;
 //         <MdHomeFilled
 //           size={24}
 //           color={
-//             location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+//             location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
 //           }
 //         />
 //       ),
@@ -963,7 +963,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefReports
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -978,7 +978,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefOrders
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -993,9 +993,9 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefDineIn
-//               ? "#e85666"
+//               ? "#06c167"
 //               : location?.pathname === CHEF_ROUTES.linkChefTableManagement
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1012,11 +1012,11 @@ export default TopNav;
 //           size={28}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefMenu
-//               ? "#e85666"
+//               ? "#06c167"
 //               : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-//               ? "#e85666"
+//               ? "#06c167"
 //               : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1034,7 +1034,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkKitchen
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1049,7 +1049,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefWallet
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1064,7 +1064,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefChat
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1079,7 +1079,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CHEF_ROUTES.linkChefSettings
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1104,7 +1104,7 @@ export default TopNav;
 //           color={
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomer ||
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomerOrders
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1121,7 +1121,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomerWallet
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1136,7 +1136,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomerFavourites
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1157,7 +1157,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomerChat
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1172,7 +1172,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomerSubscription
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1187,7 +1187,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === CUSTOMER_ROUTES.linkCustomerSettings
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1205,11 +1205,11 @@ export default TopNav;
 //           size={28}
 //           color={
 //             location?.pathname === SUB_CHEF_ROUTES.linkSubChef
-//               ? "#e85666"
+//               ? "#06c167"
 //               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline
-//               ? "#e85666"
+//               ? "#06c167"
 //               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1227,7 +1227,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === SUB_CHEF_ROUTES.linkSubChefTableManagement
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1242,7 +1242,7 @@ export default TopNav;
 //           size={24}
 //           color={
 //             location?.pathname === SUB_CHEF_ROUTES.linkSubChefSettings
-//               ? "#e85666"
+//               ? "#06c167"
 //               : "#787878"
 //           }
 //         />
@@ -1282,7 +1282,7 @@ export default TopNav;
 //                   <p className="whitespace-nowrap text-sm font_bold text-[#4E0B2B] text-center">
 //                     For You
 //                   </p>
-//                   <div className="ml-2 w-4 h-4 rounded-full bg-[#E85666] flex items-center justify-center">
+//                   <div className="ml-2 w-4 h-4 rounded-full bg-[#06c167] flex items-center justify-center">
 //                     <svg
 //                       xmlns="http://www.w3.org/2000/svg"
 //                       viewBox="0 0 24 24"
@@ -1391,7 +1391,7 @@ export default TopNav;
 //                 );
 //               }}
 //             >
-//               <p className="w-20 p-2 bg-[#E85666] rounded-full mr-4 whitespace-nowrap text-sm font_bold text-white text-center button-shine">
+//               <p className="w-20 p-2 bg-[#06c167] rounded-full mr-4 whitespace-nowrap text-sm font_bold text-white text-center button-shine">
 //                 Sign up
 //               </p>
 //             </Link>

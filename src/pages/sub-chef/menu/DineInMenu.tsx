@@ -493,7 +493,7 @@ const DineInMenu = () => {
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
-                            stroke="#E85666"
+                            stroke="#06c167"
                             className="w-6 h-6"
                           >
                             <path
@@ -513,7 +513,7 @@ const DineInMenu = () => {
                   <>
                     {!(values.images && values.images.length > 0) && (
                       <>
-                        <BiImages size={50} color="#e85666" />
+                        <BiImages size={50} color="#06c167" />
                         <p className="flex-1 text-xl text-center font_regular sec_black_color mt-1">
                           Add an image of the food
                         </p>
@@ -537,7 +537,7 @@ const DineInMenu = () => {
                         <p className="text-lg primary_txt_color font_medium text-center">
                           Choose file
                         </p>
-                        <FiChevronRight size={20} color="#e85666" />
+                        <FiChevronRight size={20} color="#06c167" />
                       </div>
                     </div>
 
@@ -715,7 +715,7 @@ const DineInMenu = () => {
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
-                            stroke="#E85666"
+                            stroke="#06c167"
                             className="w-6 h-6"
                           >
                             <path
@@ -735,7 +735,7 @@ const DineInMenu = () => {
                   <>
                     {!(values.images && values.images.length > 0) && (
                       <>
-                        <BiImages size={50} color="#e85666" />
+                        <BiImages size={50} color="#06c167" />
                         <p className="flex-1 text-xl text-center font_regular sec_black_color mt-1">
                           Add an image of the food
                         </p>
@@ -759,7 +759,7 @@ const DineInMenu = () => {
                         <p className="text-lg primary_txt_color font_medium text-center">
                           Choose file
                         </p>
-                        <FiChevronRight size={20} color="#e85666" />
+                        <FiChevronRight size={20} color="#06c167" />
                       </div>
                     </div>
 

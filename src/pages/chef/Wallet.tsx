@@ -374,7 +374,7 @@ const ChefWallet = () => {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
-                      fill="#E85666"
+                      fill="#06c167"
                       className="w-14 h-14"
                     >
                       <path

@@ -131,7 +131,7 @@ const EventCart = ({
                           className="cursor-pointer"
                           onClick={() => handleDelete(meal)}
                         >
-                          <AiFillDelete className="w-5 h-5" color="#e85666" />
+                          <AiFillDelete className="w-5 h-5" color="#06c167" />
                         </div>
                       </div>
                     </div>

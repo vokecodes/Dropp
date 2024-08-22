@@ -136,7 +136,7 @@ const Chat = ({ orders, subscriptionOrders }: any) => {
                           className="w-12 h-12 rounded-full mt-2"
                         />
                       ) : (
-                        <CiUser size={60} color="#e85666" />
+                        <CiUser size={60} color="#06c167" />
                       )}
 
                       <div className="w-40">
@@ -194,7 +194,7 @@ const Chat = ({ orders, subscriptionOrders }: any) => {
                         className="w-12 h-12 rounded-full mt-2"
                       />
                     ) : (
-                      <CiUser size={60} color="#e85666" />
+                      <CiUser size={60} color="#06c167" />
                     )}
 
                     <div className="w-40">
@@ -253,7 +253,7 @@ const Chat = ({ orders, subscriptionOrders }: any) => {
                                     className="w-12 h-12 rounded-full mt-2"
                                   />
                                 ) : (
-                                  <CiUser size={28} color="#e85666" />
+                                  <CiUser size={28} color="#06c167" />
                                 )}
                               </div>
                             ) : (
@@ -265,7 +265,7 @@ const Chat = ({ orders, subscriptionOrders }: any) => {
                                     className="w-12 h-12 rounded-full mt-2"
                                   />
                                 ) : (
-                                  <CiUser size={28} color="#e85666" />
+                                  <CiUser size={28} color="#06c167" />
                                 )}
                                 <div className="inboxchat mt-2">
                                   <p className="text-base text-right">

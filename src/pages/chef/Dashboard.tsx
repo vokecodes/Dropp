@@ -201,7 +201,7 @@ const ChefDashboard = () => {
                         className="w-12 h-12 rounded-full"
                       />
                     ) : (
-                      <CiUser className="w-12 h-12 p-2" color="#e85666" />
+                      <CiUser className="w-12 h-12 p-2" color="#06c167" />
                     )}
                   </div>
                   <div>

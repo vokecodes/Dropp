@@ -38,7 +38,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomer ||
             location?.pathname === CUSTOMER_ROUTES.linkCustomerOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -55,7 +55,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -70,7 +70,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerFavourites
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -85,7 +85,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
     //       size={24}
     //       color={
     //         // location?.pathname === CUSTOMER_ROUTES.linkChefWallet
-    //         //   ? "#e85666"
+    //         //   ? "#06c167"
     //         //   :
     //         "#787878"
     //       }
@@ -101,7 +101,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -124,7 +124,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
             color={
               location?.pathname === CUSTOMER_ROUTES.linkCustomerSubscription
                 ? "#fff"
-                : "#e85666"
+                : "#06c167"
             }
           />
         </div>
@@ -139,7 +139,7 @@ const CustomerDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />

@@ -85,7 +85,7 @@ const Testimonials = ({ navigate, buttonClick }: any) => {
             <div className="h-96 lg:mr-5">
               <div
                 key={index}
-                className="relative z-10 h-96 bg-black border border-[#E85666] p-8 rounded-2xl flex flex-col items-center justify-center"
+                className="relative z-10 h-96 bg-black border border-[#06c167] p-8 rounded-2xl flex flex-col items-center justify-center"
               >
                 <img
                   src={review.image}

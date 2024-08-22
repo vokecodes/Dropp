@@ -173,7 +173,7 @@ const Meals = ({
                                 />
                               ) : (
                                 <GiCook
-                                  color="#e85666"
+                                  color="#06c167"
                                   className="w-12 h-12 rounded-full"
                                 />
                               )}
@@ -274,7 +274,7 @@ const Meals = ({
                                     />
                                   ) : (
                                     <GiCook
-                                      color="#e85666"
+                                      color="#06c167"
                                       className="w-12 h-12 rounded-full"
                                     />
                                   )}

@@ -34,7 +34,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
           }
         />
       ),
@@ -48,7 +48,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -63,11 +63,11 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={28}
           color={
             location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -85,7 +85,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -100,7 +100,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -115,7 +115,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -132,7 +132,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
           }
         />
       ),
@@ -146,7 +146,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefReports
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -162,7 +162,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -177,9 +177,9 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefDineIn
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefTableManagement
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -196,11 +196,11 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={28}
           color={
             location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -218,7 +218,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkKitchen
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -234,7 +234,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -249,7 +249,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -264,7 +264,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkSubChefs
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -279,7 +279,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -297,11 +297,11 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={28}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChef
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -319,7 +319,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -334,7 +334,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefTableManagement
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -349,7 +349,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkKitchen
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -365,7 +365,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />

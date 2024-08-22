@@ -31,7 +31,7 @@ const CompanyDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompany
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -46,7 +46,7 @@ const CompanyDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanyEmployees
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -61,7 +61,7 @@ const CompanyDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanyWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -76,7 +76,7 @@ const CompanyDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanySettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -92,7 +92,10 @@ const CompanyDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
       <TopNav />
       <div className="py-5 w-full h-screen lg:flex">
         <div className="hidden lg:block lg:w-1/5">
-          <div className="fixed w-full md:w-auto xl:w-full h-screen" style={{ maxWidth: "17.12rem" }}>
+          <div
+            className="fixed w-full md:w-auto xl:w-full h-screen"
+            style={{ maxWidth: "17.12rem" }}
+          >
             <div className="h-5/6 w-full bg-white py-4 pr-3 flex flex-col">
               <p className="pl-10 text-lg text-black font_medium">
                 Hi {user?.companyName},

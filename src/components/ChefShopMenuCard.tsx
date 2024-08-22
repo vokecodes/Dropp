@@ -352,7 +352,7 @@ const ChefShopMenuCard = ({
                     ) : (
                       <>
                         {menuIsUserFavourite ? (
-                          <AiFillHeart fontSize={30} color="#e85666" />
+                          <AiFillHeart fontSize={30} color="#06c167" />
                         ) : (
                           <AiOutlineHeart fontSize={30} color="#8E8E8E" />
                         )}

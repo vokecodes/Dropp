@@ -5,7 +5,7 @@ const OutlineStar = () => {
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
-      stroke="#E85666"
+      stroke="#06c167"
       className="w-5 h-5"
     >
       <path

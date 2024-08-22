@@ -201,7 +201,7 @@ const ChefBusiness = () => {
                     <img src={values.coverImage} alt="coverImage" />
                   ) : (
                     <>
-                      <BiImages size={28} color="#e85666" />
+                      <BiImages size={28} color="#06c167" />
                       <p className="my-3 text-2xl text-black font_regular">
                         Add a cover image
                       </p>
@@ -233,7 +233,7 @@ const ChefBusiness = () => {
                       ? "Change banner image"
                       : "Add a banner image"}
                   </p>
-                  <FiChevronRight size={20} color="#e85666" className="" />
+                  <FiChevronRight size={20} color="#06c167" className="" />
                 </div>
               </div>
             </div>

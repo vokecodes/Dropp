@@ -167,7 +167,7 @@ const ChefPersonal = () => {
                           className="w-24 h-24 rounded-full"
                         />
                       ) : (
-                        <BiImages size={28} color="#e85666" />
+                        <BiImages size={28} color="#06c167" />
                       )}
                     </>
                   )}
@@ -195,7 +195,7 @@ const ChefPersonal = () => {
                     </p>
                     <FiChevronRight
                       size={20}
-                      color="#e85666"
+                      color="#06c167"
                       className="mt-1"
                     />
                   </div>
