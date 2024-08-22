@@ -652,7 +652,7 @@ const Home = () => {
 
         <div className="relative w-full ">
           <img
-            src="/images/restaurant2.png"
+            src="/images/restaurant2a.png"
             alt="restaurant2"
             className="w-full h-[451px] lg:h-[502px] object-cover"
           />
