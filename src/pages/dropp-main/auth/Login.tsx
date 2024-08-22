@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AUTH_DATA } from "../../../reducers/type";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL } from "../../../_redux/urls";
+import { registerLoginAccount } from "../../../_redux/auth/authSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -28,11 +29,12 @@ const LoginPage = () => {
         ...values,
       })
       .then(({ data }) => {
-        dispatch({
-          type: AUTH_DATA,
-          payload: data,
-        });
-        sessionStorage.setItem("auth", JSON.stringify(data));
+        // dispatch({
+        //   type: AUTH_DATA,
+        //   payload: data,
+        // });
+        // sessionStorage.setItem("auth", JSON.stringify(data));
+        dispatch(registerLoginAccount({ ...data?.data }));
         navigate("/chef");
       })
       .catch((error) => {
