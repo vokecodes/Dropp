@@ -8,6 +8,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { AUTH_DATA } from "../../../reducers/type";
 import { BASE_API_URL } from "../../../_redux/urls";
+import { registerLoginAccount } from "../../../_redux/auth/authSlice";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -117,12 +118,13 @@ const SignUpPage = () => {
       .then(({ data }) => {
         const { success } = data;
         if (success) setSuccess(true);
-        dispatch({
-          type: AUTH_DATA,
-          payload: data,
-        });
-        sessionStorage.setItem("auth", JSON.stringify(data));
-        navigate("/dashboard");
+        // dispatch({
+        //   type: AUTH_DATA,
+        //   payload: data,
+        // });
+        // sessionStorage.setItem("auth", JSON.stringify(data));
+        dispatch(registerLoginAccount({ ...data?.data }));
+        navigate("/chef");
       })
       .catch((error) => {
         const { message } = error.response.data;
