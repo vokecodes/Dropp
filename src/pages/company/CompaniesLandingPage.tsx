@@ -41,7 +41,7 @@ const CompaniesLandingPage = () => {
         >
           Homemade meals as a
         </p>
-        <p className="text-5xl text-[#E85666] italic font_bold text-center">
+        <p className="text-5xl text-[#06c167] italic font_bold text-center">
           benefit for employees.
         </p>
         <p className="my-3 text-xl text-[#B5ABB0] font_regular text-center">
@@ -125,7 +125,7 @@ const CompaniesLandingPage = () => {
               lovers to verified homechefs around them.
             </p>
           </div>
-          <div className="relative bg-[#E85666] rounded-2xl overflow-hidden">
+          <div className="relative bg-[#06c167] rounded-2xl overflow-hidden">
             <img src="/images/floating-money.svg" alt="unlimited-companies" />
             <div className="p-8">
               <p className="text-2xl text-white font_bold">
@@ -228,7 +228,7 @@ export default CompaniesLandingPage;
 //         >
 //           Homemade meals as a
 //         </p>
-//         <p className="text-5xl text-[#E85666] italic font_bold text-center">
+//         <p className="text-5xl text-[#06c167] italic font_bold text-center">
 //           benefit for employees.
 //         </p>
 //         <p className="my-3 text-xl text-[#B5ABB0] font_regular text-center">
@@ -312,7 +312,7 @@ export default CompaniesLandingPage;
 //               lovers to verified homechefs around them.
 //             </p>
 //           </div>
-//           <div className="relative bg-[#E85666] rounded-2xl overflow-hidden">
+//           <div className="relative bg-[#06c167] rounded-2xl overflow-hidden">
 //             <img src="/images/floating-money.svg" alt="unlimited-companies" />
 //             <div className="p-8">
 //               <p className="text-2xl text-white font_bold">

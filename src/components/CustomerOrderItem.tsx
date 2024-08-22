@@ -42,7 +42,7 @@ const CustomerOrderItem = ({
     shallowEqual
   );
 
-  console.log(customerImage, customerName)
+  console.log(customerImage, customerName);
 
   const [reviewModal, setReviewModal] = useState(false);
   const openReviewModal = () => setReviewModal(true);
@@ -278,7 +278,7 @@ const CustomerOrderItem = ({
                             key={i}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
-                            fill="#e85666"
+                            fill="#06c167"
                             className="w-5 h-5"
                           >
                             <path
@@ -357,7 +357,7 @@ const CustomerOrderItem = ({
                             key={i}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
-                            fill="#e85666"
+                            fill="#06c167"
                             className="w-5 h-5"
                           >
                             <path
@@ -447,7 +447,7 @@ const CustomerOrderItem = ({
                   key={i}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  fill={star ? "#e85666" : "#D6D6D6"}
+                  fill={star ? "#06c167" : "#D6D6D6"}
                   className="w-10 h-10 cursor-pointer"
                   onClick={() => handleRatingSelect(i)}
                 >

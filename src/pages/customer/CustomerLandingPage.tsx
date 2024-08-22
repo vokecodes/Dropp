@@ -218,7 +218,7 @@ export default CustomerLandingPage;
 //         <p className="text-5xl text-[#FBF6F6] font_bold text-center">
 //           Homemade
 //         </p>
-//         <p className="text-5xl text-[#E85666] italic font_bold text-center">
+//         <p className="text-5xl text-[#06c167] italic font_bold text-center">
 //           tastes better.
 //         </p>
 //         <p className="my-3 text-xl text-[#B5ABB0] font_regular text-center">
@@ -268,7 +268,7 @@ export default CustomerLandingPage;
 //               <p className="whitespace-nowrap text-sm font_medium text-white text-center">
 //                 Explore now
 //               </p>
-//               <div className="ml-2 w-4 h-4 rounded-full bg-[#E85666] flex items-center justify-center">
+//               <div className="ml-2 w-4 h-4 rounded-full bg-[#06c167] flex items-center justify-center">
 //                 <svg
 //                   xmlns="http://www.w3.org/2000/svg"
 //                   viewBox="0 0 24 24"
@@ -302,7 +302,7 @@ export default CustomerLandingPage;
 //               <p className="whitespace-nowrap text-sm font_medium text-white text-center">
 //                 Subscribe now
 //               </p>
-//               <div className="ml-2 w-4 h-4 rounded-full bg-[#E85666] flex items-center justify-center">
+//               <div className="ml-2 w-4 h-4 rounded-full bg-[#06c167] flex items-center justify-center">
 //                 <svg
 //                   xmlns="http://www.w3.org/2000/svg"
 //                   viewBox="0 0 24 24"
@@ -340,7 +340,7 @@ export default CustomerLandingPage;
 //               <p className="whitespace-nowrap text-sm font_medium text-white text-center">
 //                 Get started
 //               </p>
-//               <div className="ml-2 w-4 h-4 rounded-full bg-[#E85666] flex items-center justify-center">
+//               <div className="ml-2 w-4 h-4 rounded-full bg-[#06c167] flex items-center justify-center">
 //                 <svg
 //                   xmlns="http://www.w3.org/2000/svg"
 //                   viewBox="0 0 24 24"
@@ -374,7 +374,7 @@ export default CustomerLandingPage;
 //               <p className="whitespace-nowrap text-sm font_medium text-white text-center">
 //                 Get started
 //               </p>
-//               <div className="ml-2 w-4 h-4 rounded-full bg-[#E85666] flex items-center justify-center">
+//               <div className="ml-2 w-4 h-4 rounded-full bg-[#06c167] flex items-center justify-center">
 //                 <svg
 //                   xmlns="http://www.w3.org/2000/svg"
 //                   viewBox="0 0 24 24"

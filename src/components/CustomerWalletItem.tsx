@@ -67,7 +67,7 @@ const CustomerWalletItem = ({
                   className="w-12 h-12 rounded-full mt-2"
                 />
               ) : (
-                <CiUser size={28} color="#e85666" className="" />
+                <CiUser size={28} color="#06c167" className="" />
               )}
               <div className="ml-3">
                 <p className="text-xs lg:text-base font_bold text-black">

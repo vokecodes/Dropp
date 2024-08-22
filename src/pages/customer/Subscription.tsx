@@ -54,7 +54,10 @@ import {
   createSubscriptionWallet,
 } from "../../_redux/subscription/subscriptionCrud";
 import ColoredSpinner from "../../components/ColoredSpinner";
-import { getUserWalletAccount, updateProfileUserAccount } from "../../_redux/user/userAction";
+import {
+  getUserWalletAccount,
+  updateProfileUserAccount,
+} from "../../_redux/user/userAction";
 import TrackGoogleAnalyticsEvent from "../../components/TrackGoogleAnalyticsEvent";
 import { getCustomerOrders } from "../../_redux/order/orderAction";
 import { Alert, Snackbar, Tooltip } from "@mui/material";
@@ -124,7 +127,7 @@ const CustomerSubscription = () => {
 
   const closeCancelModal = () => {
     setCancelModal(false);
-    setEditSubscription('');
+    setEditSubscription("");
     window.location.reload();
   };
   const openCancelModal = () => setCancelModal(true);
@@ -159,7 +162,7 @@ const CustomerSubscription = () => {
 
   const closeEditSuccessModal = () => {
     setEditSuccessModal(false);
-    setEditSubscription('');
+    setEditSubscription("");
   };
 
   const [weeks, setWeeks] = useState([
@@ -222,14 +225,15 @@ const CustomerSubscription = () => {
     validationSchema: Yup.object().shape({
       meals: Yup.number().min(1, "Meals must be greater than or equal to 1"),
       startDate: Yup.string().required("Start date is required."),
-      whatsAppNumber: Yup.string().required("Whatsapp Number is required.").min(11, "Whatsapp Number must be equal to 11"),
+      whatsAppNumber: Yup.string()
+        .required("Whatsapp Number is required.")
+        .min(11, "Whatsapp Number must be equal to 11"),
       deliveryAddress: Yup.string().required("Delivery address is required."),
     }),
     onSubmit: () => {
       nextStep();
     },
   });
-
 
   const handleSelectDays = (w: any, day: any) => {
     const localWeeks = [...weeks];
@@ -252,7 +256,7 @@ const CustomerSubscription = () => {
     const localWeeks = [...weeks];
     const weekIndex = localWeeks.indexOf(selectedWeek);
     const menu = localWeeks[weekIndex].menu;
-    
+
     if (menu.includes(meal)) {
       const mealIndex = menu.indexOf(meal);
       menu.splice(mealIndex, 1);
@@ -262,7 +266,7 @@ const CustomerSubscription = () => {
       setError("");
       return;
     }
-    
+
     // const checkAnotherChefMenu = menu?.filter((m: any) => {
     //   return m.owner !== meal.owner;
     // });
@@ -279,7 +283,7 @@ const CustomerSubscription = () => {
       setMealError(`You've chosen the week's maximum meal.`);
       return;
     }
-    
+
     menu.push(meal);
     localWeeks[weekIndex].menu = menu;
     setWeeks(localWeeks);
@@ -289,9 +293,11 @@ const CustomerSubscription = () => {
 
   const handleEditSelectMenu = (meal: any) => {
     const localWeeks = [...editWeeks];
-    const weekIndex = localWeeks.findIndex(curWeek => editSelectedWeek.name === curWeek.name);
+    const weekIndex = localWeeks.findIndex(
+      (curWeek) => editSelectedWeek.name === curWeek.name
+    );
     const menu = [...localWeeks[weekIndex].menu];
-    
+
     if (menu.includes(meal)) {
       const mealIndex = menu.indexOf(meal);
       menu.splice(mealIndex, 1);
@@ -581,7 +587,6 @@ const CustomerSubscription = () => {
     setEditSubscription(subscription);
     setEditWeeks(subscription.weeks);
 
-
     setValues({
       ...values,
       meals: subscription.meals,
@@ -648,7 +653,7 @@ const CustomerSubscription = () => {
       updateCustomerSubscription(
         subscription?._id,
         { ...values, weeks: formatWeeks, totalAmount },
-        openEditSuccessModal,
+        openEditSuccessModal
       )
     );
   };
@@ -692,16 +697,19 @@ const CustomerSubscription = () => {
     dispatch(getUserWalletAccount());
   }, []);
 
-  const [alertPresent, setAlertPresent] = useState('')
-  const [openAlert, setOpenAlert] = useState(false)
+  const [alertPresent, setAlertPresent] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
 
   const handleWhatsAppNumberAlert = (message: string) => {
-    setAlertPresent(message)
-    setOpenAlert(true)
-  }
+    setAlertPresent(message);
+    setOpenAlert(true);
+  };
 
-  const handleCloseAlert = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleCloseAlert = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -709,36 +717,46 @@ const CustomerSubscription = () => {
   };
 
   const handleSetWhatsAppNumber = () => {
-    console.log('whatsAppNumber= ', values.whatsAppNumber)
-    console.log('user Number= ', user?.phoneNumber)
-    
-    console.log('values user test= ', !/\D/g.test(values.whatsAppNumber))
+    console.log("whatsAppNumber= ", values.whatsAppNumber);
+    console.log("user Number= ", user?.phoneNumber);
 
-    if(values.whatsAppNumber == user?.phoneNumber){
-      setAlertPresent("Whatsapp number has not been changed!")
-      setOpenAlert(true)
-      return
-    }else if (!values.whatsAppNumber) {
-      setAlertPresent("Whatsapp number has not been set!")
-      setOpenAlert(true)
-      return
+    console.log("values user test= ", !/\D/g.test(values.whatsAppNumber));
+
+    if (values.whatsAppNumber == user?.phoneNumber) {
+      setAlertPresent("Whatsapp number has not been changed!");
+      setOpenAlert(true);
+      return;
+    } else if (!values.whatsAppNumber) {
+      setAlertPresent("Whatsapp number has not been set!");
+      setOpenAlert(true);
+      return;
     } else if (/\D/g.test(values.whatsAppNumber)) {
-      setAlertPresent("Whatsapp number contains non-digits")
-      setOpenAlert(true)
-      return
-    }else if (values.whatsAppNumber.length !== 11 ) {
-      setAlertPresent("Whatsapp number must contain 11 digits")
-      setOpenAlert(true)
-      return
+      setAlertPresent("Whatsapp number contains non-digits");
+      setOpenAlert(true);
+      return;
+    } else if (values.whatsAppNumber.length !== 11) {
+      setAlertPresent("Whatsapp number must contain 11 digits");
+      setOpenAlert(true);
+      return;
     }
 
-    console.log('values user= ', {phoneNumber: values.whatsAppNumber, ...user})
-    
-    let whatsAppNum = true
+    console.log("values user= ", {
+      phoneNumber: values.whatsAppNumber,
+      ...user,
+    });
 
-    dispatch(updateProfileUserAccount(USER_URL, {phoneNumber: values.whatsAppNumber, ...values}, setAlertPresent, handleWhatsAppNumberAlert));
-  }
-  
+    let whatsAppNum = true;
+
+    dispatch(
+      updateProfileUserAccount(
+        USER_URL,
+        { phoneNumber: values.whatsAppNumber, ...values },
+        setAlertPresent,
+        handleWhatsAppNumberAlert
+      )
+    );
+  };
+
   // useEffect(() => {
   //   console.log('errors= ', errors)
   //   console.log('touched= ', touched)
@@ -815,27 +833,28 @@ const CustomerSubscription = () => {
                           </div>
 
                           <div
-                            className={`${ !editStartDate
+                            className={`${
+                              !editStartDate
                                 ? "absolute top-0 left-0 right-0 bottom-0 bg-neutral-400/30 cursor-not-allowed block"
                                 : "hidden"
                             }`}
                           ></div>
                         </div>
 
-                        {errors.meals && editSubscription.meals !== values.meals && (
-                          <p className="text-sm text-red-500 text-center">
-                            {errors.meals}
-                          </p>
-                        )}
+                        {errors.meals &&
+                          editSubscription.meals !== values.meals && (
+                            <p className="text-sm text-red-500 text-center">
+                              {errors.meals}
+                            </p>
+                          )}
                         <div
                           className={`${
-                            !editStartDate
-                              ? "block px-2 lg:px-5"
-                              : "hidden"
+                            !editStartDate ? "block px-2 lg:px-5" : "hidden"
                           }`}
                         >
                           <p className="text-red-600 font_medium text-sm font-bold">
-                            You cannot edit Number of meals because this subscription has started!
+                            You cannot edit Number of meals because this
+                            subscription has started!
                           </p>
                         </div>
                       </div>
@@ -863,20 +882,20 @@ const CustomerSubscription = () => {
                           }`}
                           disabled={editStartDate ? false : true}
                         />
-                        {errors.startDate && editSubscription.startDate !== values.startDate && (
-                          <p className="text-sm text-red-500 text-center">
-                            {errors.startDate}
-                          </p>
-                        )}
+                        {errors.startDate &&
+                          editSubscription.startDate !== values.startDate && (
+                            <p className="text-sm text-red-500 text-center">
+                              {errors.startDate}
+                            </p>
+                          )}
                         <div
                           className={`${
-                            !editStartDate
-                              ? "block px-2 lg:px-5"
-                              : "hidden"
+                            !editStartDate ? "block px-2 lg:px-5" : "hidden"
                           }`}
                         >
                           <p className="text-red-600 font_medium text-sm font-bold">
-                            You cannot edit Start date because this subscription has started!
+                            You cannot edit Start date because this subscription
+                            has started!
                           </p>
                         </div>
                       </div>
@@ -911,11 +930,13 @@ const CustomerSubscription = () => {
                           }}
                         />
 
-                        {errors.deliveryAddress && editSubscription.deliveryAddress !== values.deliveryAddress && (
-                          <p className="text-sm text-red-500 text-center">
-                            {errors.deliveryAddress}
-                          </p>
-                        )}
+                        {errors.deliveryAddress &&
+                          editSubscription.deliveryAddress !==
+                            values.deliveryAddress && (
+                            <p className="text-sm text-red-500 text-center">
+                              {errors.deliveryAddress}
+                            </p>
+                          )}
                       </div>
 
                       {/* Whatsapp */}
@@ -932,13 +953,16 @@ const CustomerSubscription = () => {
                           className="mt-1 block w-full bg_gray_sub text-black text-sm font_medium py-3 px-4 rounded-md outline-none"
                         />
 
-                        {errors?.whatsAppNumber && typeof errors.whatsAppNumber === "string" && editSubscription.whatsAppNumber !== values.whatsAppNumber && (
-                          <p className="text-sm text-red-500 text-center">
-                            {errors.whatsAppNumber}
-                          </p>
-                        )}
+                        {errors?.whatsAppNumber &&
+                          typeof errors.whatsAppNumber === "string" &&
+                          editSubscription.whatsAppNumber !==
+                            values.whatsAppNumber && (
+                            <p className="text-sm text-red-500 text-center">
+                              {errors.whatsAppNumber}
+                            </p>
+                          )}
                       </div>
-                      
+
                       {/* NOTES */}
                       <div className="mb-2">
                         <label className="text-sm secondary_gray_color">
@@ -1407,7 +1431,7 @@ const CustomerSubscription = () => {
                                   }
                                   className="mt-1 w-full block bg_gray_sub text-black text-sm font_medium py-3 px-4 rounded-md outline-none"
                                 />
-                                {errors.startDate && touched.startDate  && (
+                                {errors.startDate && touched.startDate && (
                                   <p className="text-sm text-red-500 text-center">
                                     {errors.startDate}
                                   </p>
@@ -1444,7 +1468,8 @@ const CustomerSubscription = () => {
                                     componentRestrictions: { country: "ng" },
                                   }}
                                 />
-                                {errors.deliveryAddress && touched.deliveryAddress && (
+                                {errors.deliveryAddress &&
+                                  touched.deliveryAddress && (
                                     <p className="text-sm text-red-500 text-center">
                                       {errors.deliveryAddress}
                                     </p>
@@ -1458,9 +1483,9 @@ const CustomerSubscription = () => {
                                 </label>
 
                                 <div className="relative mt-1 block w-full bg_gray_sub text-black text-sm font_medium rounded-md outline-none flex flex-row items-center">
-                                  <input 
-                                    type="tel" 
-                                    className="h-full w-full shrink-0 bg_gray_sub py-3 px-4 outline-none rounded-md" 
+                                  <input
+                                    type="tel"
+                                    className="h-full w-full shrink-0 bg_gray_sub py-3 px-4 outline-none rounded-md"
                                     name="whatsAppNumber"
                                     value={values.whatsAppNumber}
                                     onChange={handleChange("whatsAppNumber")}
@@ -1468,15 +1493,22 @@ const CustomerSubscription = () => {
                                   />
 
                                   <div className="absolute top-0 right-2 h-full flex flex-row items-center justify-center">
-                                    <button className="w-fit h-fit px-2 lg:px-5 py-1 rounded-lg bg-neutral-200 font_bold text-xs lg:text-base hover:bg-neutral-300" onClick={handleSetWhatsAppNumber}>Update</button>
+                                    <button
+                                      className="w-fit h-fit px-2 lg:px-5 py-1 rounded-lg bg-neutral-200 font_bold text-xs lg:text-base hover:bg-neutral-300"
+                                      onClick={handleSetWhatsAppNumber}
+                                    >
+                                      Update
+                                    </button>
                                   </div>
                                 </div>
 
-                                {errors?.whatsAppNumber && typeof errors.whatsAppNumber === "string" && touched.whatsAppNumber && (
-                                  <p className="text-sm text-red-500 text-center">
-                                    {errors.whatsAppNumber}
-                                  </p>
-                                )}
+                                {errors?.whatsAppNumber &&
+                                  typeof errors.whatsAppNumber === "string" &&
+                                  touched.whatsAppNumber && (
+                                    <p className="text-sm text-red-500 text-center">
+                                      {errors.whatsAppNumber}
+                                    </p>
+                                  )}
                               </div>
 
                               {/* NOTES */}
@@ -1698,7 +1730,7 @@ const CustomerSubscription = () => {
         {/* SNACKBAR */}
         <Snackbar
           open={openAlert}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
           message={alertPresent}
@@ -1788,7 +1820,7 @@ const CustomerSubscription = () => {
                               />
                             ) : (
                               <GiCook
-                                color="#e85666"
+                                color="#06c167"
                                 className="w-12 h-12 rounded-full"
                               />
                             )}
@@ -1847,7 +1879,7 @@ const CustomerSubscription = () => {
                                 />
                               ) : (
                                 <GiCook
-                                  color="#e85666"
+                                  color="#06c167"
                                   className="w-12 h-12 rounded-full"
                                 />
                               )}
@@ -1975,7 +2007,7 @@ const CustomerSubscription = () => {
                               />
                             ) : (
                               <GiCook
-                                color="#e85666"
+                                color="#06c167"
                                 className="w-12 h-12 rounded-full"
                               />
                             )}
@@ -2035,7 +2067,7 @@ const CustomerSubscription = () => {
                                 />
                               ) : (
                                 <GiCook
-                                  color="#e85666"
+                                  color="#06c167"
                                   className="w-12 h-12 rounded-full"
                                 />
                               )}
@@ -2109,7 +2141,7 @@ const CustomerSubscription = () => {
                 <div className="grayBackground flex p-6 mb-4">
                   <div className="flex-1">
                     <div className="flex items-center">
-                      <FaWallet size={28} color="#e85666" />
+                      <FaWallet size={28} color="#06c167" />
                       <p className="ml-2 text-md text-black font_regular">
                         Balance
                       </p>
@@ -2255,7 +2287,10 @@ const CustomerSubscription = () => {
         >
           <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
             <div className="flex flex-col justify-between items-center p-0 h-full">
-              <div className="h-fit my-3 w-100 w-full flex flex-col gap-y-10" style={{ minHeight: '80%', }}>
+              <div
+                className="h-fit my-3 w-100 w-full flex flex-col gap-y-10"
+                style={{ minHeight: "80%" }}
+              >
                 <div className="flex w-full justify-end">
                   <IoMdClose
                     size={24}
@@ -2267,14 +2302,16 @@ const CustomerSubscription = () => {
                   />
                 </div>
 
-                <div className="flex flex-col justify-center items-center h-full w-full mb-5" style={{ minHeight: '80%', }}>
-                  
+                <div
+                  className="flex flex-col justify-center items-center h-full w-full mb-5"
+                  style={{ minHeight: "80%" }}
+                >
                   <div className="flex flex-col justify-center items-center w-full">
                     <div className="my-6 w-28 h-28 rounded-full suc_withdraw_bg flex justify-center items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        fill="#E85666"
+                        fill="#06c167"
                         className="w-14 h-14"
                       >
                         <path
@@ -2288,7 +2325,6 @@ const CustomerSubscription = () => {
                       Meal plan edited successfully.
                     </p>
                   </div>
-                  
                 </div>
               </div>
 

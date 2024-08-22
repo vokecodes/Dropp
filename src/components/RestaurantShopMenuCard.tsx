@@ -171,10 +171,8 @@ const RestaurantShopMenuCard = ({
 
   return (
     <div className="w-full">
-      <div
-        className="relative w-full h-fit lg:h-96 bg-white shadow lg:mt-0 p-2 lg:p-0 rounded-xl cursor-pointer flex flex-row justify-between items-center lg:flex-col lg:justify-start lg:items-center"
-      >
-        <div 
+      <div className="relative w-full h-fit lg:h-96 bg-white shadow lg:mt-0 p-2 lg:p-0 rounded-xl cursor-pointer flex flex-row justify-between items-center lg:flex-col lg:justify-start lg:items-center">
+        <div
           className="w-48 lg:w-full h-full lg:h-1/2 overflow-hidden mr-5 lg:m-0"
           onClick={openMenuInfoModal}
         >
@@ -185,13 +183,13 @@ const RestaurantShopMenuCard = ({
               autoPlay
               infiniteLoop
               showThumbs={false}
-              >
+            >
               {menu?.images?.map((image: string, i: number) => (
                 <img
-                key={i}
-                src={image}
-                alt="food"
-                className="w-48 lg:w-full min-h-48 h-48 rounded-xl object-cover object-center"
+                  key={i}
+                  src={image}
+                  alt="food"
+                  className="w-48 lg:w-full min-h-48 h-48 rounded-xl object-cover object-center"
                 />
               ))}
             </Carousel>
@@ -234,7 +232,7 @@ const RestaurantShopMenuCard = ({
                 </h2>
               </div>
             </div>
-            
+
             <h6
               className="text-lg font_bold primary_txt_color mt-1"
               onClick={openMenuInfoModal}
@@ -271,7 +269,7 @@ const RestaurantShopMenuCard = ({
             >
               See more
             </h3>
-            
+
             <div className="my-2 w-full">
               {inCart ? (
                 <div className="primary_bg_color flex flex-row justify-between items-center rounded-full p-1 w-full">
@@ -360,7 +358,7 @@ const RestaurantShopMenuCard = ({
                     ) : (
                       <>
                         {menuIsUserFavourite ? (
-                          <AiFillHeart fontSize={30} color="#e85666" />
+                          <AiFillHeart fontSize={30} color="#06c167" />
                         ) : (
                           <AiOutlineHeart fontSize={30} color="#8E8E8E" />
                         )}
@@ -409,7 +407,9 @@ const RestaurantShopMenuCard = ({
                 <h6 className="text-xl font_bold primary_txt_color mt-2">
                   <span
                     className={`${
-                      menu?.discount ? "line-through primary_light_txt_color" : ""
+                      menu?.discount
+                        ? "line-through primary_light_txt_color"
+                        : ""
                     }`}
                   >
                     ₦{formatPrice(menu?.price)}
@@ -523,7 +523,6 @@ const RestaurantShopMenuCard = ({
                   )}
               </div>
             </div>
-
           </div>
         </div>
       </Modal>

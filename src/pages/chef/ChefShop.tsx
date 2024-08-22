@@ -23,7 +23,10 @@ import ChefsDates from "../../components/landing-page/ChefsDates";
 import ChefShopMenuCard from "../../components/ChefShopMenuCard";
 import ChefsReviews from "../../components/ChefsReviews";
 import Cart from "../../components/Cart";
-import { createAnOrder, createAnOrderWallet } from "../../_redux/order/orderCrud";
+import {
+  createAnOrder,
+  createAnOrderWallet,
+} from "../../_redux/order/orderCrud";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
 import axios from "axios";
 import { DELIVERY_COST, TRANSACTION_URL } from "../../_redux/urls";
@@ -408,7 +411,7 @@ const ChefShop = () => {
                                   {chefIsUserFavourite ? (
                                     <AiFillHeart
                                       fontSize={24}
-                                      color="#e85666"
+                                      color="#06c167"
                                     />
                                   ) : (
                                     <AiOutlineHeart
@@ -451,7 +454,7 @@ const ChefShop = () => {
                               />
                             ) : (
                               <GiCook
-                                color="#e85666"
+                                color="#06c167"
                                 className="w-20 lg:w-40 h-20 lg:h-40 rounded-full p-4"
                               />
                             )}
@@ -480,7 +483,7 @@ const ChefShop = () => {
                                         {chefIsUserFavourite ? (
                                           <AiFillHeart
                                             fontSize={30}
-                                            color="#e85666"
+                                            color="#06c167"
                                           />
                                         ) : (
                                           <AiOutlineHeart fontSize={30} />
@@ -556,7 +559,7 @@ const ChefShop = () => {
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 24 24"
-                                      fill="#E85666"
+                                      fill="#06c167"
                                       className="w-8 h-8"
                                     >
                                       <path

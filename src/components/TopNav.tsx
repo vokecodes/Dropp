@@ -48,7 +48,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompany
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -63,7 +63,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanyEmployees
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -78,7 +78,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanyWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -93,7 +93,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === COMPANY_ROUTES.linkCompanySettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -110,7 +110,7 @@ const TopNav = ({ page, event }: any) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
           }
         />
       ),
@@ -124,7 +124,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -139,7 +139,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -154,7 +154,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -169,7 +169,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -184,7 +184,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -201,7 +201,7 @@ const TopNav = ({ page, event }: any) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#e85666" : "#787878"
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
           }
         />
       ),
@@ -215,7 +215,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefReports
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -230,7 +230,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -245,9 +245,9 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefDineIn
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefTableManagement
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -264,11 +264,11 @@ const TopNav = ({ page, event }: any) => {
           size={28}
           color={
             location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -286,7 +286,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkKitchen
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -301,7 +301,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -316,7 +316,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -331,7 +331,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -356,7 +356,7 @@ const TopNav = ({ page, event }: any) => {
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomer ||
             location?.pathname === CUSTOMER_ROUTES.linkCustomerOrders
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -373,7 +373,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerWallet
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -388,7 +388,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerFavourites
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -403,7 +403,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerChat
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -418,7 +418,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerSubscription
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -433,7 +433,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === CUSTOMER_ROUTES.linkCustomerSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -451,11 +451,11 @@ const TopNav = ({ page, event }: any) => {
           size={28}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChef
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline
-              ? "#e85666"
+              ? "#06c167"
               : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -473,7 +473,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefDineIn
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -488,7 +488,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefTableManagement
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />
@@ -503,7 +503,7 @@ const TopNav = ({ page, event }: any) => {
           size={24}
           color={
             location?.pathname === SUB_CHEF_ROUTES.linkSubChefSettings
-              ? "#e85666"
+              ? "#06c167"
               : "#787878"
           }
         />

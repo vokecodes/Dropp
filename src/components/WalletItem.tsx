@@ -72,7 +72,7 @@ const WalletItem = ({
                         className="rounded-full w-14 h-14 p-2"
                       />
                     ) : (
-                      <CiUser className="w-14 h-14 p-2" color="#e85666" />
+                      <CiUser className="w-14 h-14 p-2" color="#06c167" />
                     )}
                   </div>
                   <div>

@@ -24,7 +24,7 @@ import {
 import { getSections } from "../../_redux/section/sectionAction";
 import { getTables } from "../../_redux/table/tableAction";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-import { Popover, RadioGroup, Transition } from '@headlessui/react'
+import { Popover, RadioGroup, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
@@ -415,71 +415,82 @@ const SalesReports = () => {
     }
   };
 
-
   const ordersListUnsorted = ordersTransactions.concat(transactions);
 
-  const ordersList = ordersListUnsorted.sort((a: any, b: any) => moment(b.createdAt).diff(moment(a.createdAt)));
-      
-  const [selectedTableItem, setSelectedTableItem] = useState('');
-  const filteredTable = !selectedTableItem ? ordersList : ordersList.filter((item:any, i:any) => {return item.table?.table == selectedTableItem});
+  const ordersList = ordersListUnsorted.sort((a: any, b: any) =>
+    moment(b.createdAt).diff(moment(a.createdAt))
+  );
 
-  
-  const [selectedPayment, setSelectedPayment] = useState('');
-  const filteredPayment = !selectedPayment ? filteredTable : filteredTable?.filter((item:any, i:any) => {
-    if(selectedPayment === 'POS'){
-      return item?.posPayment == true
-    }else{
-      return !item?.posPayment
-    }
-  });
+  const [selectedTableItem, setSelectedTableItem] = useState("");
+  const filteredTable = !selectedTableItem
+    ? ordersList
+    : ordersList.filter((item: any, i: any) => {
+        return item.table?.table == selectedTableItem;
+      });
 
+  const [selectedPayment, setSelectedPayment] = useState("");
+  const filteredPayment = !selectedPayment
+    ? filteredTable
+    : filteredTable?.filter((item: any, i: any) => {
+        if (selectedPayment === "POS") {
+          return item?.posPayment == true;
+        } else {
+          return !item?.posPayment;
+        }
+      });
 
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const filteredStatus = !selectedStatus ? filteredPayment : filteredPayment?.filter((item:any, i:any) => {
-    if(item?.restaurant){
-      if(selectedStatus === 'Void'){
-        return item?.order[0]?.status === 'archived'
-      }else if(selectedStatus === 'Kitchen'){
-        return !["completed", "declined", "archived"].includes(item?.order[0]?.status)
-      }else{
-        return item?.order[0]?.status === selectedStatus.toLowerCase()
-      }
-    }else{
-      return item?.status === selectedStatus.toLowerCase()
-    }
-  });
-  
-  
-  const [selectedType, setSelectedType] = useState('');
-  const filteredType = !selectedType ? filteredStatus : filteredStatus?.filter((item:any, i:any) => {
-    if(selectedType === 'Gift'){
-      return item?.gift == true
-    }else{
-      return !item?.gift
-    }
-  });
-  
-  
-  const [selectedPlatform, setSelectedPlatform] = useState('');
-  const filteredPlatform = !selectedPlatform ? filteredType : filteredType?.filter((item:any, i:any) => {
-    if(selectedPlatform === 'Dine-in'){
-      return item?.restaurant
-    }else{
-      return !item?.restaurant
-    }
-  });
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const filteredStatus = !selectedStatus
+    ? filteredPayment
+    : filteredPayment?.filter((item: any, i: any) => {
+        if (item?.restaurant) {
+          if (selectedStatus === "Void") {
+            return item?.order[0]?.status === "archived";
+          } else if (selectedStatus === "Kitchen") {
+            return !["completed", "declined", "archived"].includes(
+              item?.order[0]?.status
+            );
+          } else {
+            return item?.order[0]?.status === selectedStatus.toLowerCase();
+          }
+        } else {
+          return item?.status === selectedStatus.toLowerCase();
+        }
+      });
+
+  const [selectedType, setSelectedType] = useState("");
+  const filteredType = !selectedType
+    ? filteredStatus
+    : filteredStatus?.filter((item: any, i: any) => {
+        if (selectedType === "Gift") {
+          return item?.gift == true;
+        } else {
+          return !item?.gift;
+        }
+      });
+
+  const [selectedPlatform, setSelectedPlatform] = useState("");
+  const filteredPlatform = !selectedPlatform
+    ? filteredType
+    : filteredType?.filter((item: any, i: any) => {
+        if (selectedPlatform === "Dine-in") {
+          return item?.restaurant;
+        } else {
+          return !item?.restaurant;
+        }
+      });
 
   const filteredOrders = filteredPlatform;
 
   const handleClickAway = (flag: string) => {
-    if(flag === 'payment'){
-      setOpenPaymentOptions(false)
-    }else if(flag === 'section'){
-      setOpenSectionOptions(false)
-    }else if(flag === 'table'){
-      setOpenTableOptions(false)
-    } 
-  }
+    if (flag === "payment") {
+      setOpenPaymentOptions(false);
+    } else if (flag === "section") {
+      setOpenSectionOptions(false);
+    } else if (flag === "table") {
+      setOpenTableOptions(false);
+    }
+  };
 
   return (
     <>
@@ -532,38 +543,40 @@ const SalesReports = () => {
                     <TiArrowSortedDown color="#8E8E8E" size={20} />
                   )}
                 </div>
-                  {openPaymentOptions && (
-                    <ClickAwayListener onClickAway={() => handleClickAway('payment')}>
-                      <div
-                        className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
-                      >
-                        {PAYMENT_OPTIONS?.map((payment: any, i: number) => (
+                {openPaymentOptions && (
+                  <ClickAwayListener
+                    onClickAway={() => handleClickAway("payment")}
+                  >
+                    <div
+                      className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                    >
+                      {PAYMENT_OPTIONS?.map((payment: any, i: number) => (
+                        <div
+                          className="flex items-center cursor-pointer mb-2"
+                          key={i}
+                          onClick={() => {
+                            resetFilters();
+                            setPaymentType(payment);
+                            setOpenPaymentOptions(false);
+                          }}
+                        >
                           <div
-                            className="flex items-center cursor-pointer mb-2"
-                            key={i}
-                            onClick={() => {
-                              resetFilters();
-                              setPaymentType(payment);
-                              setOpenPaymentOptions(false);
-                            }}
+                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                              paymentType === payment
+                                ? "primary_bg_color"
+                                : "bg_gray_color"
+                            }`}
+                          />
+                          <p
+                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
                           >
-                            <div
-                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                paymentType === payment
-                                  ? "primary_bg_color"
-                                  : "bg_gray_color"
-                              }`}
-                            />
-                            <p
-                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                            >
-                              {payment}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </ClickAwayListener>
-                  )}
+                            {payment}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </ClickAwayListener>
+                )}
               </div>
             </div>
             <div className="w-1/5">
@@ -586,7 +599,9 @@ const SalesReports = () => {
                   )}
                 </div>
                 {openSectionOptions && (
-                  <ClickAwayListener onClickAway={() => handleClickAway('section')}>
+                  <ClickAwayListener
+                    onClickAway={() => handleClickAway("section")}
+                  >
                     <div
                       className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                     >
@@ -658,62 +673,62 @@ const SalesReports = () => {
                   <TiArrowSortedDown color="#8E8E8E" size={20} />
                 )}
               </div>
-                {openTableOptions && (
-                  <ClickAwayListener onClickAway={() => handleClickAway('table')}>
+              {openTableOptions && (
+                <ClickAwayListener onClickAway={() => handleClickAway("table")}>
+                  <div
+                    className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  >
                     <div
-                      className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                      className="flex items-center cursor-pointer mb-2"
+                      onClick={() => {
+                        resetFilters();
+                        setSelectedFilterTable({ _id: "", table: "All" });
+                        setFilterTable("");
+                        setOpenSectionOptions(false);
+                      }}
                     >
                       <div
-                        className="flex items-center cursor-pointer mb-2"
-                        onClick={() => {
-                          resetFilters();
-                          setSelectedFilterTable({ _id: "", table: "All" });
-                          setFilterTable("");
-                          setOpenSectionOptions(false);
-                        }}
+                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                          selectedFilterTable?._id === ""
+                            ? "primary_bg_color"
+                            : "bg_gray_color"
+                        }`}
+                      />
+                      <p
+                        className={`text-xs lg:text-sm secondary_gray_color text-black`}
                       >
-                        <div
-                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                            selectedFilterTable?._id === ""
-                              ? "primary_bg_color"
-                              : "bg_gray_color"
-                          }`}
-                        />
-                        <p
-                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                        >
-                          All
-                        </p>
-                      </div>
-                      {table?.length > 0 &&
-                        table?.map((s: any, i: number) => (
-                          <div
-                            className="flex items-center cursor-pointer mb-2"
-                            key={i}
-                            onClick={() => {
-                              resetFilters();
-                              setSelectedFilterTable(s);
-                              setFilterTable(s._id);
-                              setOpenTableOptions(false);
-                            }}
-                          >
-                            <div
-                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                selectedFilterTable?._id === s._id
-                                  ? "primary_bg_color"
-                                  : "bg_gray_color"
-                              }`}
-                            />
-                            <p
-                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                            >
-                              {s.table}
-                            </p>
-                          </div>
-                        ))}
+                        All
+                      </p>
                     </div>
-                  </ClickAwayListener>
-                )}
+                    {table?.length > 0 &&
+                      table?.map((s: any, i: number) => (
+                        <div
+                          className="flex items-center cursor-pointer mb-2"
+                          key={i}
+                          onClick={() => {
+                            resetFilters();
+                            setSelectedFilterTable(s);
+                            setFilterTable(s._id);
+                            setOpenTableOptions(false);
+                          }}
+                        >
+                          <div
+                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                              selectedFilterTable?._id === s._id
+                                ? "primary_bg_color"
+                                : "bg_gray_color"
+                            }`}
+                          />
+                          <p
+                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                          >
+                            {s.table}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                </ClickAwayListener>
+              )}
             </div>
           </div>
           <div className="my-4 bg-[#FDEEF0] rounded-xl flex justify-between">
@@ -741,7 +756,7 @@ const SalesReports = () => {
                   </svg>
                   <Tooltip id="net-sales" />
                 </div>
-                <p className="my-3 text-3xl text-[#E85666] font_medium">
+                <p className="my-3 text-3xl text-[#06c167] font_medium">
                   {formatRemoteAmountKobo(dashboard?.totalNetSales).naira}
                   {formatRemoteAmountKobo(dashboard?.totalNetSales).kobo}
                 </p>
@@ -887,7 +902,7 @@ const SalesReports = () => {
                     </>
                   )}
                 </div>
-                
+
                 <div
                   className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-[#EDECEC]"
                   onClick={scrollLeft}
@@ -1000,9 +1015,17 @@ const SalesReports = () => {
                                 <Popover className="relative">
                                   {({ open }) => (
                                     <>
-                                      <Popover.Button className={`flex flex-row items-center space-between gap-x-2`}>
-                                        <span className="text-nowrap">Table</span>
-                                        {open ?(<BiSolidUpArrow />) : (<BiSolidDownArrow />)}
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-2`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Table
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
                                       </Popover.Button>
 
                                       <Transition
@@ -1015,12 +1038,17 @@ const SalesReports = () => {
                                         leaveTo="opacity-0 translate-y-1"
                                       >
                                         <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup value={selectedTableItem} onChange={setSelectedTableItem}>
-                                            <div className="space-y-3">
-                                            <RadioGroup.Option
-                                                  value={''}
-                                                  className={'flex items-center cursor-pointer mb-2'}
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedTableItem}
+                                              onChange={setSelectedTableItem}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
                                                 >
                                                   {({ active, checked }) => (
                                                     <>
@@ -1041,37 +1069,39 @@ const SalesReports = () => {
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                              {table?.map((item: any) => (
-                                                <RadioGroup.Option
-                                                  key={item.table}
-                                                  value={item.table}
-                                                  className={'flex items-center cursor-pointer mb-2'}
-                                                >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
+                                                {table?.map((item: any) => (
+                                                  <RadioGroup.Option
+                                                    key={item.table}
+                                                    value={item.table}
+                                                    className={
+                                                      "flex items-center cursor-pointer mb-2"
+                                                    }
+                                                  >
+                                                    {({ active, checked }) => (
+                                                      <>
+                                                        <div
+                                                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                            checked
+                                                              ? "primary_bg_color"
+                                                              : "bg_gray_color"
+                                                          }`}
+                                                        />
 
-                                                      <div className="">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          {item.table}
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                              ))}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
+                                                        <div className="">
+                                                          <RadioGroup.Label
+                                                            as="p"
+                                                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                          >
+                                                            {item.table}
+                                                          </RadioGroup.Label>
+                                                        </div>
+                                                      </>
+                                                    )}
+                                                  </RadioGroup.Option>
+                                                ))}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
                                         </Popover.Panel>
                                       </Transition>
                                     </>
@@ -1103,9 +1133,17 @@ const SalesReports = () => {
                                 <Popover className="relative">
                                   {({ open }) => (
                                     <>
-                                      <Popover.Button className={`flex flex-row items-center space-between gap-x-1`}>
-                                        <span className="text-nowrap">Type</span>
-                                        {open ?(<BiSolidUpArrow />) : (<BiSolidDownArrow />)}
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-1`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Type
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
                                       </Popover.Button>
 
                                       <Transition
@@ -1118,12 +1156,17 @@ const SalesReports = () => {
                                         leaveTo="opacity-0 translate-y-1"
                                       >
                                         <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup value={selectedType} onChange={setSelectedType}>
-                                            <div className="space-y-3">
-                                            <RadioGroup.Option
-                                                  value={''}
-                                                  className={'flex items-center cursor-pointer mb-2'}
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedType}
+                                              onChange={setSelectedType}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
                                                 >
                                                   {({ active, checked }) => (
                                                     <>
@@ -1146,37 +1189,44 @@ const SalesReports = () => {
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                              {typeOptions?.map((item: any) => (
-                                                <RadioGroup.Option
-                                                  key={item}
-                                                  value={item}
-                                                  className={'flex items-center cursor-pointer mb-2'}
-                                                >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
+                                                {typeOptions?.map(
+                                                  (item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item}
+                                                      value={item}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
 
-                                                      <div className="text-sm">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          {item}
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                              ))}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  )
+                                                )}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
                                         </Popover.Panel>
                                       </Transition>
                                     </>
@@ -1196,9 +1246,17 @@ const SalesReports = () => {
                                 <Popover className="relative">
                                   {({ open }) => (
                                     <>
-                                      <Popover.Button className={`flex flex-row items-center space-between gap-x-1`}>
-                                        <span className="text-nowrap">Payment</span>
-                                        {open ?(<BiSolidUpArrow />) : (<BiSolidDownArrow />)}
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-1`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Payment
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
                                       </Popover.Button>
 
                                       <Transition
@@ -1211,12 +1269,17 @@ const SalesReports = () => {
                                         leaveTo="opacity-0 translate-y-1"
                                       >
                                         <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup value={selectedPayment} onChange={setSelectedPayment}>
-                                            <div className="space-y-3">
-                                            <RadioGroup.Option
-                                                  value={''}
-                                                  className={'flex items-center cursor-pointer mb-2'}
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedPayment}
+                                              onChange={setSelectedPayment}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
                                                 >
                                                   {({ active, checked }) => (
                                                     <>
@@ -1239,37 +1302,44 @@ const SalesReports = () => {
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                              {paymentOptions?.map((item: any) => (
-                                                <RadioGroup.Option
-                                                  key={item}
-                                                  value={item}
-                                                  className={'flex items-center cursor-pointer mb-2'}
-                                                >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
+                                                {paymentOptions?.map(
+                                                  (item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item}
+                                                      value={item}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
 
-                                                      <div className="text-sm">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          {item}
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                              ))}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  )
+                                                )}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
                                         </Popover.Panel>
                                       </Transition>
                                     </>
@@ -1283,9 +1353,17 @@ const SalesReports = () => {
                                 <Popover className="relative">
                                   {({ open }) => (
                                     <>
-                                      <Popover.Button className={`flex flex-row items-center space-between gap-x-1`}>
-                                        <span className="text-nowrap">Platform</span>
-                                        {open ?(<BiSolidUpArrow />) : (<BiSolidDownArrow />)}
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-1`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Platform
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
                                       </Popover.Button>
 
                                       <Transition
@@ -1298,12 +1376,17 @@ const SalesReports = () => {
                                         leaveTo="opacity-0 translate-y-1"
                                       >
                                         <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup value={selectedPlatform} onChange={setSelectedPlatform}>
-                                            <div className="space-y-3">
-                                            <RadioGroup.Option
-                                                  value={''}
-                                                  className={'flex items-center cursor-pointer mb-2'}
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedPlatform}
+                                              onChange={setSelectedPlatform}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
                                                 >
                                                   {({ active, checked }) => (
                                                     <>
@@ -1326,37 +1409,44 @@ const SalesReports = () => {
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                              {platformOptions?.map((item: any) => (
-                                                <RadioGroup.Option
-                                                  key={item}
-                                                  value={item}
-                                                  className={'flex items-center cursor-pointer mb-2'}
-                                                >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
+                                                {platformOptions?.map(
+                                                  (item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item}
+                                                      value={item}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
 
-                                                      <div className="text-sm">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          {item}
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                              ))}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  )
+                                                )}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
                                         </Popover.Panel>
                                       </Transition>
                                     </>
@@ -1370,9 +1460,17 @@ const SalesReports = () => {
                                 <Popover className="relative">
                                   {({ open }) => (
                                     <>
-                                      <Popover.Button className={`flex flex-row items-center space-between gap-x-1`}>
-                                        <span className="text-nowrap">Status</span>
-                                        {open ?(<BiSolidUpArrow />) : (<BiSolidDownArrow />)}
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-1`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Status
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
                                       </Popover.Button>
 
                                       <Transition
@@ -1385,13 +1483,20 @@ const SalesReports = () => {
                                         leaveTo="opacity-0 translate-y-1"
                                       >
                                         <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup value={selectedStatus} onChange={setSelectedStatus}>
-                                            <div className="space-y-3">
-                                            <RadioGroup.Option
-                                                  value={''}
-                                                  className={'flex items-center cursor-pointer mb-2'}
-                                                  onClick={() => setSelectedStatus('')}
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedStatus}
+                                              onChange={setSelectedStatus}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
+                                                  onClick={() =>
+                                                    setSelectedStatus("")
+                                                  }
                                                 >
                                                   {({ active, checked }) => (
                                                     <>
@@ -1414,37 +1519,44 @@ const SalesReports = () => {
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                              {statusOptions?.map((item: any) => (
-                                                <RadioGroup.Option
-                                                  key={item}
-                                                  value={item}
-                                                  className={'flex items-center cursor-pointer mb-2'}
-                                                >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
+                                                {statusOptions?.map(
+                                                  (item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item}
+                                                      value={item}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
 
-                                                      <div className="text-sm">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          {item}
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                              ))}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  )
+                                                )}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
                                         </Popover.Panel>
                                       </Transition>
                                     </>
@@ -1455,114 +1567,127 @@ const SalesReports = () => {
                           </thead>
                           {/* Table body */}
                           <tbody className="divide-y divide-gray-200">
-                            {filteredOrders?.map((transaction: any, i: number) => (
-                              <tr key={transaction.id + i}>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  #
-                                  {transaction.id.substring(
-                                    transaction?.id?.length - 5
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {moment(transaction?.createdAt).format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {moment(transaction?.createdAt).format(
-                                    "hh:mm A"
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
-                                  {transaction?.name}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
-                                  {transaction?.email}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                  {transaction?.phoneNumber}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.table?.table}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                  {transaction?.cartMenu?.map((menu: any) => (
-                                    <div
-                                      key={menu?._id}
-                                      className="flex items-center"
-                                    >
-                                      <div className="h-10 w-10 flex-shrink-0">
-                                        <img
-                                          className="h-10 w-10 rounded-full object-cover"
-                                          src={menu?.images[0]}
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div className="ml-4">
-                                        <div className="font-medium text-wrap">
-                                          {menu?.foodName} X {menu?.quantity}
+                            {filteredOrders?.map(
+                              (transaction: any, i: number) => (
+                                <tr key={transaction.id + i}>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    #
+                                    {transaction.id.substring(
+                                      transaction?.id?.length - 5
+                                    )}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {moment(transaction?.createdAt).format(
+                                      "DD/MM/YYYY"
+                                    )}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {moment(transaction?.createdAt).format(
+                                      "hh:mm A"
+                                    )}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
+                                    {transaction?.name}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
+                                    {transaction?.email}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                    {transaction?.phoneNumber}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.table?.table}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
+                                    {transaction?.cartMenu?.map((menu: any) => (
+                                      <div
+                                        key={menu?._id}
+                                        className="flex items-center"
+                                      >
+                                        <div className="h-10 w-10 flex-shrink-0">
+                                          <img
+                                            className="h-10 w-10 rounded-full object-cover"
+                                            src={menu?.images[0]}
+                                            alt=""
+                                          />
                                         </div>
-                                        <div className="">
-                                          ₦
-                                          {parseInt(
-                                            menu?.eventAmount
-                                              ? menu?.eventAmount
-                                              : menu?.discount
-                                              ? menu.price -
-                                                (menu.price / 100) *
-                                                  menu.discount
-                                              : menu.price
-                                          ).toLocaleString()}
+                                        <div className="ml-4">
+                                          <div className="font-medium text-wrap">
+                                            {menu?.foodName} X {menu?.quantity}
+                                          </div>
+                                          <div className="">
+                                            ₦
+                                            {parseInt(
+                                              menu?.eventAmount
+                                                ? menu?.eventAmount
+                                                : menu?.discount
+                                                ? menu.price -
+                                                  (menu.price / 100) *
+                                                    menu.discount
+                                                : menu.price
+                                            ).toLocaleString()}
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  ))}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.cartMenu?.reduce(
-                                    (total: any, item: any) =>
-                                      total + item.quantity,
-                                    0
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.table?.employeeAssigned || "-"}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.gift ? "Gift" : "Sales"}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                  {
-                                    formatRemoteAmountKobo(
-                                      transaction?.totalAmount
-                                    ).naira
-                                  }
-                                  {
-                                    formatRemoteAmountKobo(
-                                      transaction?.totalAmount
-                                    ).kobo
-                                  }
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                  {transaction?.posPayment ? "POS" : "Online"}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                  {transaction?.restaurant ? "Dine-in" : "Online"}
-                                </td>
-                                <td className="capitalize whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                  {
-                                  (transaction?.restaurant 
-                                  && transaction?.order[0].status === "archived") 
-                                    ? 'void' 
-                                    : (transaction?.restaurant 
-                                    && !["completed", "kitchen", "declined", "void"].includes(transaction?.order[0]?.status)) 
-                                    ? 'kitchen' 
-                                    : (transaction?.restaurant && transaction?.order[0]?.status !== "archived") 
-                                    ? transaction?.order[0]?.status 
-                                    : transaction?.status}
-                                </td>
-                              </tr>
-                            ))}
+                                    ))}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.cartMenu?.reduce(
+                                      (total: any, item: any) =>
+                                        total + item.quantity,
+                                      0
+                                    )}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.table?.employeeAssigned ||
+                                      "-"}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.gift ? "Gift" : "Sales"}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                    {
+                                      formatRemoteAmountKobo(
+                                        transaction?.totalAmount
+                                      ).naira
+                                    }
+                                    {
+                                      formatRemoteAmountKobo(
+                                        transaction?.totalAmount
+                                      ).kobo
+                                    }
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                    {transaction?.posPayment ? "POS" : "Online"}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                    {transaction?.restaurant
+                                      ? "Dine-in"
+                                      : "Online"}
+                                  </td>
+                                  <td className="capitalize whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                    {transaction?.restaurant &&
+                                    transaction?.order[0].status === "archived"
+                                      ? "void"
+                                      : transaction?.restaurant &&
+                                        ![
+                                          "completed",
+                                          "kitchen",
+                                          "declined",
+                                          "void",
+                                        ].includes(
+                                          transaction?.order[0]?.status
+                                        )
+                                      ? "kitchen"
+                                      : transaction?.restaurant &&
+                                        transaction?.order[0]?.status !==
+                                          "archived"
+                                      ? transaction?.order[0]?.status
+                                      : transaction?.status}
+                                  </td>
+                                </tr>
+                              )
+                            )}
                           </tbody>
                         </table>
                       </div>

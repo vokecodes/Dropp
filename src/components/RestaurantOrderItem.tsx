@@ -296,15 +296,40 @@ const RestaurantOrderItem = ({
                           </p>
                         ) : (
                           <Popover className="relative">
-                            <Popover.Button className={'credit_color font-semibold flex flex-row items-center justify-between gap-x-2 text-nowrap'}>Pending Payment <IoIosArrowDown /></Popover.Button>
+                            <Popover.Button
+                              className={
+                                "credit_color font-semibold flex flex-row items-center justify-between gap-x-2 text-nowrap"
+                              }
+                            >
+                              Pending Payment <IoIosArrowDown />
+                            </Popover.Button>
 
                             <Popover.Panel className="absolute top-10 -left-2 z-10 bg-neutral-200 w-44 h-auto p-1 rounded-xl">
                               <div className="flex flex-col items-start justify-start gap-y-2 w-full">
-                                <p className="w-full p-2 rounded-lg hover:bg-neutral-400" onClick={() => { if (!paid) { markAsPaid(); } }}> Paid </p>
-                                
+                                <p
+                                  className="w-full p-2 rounded-lg hover:bg-neutral-400"
+                                  onClick={() => {
+                                    if (!paid) {
+                                      markAsPaid();
+                                    }
+                                  }}
+                                >
+                                  {" "}
+                                  Paid{" "}
+                                </p>
+
                                 <Divider variant="middle" flexItem />
 
-                                <p className="w-full p-2 rounded-lg hover:bg-neutral-400" onClick={() => { if (!gift) { markAsGift(); } }}>Gift item</p>
+                                <p
+                                  className="w-full p-2 rounded-lg hover:bg-neutral-400"
+                                  onClick={() => {
+                                    if (!gift) {
+                                      markAsGift();
+                                    }
+                                  }}
+                                >
+                                  Gift item
+                                </p>
                               </div>
 
                               <img src="/solutions.jpg" alt="" />
@@ -375,36 +400,61 @@ const RestaurantOrderItem = ({
                       ) : (
                         <>
                           {paid ? (
-                          <p
-                            className={`${
-                              paid
-                                ? "text-base font_bold text-white text-center"
-                                : "text-base font_bold credit_color text-center"
-                            }`}
-                          >
-                            Paid
-                          </p>
-                        ) : gift ? (
-                          <p
-                            className={`${
-                              gift
-                                ? "text-base font_bold text-white text-center"
-                                : "text-base font_bold credit_color text-center"
-                            }`}
-                          >
-                            Gift
-                          </p>
-                        ) : (
+                            <p
+                              className={`${
+                                paid
+                                  ? "text-base font_bold text-white text-center"
+                                  : "text-base font_bold credit_color text-center"
+                              }`}
+                            >
+                              Paid
+                            </p>
+                          ) : gift ? (
+                            <p
+                              className={`${
+                                gift
+                                  ? "text-base font_bold text-white text-center"
+                                  : "text-base font_bold credit_color text-center"
+                              }`}
+                            >
+                              Gift
+                            </p>
+                          ) : (
                             <Popover className="relative">
-                              <Popover.Button className={'credit_color font-semibold flex flex-row items-center justify-between gap-x-2 text-nowrap'}>Pending Payment <IoIosArrowDown /></Popover.Button>
+                              <Popover.Button
+                                className={
+                                  "credit_color font-semibold flex flex-row items-center justify-between gap-x-2 text-nowrap"
+                                }
+                              >
+                                Pending Payment <IoIosArrowDown />
+                              </Popover.Button>
 
                               <Popover.Panel className="absolute top-10 -left-2 z-10 bg-neutral-200 w-44 h-auto p-1 rounded-xl">
                                 <div className="flex flex-col items-start justify-start gap-y-2 w-full">
-                                  <p className="w-full p-2 rounded-lg hover:bg-neutral-400" onClick={() => { if (!paid) { markAsPaid(); } }}> Paid </p>
-                                  
+                                  <p
+                                    className="w-full p-2 rounded-lg hover:bg-neutral-400"
+                                    onClick={() => {
+                                      if (!paid) {
+                                        markAsPaid();
+                                      }
+                                    }}
+                                  >
+                                    {" "}
+                                    Paid{" "}
+                                  </p>
+
                                   <Divider variant="middle" flexItem />
 
-                                  <p className="w-full p-2 rounded-lg hover:bg-neutral-400" onClick={() => { if (!gift) { markAsGift(); } }}>Gift item</p>
+                                  <p
+                                    className="w-full p-2 rounded-lg hover:bg-neutral-400"
+                                    onClick={() => {
+                                      if (!gift) {
+                                        markAsGift();
+                                      }
+                                    }}
+                                  >
+                                    Gift item
+                                  </p>
                                 </div>
 
                                 <img src="/solutions.jpg" alt="" />
@@ -574,7 +624,7 @@ const RestaurantOrderItem = ({
                         className="w-11 h-11 rounded-full"
                       />
                     ) : (
-                      <CiUser size={28} color="#e85666" />
+                      <CiUser size={28} color="#06c167" />
                     )}
                     <div className="ml-3">
                       <p className="text-lg font-bold font_regular text-black">
@@ -629,7 +679,7 @@ const RestaurantOrderItem = ({
                                 key={i}
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
-                                fill="#e85666"
+                                fill="#06c167"
                                 className="w-4 h-4 cursor-pointer"
                               >
                                 <path
@@ -690,7 +740,7 @@ const RestaurantOrderItem = ({
                           className="w-11 h-11 rounded-full"
                         />
                       ) : (
-                        <CiUser size={28} color="#e85666" />
+                        <CiUser size={28} color="#06c167" />
                       )}
                       <div className="ml-3">
                         <p className="text-lg font-bold font_regular text-black">
@@ -773,7 +823,7 @@ const RestaurantOrderItem = ({
                             key={i}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
-                            fill="#e85666"
+                            fill="#06c167"
                             className="w-4 h-4 cursor-pointer"
                           >
                             <path

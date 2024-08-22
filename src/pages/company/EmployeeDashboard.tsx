@@ -387,7 +387,7 @@ const CompanyDashboard = () => {
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        fill="#E85666"
+                        fill="#06c167"
                         className="w-14 h-14"
                       >
                         <path
@@ -410,7 +410,7 @@ const CompanyDashboard = () => {
                       <div className="my-6 w-28 h-28 rounded-full bg_pink flex justify-center items-center">
                         <MdGroups
                           size={65}
-                          color="#e85666"
+                          color="#06c167"
                           className="self-center"
                         />
                       </div>
@@ -492,14 +492,14 @@ const CompanyDashboard = () => {
                               variant="outlined"
                               sx={[
                                 {
-                                  border: "2px solid #e85666",
+                                  border: "2px solid #06c167",
                                   borderRadius: "50px",
                                   color: extras ? "#ffffff" : "initial",
                                   fontWeight: "bold",
                                   textTransform: "none",
                                   paddingX: "30px",
                                   backgroundColor: extras
-                                    ? "#e85666"
+                                    ? "#06c167"
                                     : "initial",
                                   "&:hover": {
                                     color: "#4e0b2b",
@@ -538,8 +538,8 @@ const CompanyDashboard = () => {
                                 className="cursor-pointer decoration-1 underline decoration-red-500"
                               >
                                 <p className="font-semibold text-sm">
-                                  Click to download sample csv file
-                                !</p>
+                                  Click to download sample csv file !
+                                </p>
                               </a>
                             </div>
                           </div>

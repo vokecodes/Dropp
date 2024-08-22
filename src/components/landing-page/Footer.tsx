@@ -13,11 +13,15 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
 
   return (
     <>
-    {!noLove && (
-      <div className="relative -bottom-2 lg:-bottom-[4.5rem] w-full px-2">
-        <img src="/images/street-love.svg" className="w-full object-cover" alt="" />
-      </div>
-    )}
+      {!noLove && (
+        <div className="relative -bottom-2 lg:-bottom-[4.5rem] w-full px-2">
+          <img
+            src="/images/street-love.svg"
+            className="w-full object-cover"
+            alt=""
+          />
+        </div>
+      )}
       <div className="relative bg-[#240011] px-6 lg:px-24">
         <div className="w-full flex flex-col lg:flex-row justify-between gap-y-10 white_txt_color py-14">
           <div>
@@ -38,7 +42,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
 
           <div className="flex flex-row items-start justify-between gap-x-10">
             <div className="min-w-24">
-              <h1 className="bg-[#E85666] rounded-full w-20 text-[#4E0B2B] text-base text-center font_bold">
+              <h1 className="bg-[#06c167] rounded-full w-20 text-[#4E0B2B] text-base text-center font_bold">
                 Explore
               </h1>
               <Link to={HOME_ROUTES.linkExplore}>
@@ -63,7 +67,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
               </Link>
             </div>
             <div className="min-w-24">
-              <h1 className="bg-[#E85666] rounded-full w-20 text-[#4E0B2B] text-base text-center font_bold">
+              <h1 className="bg-[#06c167] rounded-full w-20 text-[#4E0B2B] text-base text-center font_bold">
                 Learn
               </h1>
               <Link to={HOME_ROUTES.linkFoodSafety}>
@@ -90,7 +94,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
           </div>
 
           <div>
-            <h1 className="bg-[#E85666] rounded-full w-24 text-[#4E0B2B] text-base text-center font_bold">
+            <h1 className="bg-[#06c167] rounded-full w-24 text-[#4E0B2B] text-base text-center font_bold">
               Reach out
             </h1>
             <a href="+2348068424478">
@@ -104,7 +108,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
               </p>
             </a>
             <div className="mt-5">
-              <h1 className="bg-[#E85666] rounded-full w-20 text-[#4E0B2B] text-base text-center font_bold">
+              <h1 className="bg-[#06c167] rounded-full w-20 text-[#4E0B2B] text-base text-center font_bold">
                 Office
               </h1>
               <p className="text-sm text-[#8A8085] font_regular mt-3 decoration-1">
@@ -119,7 +123,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
             </div>
           </div>
           <div className="w-full lg:w-fit flex flex-row lg:flex-col justify-between lg:justify-start gap-y-4">
-            <p className="bg-[#E85666] rounded-full w-fit lg:w-24 text-base text-center text-white font_bold px-2">
+            <p className="bg-[#06c167] rounded-full w-fit lg:w-24 text-base text-center text-white font_bold px-2">
               <a
                 href="https://www.linkedin.com/company/homemade-by-dropp?trk=profile-position"
                 target="_blank"
@@ -128,7 +132,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
                 LinkedIn
               </a>
             </p>
-            <p className="bg-[#E85666] rounded-full w-fit lg:w-24 text-base text-center text-white font_bold px-2">
+            <p className="bg-[#06c167] rounded-full w-fit lg:w-24 text-base text-center text-white font_bold px-2">
               <a
                 href="https://www.instagram.com/try.homemade/"
                 target="_blank"
@@ -137,7 +141,7 @@ const Footer = ({ howref, chefDashboard, noLove }: any) => {
                 Instagram
               </a>
             </p>
-            <p className="bg-[#E85666] rounded-full w-fit lg:w-24 text-base text-center text-white font_bold px-2">
+            <p className="bg-[#06c167] rounded-full w-fit lg:w-24 text-base text-center text-white font_bold px-2">
               <a
                 href="https://twitter.com/tryhomemade"
                 target="_blank"

@@ -318,7 +318,7 @@ const Wallet = () => {
           <PageTitle title="My Wallet" />
           <div className="mt-10 w-full lg:w-5/6">
             <div className="flex">
-              <FaWallet size={28} color="#e85666" />
+              <FaWallet size={28} color="#06c167" />
               <div className="ml-4 lg:flex items-center mb-8">
                 <div>
                   <div className="flex">
@@ -464,7 +464,7 @@ const Wallet = () => {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  fill="#E85666"
+                  fill="#06c167"
                   className="w-14 h-14"
                 >
                   <path

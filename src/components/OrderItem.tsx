@@ -65,9 +65,7 @@ const OrderItem = ({
                 <p className="text-base font-bold font_regular text-black">
                   {date}
                 </p>
-                <p className="text-sm font_regular sec_gray_color">
-                  {time}
-                </p>
+                <p className="text-sm font_regular sec_gray_color">{time}</p>
                 {/* {checkoutCode && (
                   <p className="text-md font_bold text-black">
                     Checkout Code: {checkoutCode}
@@ -93,7 +91,8 @@ const OrderItem = ({
                       orders?.map((order: any) => {
                         const price =
                           (order?.discount
-                            ? order?.price - (order?.price / 100) * order?.discount
+                            ? order?.price -
+                              (order?.price / 100) * order?.discount
                             : order?.price) * order?.quantity;
 
                         const priceAfterTax = (price / 100) * 85;
@@ -107,7 +106,7 @@ const OrderItem = ({
                   </>
                 )}
               </div>
-              
+
               <div className="w-1/4 flex flex-row items-start justify-between">
                 <div className="flex justify-center">
                   {completed !== "completed" && (
@@ -120,27 +119,39 @@ const OrderItem = ({
                 </div>
 
                 {showCustomer ? (
-                  <div className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-300" onClick={onClickIconClose}>
+                  <div
+                    className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-300"
+                    onClick={onClickIconClose}
+                  >
                     <FaChevronUp color="#000" />
                   </div>
                 ) : (
-                  <div className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-300" onClick={onClickIconOpen}>
+                  <div
+                    className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-300"
+                    onClick={onClickIconOpen}
+                  >
                     <FaChevronDown color="#000" />
                   </div>
-                  )}
+                )}
               </div>
             </div>
           </div>
 
           <div className="lg:hidden pb-4 shadow-lg rounded-xl">
             {showCustomer ? (
-              <div className="flex flex-row items-center justify-end w-full h-fit mb-2 py-2 bg-gray-100 px-4 rounded-t-xl" onClick={onClickIconClose}>
+              <div
+                className="flex flex-row items-center justify-end w-full h-fit mb-2 py-2 bg-gray-100 px-4 rounded-t-xl"
+                onClick={onClickIconClose}
+              >
                 <div className="cursor-pointer">
                   <FaChevronUp color="#000" />
                 </div>
               </div>
             ) : (
-              <div className="flex flex-row items-center justify-end w-full h-fit mb-2 py-2 bg-gray-100 px-4 rounded-t-xl" onClick={onClickIconOpen}>
+              <div
+                className="flex flex-row items-center justify-end w-full h-fit mb-2 py-2 bg-gray-100 px-4 rounded-t-xl"
+                onClick={onClickIconOpen}
+              >
                 <div className="cursor-pointer">
                   <FaChevronDown color="#000" />
                 </div>
@@ -226,7 +237,7 @@ const OrderItem = ({
                       {customerName}
                     </p>
                   </div>
-                  
+
                   <div className="w-1/3 flex flex-col items-start justify-center">
                     <p className="text-base text-start font-bold font_regular text-black">
                       Email
@@ -248,7 +259,7 @@ const OrderItem = ({
                       {customerName}
                     </p>
                   </div>
-                  
+
                   <div className="w-full flex flex-col items-start justify-center">
                     <p className="text-base text-start font-bold font_regular text-black">
                       Email
@@ -305,7 +316,8 @@ const OrderItem = ({
                       orders?.map((order: any) => {
                         const price =
                           (order?.discount
-                            ? order?.price - (order?.price / 100) * order?.discount
+                            ? order?.price -
+                              (order?.price / 100) * order?.discount
                             : order?.price) * order?.quantity;
 
                         const priceAfterTax = (price / 100) * 85;
@@ -440,7 +452,7 @@ const OrderItem = ({
                         className="w-11 h-11 rounded-full"
                       />
                     ) : (
-                      <CiUser size={28} color="#e85666" />
+                      <CiUser size={28} color="#06c167" />
                     )}
                     <div className="ml-3">
                       <p className="text-lg font-bold font_regular text-black">
@@ -495,7 +507,7 @@ const OrderItem = ({
                                 key={i}
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
-                                fill="#e85666"
+                                fill="#06c167"
                                 className="w-4 h-4 cursor-pointer"
                               >
                                 <path
@@ -556,7 +568,7 @@ const OrderItem = ({
                           className="w-11 h-11 rounded-full"
                         />
                       ) : (
-                        <CiUser size={28} color="#e85666" />
+                        <CiUser size={28} color="#06c167" />
                       )}
                       <div className="ml-3">
                         <p className="text-lg font-bold font_regular text-black">
@@ -639,7 +651,7 @@ const OrderItem = ({
                             key={i}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
-                            fill="#e85666"
+                            fill="#06c167"
                             className="w-4 h-4 cursor-pointer"
                           >
                             <path

@@ -58,7 +58,9 @@ const CompanyPersonal = () => {
   const [togglePassword, setTogglePassword] = useState("password");
 
   const updateUserProfile = () =>
-    dispatch(updateProfileCompanyAccount(COMPANY_URL, values, closeProfileModal));
+    dispatch(
+      updateProfileCompanyAccount(COMPANY_URL, values, closeProfileModal)
+    );
 
   const { handleChange, handleSubmit, values, setFieldValue } = useFormik({
     initialValues: user,
@@ -76,24 +78,21 @@ const CompanyPersonal = () => {
       <div className="lg:w-2/3">
         <div className="flex flex-row justify-start items-start gap-x-3 border-b pb-5">
           <div className="mb-5 border-8 w-fit h-fit rounded-full flex justify-center items-center">
-          {user?.image ? (
-            <img
-              src={user?.image}
-              alt="chef"
-              className="w-14 h-14 rounded-full"
-            />
-          ) : (
-            <CiUser className="w-14 h-14 p-2" color="#e85666" />
-          )}
+            {user?.image ? (
+              <img
+                src={user?.image}
+                alt="chef"
+                className="w-14 h-14 rounded-full"
+              />
+            ) : (
+              <CiUser className="w-14 h-14 p-2" color="#06c167" />
+            )}
           </div>
           <div className="flex flex-col justify-start items-start gap-y-1">
             <p className="text-xl text-black font-bold font_medium">
               {user?.companyName}
             </p>
-            <p className="text-base gray_color font_regular">
-              {user?.email}
-            </p>
-
+            <p className="text-base gray_color font_regular">{user?.email}</p>
           </div>
         </div>
         <div className="border-b py-5">
@@ -162,7 +161,7 @@ const CompanyPersonal = () => {
                         className="w-24 h-24 rounded-full"
                       />
                     ) : (
-                      <BiImages size={28} color="#e85666" />
+                      <BiImages size={28} color="#06c167" />
                     )}
                   </>
                 )}
@@ -188,7 +187,7 @@ const CompanyPersonal = () => {
                   <p className="text-lg primary_txt_color font_regular text-center mr-3">
                     {values.image ? "Change image" : "Add an image"}
                   </p>
-                  <FiChevronRight size={20} color="#e85666" className="mt-1" />
+                  <FiChevronRight size={20} color="#06c167" className="mt-1" />
                 </div>
               </div>
             </div>

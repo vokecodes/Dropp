@@ -416,7 +416,7 @@ const RestaurantShop = () => {
                                 />
                               ) : (
                                 <GiCook
-                                  color="#e85666"
+                                  color="#06c167"
                                   className="w-20 lg:w-32 h-20 lg:h-32 rounded-full p-4"
                                 />
                               )}
@@ -786,7 +786,7 @@ const RestaurantShop = () => {
                           />
                         ) : (
                           <GiCook
-                            color="#e85666"
+                            color="#06c167"
                             className="w-28 lg:w-40 h-28 lg:h-40 rounded-full p-4"
                           />
                         )}
@@ -927,7 +927,7 @@ const RestaurantShop = () => {
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
-                              fill="#E85666"
+                              fill="#06c167"
                               className="w-10 lg:w-14 h-10 lg:h-14"
                             >
                               <path

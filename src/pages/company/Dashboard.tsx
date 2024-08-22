@@ -42,10 +42,7 @@ import {
   getCompanyWalletAccount,
 } from "../../_redux/user/userAction";
 import { fundEmployeesCompany } from "../../_redux/employees/employeeCrud";
-import {
-  getCompanyEmployees,
-} from "../../_redux/employees/employeeAction";
-
+import { getCompanyEmployees } from "../../_redux/employees/employeeAction";
 
 const TRANSACTION_TYPE = "COMPANY_FUNDING";
 
@@ -62,26 +59,40 @@ const FUNDING_SOURCES = [
   },
 ];
 
-
-
 const CompanyDashboard = () => {
   const dispatch = useAppDispatch();
-  const { auth, user, wallet, cards, walletTransaction, userLoading, employees, employeeLoading } =
-    useSelector(
-      (state: any) => ({
-        auth: state.auth.user,
-        user: state.user.user,
-        cards: state.cards.cards,
-        wallet: state.user.wallet,
-        walletTransaction: state.user.walletTransaction,
-        userLoading: state.user.loading,
-        employees: state.employees.employees,
-        employeeLoading: state.employees.loading,
-      }),
-      shallowEqual
-    );
+  const {
+    auth,
+    user,
+    wallet,
+    cards,
+    walletTransaction,
+    userLoading,
+    employees,
+    employeeLoading,
+  } = useSelector(
+    (state: any) => ({
+      auth: state.auth.user,
+      user: state.user.user,
+      cards: state.cards.cards,
+      wallet: state.user.wallet,
+      walletTransaction: state.user.walletTransaction,
+      userLoading: state.user.loading,
+      employees: state.employees.employees,
+      employeeLoading: state.employees.loading,
+    }),
+    shallowEqual
+  );
 
-  const employeeOptions:any[] = employees && employees.map((i: any) => { return {'label': `${i.employee.firstName} ${i.employee.lastName}`, 'id': i._id, 'employee': i}})
+  const employeeOptions: any[] =
+    employees &&
+    employees.map((i: any) => {
+      return {
+        label: `${i.employee.firstName} ${i.employee.lastName}`,
+        id: i._id,
+        employee: i,
+      };
+    });
 
   useEffect(() => {
     dispatch(getProfileCompanyAccount());
@@ -122,11 +133,9 @@ const CompanyDashboard = () => {
     },
   ];
 
-
   const [employeeWalletModal, setEmployeeWalletModal] = useState(false);
   const openEmployeeWalletModal = () => setEmployeeWalletModal(true);
   const closeEmployeeWalletModal = () => setEmployeeWalletModal(false);
-
 
   // PROCESSING MODAL
   const [processingModal, setProcessingModal] = useState(false);
@@ -145,20 +154,24 @@ const CompanyDashboard = () => {
   };
 
   // FUND MULTIPLE EMPLOYEES
-  const [fundAmount, setFundAmount] = useState("")
+  const [fundAmount, setFundAmount] = useState("");
   const [employeeError, setEmployeeError] = useState("");
 
   const handleFundEmployee = () => {
-    if (!checked && selectedEmployee == null || checked && selectManyEmployees.length == 0) {
+    if (
+      (!checked && selectedEmployee == null) ||
+      (checked && selectManyEmployees.length == 0)
+    ) {
       setEmployeeError("No employee selected.");
       return;
-    } if(fundAmount == ""){
-      setEmployeeError('Amount cannot be empty');
+    }
+    if (fundAmount == "") {
+      setEmployeeError("Amount cannot be empty");
       return;
-    }else if(parseFloat(fundAmount) < 1000){
-      setEmployeeError('Amount cannot be lower than 1000');
+    } else if (parseFloat(fundAmount) < 1000) {
+      setEmployeeError("Amount cannot be lower than 1000");
       return;
-    }else {
+    } else {
       setEmployeeWalletModal(false);
       setProcessingModal(true);
       fundEmployees();
@@ -166,11 +179,11 @@ const CompanyDashboard = () => {
   };
 
   const fundEmployees = async () => {
-    let ids 
+    let ids;
     if (checked) {
-      ids = selectManyEmployees.map((c: any) => c._id)
+      ids = selectManyEmployees.map((c: any) => c._id);
     } else {
-      ids = selectedEmployee._id
+      ids = selectedEmployee._id;
     }
 
     setIsLoading(true);
@@ -216,7 +229,7 @@ const CompanyDashboard = () => {
     if (
       checked &&
       !selectManyEmployees.find(({ _id }: any) => _id === employee._id)
-      ) {
+    ) {
       setSelectManyEmployees(
         Array.from(new Set([...selectManyEmployees, employee]))
       );
@@ -241,8 +254,6 @@ const CompanyDashboard = () => {
       );
     }
   };
-
-
 
   // CARD MANAGEMENT FUNCS
   const [selectedCard, setSelectedCard] = useState<any>();
@@ -532,7 +543,10 @@ const CompanyDashboard = () => {
 
                 {/* table gangan */}
                 <div className="bg-white px-8 rounded-3xl w-full overflow-x-auto">
-                  <div className="grid grid-cols-4 items-center justify-items-start md:justify-between border-b gap-x-5 py-4 font-medium" style={{ minWidth:'500px', }}>
+                  <div
+                    className="grid grid-cols-4 items-center justify-items-start md:justify-between border-b gap-x-5 py-4 font-medium"
+                    style={{ minWidth: "500px" }}
+                  >
                     <p className="text-sm lg:text-base font_regular gray_color col-span-2 whitespace-nowrap">
                       Name & Email
                     </p>
@@ -542,10 +556,7 @@ const CompanyDashboard = () => {
                     <p className="justify-self-end">&nbsp;</p>
                   </div>
 
-                  <div
-                    className="h-fit md:px-3"
-                    style={{ maxHeight: "500px" }}
-                  >
+                  <div className="h-fit md:px-3" style={{ maxHeight: "500px" }}>
                     {employees && employees?.length > 0 ? (
                       employees?.map((e: any, i: number) => (
                         <EmployeeListItem
@@ -597,7 +608,7 @@ const CompanyDashboard = () => {
                       className="w-12 h-12 rounded-full"
                     />
                   ) : (
-                    <CiUser className="w-12 h-12 p-2" color="#e85666" />
+                    <CiUser className="w-12 h-12 p-2" color="#06c167" />
                   )}
                 </div>
               </div>
@@ -693,7 +704,7 @@ const CompanyDashboard = () => {
                             className="w-11 h-11 rounded-full"
                           />
                         ) : (
-                          <CiUser size={28} color="#e85666" />
+                          <CiUser size={28} color="#06c167" />
                         )}
                         <div className="h-full my-auto ml-3 flex flex-row justify-between items-center">
                           <p className="text-xs font-bold font_regular text-black">
@@ -726,7 +737,10 @@ const CompanyDashboard = () => {
                       style={{ maxHeight: "250px" }}
                     >
                       {selectManyEmployees.map((employee: any, i: number) => (
-                        <div key={employee?.employee._id} className="flex flex-row justify-between bg-gray-200 items-center w-fit h-fit py-2 px-1 my-1 gap-x-1 rounded-full">
+                        <div
+                          key={employee?.employee._id}
+                          className="flex flex-row justify-between bg-gray-200 items-center w-fit h-fit py-2 px-1 my-1 gap-x-1 rounded-full"
+                        >
                           <div className="flex flex-row justify-between items-center">
                             {employee?.employee?.image ? (
                               <img
@@ -735,7 +749,7 @@ const CompanyDashboard = () => {
                                 className="w-8 h-8 rounded-full"
                               />
                             ) : (
-                              <CiUser size={28} color="#e85666" />
+                              <CiUser size={28} color="#06c167" />
                             )}
                             <div className="ml-3 flex flex-row justify-between items-center">
                               <p className="text-xs font-bold font_regular text-black">
@@ -766,7 +780,10 @@ const CompanyDashboard = () => {
 
                   {employees && employees?.length > 0 ? (
                     employees?.slice(0, 5).map((employee: any, i: number) => (
-                      <div key={employee?.employee._id} className="h-fit w-full p-0 m-0">
+                      <div
+                        key={employee?.employee._id}
+                        className="h-fit w-full p-0 m-0"
+                      >
                         <div className="flex flex-row justify-between items-start">
                           <div className="flex flex-row justify-between items-center">
                             {employee?.employee?.image ? (
@@ -776,7 +793,7 @@ const CompanyDashboard = () => {
                                 className="w-8 h-8 rounded-full"
                               />
                             ) : (
-                              <CiUser size={28} color="#e85666" />
+                              <CiUser size={28} color="#06c167" />
                             )}
                             <div className="ml-3 flex flex-row justify-between items-center">
                               <p className="text-xs font-bold font_regular text-black">
@@ -799,9 +816,7 @@ const CompanyDashboard = () => {
                               />
                             ) : (
                               <Radio
-                                checked={
-                                  selectedRadio === employee?._id
-                                }
+                                checked={selectedRadio === employee?._id}
                                 onChange={(e) => handleRadio(e, employee)}
                                 value={employee?._id}
                                 name={`${employee.employee.firstName} ${employee.employee.lastName}`}
@@ -858,7 +873,7 @@ const CompanyDashboard = () => {
                       title="Proceed"
                       extraClasses="w-full p-3 rounded-full"
                       onClick={() => {
-                        handleFundEmployee()
+                        handleFundEmployee();
                       }}
                     />
                   </div>
@@ -894,7 +909,7 @@ const CompanyDashboard = () => {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
-                      fill="#E85666"
+                      fill="#06c167"
                       className="w-14 h-14"
                     >
                       <path
@@ -1086,7 +1101,7 @@ const CompanyDashboard = () => {
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    fill="#E85666"
+                    fill="#06c167"
                     className="w-14 h-14"
                   >
                     <path
@@ -1114,7 +1129,7 @@ const CompanyDashboard = () => {
                               className="w-8 h-8 rounded-full"
                             />
                           ) : (
-                            <CiUser size={28} color="#e85666" />
+                            <CiUser size={28} color="#06c167" />
                           )}
                           <div className="ml-3 flex flex-row justify-between items-center">
                             <p className="text-xs font-bold font_regular text-black">
@@ -1133,7 +1148,10 @@ const CompanyDashboard = () => {
                       style={{ maxHeight: "250px" }}
                     >
                       {selectManyEmployees.map((employee: any, i: number) => (
-                        <div key={employee?.employee._id} className="flex flex-row justify-between bg-gray-200 items-center w-fit h-fit p-2 my-1 gap-x-1 rounded-full">
+                        <div
+                          key={employee?.employee._id}
+                          className="flex flex-row justify-between bg-gray-200 items-center w-fit h-fit p-2 my-1 gap-x-1 rounded-full"
+                        >
                           <div className="flex flex-row justify-between items-center">
                             {employee?.employee.image ? (
                               <img
@@ -1143,7 +1161,7 @@ const CompanyDashboard = () => {
                               />
                             ) : (
                               <div className="h-fit w-fit bg-white p-2 rounded-full">
-                                <CiUser size={28} color="#e85666" />
+                                <CiUser size={28} color="#06c167" />
                               </div>
                             )}
                             <div className="ml-3 flex flex-row justify-between items-center">

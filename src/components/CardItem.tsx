@@ -19,7 +19,6 @@ const CardItem = ({
         <div className="flex items-center">
           <div className="flex-1">
             <div className="flex items-center">
-              
               <div className="ml-5">
                 <p className="text-lg gray_color font_regular uppercase">
                   {bankName}
@@ -38,7 +37,7 @@ const CardItem = ({
             className="w-8 h-8 rounded-full bg_menu flex items-center justify-center cursor-pointer"
             onClick={onClickSelectCard}
           >
-            {selectedCard && <RxCheck size={24} color="#e85666" />}
+            {selectedCard && <RxCheck size={24} color="#06c167" />}
             {selectedLoading && <ColoredSpinner />}
           </div>
         </div>
@@ -50,7 +49,7 @@ const CardItem = ({
                 className="w-8 h-8 rounded-full bg_menu flex items-center justify-center cursor-pointer"
                 onClick={onClickSelectCard}
               >
-                {selectedCard && <RxCheck size={24} color="#e85666" />}
+                {selectedCard && <RxCheck size={24} color="#06c167" />}
                 {selectedLoading && <ColoredSpinner />}
               </div>
               <div className="ml-5">
@@ -78,7 +77,6 @@ const CardItem = ({
           )}
         </div>
       )}
-      
     </div>
   );
 };

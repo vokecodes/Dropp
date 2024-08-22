@@ -110,7 +110,7 @@ const PreviewChefShop = () => {
                               />
                             ) : (
                               <GiCook
-                                color="#e85666"
+                                color="#06c167"
                                 className="w-20 lg:w-40 h-20 lg:h-40 rounded-full p-4"
                               />
                             )}
@@ -189,7 +189,7 @@ const PreviewChefShop = () => {
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 24 24"
-                                      fill="#E85666"
+                                      fill="#06c167"
                                       className="w-8 h-8"
                                     >
                                       <path
@@ -306,7 +306,11 @@ const PreviewChefShop = () => {
                   </div>
                 </div>
 
-                <Footer chefDashboard={person?.userType === USER_TYPE.CHEF ? true : false} />
+                <Footer
+                  chefDashboard={
+                    person?.userType === USER_TYPE.CHEF ? true : false
+                  }
+                />
               </div>
             </div>
           ) : (

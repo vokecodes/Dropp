@@ -286,7 +286,7 @@ const Cart = ({
           >
             <div className="flex-1">
               <div className="flex items-center">
-                <FaWallet size={28} color="#e85666" />
+                <FaWallet size={28} color="#06c167" />
                 <p className="ml-2 text-md text-black font_regular">Balance</p>
               </div>
               <p className="my-5 text-4xl text-black font_bold">
@@ -422,7 +422,7 @@ const Cart = ({
                 ) : (
                   <GiCook
                     className="w-10 h-10 p-1 rounded-full"
-                    color="#e85666"
+                    color="#06c167"
                   />
                 )}
               </div>
@@ -503,7 +503,7 @@ const Cart = ({
                               >
                                 <AiFillDelete
                                   className="w-5 h-5"
-                                  color="#e85666"
+                                  color="#06c167"
                                 />
                               </div>
                             </div>

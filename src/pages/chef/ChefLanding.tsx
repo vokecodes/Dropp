@@ -466,12 +466,12 @@ export default ChefLandingPage;
 //             <p className="font-bold font_bold text-4xl lg:text-6xl text-center">
 //               <span className="text-[#FBF6F6]">Make money.<br /></span>
 //               <span className="text-[#FBF6F6]">Homemade.<br /></span>
-//               <span className="text-[#E85666] italic">from your kitchen.</span>
+//               <span className="text-[#06c167] italic">from your kitchen.</span>
 //             </p>
 
 //             <p className="text-[#B5ABB0] text-sm lg:text-lg font_regular font-medium w-2/3 lg:w-1/2 text-center">Sign up to be your own boss and cook whenever you want.</p>
 
-//             <button className="flex flex-row items-center justify-between py-3 px-4 lg:px-8 bg-[#E85666] text-white rounded-lg gap-x-14 text-sm lg:text-lg font-bold button-shine whitespace-nowrap mx-auto" onClick={() => navigate(AUTH_ROUTES.linkChefSignUp)}>
+//             <button className="flex flex-row items-center justify-between py-3 px-4 lg:px-8 bg-[#06c167] text-white rounded-lg gap-x-14 text-sm lg:text-lg font-bold button-shine whitespace-nowrap mx-auto" onClick={() => navigate(AUTH_ROUTES.linkChefSignUp)}>
 //               Get Started!
 //               <FaArrowRightLong size={20} className="" />
 //             </button>
@@ -489,7 +489,7 @@ export default ChefLandingPage;
 
 //           {chosenTab === 1 && (
 //             <div className="w-full m-0">
-//               <p className="text-[#E85666] font-bold font_bold text-3xl lg:text-5xl text-center">More for you and your business</p>
+//               <p className="text-[#06c167] font-bold font_bold text-3xl lg:text-5xl text-center">More for you and your business</p>
 
 //               <div className="w-full lg:w-9/12 lg:mx-auto grid grid-cols-1 lg:grid-cols-2 justify-items-center items-center gap-x-10 gap-y-10">
 //                 <div className="h-full w-4/5 flex flex-col justify-center items-center justify-self-center lg:justify-self-end">
@@ -498,15 +498,15 @@ export default ChefLandingPage;
 
 //                 <div className="h-full w-10/12 lg:w-4/5 flex flex-col items-center lg:items-start justify-center gap-y-10 justify-self-center lg:justify-self-start">
 //                   <div>
-//                     <p className="text-xl font-semibold text-[#E85666]">Submit application.</p>
+//                     <p className="text-xl font-semibold text-[#06c167]">Submit application.</p>
 //                     <p className="text-white">All you need is passion, commitment & answer to few simple questions from us.</p>
 //                   </div>
 //                   <div>
-//                     <p className="text-xl font-semibold text-[#E85666]">Get approved.</p>
+//                     <p className="text-xl font-semibold text-[#06c167]">Get approved.</p>
 //                     <p className="text-white">We’ll walk you through the food safety certification process. Requirements vary by country.</p>
 //                   </div>
 //                   <div>
-//                     <p className="text-xl font-semibold text-[#E85666]">Get approved.</p>
+//                     <p className="text-xl font-semibold text-[#06c167]">Get approved.</p>
 //                     <p className="text-white">We’ll walk you through the food safety certification process. Requirements vary by country.</p>
 //                   </div>
 //                 </div>
@@ -516,7 +516,7 @@ export default ChefLandingPage;
 
 //           {chosenTab === 2 && (
 //             <div className="w-full m-0">
-//               <p className="text-[#E85666] font-bold font_bold text-3xl lg:text-5xl text-center">More for you and your business2</p>
+//               <p className="text-[#06c167] font-bold font_bold text-3xl lg:text-5xl text-center">More for you and your business2</p>
 
 //               <div className="w-full lg:w-9/12 lg:mx-auto grid grid-cols-1 lg:grid-cols-2 justify-items-center items-center gap-x-10 gap-y-10">
 //                 <div className="h-full w-4/5 flex flex-col justify-center items-center justify-self-center lg:justify-self-end">
@@ -525,15 +525,15 @@ export default ChefLandingPage;
 
 //                 <div className="h-full w-10/12 lg:w-4/5 flex flex-col items-center lg:items-start justify-center gap-y-10 justify-self-center lg:justify-self-start">
 //                   <div>
-//                     <p className="text-xl font-semibold text-[#E85666]">Submit application.</p>
+//                     <p className="text-xl font-semibold text-[#06c167]">Submit application.</p>
 //                     <p className="text-white">All you need is passion, commitment & answer to few simple questions from us.</p>
 //                   </div>
 //                   <div>
-//                     <p className="text-xl font-semibold text-[#E85666]">Get approved.</p>
+//                     <p className="text-xl font-semibold text-[#06c167]">Get approved.</p>
 //                     <p className="text-white">We’ll walk you through the food safety certification process. Requirements vary by country.</p>
 //                   </div>
 //                   <div>
-//                     <p className="text-xl font-semibold text-[#E85666]">Get approved.</p>
+//                     <p className="text-xl font-semibold text-[#06c167]">Get approved.</p>
 //                     <p className="text-white">We’ll walk you through the food safety certification process. Requirements vary by country.</p>
 //                   </div>
 //                 </div>
@@ -575,19 +575,19 @@ export default ChefLandingPage;
 
 //           <div className="h-full w-9/12 lg:w-3/5 flex flex-col items-start justify-center gap-y-10 lg:justify-self-start">
 //             <div>
-//               <p className="text-xl font-semibold text-[#E85666]">Submit application.</p>
+//               <p className="text-xl font-semibold text-[#06c167]">Submit application.</p>
 //               <p className="text-white">All you need is passion, commitment & answer to few simple questions from us.</p>
 //             </div>
 //             <div>
-//               <p className="text-xl font-semibold text-[#E85666]">Get approved.</p>
+//               <p className="text-xl font-semibold text-[#06c167]">Get approved.</p>
 //               <p className="text-white">We’ll walk you through the food safety certification process. Requirements vary by country.</p>
 //             </div>
 //             <div>
-//               <p className="text-xl font-semibold text-[#E85666]">Start cooking.</p>
+//               <p className="text-xl font-semibold text-[#06c167]">Start cooking.</p>
 //               <p className="text-white">Get paid for doing what you love. We’ll make sure you succeed from day one.</p>
 //             </div>
 
-//             <button className="flex flex-row items-center justify-between py-2 px-4 lg:px-10 bg-[#E85666] text-white rounded-lg gap-x-14 text-sm lg:text-lg font-bold button-shine whitespace-nowrap" onClick={() => navigate(AUTH_ROUTES.linkChefSignUp)}>
+//             <button className="flex flex-row items-center justify-between py-2 px-4 lg:px-10 bg-[#06c167] text-white rounded-lg gap-x-14 text-sm lg:text-lg font-bold button-shine whitespace-nowrap" onClick={() => navigate(AUTH_ROUTES.linkChefSignUp)}>
 //               Get Started!
 //               <FaArrowRightLong size={20} className="" />
 //             </button>
@@ -597,7 +597,7 @@ export default ChefLandingPage;
 
 //       {/* PRICING */}
 //       <div className="w-11/12 mx-auto space-y-10 rounded-xl bg-[#090004] px-4 py-8 lg:p-20 my-16">
-//         <p className="text-[#E85666] text-5xl font-bold font_bold text-center">Pricing</p>
+//         <p className="text-[#06c167] text-5xl font-bold font_bold text-center">Pricing</p>
 //         <p className="text-white text-center w-full lg:w-1/3 mx-auto">All you need is passion, commitment & answer to few simple questions from us.</p>
 
 //         <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-center align content-start gap-x-5 gap-y-5 w-full">
@@ -606,7 +606,7 @@ export default ChefLandingPage;
 
 //             <div className="w-full space-y-1 text-center border-b border-[#34061C] pb-5">
 //               <p className="text-white text-lg">Starter</p>
-//               <p className="text-5xl font-semibold text-[#E85666]">₦<span className="font_bold">3,750</span></p>
+//               <p className="text-5xl font-semibold text-[#06c167]">₦<span className="font_bold">3,750</span></p>
 //               <p className="text-[#6B133D] text-lg">Monthly</p>
 //             </div>
 
@@ -637,17 +637,17 @@ export default ChefLandingPage;
 //               </div>
 //             </div>
 
-//             <button className="w-full text-center py-2 px-4 lg:px-10 bg-transparent border border-[#E85666] text-[#FBF6F6] rounded-xl text-sm font-semibold button-shine whitespace-nowrap">
+//             <button className="w-full text-center py-2 px-4 lg:px-10 bg-transparent border border-[#06c167] text-[#FBF6F6] rounded-xl text-sm font-semibold button-shine whitespace-nowrap">
 //               Choose starter
 //             </button>
 //           </div>
 
 //           <div className="flex flex-col items-center justify-between gap-y-10 w-full rounded-xl py-10 px-5 bg-[#4E0B2B] hover:scale-105 hover:shadow-lg hover:shadow-neutral-600">
 
-//             <div className="w-full space-y-1 text-center border-b border-[#E85666] pb-5">
+//             <div className="w-full space-y-1 text-center border-b border-[#06c167] pb-5">
 //               <p className="text-white text-lg">Starter</p>
-//               <p className="text-5xl font-semibold text-[#E85666]">₦<span className="font_bold">3,750</span></p>
-//               <p className="text-[#E85666] text-lg">Monthly</p>
+//               <p className="text-5xl font-semibold text-[#06c167]">₦<span className="font_bold">3,750</span></p>
+//               <p className="text-[#06c167] text-lg">Monthly</p>
 //             </div>
 
 //             <div className="flex flex-col items-start justify-start gap-y-3 font-light font_regular text-sm">
@@ -677,7 +677,7 @@ export default ChefLandingPage;
 //               </div>
 //             </div>
 
-//             <button className="w-full text-center py-2 px-4 lg:px-10 bg-[#E85666] text-[#FBF6F6] rounded-xl text-sm font-semibold button-shine whitespace-nowrap">
+//             <button className="w-full text-center py-2 px-4 lg:px-10 bg-[#06c167] text-[#FBF6F6] rounded-xl text-sm font-semibold button-shine whitespace-nowrap">
 //               Choose starter
 //             </button>
 //           </div>
@@ -686,7 +686,7 @@ export default ChefLandingPage;
 
 //             <div className="w-full space-y-1 text-center border-b border-[#34061C] pb-5">
 //               <p className="text-white text-lg">Starter</p>
-//               <p className="text-5xl font-semibold text-[#E85666]">₦<span className="font_bold">3,750</span></p>
+//               <p className="text-5xl font-semibold text-[#06c167]">₦<span className="font_bold">3,750</span></p>
 //               <p className="text-[#6B133D] text-lg">Monthly</p>
 //             </div>
 
@@ -717,7 +717,7 @@ export default ChefLandingPage;
 //               </div>
 //             </div>
 
-//             <button className="w-full text-center py-2 px-4 lg:px-10 bg-transparent border border-[#E85666] text-[#FBF6F6] rounded-xl text-sm font-semibold button-shine whitespace-nowrap">
+//             <button className="w-full text-center py-2 px-4 lg:px-10 bg-transparent border border-[#06c167] text-[#FBF6F6] rounded-xl text-sm font-semibold button-shine whitespace-nowrap">
 //               Choose starter
 //             </button>
 //           </div>
@@ -727,19 +727,19 @@ export default ChefLandingPage;
 
 //       {/* CHEFS */}
 //       <div className="w-full space-y-16 flex flex-col overflow-hidden my-16">
-//         <p className="text-4xl lg:text-5xl font-bold font_bold text-white text-center"><span className="text-[#E85666]">150+</span>Homechefs</p>
+//         <p className="text-4xl lg:text-5xl font-bold font_bold text-white text-center"><span className="text-[#06c167]">150+</span>Homechefs</p>
 
 //         <div className="ml-10 grow flex flex-row items-center justify-start gap-x-5 chef-images">
 //           {
 //             chefImages.map((img, i) => (
-//               <div key={i} className="shrink-0 w-[240px] h-[330px] rounded-xl border border-[#E85666] hover:scale-105 hover:shadow-lg hover:shadow-neutral-600">
+//               <div key={i} className="shrink-0 w-[240px] h-[330px] rounded-xl border border-[#06c167] hover:scale-105 hover:shadow-lg hover:shadow-neutral-600">
 //                 <img src={img} className="w-full h-full object-cover object-center rounded-xl" alt="" />
 //               </div>
 //             ))
 //           }
 //         </div>
 
-//         <button className="flex flex-row items-center justify-between py-2 px-4 lg:px-10 bg-[#E85666] text-white rounded-lg gap-x-14 text-sm lg:text-lg font-bold button-shine whitespace-nowrap w-fit mx-auto" onClick={() => navigate(AUTH_ROUTES.linkChefSignUp)}>
+//         <button className="flex flex-row items-center justify-between py-2 px-4 lg:px-10 bg-[#06c167] text-white rounded-lg gap-x-14 text-sm lg:text-lg font-bold button-shine whitespace-nowrap w-fit mx-auto" onClick={() => navigate(AUTH_ROUTES.linkChefSignUp)}>
 //           Get Started!
 //           <FaArrowRightLong size={20} className="" />
 //         </button>

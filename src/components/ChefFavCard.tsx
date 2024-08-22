@@ -36,7 +36,7 @@ const ChefFavCard = ({ chef }: any) => {
               className="w-18 h-18 rounded-full"
             />
           ) : (
-            <GiCook size={52} color="#e85666" />
+            <GiCook size={52} color="#06c167" />
           )}
         </div>
       </div>

@@ -33,7 +33,10 @@ import {
 import CardItem from "../../components/CardItem";
 import { TRANSACTION_URL } from "../../_redux/urls";
 import { BsFillCheckCircleFill } from "react-icons/bs";
-import { companyExportTransactions, downloadCompanyExport } from "../../_redux/wallet/walletCrud";
+import {
+  companyExportTransactions,
+  downloadCompanyExport,
+} from "../../_redux/wallet/walletCrud";
 import { store } from "../store";
 
 const TRANSACTION_TYPE = "COMPANY_FUNDING";
@@ -77,8 +80,6 @@ const CompanyWallet = () => {
   const [selectedView, setSelectedView] = useState<any>("all");
   const VIEWS = ["Successful", "Pending", "Failed"];
 
-
-
   // DATE FILTER
   const [filterDateModal, setFilterDateModal] = useState(false);
   const openFilterDateModal = () => setFilterDateModal(true);
@@ -89,42 +90,44 @@ const CompanyWallet = () => {
   const [exportSuccessful, setExportSuccessful] = useState(false);
   const openExportModal = () => setExportModal(true);
   const closeExportModal = () => {
-    setExportData('');
-    setExportDataError('');
+    setExportData("");
+    setExportDataError("");
     setExportModal(false);
     setExportSuccessful(false);
-  }
-  
-  const [exportData, setExportData] = useState('');
-  const [exportDataError, setExportDataError] = useState('');
+  };
+
+  const [exportData, setExportData] = useState("");
+  const [exportDataError, setExportDataError] = useState("");
 
   const handleExportData = async () => {
-    setExportDataError('')
+    setExportDataError("");
 
-    if(!exportData){
-      setExportDataError('No file format selected')
-      return
+    if (!exportData) {
+      setExportDataError("No file format selected");
+      return;
     }
     setIsLoading(true);
 
     try {
-      const { data } = await companyExportTransactions(exportData.toUpperCase())
-      console.log('exportData= ', data)
+      const { data } = await companyExportTransactions(
+        exportData.toUpperCase()
+      );
+      console.log("exportData= ", data);
       if (data?.success) {
-        window.open(data?.downloadLink, '_blank', 'noopener,noreferrer');
-        setExportSuccessful(true)
-      }else{
-        throw(new Error)
+        window.open(data?.downloadLink, "_blank", "noopener,noreferrer");
+        setExportSuccessful(true);
+      } else {
+        throw new Error();
       }
-    }catch(error){
-      console.log('error final= ', error)
-      alert("Something went wrong! Try again and if it persists contact support.")
-    }finally {
+    } catch (error) {
+      console.log("error final= ", error);
+      alert(
+        "Something went wrong! Try again and if it persists contact support."
+      );
+    } finally {
       setIsLoading(false);
     }
-  }
-
-
+  };
 
   // CARD MANAGEMENT FUNCS
   const [selectedCard, setSelectedCard] = useState<any>();
@@ -464,7 +467,10 @@ const CompanyWallet = () => {
                   </button> */}
 
                   {/* SEARCH */}
-                  <div className="inline-flex flex-row rounded-full bg-gray-200 py-0 md:py-.5 pl-3 pr-1 w-2/6" style={{ minWidth:'150px', }}>
+                  <div
+                    className="inline-flex flex-row rounded-full bg-gray-200 py-0 md:py-.5 pl-3 pr-1 w-2/6"
+                    style={{ minWidth: "150px" }}
+                  >
                     <img src="../images/search.svg" alt="search" width={15} />
                     <input
                       placeholder="Search for recipients"
@@ -478,7 +484,10 @@ const CompanyWallet = () => {
                 </div>
 
                 <div className="w-full overflow-x-auto">
-                  <div className="grid grid-cols-5 items-center justify-items-start md:justify-between border-b border-t font-semibold py-5 mt-10 gap-x-5 break-keep w-full" style={{ minWidth:'800px', }}>
+                  <div
+                    className="grid grid-cols-5 items-center justify-items-start md:justify-between border-b border-t font-semibold py-5 mt-10 gap-x-5 break-keep w-full"
+                    style={{ minWidth: "800px" }}
+                  >
                     <p className="lg:w-1/3 text-sm lg:text-base font_regular gray_color">
                       Transaction
                     </p>
@@ -496,66 +505,71 @@ const CompanyWallet = () => {
 
                   {userLoading ? (
                     <div className="flex justify-center my-16">
-                      <ColoredSpinner sx={[{ width: "5rem", height: "auto", }]}/>
+                      <ColoredSpinner
+                        sx={[{ width: "5rem", height: "auto" }]}
+                      />
                     </div>
                   ) : (
                     <>
-                      <div className="w-full max-w-screen h-fit max-h-screen lg:max-h-96 overflow-y-scroll" style={{ minWidth:'800px', }}>
-                        {q?.length > 0 ? walletTransaction
-                          ?.filter(
-                            (transaction:any) =>
-                              transaction?.recipient?.firstName
-                                .toString()
-                                .toLowerCase()
-                                .indexOf(q.toLowerCase()) > -1
-                              || transaction?.recipient?.lastName
-                              .toString()
-                              .toLowerCase()
-                              .indexOf(q.toLowerCase()) > -1
-                              || transaction?.recipient?.email
-                              .toString()
-                              .toLowerCase()
-                              .indexOf(q.toLowerCase()) > -1
-                          )
-                          .map(
-                            (transaction: any, i: number) => (
-                              <WalletItem
-                                key={i}
-                                transactionType={transaction?.type}
-                                amount={formatPrice(transaction?.amount)}
-                                date={moment(transaction?.createdAt).format(
-                                  "MMM DD YYYY"
-                                )}
-                                time={moment(transaction?.createdAt).format(
-                                  "HH:mm a"
-                                )}
-                                status={transaction?.status}
-                                recipient={transaction?.recipient}
-                                companyWallet={true}
-                                self={user}
-                                selectedView={selectedView}
-                              />
-                            )
-                          ) : walletTransaction.map(
-                            (transaction: any, i: number) => (
-                              <WalletItem
-                                key={i}
-                                transactionType={transaction?.type}
-                                amount={formatPrice(transaction?.amount)}
-                                date={moment(transaction?.createdAt).format(
-                                  "MMM DD YYYY"
-                                )}
-                                time={moment(transaction?.createdAt).format(
-                                  "HH:mm a"
-                                )}
-                                status={transaction?.status}
-                                recipient={transaction?.recipient}
-                                companyWallet={true}
-                                self={user}
-                                selectedView={selectedView}
-                              />
-                            )
-                          )}
+                      <div
+                        className="w-full max-w-screen h-fit max-h-screen lg:max-h-96 overflow-y-scroll"
+                        style={{ minWidth: "800px" }}
+                      >
+                        {q?.length > 0
+                          ? walletTransaction
+                              ?.filter(
+                                (transaction: any) =>
+                                  transaction?.recipient?.firstName
+                                    .toString()
+                                    .toLowerCase()
+                                    .indexOf(q.toLowerCase()) > -1 ||
+                                  transaction?.recipient?.lastName
+                                    .toString()
+                                    .toLowerCase()
+                                    .indexOf(q.toLowerCase()) > -1 ||
+                                  transaction?.recipient?.email
+                                    .toString()
+                                    .toLowerCase()
+                                    .indexOf(q.toLowerCase()) > -1
+                              )
+                              .map((transaction: any, i: number) => (
+                                <WalletItem
+                                  key={i}
+                                  transactionType={transaction?.type}
+                                  amount={formatPrice(transaction?.amount)}
+                                  date={moment(transaction?.createdAt).format(
+                                    "MMM DD YYYY"
+                                  )}
+                                  time={moment(transaction?.createdAt).format(
+                                    "HH:mm a"
+                                  )}
+                                  status={transaction?.status}
+                                  recipient={transaction?.recipient}
+                                  companyWallet={true}
+                                  self={user}
+                                  selectedView={selectedView}
+                                />
+                              ))
+                          : walletTransaction.map(
+                              (transaction: any, i: number) => (
+                                <WalletItem
+                                  key={i}
+                                  transactionType={transaction?.type}
+                                  amount={formatPrice(transaction?.amount)}
+                                  date={moment(transaction?.createdAt).format(
+                                    "MMM DD YYYY"
+                                  )}
+                                  time={moment(transaction?.createdAt).format(
+                                    "HH:mm a"
+                                  )}
+                                  status={transaction?.status}
+                                  recipient={transaction?.recipient}
+                                  companyWallet={true}
+                                  self={user}
+                                  selectedView={selectedView}
+                                />
+                              )
+                            )}
                       </div>
                     </>
                   )}
@@ -573,7 +587,7 @@ const CompanyWallet = () => {
                   <rect x="0.5" width="80" height="80" rx="40" fill="#F8F8F8" />
                   <path
                     d="M48.3137 21.4219C54.0733 21.4219 57.2802 24.7289 57.2802 30.3954V49.5872C57.2802 55.3466 54.0733 58.5792 48.3137 58.5792H32.6871C27.019 58.5792 23.7188 55.3466 23.7188 49.5872V30.3954C23.7188 24.7289 27.019 21.4219 32.6871 21.4219H48.3137ZM33.1905 46.949C32.6312 46.8932 32.0905 47.1534 31.7922 47.6364C31.4938 48.1009 31.4938 48.714 31.7922 49.197C32.0905 49.6615 32.6312 49.9402 33.1905 49.8658H47.8084C48.5524 49.7915 49.1136 49.158 49.1136 48.4167C49.1136 47.655 48.5524 47.0233 47.8084 46.949H33.1905ZM47.8084 38.4753H33.1905C32.3869 38.4753 31.7362 39.1274 31.7362 39.9262C31.7362 40.7251 32.3869 41.3754 33.1905 41.3754H47.8084C48.6102 41.3754 49.2628 40.7251 49.2628 39.9262C49.2628 39.1274 48.6102 38.4753 47.8084 38.4753ZM38.7636 30.061H33.1905V30.0795C32.3869 30.0795 31.7362 30.7298 31.7362 31.5287C31.7362 32.3276 32.3869 32.9778 33.1905 32.9778H38.7636C39.5672 32.9778 40.2198 32.3276 40.2198 31.5082C40.2198 30.7112 39.5672 30.061 38.7636 30.061Z"
-                    fill="#E85666"
+                    fill="#06c167"
                   />
                 </svg>
 
@@ -660,7 +674,7 @@ const CompanyWallet = () => {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
-                      fill="#E85666"
+                      fill="#06c167"
                       className="w-14 h-14"
                     >
                       <path
@@ -701,13 +715,13 @@ const CompanyWallet = () => {
                         style={{ width: "3.5rem" }}
                       /> */}
                       <Radio
-                        checked={exportData === 'pdf'}
+                        checked={exportData === "pdf"}
                         onChange={(e: any) => {
-                          console.log(e.target.value)
-                          setExportData(e.target.value)
+                          console.log(e.target.value);
+                          setExportData(e.target.value);
                         }}
-                        value={'pdf'}
-                        name={'export'}
+                        value={"pdf"}
+                        name={"export"}
                         inputProps={{ "aria-label": "A" }}
                       />
                     </p>
@@ -729,13 +743,13 @@ const CompanyWallet = () => {
                         style={{ width: "3.5rem" }}
                       /> */}
                       <Radio
-                        checked={exportData === 'doc'}
+                        checked={exportData === "doc"}
                         onChange={(e: any) => {
-                          console.log(e.target.value)
-                          setExportData(e.target.value)
+                          console.log(e.target.value);
+                          setExportData(e.target.value);
                         }}
-                        value={'doc'}
-                        name={'export'}
+                        value={"doc"}
+                        name={"export"}
                         inputProps={{ "aria-label": "A" }}
                       />
                     </p>
@@ -757,20 +771,22 @@ const CompanyWallet = () => {
                         style={{ width: "3.5rem" }}
                       /> */}
                       <Radio
-                        checked={exportData === 'csv'}
+                        checked={exportData === "csv"}
                         onChange={(e: any) => {
-                          console.log(e.target.value)
-                          setExportData(e.target.value)
+                          console.log(e.target.value);
+                          setExportData(e.target.value);
                         }}
-                        value={'csv'}
-                        name={'export'}
+                        value={"csv"}
+                        name={"export"}
                         inputProps={{ "aria-label": "A" }}
                       />
                     </p>
                   </div>
 
                   <div className="w-full py-1">
-                    <p className="text-red-600 text-base text-center">{ exportDataError && exportDataError }</p>
+                    <p className="text-red-600 text-base text-center">
+                      {exportDataError && exportDataError}
+                    </p>
                   </div>
 
                   <div className="flex mt-10 justify-center">
@@ -783,7 +799,6 @@ const CompanyWallet = () => {
                   </div>
                 </div>
               )}
-              
             </div>
           </Modal>
 
@@ -814,7 +829,7 @@ const CompanyWallet = () => {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
-                      fill="#E85666"
+                      fill="#06c167"
                       className="w-14 h-14"
                     >
                       <path

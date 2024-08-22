@@ -33,7 +33,7 @@ const ChefCard = ({ chef }: any) => {
                   className="w-18 h-18 rounded-full object-cover"
                 />
               ) : (
-                <GiCook size={52} color="#e85666" />
+                <GiCook size={52} color="#06c167" />
               )}
             </div>
           </div>

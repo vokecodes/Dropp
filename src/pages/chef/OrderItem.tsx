@@ -23,7 +23,7 @@ const OrderItem = ({ order, extraClasses, buttonText, hideButton }: any) => {
         </p>
         <span className="transition-all ease-in-out duration-300">
           {toggler ? (
-            <IoIosArrowDropupCircle size={22} color={"#e85666"} />
+            <IoIosArrowDropupCircle size={22} color="#06c167" />
           ) : (
             <IoIosArrowDropdown size={22} color={"#000000"} />
           )}
