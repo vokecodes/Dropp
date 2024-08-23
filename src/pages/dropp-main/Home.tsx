@@ -21,6 +21,7 @@ import OverlapCard from "../../components/OverlapCard";
 import { smoothScrollTo } from "../../utils/scrollIntoView";
 import { BASE_API_URL } from "../../_redux/urls";
 import axios from "axios";
+import { shallowEqual, useSelector } from "react-redux";
 
 const CATEGORIES = [
   "Dine-In",
@@ -140,6 +141,13 @@ const FEATURES = [
 const Home = () => {
   const navigate = useNavigate();
 
+  // const { user } = useSelector(
+  //   (state: any) => ({
+  //     user: state.auth.user,
+  //   }),
+  //   shallowEqual
+  // );
+
   // const getUser = useCallback(() => {
   //   const result = sessionStorage.getItem("auth");
 
@@ -147,8 +155,8 @@ const Home = () => {
   // }, [navigate]);
 
   // useEffect(() => {
-  //   getUser();
-  // }, [getUser]);
+  //   console.log({ user });
+  // }, []);
 
   const [showModal, setShowModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
