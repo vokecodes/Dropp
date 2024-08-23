@@ -1,6 +1,6 @@
 import React from "react";
 
-const Banner = ({ bannerImage, businesses }) => {
+const Banner = ({ bannerImage, businesses }: any) => {
   return (
     <section className="header_bg">
       <div className="w-4/5 lg:w-4/6 mx-auto pt-40 lg:pt-12">
@@ -50,7 +50,7 @@ const Banner = ({ bannerImage, businesses }) => {
             Trusted by some of the notable <br /> businesses around.
           </h2>
           <div className="flex flex-row flex-wrap justify-center px-5 pt-6">
-            {businesses?.map((business, i) => {
+            {businesses?.map((business: any, i: number) => {
               return (
                 <React.Fragment key={business.id}>
                   <img
