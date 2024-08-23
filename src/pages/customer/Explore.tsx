@@ -20,7 +20,10 @@ import { CHEFS_LOCATIONS, USER_TYPE } from "../../utils/Globals";
 import CartFloat from "../../components/CartFloat";
 import { DELIVERY_COST, TRANSACTION_URL } from "../../_redux/urls";
 import Cart from "../../components/Cart";
-import { createAnOrder, createAnOrderWallet } from "../../_redux/order/orderCrud";
+import {
+  createAnOrder,
+  createAnOrderWallet,
+} from "../../_redux/order/orderCrud";
 import ColoredSpinner from "../../components/ColoredSpinner";
 import TrackGoogleAnalyticsEvent from "../../components/TrackGoogleAnalyticsEvent";
 import { getProfileUserAccount } from "../../_redux/user/userAction";
@@ -357,7 +360,7 @@ const Explore = () => {
 
       if (data.success) {
         let handler = window.PaystackPop.setup({
-          key: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+          key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
           email: user.email,
           amount: amount * 100,
           ref: data.data.orderId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you

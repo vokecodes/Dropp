@@ -17,7 +17,7 @@ import LogoutButton from "../../components/LogoutButton";
 import moment from "moment";
 // import io from "socket.io-client";
 
-// const socket = io(process.env.REACT_APP_BASE_API_URL, {
+// const socket = io(import.meta.env.REACT_APP_BASE_API_URL, {
 //   withCredentials: true,
 // });
 
@@ -160,35 +160,40 @@ const Kitchen = () => {
       .finally(() => setDeclineLoading(false));
   };
 
-
   const CalculateAverageTime = (objectList) => {
     if (!objectList.length) {
       return 0;
     }
-  
+
     const timestamps = objectList.map((obj) => moment(obj.createdAt).valueOf());
-  
+
     const totalTime = timestamps.reduce((acc, timestamp) => acc + timestamp, 0);
-  
+
     const averageTime = totalTime / objectList.length;
-  
-    const averageTimeFormatted = moment.utc(averageTime).format('HH:mm:ss');
-  
+
+    const averageTimeFormatted = moment.utc(averageTime).format("HH:mm:ss");
+
     return averageTimeFormatted;
-  }
+  };
 
   const getAllKitchenOrders = async () => {
     let currentPage = 1;
     let allOrders = [];
-  
+
     const fetchAllOrders = async (currentPage) => {
       try {
-        const response = await SERVER.get(`${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`);
+        const response = await SERVER.get(
+          `${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`
+        );
         const fetchedOrders = response.data.data;
-  
+
         allOrders = [...allOrders, ...fetchedOrders];
 
-        if (response.data.pagination.totalPages > currentPage && response.data.pagination.currentPage !== response.data.pagination.totalPages) {
+        if (
+          response.data.pagination.totalPages > currentPage &&
+          response.data.pagination.currentPage !==
+            response.data.pagination.totalPages
+        ) {
           currentPage++;
           await fetchAllOrders(currentPage);
         } else {
@@ -198,9 +203,9 @@ const Kitchen = () => {
         console.error("Error fetching orders:", err);
       }
     };
-  
+
     await fetchAllOrders(currentPage);
-    return allOrders
+    return allOrders;
   };
 
   const [isDownloading, setIsDownloading] = useState(false);
@@ -215,15 +220,29 @@ const Kitchen = () => {
 
     const allOrders = await getAllKitchenOrders();
 
-    const declinedOrders = allOrders && allOrders?.filter( (ro) => ro?.parentStatus === "kitchen" && ro?.status === "declined" ).length;
-    
-    const voidOrders = allOrders && allOrders?.filter( (ro) => ro?.parentStatus === "kitchen" && ro?.status === "archived" ).length;
-    
-    const completedOrders = allOrders && allOrders?.filter( (ro) => ro?.parentStatus === "completed" && ro?.status === "completed" ).length;
-    
-    const avgTime = '-';
-    
-    const rows = [declinedOrders, voidOrders, completedOrders, avgTime].join(",");
+    const declinedOrders =
+      allOrders &&
+      allOrders?.filter(
+        (ro) => ro?.parentStatus === "kitchen" && ro?.status === "declined"
+      ).length;
+
+    const voidOrders =
+      allOrders &&
+      allOrders?.filter(
+        (ro) => ro?.parentStatus === "kitchen" && ro?.status === "archived"
+      ).length;
+
+    const completedOrders =
+      allOrders &&
+      allOrders?.filter(
+        (ro) => ro?.parentStatus === "completed" && ro?.status === "completed"
+      ).length;
+
+    const avgTime = "-";
+
+    const rows = [declinedOrders, voidOrders, completedOrders, avgTime].join(
+      ","
+    );
 
     return [header, rows].join("\n");
   };
@@ -253,7 +272,7 @@ const Kitchen = () => {
     }
   };
 
-  console.log('restaurantOrders= ', restaurantOrders)
+  console.log("restaurantOrders= ", restaurantOrders);
 
   return (
     <>
@@ -289,13 +308,7 @@ const Kitchen = () => {
               fill="none"
               viewBox="0 0 24 24"
             >
-              <circle
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="#6D6D6D"
-                strokeWidth="4"
-              />
+              <circle cx="12" cy="12" r="10" stroke="#6D6D6D" strokeWidth="4" />
               <path
                 className="opacity-75"
                 fill="currentColor"
@@ -488,7 +501,7 @@ const Kitchen = () => {
                           onClick={() =>
                             handleReadyForPickup(order?.parent, order?._id)
                           }
-                          />
+                        />
 
                         <KitchenButton
                           title="Void"
@@ -733,7 +746,6 @@ const Kitchen = () => {
                       </div>
                     ))}
               </div>
-
             </div>
             {/* </div> */}
             {/* </div> */}

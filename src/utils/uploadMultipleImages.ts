@@ -26,7 +26,7 @@ export const HandleMultipleImagesUpload = async (
         formData.append("file", result);
         formData.append(
           "upload_preset",
-          `${process.env.REACT_APP_CLOUDINARY_PRESET}`
+          `${import.meta.env.REACT_APP_CLOUDINARY_PRESET}`
         );
         setIsLoading(true);
         try {

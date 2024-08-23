@@ -78,7 +78,9 @@ const CompanyPayment = () => {
         { transaction: referenceId },
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_SECRET_KEY}`,
+            Authorization: `Bearer ${
+              import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
+            }`,
           },
         }
       )
@@ -90,9 +92,7 @@ const CompanyPayment = () => {
 
   const verifyTransaction = async (referenceId: any) => {
     await axios
-      .get(
-        `${TRANSACTION_URL}/verify/${referenceId}`
-      )
+      .get(`${TRANSACTION_URL}/verify/${referenceId}`)
       .then(async ({ data }) => {
         const result = data?.data;
 
@@ -108,7 +108,7 @@ const CompanyPayment = () => {
         }
       })
       .catch((err) => {
-        alert('Server error! Try again and if it persists contact support.');
+        alert("Server error! Try again and if it persists contact support.");
       });
   };
 
@@ -116,7 +116,7 @@ const CompanyPayment = () => {
     try {
       const transactionId = uuidv4();
       let handler = window.PaystackPop.setup({
-        key: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+        key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
         email: user.email,
         amount: 50 * 100,
         ref: transactionId,

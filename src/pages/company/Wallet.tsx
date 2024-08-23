@@ -164,7 +164,9 @@ const CompanyWallet = () => {
         { transaction: referenceId },
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_SECRET_KEY}`,
+            Authorization: `Bearer ${
+              import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
+            }`,
           },
         }
       )
@@ -228,7 +230,7 @@ const CompanyWallet = () => {
     try {
       const transactionId = uuidv4();
       let handler = window.PaystackPop.setup({
-        key: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+        key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
         email: user.email,
         amount: 50 * 100,
         ref: transactionId,
@@ -293,7 +295,7 @@ const CompanyWallet = () => {
       const referenceId = uuidv4();
 
       let handler = window.PaystackPop.setup({
-        key: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+        key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
         email: user.email,
         amount: amount * 100,
         ref: referenceId,
@@ -342,7 +344,9 @@ const CompanyWallet = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_SECRET_KEY}`,
+              Authorization: `Bearer ${
+                import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
+              }`,
             },
           }
         );

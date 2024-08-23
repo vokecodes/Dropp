@@ -9,7 +9,7 @@ import MenuOrderItem from "./MenuOrderItem";
 import WaiterLogoutButton from "../../components/WaiterLogoutButton";
 // import io from "socket.io-client";
 
-// const socket = io(process.env.REACT_APP_BASE_API_URL, {
+// const socket = io(import.meta.env.REACT_APP_BASE_API_URL, {
 //   withCredentials: true,
 // });
 

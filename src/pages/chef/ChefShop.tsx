@@ -213,7 +213,7 @@ const ChefShop = () => {
 
       if (data.success) {
         let handler = window.PaystackPop.setup({
-          key: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+          key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
           email: user.email,
           amount: amount * 100,
           ref: data.data.orderId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
