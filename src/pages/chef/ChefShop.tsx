@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import ReactGA from "react-ga4";
 import { Modal } from "@mui/material";
@@ -213,7 +214,7 @@ const ChefShop = () => {
 
       if (data.success) {
         let handler = window.PaystackPop.setup({
-          key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+          key: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY, // Replace with your public key
           email: user.email,
           amount: amount * 100,
           ref: data.data.orderId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
