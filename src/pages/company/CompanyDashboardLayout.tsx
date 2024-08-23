@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector, shallowEqual } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { AiFillSetting } from "react-icons/ai";

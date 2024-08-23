@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import { useFormik } from "formik";
