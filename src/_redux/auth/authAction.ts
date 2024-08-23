@@ -108,5 +108,7 @@ export const logOutUserAccount = (navigate: any) => (dispatch: any) => {
   dispatch(logoutWaiter());
   dispatch(logoutDiningMenu());
 
+  sessionStorage.removeItem("auth");
+
   navigate("/auth");
 };

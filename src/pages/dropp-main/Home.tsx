@@ -140,15 +140,15 @@ const FEATURES = [
 const Home = () => {
   const navigate = useNavigate();
 
-  const getUser = useCallback(() => {
-    const result = sessionStorage.getItem("auth");
+  // const getUser = useCallback(() => {
+  //   const result = sessionStorage.getItem("auth");
 
-    if (result) navigate("/chef");
-  }, [navigate]);
+  //   if (result) navigate("/chef");
+  // }, [navigate]);
 
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
+  // useEffect(() => {
+  //   getUser();
+  // }, [getUser]);
 
   const [showModal, setShowModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
@@ -1078,17 +1078,6 @@ const Home = () => {
         {/* Footer */}
         <Footer logo={Images.logo} />
       </div>
-
-      <Register
-        showModal={showModal}
-        setShowModal={setShowModal}
-        setShowResetModal={setShowResetModal}
-      />
-      <ResetPassword
-        showResetModal={showResetModal}
-        setShowResetModal={setShowResetModal}
-        setShowModal={setShowModal}
-      />
     </>
   );
 };
