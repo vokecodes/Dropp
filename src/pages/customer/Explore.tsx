@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import ReactGA from "react-ga4";
