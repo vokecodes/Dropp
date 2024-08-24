@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Disclosure,
@@ -17,11 +17,19 @@ import axios from "axios";
 import { Images } from "../config/images";
 import { AUTH_DATA } from "../reducers/type";
 import { BASE_API_URL } from "../_redux/urls";
+import { HOME_ROUTES } from "../routes/routes";
 
 const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [address, setAddress] = useState(user?.address || "");
+
+  const { auth } = useSelector(
+    (state: any) => ({
+      auth: state.auth.user,
+    }),
+    shallowEqual
+  );
 
   const handleLogout = () => {
     dispatch({
@@ -63,12 +71,12 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
     },
     { name: "Product", href: "#", current: false },
     { name: "Pricing", href: "#pricing", current: false },
-    { name: "Marketplace", href: "", current: false },
+    { name: "Marketplace", href: HOME_ROUTES.linkExplore, current: false },
   ];
 
   const mobileNavigation = [
     { name: "Pricing", href: "#pricing", current: false },
-    { name: "Marketplace", href: "", current: false },
+    { name: "Marketplace", href: HOME_ROUTES.linkExplore, current: false },
   ];
 
   const restaurantNavigation = [
@@ -219,7 +227,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
                 </MenuItems>
               </Menu>
               <a
-                href="#"
+                href="restaurant"
                 className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
               >
                 Private Chef
@@ -274,7 +282,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
                 Pricing
               </a>
               <a
-                href="#"
+                href={HOME_ROUTES.linkExplore}
                 className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
               >
                 Marketplace
@@ -297,7 +305,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
             </DisclosureButton>
           </div>
           <div className="hidden lg:relative lg:z-50 lg:ml-4 lg:flex lg:gap-3 lg:items-center">
-            {user ? (
+            {auth?.access_token ? (
               <Button
                 title="Log out"
                 onClick={() => handleLogout()}
@@ -306,18 +314,10 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
             ) : (
               <>
                 <Link to={"/auth/login"}>
-                  <OutlineButton
-                    title="Log in"
-                    // onClick={() => setShowModal(true)}
-                    extraClasses="w-24"
-                  />
+                  <OutlineButton title="Log in" extraClasses="w-24" />
                 </Link>
                 <Link to={"/auth/register"}>
-                  <Button
-                    title="Sign up"
-                    // onClick={() => setShowModal(true)}
-                    extraClasses="w-24"
-                  />
+                  <Button title="Sign up" extraClasses="w-24" />
                 </Link>
               </>
             )}
@@ -423,32 +423,30 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
               />
             </div>
           )}
-          <div className="flex flex-col items-center justify-start mt-3 gap-5 px-4">
-            {user ? (
-              <Button
-                title="Log out"
-                onClick={() => handleLogout()}
-                extraClasses="w-24"
-              />
-            ) : (
-              <>
-                <Link to={"/auth/login"}>
-                  <OutlineButton
-                    title="Log in"
-                    // onClick={() => setShowModal(true)}
-                    extraClasses="w-44"
-                  />
-                </Link>
-                <Link to={"/auth/register"}>
-                  <Button
-                    title="Sign up"
-                    // onClick={() => setShowModal(true)}
-                    extraClasses="w-44"
-                  />
-                </Link>
-              </>
-            )}
-          </div>
+          {auth?.access_token ? (
+            <Button
+              title="Log out"
+              onClick={() => handleLogout()}
+              extraClasses="w-24 ms-4"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-start mt-3 gap-5 px-4">
+              <Link to={"/auth/login"}>
+                <OutlineButton
+                  title="Log in"
+                  // onClick={() => setShowModal(true)}
+                  extraClasses="w-44"
+                />
+              </Link>
+              <Link to={"/auth/register"}>
+                <Button
+                  title="Sign up"
+                  // onClick={() => setShowModal(true)}
+                  extraClasses="w-44"
+                />
+              </Link>
+            </div>
+          )}
         </div>
       </DisclosurePanel>
     </Disclosure>

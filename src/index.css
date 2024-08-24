@@ -36,6 +36,15 @@ code {
   width: 15rem;
 }
 
+.header_bg {
+  background-image: url("/images/hero.svg");
+  background-size: cover;
+}
+
+.gradient_bg {
+  background-image: linear-gradient(to right, #d4edcc, #ffe7d5);
+}
+
 .white_txt_color {
   color: #ffffff;
 }
