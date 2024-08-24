@@ -135,7 +135,7 @@ const SignUpPage = () => {
 
   return (
     <section className="w-full h-full header_bg lg:pb-20">
-      <Navbar />
+      <Navbar authPage />
 
       <main className="bg-white rounded-3xl w-11/12 lg:w-1/3 mx-auto pt-5 lg:flex flex-row items-center">
         <div className="relative pt-5 px-3 lg:px-8">

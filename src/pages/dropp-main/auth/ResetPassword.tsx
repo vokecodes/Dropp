@@ -39,7 +39,7 @@ const ResetPasswordPage = () => {
   };
   return (
     <section className="w-screen h-screen flex flex-col items-center justify-between header_bg">
-      <Navbar />
+      <Navbar authPage />
 
       <main className="w-full h-full flex flex-row items-center justify-center">
         <div className="bg-white rounded-3xl h-3/4 min-h-1/2 w-11/12 lg:w-1/3 mx-auto lg:flex flex-col items-center justify-start">

@@ -19,14 +19,14 @@ import { AUTH_DATA } from "../reducers/type";
 import { BASE_API_URL } from "../_redux/urls";
 import { HOME_ROUTES } from "../routes/routes";
 
-const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
+const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [address, setAddress] = useState(user?.address || "");
 
   const { auth } = useSelector(
     (state: any) => ({
       auth: state.auth.user,
+      user: state.auth.user,
     }),
     shallowEqual
   );
@@ -38,28 +38,6 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
     });
     sessionStorage.removeItem("auth");
     navigate("/");
-  };
-
-  const handleChangeAddress = (value: any) => {
-    setAddress(value);
-
-    const result = sessionStorage.getItem("auth") || "{}";
-    const { token, data } = JSON.parse(result);
-
-    axios
-      .patch(
-        `${BASE_API_URL}/user/${data?.user?._id}/address`,
-        { address: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then(({ data }) => {
-        sessionStorage.setItem("auth", JSON.stringify(data.updatedUser));
-      })
-      .catch((error) => {});
   };
 
   const navigation = [
@@ -177,118 +155,120 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
               </Link>
             </div>
           </div>
-          <div className="relative z-40 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
-            <nav
-              aria-label="Global"
-              className="hidden lg:flex lg:flex-wrap lg:py-2"
-            >
-              <Menu as="div" className="relative flex-shrink-0 z-50">
-                <div>
-                  <MenuButton className="relative flex">
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">Open user menu</span>
-                    <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
-                      <p className="text-lg font_medium text-[#4A443A]">
-                        Restaurant
-                      </p>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="2"
-                        stroke="#4A443A"
-                        width={16}
-                        height={16}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                        />
-                      </svg>
-                    </div>
-                  </MenuButton>
-                </div>
-                <MenuItems
-                  transition
-                  className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
+          {!authPage && (
+            <div className="relative z-40 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+              <nav
+                aria-label="Global"
+                className="hidden lg:flex lg:flex-wrap lg:py-2"
+              >
+                <Menu as="div" className="relative flex-shrink-0 z-50">
+                  <div>
+                    <MenuButton className="relative flex">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
+                        <p className="text-lg font_medium text-[#4A443A]">
+                          Restaurant
+                        </p>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="#4A443A"
+                          width={16}
+                          height={16}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                          />
+                        </svg>
+                      </div>
+                    </MenuButton>
+                  </div>
+                  <MenuItems
+                    transition
+                    className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
+                  >
+                    {restaurantNavigation.map((item) => (
+                      <MenuItem key={item.name}>
+                        <a
+                          href={item.href}
+                          className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
+                          onClick={() => setSelectedCategory(item.name)}
+                        >
+                          {item.name}
+                        </a>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
+                <a
+                  href="restaurant"
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
                 >
-                  {restaurantNavigation.map((item) => (
-                    <MenuItem key={item.name}>
-                      <a
-                        href={item.href}
-                        className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
-                        onClick={() => setSelectedCategory(item.name)}
-                      >
-                        {item.name}
-                      </a>
-                    </MenuItem>
-                  ))}
-                </MenuItems>
-              </Menu>
-              <a
-                href="restaurant"
-                className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
-              >
-                Private Chef
-              </a>
-              <Menu as="div" className="relative ml-4 flex-shrink-0 z-50">
-                <div>
-                  <MenuButton className="relative flex">
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">Open user menu</span>
-                    <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
-                      <p className="text-lg font_medium text-[#4A443A]">
-                        Product
-                      </p>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="2"
-                        stroke="#4A443A"
-                        width={16}
-                        height={16}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                        />
-                      </svg>
-                    </div>
-                  </MenuButton>
-                </div>
-                <MenuItems
-                  transition
-                  className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
+                  Private Chef
+                </a>
+                <Menu as="div" className="relative ml-4 flex-shrink-0 z-50">
+                  <div>
+                    <MenuButton className="relative flex">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
+                        <p className="text-lg font_medium text-[#4A443A]">
+                          Product
+                        </p>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="#4A443A"
+                          width={16}
+                          height={16}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                          />
+                        </svg>
+                      </div>
+                    </MenuButton>
+                  </div>
+                  <MenuItems
+                    transition
+                    className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
+                  >
+                    {productNavigation.map((item) => (
+                      <MenuItem key={item.name}>
+                        <a
+                          href={item.href}
+                          className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
+                        >
+                          {item.name}
+                        </a>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
+                <a
+                  href="#pricing"
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
                 >
-                  {productNavigation.map((item) => (
-                    <MenuItem key={item.name}>
-                      <a
-                        href={item.href}
-                        className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
-                      >
-                        {item.name}
-                      </a>
-                    </MenuItem>
-                  ))}
-                </MenuItems>
-              </Menu>
-              <a
-                href="#pricing"
-                className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
-              >
-                Pricing
-              </a>
-              <a
-                href={HOME_ROUTES.linkExplore}
-                className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
-              >
-                Marketplace
-              </a>
-            </nav>
-          </div>
+                  Pricing
+                </a>
+                <a
+                  href={HOME_ROUTES.linkExplore}
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
+                >
+                  Marketplace
+                </a>
+              </nav>
+            </div>
+          )}
           <div className="relative z-40 flex items-center lg:hidden">
             {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -411,7 +391,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
           ))}
         </div>
         <div className="border-t border-gray-200 pb-3 pt-4">
-          {user && (
+          {/* {user && (
             <div className="hidden lg:block ml-5">
               <div className="absolute mt-4 ml-5">
                 <img src={Images.carbon_location} alt="location" className="" />
@@ -422,7 +402,7 @@ const Navbar = ({ user, setShowModal, setSelectedCategory }: any) => {
                 onChange={(e) => handleChangeAddress(e.target.value)}
               />
             </div>
-          )}
+          )} */}
           {auth?.access_token ? (
             <Button
               title="Log out"
