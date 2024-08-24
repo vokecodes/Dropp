@@ -9,10 +9,11 @@ import Select from "react-select";
 import { AUTH_DATA } from "../../../reducers/type";
 import { BASE_API_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
+import { useAppDispatch } from "../../../redux/hooks";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -84,8 +85,6 @@ const SignUpPage = () => {
     setRestaurantLocation(temp);
     return temp;
   };
-
-  console.log("first", restaurantLocation);
 
   const restaurantNums = [
     { value: "1", label: "1" },

@@ -23,7 +23,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { auth } = useSelector(
+  const { auth, user } = useSelector(
     (state: any) => ({
       auth: state.auth.user,
       user: state.auth.user,
@@ -72,8 +72,6 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
     { name: "Marketing tools", href: "#marketing-tools" },
     { name: "Analytics & Insight", href: "#analytics-insight" },
   ];
-
-  // console.log('userNav= ', user)
 
   return (
     // <div className="w-4/5 lg:w-4/6 mx-auto">
@@ -285,7 +283,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
             </DisclosureButton>
           </div>
           <div className="hidden lg:relative lg:z-50 lg:ml-4 lg:flex lg:gap-3 lg:items-center">
-            {auth?.access_token ? (
+            {auth?.user ? (
               <Button
                 title="Log out"
                 onClick={() => handleLogout()}
@@ -403,7 +401,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
               />
             </div>
           )} */}
-          {auth?.access_token ? (
+          {auth?.user ? (
             <Button
               title="Log out"
               onClick={() => handleLogout()}
