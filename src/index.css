@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Gilroy_Regular";
+  src: local("Gilroy_Regular"),
+    url(/public/fonts/Gilroy-Regular.ttf) format("woff");
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -9,6 +15,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: Gilroy_Regular;
 }
 
 code {
@@ -17,6 +24,10 @@ code {
 }
 
 .primary_bg_color {
+  background-color: #06c167;
+}
+
+.bg_primary {
   background-color: #06c167;
 }
 
@@ -30,6 +41,15 @@ code {
 
 .customW {
   width: 15rem;
+}
+
+.header_bg {
+  background-image: url("/images/hero.svg");
+  background-size: cover;
+}
+
+.gradient_bg {
+  background-image: linear-gradient(to right, #d4edcc, #ffe7d5);
 }
 
 .white_txt_color {
@@ -1071,4 +1091,12 @@ html {
 
 .parallax-card:not(.active) {
   transform: translateZ(-500px) scale(0.8);
+}
+
+.exploreBannerBackgroundImage {
+  background-image: url("/images/chef-banner.svg");
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 20px;
 }

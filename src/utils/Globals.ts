@@ -1,0 +1,161 @@
+export const ORDERS_MENU = Object.freeze({
+  PERSONAL: "Personal",
+  MY_BUSINESS: "My Business",
+  PAYMENT: "Payment",
+});
+
+export const COMPANY_SETTINGS = Object.freeze({
+  COMPANY_PROFILE: "Company Profile",
+  COMPANY_CARD: "Manage Card",
+});
+
+export const CUSTOMER_ORDERS_MENU = Object.freeze({
+  UPCOMING: "Upcoming",
+  PREVIOUS: "Previous",
+});
+
+export const USER_TYPE = Object.freeze({
+  CHEF: "chef",
+  SUB_CHEF: "subChef",
+  CUSTOMER: "customer",
+  COMPANY: "company",
+});
+
+export const chefData = [
+  {
+    picture1: "/images/chefDoyin.png",
+    picture2: "/images/chefDoyinMeal.png",
+    paragraph:
+      "Doyin makes original homemade cuisine, drawing inspiration from Ede, her hometown, to deliver the best mouth watering dishes to locals around her.",
+    chefsName: "Chef Doyin.",
+  },
+
+  {
+    picture1: "/images/chefPrecious.png",
+    picture2: "/images/chefPreciousMeal.png",
+    paragraph: `Precious' famous quote is "Eat like every day's the weekend." This is the childhood memory she grew up with & wants to keep sharing with her community.`,
+    chefsName: "Chef Precious.",
+  },
+];
+
+export const CUSTOMER_SETTINGS_MENU = Object.freeze({
+  PERSONAL: "Personal",
+  PAYMENT: "Payment",
+});
+
+export const CHEFS_LOCATIONS = [
+  { label: "Abule", value: "Abule, Lagos" },
+  { label: "Agege", value: "Agege, Lagos" },
+  { label: "Aguda", value: "Aguda, Lagos" },
+  { label: "Ajegunle", value: "Ajegunle, Lagos" },
+  { label: "Akerele", value: "Akerele, Lagos" },
+  { label: "Alaba", value: "Alaba, Lagos" },
+  { label: "Alausa", value: "Alausa, Lagos" },
+  { label: "Amuwo Odofin", value: "Amuwo Odofin, Lagos" },
+  { label: "Apapa", value: "Apapa, Lagos" },
+  { label: "Adeniyi Jones", value: "Adeniyi Jones, Lagos" },
+  { label: "Agidingbi", value: "Agidingbi, Lagos" },
+  { label: "Ajah", value: "Ajah, Lagos" },
+  { label: "Ajeromi-Ifelodun", value: "Ajeromi-Ifelodun, Lagos" },
+  { label: "Akoka", value: "Akoka, Lagos" },
+  { label: "Alagomeji", value: "Alagomeji, Lagos" },
+  { label: "Anthony Village", value: "Anthony Village, Lagos" },
+  { label: "Badagry", value: "Badagry, Lagos" },
+  { label: "Bariga", value: "Bariga, Lagos" },
+  { label: "Coker", value: "Coker, Lagos" },
+  { label: "Dopemu", value: "Dopemu, Lagos" },
+  { label: "Dolphin Estate", value: "Dolphin Estate, Lagos" },
+  { label: "Ebute Metta", value: "Ebute Metta, Lagos" },
+  { label: "Eti-Osa", value: "Eti-Osa, Lagos" },
+  { label: "Epe", value: "Epe, Lagos" },
+  { label: "Festac Town", value: "Festac Town, Lagos" },
+  { label: "Gbagada", value: "Gbagada, Lagos" },
+  { label: "Ifako - Ijaiye", value: "Ifako - Ijaiye, Lagos" },
+  { label: "Ijora", value: "Ijora, Lagos" },
+  { label: "Ikorodu", value: "Ikorodu, Lagos" },
+  { label: "Ilasamaja", value: "Ilasamaja, Lagos" },
+  { label: "Iwaya", value: "Iwaya, Lagos" },
+  { label: "Idumota", value: "Idumota, Lagos" },
+  { label: "Ijesha", value: "Ijesha, Lagos" },
+  { label: "Ikeja", value: "Ikeja, Lagos" },
+  { label: "Ikoyi", value: "Ikoyi, Lagos" },
+  { label: "Ilupeju", value: "Ilupeju, Lagos" },
+  { label: "Iyana Ipaja", value: "Iyana Ipaja, Lagos" },
+  { label: "Jibowu", value: "Jibowu, Lagos" },
+  { label: "Kosofe", value: "Kosofe, Lagos" },
+  { label: "Ketu", value: "Ketu, Lagos" },
+  { label: "Ladipo", value: "Ladipo, Lagos" },
+  { label: "Lagos Island", value: "Lagos Island, Lagos" },
+  { label: "Lawanson", value: "Lawanson, Lagos" },
+  { label: "Lagos Mainland", value: "Lagos Mainland, Lagos" },
+  { label: "Lekki", value: "Lekki, Lagos" },
+  { label: "Marina", value: "Marina, Lagos" },
+  { label: "Maryland", value: "Maryland, Lagos" },
+  { label: "Mile 2", value: "Mile 2, Lagos" },
+  { label: "Masha", value: "Masha, Lagos" },
+  { label: "Maza Maza", value: "Maza Maza, Lagos" },
+  { label: "Mende", value: "Mende, Lagos" },
+  { label: "Mushin", value: "Mushin, Lagos" },
+  { label: "Obanikoro", value: "Obanikoro, Lagos" },
+  { label: "Ogudu", value: "Ogudu, Lagos" },
+  { label: "Ojodu", value: "Ojodu, Lagos" },
+  { label: "Ojota", value: "Ojota, Lagos" },
+  { label: "Olodi", value: "Olodi, Lagos" },
+  { label: "Onipanu", value: "Onipanu, Lagos" },
+  { label: "Opebi", value: "Opebi, Lagos" },
+  { label: "Obalende", value: "Obalende, Lagos" },
+  { label: "Ogba", value: "Ogba, Lagos" },
+  { label: "Ojo", value: "Ojo, Lagos" },
+  { label: "Ojodu Berger", value: "Ojodu Berger, Lagos" },
+  { label: "Ojuelegba", value: "Ojuelegba, Lagos" },
+  { label: "Onigbongbo", value: "Onigbongbo, Lagos" },
+  { label: "Oniru", value: "Oniru, Lagos" },
+  { label: "Oregun", value: "Oregun, Lagos" },
+  { label: "Oshodi - Isolo", value: "Oshodi - Isolo, Lagos" },
+  { label: "Palmgrove", value: "Palmgrove, Lagos" },
+  { label: "Papa Ajao", value: "Papa Ajao, Lagos" },
+  { label: "Satellite Town", value: "Satellite Town, Lagos" },
+  { label: "Sabo", value: "Sabo, Lagos" },
+  { label: "Shomolu", value: "Shomolu, Lagos" },
+  { label: "Surulere", value: "Surulere, Lagos" },
+  { label: "Tarkwa Bay", value: "Tarkwa Bay, Lagos" },
+  { label: "Tinubu Square", value: "Tinubu Square, Lagos" },
+  { label: "Victoria Island", value: "Victoria Island, Lagos" },
+  {
+    label: "Victoria Garden City",
+    value: "Victoria Garden City, Lagos",
+  },
+  { label: "Yaba", value: "Yaba, Lagos" },
+];
+
+export const TABLE_OPTIONS = [
+  {
+    label: "COUPLE'S PARENTS WITH SPECIAL GUEST ETC",
+    value: "COUPLE'S PARENTS WITH SPECIAL GUEST ETC",
+  },
+  { label: "AKINTULA FAMILY", value: "AKINTULA FAMILY" },
+  { label: "OGUNDAYOMI FAMILY", value: "OGUNDAYOMI FAMILY" },
+  { label: "COUPLE'S FRIENDS", value: "COUPLE'S FRIENDS" },
+  {
+    label: "OPEN HEAVENS MEMBERS",
+    value: "OPEN HEAVENS MEMBERS",
+  },
+  { label: "IKOTUN RESIDENTS ", value: "IKOTUN RESIDENTS " },
+  {
+    label: "IKOTUN WORKERS/TENANTS ",
+    value: "IKOTUN WORKERS/TENANTS ",
+  },
+  { label: "LSGSMC", value: "LSGSMC" },
+  { label: "ANCOPPSS", value: "ANCOPPSS" },
+  { label: "GVBC", value: "GVBC" },
+  { label: "UNITY ESTATE", value: "UNITY ESTATE" },
+  { label: "THE ODETUNDES/AMUSANS", value: "THE ODETUNDES/AMUSANS" },
+  { label: "THE OGUNBIYIS", value: "THE OGUNBIYIS" },
+  { label: "NUT", value: "NUT" },
+  { label: "GROOM’S FAMILY FRIEND", value: "GROOM’S FAMILY FRIEND" },
+  { label: "DROPP/HOMEMADE", value: "DROPP/HOMEMADE" },
+  { label: "LASUCOM/OAU", value: "LASUCOM/OAU" },
+  { label: "FRIENDS OF THE GROOM", value: "FRIENDS OF THE GROOM" },
+  { label: "AGBADA MEN", value: "AGBADA MEN" },
+  { label: "GROOMSEN/BRIDESMAID", value: "GROOMSEN/BRIDESMAID" },
+];
