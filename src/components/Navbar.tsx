@@ -727,14 +727,12 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
             as="nav"
             aria-label="Global"
             // className="bg-red-900 h-full"
-            className="absolute right-0 w-96 flex flex-col gallery_bg py-3 rounded-t-xl"
+            className="absolute right-0 w-96 flex flex-col gallery_bg pt-3 rounded-t-xl"
           >
-            {/* <div className="space-y-1 px-2 pb-3 pt-2"> */}
-
             <DisclosureButton
               as="a"
               href=""
-              className="block rounded-md px-3 py-2 text-lg text-[#fff] font_medium"
+              className="block rounded-md text-lg text-[#4A443A] font_medium"
             >
               {person && (
                 <div className="flex flex-col items-center justify-center mb-2">
@@ -787,7 +785,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
                     />
                     <XMarkIcon
                       aria-hidden="true"
-                      className="hidden h-6 w-6 group-data-[open]:block"
+                      className="hidden h-6 w-6 group-data-[open]:block text-white"
                     />
                   </DisclosureButton>
                 </div>
