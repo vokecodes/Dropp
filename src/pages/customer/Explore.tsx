@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "@mui/material";
 import Footer from "../../components/landing-page/Footer";
-import MainFooter from "../../components/Footer";
+import HomeFooter from "../../components/Footer";
 import Meals from "../../components/landing-page/Meals";
 import TopNav from "../../components/landing-page/TopNav";
 import Preloader from "../../components/Preloader";
@@ -943,8 +943,8 @@ const Explore = () => {
             </div>
           </div>
 
-          <Footer
-            chefDashboard={person?.userType === USER_TYPE.CHEF ? true : false}
+          <HomeFooter
+          // chefDashboard={person?.userType === USER_TYPE.CHEF ? true : false}
           />
 
           <CartFloat

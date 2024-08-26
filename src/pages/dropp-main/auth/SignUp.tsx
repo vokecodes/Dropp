@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import * as Yup from "yup";
 import { Field, Formik, Form, ErrorMessage } from "formik";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Select from "react-select";
@@ -14,6 +14,13 @@ import { useAppDispatch } from "../../../redux/hooks";
 const SignUpPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { user } = useSelector(
+    (state: any) => ({
+      user: state.auth.user,
+    }),
+    shallowEqual
+  );
 
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [success, setSuccess] = useState(false);

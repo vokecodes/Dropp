@@ -400,7 +400,7 @@ const Home = () => {
                         <p className="text-2xl font_bold text-[#385C44]">
                           {cat.subtitle}
                         </p>
-                        <p className="mt-2 text-xl font_medium text-[#8F8F8F] leading-">
+                        <p className="mt-2 text-lg font_medium text-[#8F8F8F]">
                           {cat.description}
                         </p>
                         <div className="my-3">
@@ -557,7 +557,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="overlapping-card">
+            <div id="overlappingCard" className="overlapping-card">
               <div
                 className={`category-post-card w-full lg:w-[1148px] bg-[#9E6A55] rounded-2xl lg:flex lg:justify-around px-11 pt-8 lg:lg:pt-12 pb-10 lg:pb-0`}
                 id="marketing-tools"
@@ -763,7 +763,7 @@ const Home = () => {
                   </p>
                   <div>
                     <p className="text-white text-3xl lg:text-5xl font_bold">
-                      N20,000/<span className="text-lg">month</span>
+                      ₦20,000/<span className="text-lg">month</span>
                     </p>
                     <p className="text-white text-lg lg:text-xl font_bold">
                       +2.5% commission fee
@@ -772,34 +772,36 @@ const Home = () => {
                   </div>
                   <div className="mt-5 mb-20">
                     <ul className="list-disc pl-5">
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Menu management
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Customised website
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Kitchen display system
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Sales reports and insights
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Payment collection
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Online ordering
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Customer management
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Loyalty features
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         QR digital menu
                       </li>
-                      <li className="text-lg text-[#4A443A]">Pay at table</li>
+                      <li className="text-lg text-[#4A443A] font_regular">
+                        Pay at table
+                      </li>
                     </ul>
                   </div>
                   <Link to={"/auth/register"} className="w-[84%]">
@@ -827,19 +829,19 @@ const Home = () => {
                   </div>
                   <div className="mt-5 mb-20">
                     <ul className="list-disc pl-5">
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Menu management
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Customised website
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Payment collection
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Online ordering
                       </li>
-                      <li className="text-lg text-[#4A443A]">
+                      <li className="text-lg text-[#4A443A] font_regular">
                         Customer management
                       </li>
                     </ul>

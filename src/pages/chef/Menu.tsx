@@ -29,15 +29,15 @@ const ChefMenu = () => {
                 backgroundImage="/images/chef-menu-banner.svg"
                 bgExtraClasses="p-7 lg:p-2 bg-cover bg-no-repeat min-w-full h-42"
                 textContainerClasses="pl-10 py-10"
-                text1="Learning and resources"
+                text1="Design your menu"
                 text1ExtraClasses="text-3xl text-white font_bold  mb-5"
                 text2="This delectable Indian Vegetable Korma is loaded with potatoes, tomatoes, carrots, peas, and green bean"
                 text2ExtraClasses="text-xs text-white font_regular mt-2 mb-5 w-60"
-                text3="Show tips"
-                text3ExtraClasses="text-1xl text-white font_regular"
-                iconColor="#fff"
-                iconSize={24}
-                iconExtraClasses="ml-2"
+                // text3="Show tips"
+                // text3ExtraClasses="text-1xl text-white font_regular"
+                // iconColor="#fff"
+                // iconSize={24}
+                // iconExtraClasses="ml-2"
               />
             </div>
 
@@ -52,8 +52,7 @@ const ChefMenu = () => {
                     />
                     <div className="absolute bottom-5 left-0 p-5 space-y-3">
                       <p className="text-start text-white text-2xl font-semibold font_medium">
-                        Create <br />
-                        Online Menu
+                        Homemade Menu
                       </p>
                       <button
                         className="px-3 py-1 rounded-lg text-white font_medium"
@@ -78,7 +77,6 @@ const ChefMenu = () => {
                       />
                       <div className="absolute bottom-5 left-0 p-5 space-y-3">
                         <p className="text-start text-black text-2xl font-semibold font_medium">
-                          Create a<br />
                           Dine-in Menu
                         </p>
                         <button

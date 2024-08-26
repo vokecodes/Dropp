@@ -3,8 +3,10 @@ import { useSelector, shallowEqual } from "react-redux";
 import Button from "./Button";
 import { CHEF_USER } from "../config/UserType";
 import { CHEF_ROUTES } from "../routes/routes";
+import { useEffect } from "react";
 
 const NotFound = () => {
+  const navigate = useNavigate();
   const { user } = useSelector(
     (state: any) => ({
       user: state.auth.user,
@@ -12,7 +14,13 @@ const NotFound = () => {
     shallowEqual
   );
 
-  const navigate = useNavigate();
+  // useEffect(() => {
+  //   console.log("userGEHMD", { user });
+
+  //   if (user) {
+  //     navigate(`/${user?.user?.userType}`);
+  //   }
+  // }, [user]);
 
   return (
     <main className="grid min-h-full place-items-center bg-white px-6 py-24">

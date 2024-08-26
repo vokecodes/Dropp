@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { HOME_ROUTES } from "../routes/routes";
 
 const Footer = ({ logo }) => {
   return (
@@ -25,28 +26,40 @@ const Footer = ({ logo }) => {
 
           <div className="w-full">
             <h1 className="text-white text-lg font_bold">Products</h1>
-            <p className="text-base text-white font_regular mt-3">
+            <a
+              href="#overlappingCard"
+              className="block text-base text-white font_regular mt-3"
+            >
               Ordering tools
-            </p>
-            <p className="text-base text-white font_regular mt-3">
+            </a>
+            <a
+              href="#overlappingCard"
+              className="block text-base text-white font_regular mt-3"
+            >
               Restaurant operations tools
-            </p>
-            <p className="text-base text-white font_regular mt-3">
+            </a>
+            <a
+              href="#overlappingCard"
+              className="block text-base text-white font_regular mt-3"
+            >
               Marketing tools
-            </p>
-            <p className="text-base text-white font_regular mt-3">
+            </a>
+            <a
+              href="#overlappingCard"
+              className="block text-base text-white font_regular mt-3"
+            >
               Analytics & Insight
-            </p>
+            </a>
           </div>
 
           <div className="w-full">
             <h1 className="text-white text-lg font_bold">Legal</h1>
-            <Link to="#">
+            <Link to={HOME_ROUTES.linkTermsService}>
               <p className="text-base text-white font_regular mt-3">
                 Terms of use
               </p>
             </Link>
-            <Link to="#">
+            <Link to={HOME_ROUTES.linkPrivacyPolicy}>
               <p className="text-base text-white font_regular mt-3">
                 Privacy policy
               </p>
@@ -62,9 +75,12 @@ const Footer = ({ logo }) => {
             >
               +2348068424478
             </a>
-            <p className="text-base text-white font_regular mt-3">
+            <a
+              href="mailto:hello@getdropp.com"
+              className="block text-base text-white font_regular mt-3"
+            >
               hello@getdropp.com
-            </p>
+            </a>
           </div>
           <div className="w-full">
             <h1 className="text-white text-lg font_bold">Social media</h1>

@@ -1,10 +1,23 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  BrowserRouter,
+} from "react-router-dom";
 import { connect, shallowEqual, useSelector } from "react-redux";
 import Home from "../pages/dropp-main/Home";
 import Dashboard from "../pages/dropp-main/Dashboard";
 import AuthRoutes from "./authRoutes";
-import { AUTH_ROUTES, CHEF_ROUTES, COMPANY_ROUTES, CUSTOMER_ROUTES, HOME_ROUTES, SUB_CHEF_ROUTES, WAITER_ROUTES } from "./routes";
+import {
+  AUTH_ROUTES,
+  CHEF_ROUTES,
+  COMPANY_ROUTES,
+  CUSTOMER_ROUTES,
+  HOME_ROUTES,
+  SUB_CHEF_ROUTES,
+  WAITER_ROUTES,
+} from "./routes";
 import NotFound from "../components/NotFound";
 import { CHEF_USER, COMPANY_USER, SUB_CHEF_USER } from "../config/UserType";
 import Explore from "../pages/customer/Explore";
@@ -33,8 +46,6 @@ const AppRoutes = () => {
     }),
     shallowEqual
   );
-
-  console.log('user= ', user, user?.user?.userType)
 
   return (
     <BrowserRouter>
@@ -106,6 +117,5 @@ const AppRoutes = () => {
     </BrowserRouter>
   );
 };
-
 
 export default AppRoutes;

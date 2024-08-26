@@ -1,3 +1,4 @@
+import { shallowEqual, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import ChefSignUp from "../pages/chef/SignUp";
 import ChefLogin from "../pages/chef/Login";
@@ -21,63 +22,71 @@ import LoginPage from "../pages/dropp-main/auth/Login";
 import ForgotPasswordPage from "../pages/dropp-main/auth/ForgotPassword";
 import ResetPasswordPage from "../pages/dropp-main/auth/ResetPassword";
 
-const AuthRoutes = () => (
-  <Routes>
-    <Route>
-      {/* Dropp Routes */}
-      <Route index element={<SignUpPage />} />
-      <Route path='/register' element={<SignUpPage/>} />
-      <Route path='/login' element={<LoginPage/>} />
-      <Route path='/forgot-password' element={<ForgotPasswordPage/>} />
-      <Route path='/reset-password' element={<ResetPasswordPage/>} />
+const AuthRoutes = () => {
+  const { user } = useSelector(
+    (state: any) => ({
+      user: state.auth.user,
+    }),
+    shallowEqual
+  );
 
-      {/* Customer Routes */}
-      <Route path={AUTH_ROUTES.customerSignUp} element={<CustomerSignUp />} />
-      <Route path={AUTH_ROUTES.customerLogin} element={<CustomerLogin />} />
-      <Route
-        path={AUTH_ROUTES.customerForgotPassword}
-        element={<CustomerForgotPassword />}
-      />
-      <Route
-        path={AUTH_ROUTES.customerResetPassword}
-        element={<CustomerResetPassword />}
-      />
+  return (
+    <Routes>
+      <Route>
+        {/* Dropp Routes */}
+        <Route index element={<SignUpPage />} />
+        <Route path="/register" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      {/* Chef Routes */}
-      <Route path={AUTH_ROUTES.chefSignUp} element={<ChefSignUp />} />
-      <Route path={AUTH_ROUTES.chefLogin} element={<ChefLogin />} />
-      <Route
-        path={AUTH_ROUTES.chefForgotPassword}
-        element={<ChefForgotPassword />}
-      />
-      <Route
-        path={AUTH_ROUTES.chefResetPassword}
-        element={<ChefResetPassword />}
-      />
-      <Route path={AUTH_ROUTES.chefSignUp} element={<ChefSignUp />} />
-      <Route path={AUTH_ROUTES.chefLogin} element={<ChefLogin />} />
-      <Route
-        path={AUTH_ROUTES.chefForgotPassword}
-        element={<ChefForgotPassword />}
-      />
+        {/* Customer Routes */}
+        <Route path={AUTH_ROUTES.customerSignUp} element={<CustomerSignUp />} />
+        <Route path={AUTH_ROUTES.customerLogin} element={<CustomerLogin />} />
+        <Route
+          path={AUTH_ROUTES.customerForgotPassword}
+          element={<CustomerForgotPassword />}
+        />
+        <Route
+          path={AUTH_ROUTES.customerResetPassword}
+          element={<CustomerResetPassword />}
+        />
 
-      {/* WAITER */}
-      <Route path={AUTH_ROUTES.chefLogin} element={<ChefLogin />} />
-      
-      {/* COMPANY */}
-      <Route path={AUTH_ROUTES.companySignUp} element={<CompanySignUp />} />
-      <Route path={AUTH_ROUTES.companyLogin} element={<CompanyLogin />} />
-      <Route
-        path={AUTH_ROUTES.companyForgotPassword}
-        element={<CompanyForgotPassword />}
-      />
-      <Route
-        path={AUTH_ROUTES.companyResetPassword}
-        element={<CompanyResetPassword />}
-      />
+        {/* Chef Routes */}
+        <Route path={AUTH_ROUTES.chefSignUp} element={<ChefSignUp />} />
+        <Route path={AUTH_ROUTES.chefLogin} element={<ChefLogin />} />
+        <Route
+          path={AUTH_ROUTES.chefForgotPassword}
+          element={<ChefForgotPassword />}
+        />
+        <Route
+          path={AUTH_ROUTES.chefResetPassword}
+          element={<ChefResetPassword />}
+        />
+        <Route path={AUTH_ROUTES.chefSignUp} element={<ChefSignUp />} />
+        <Route path={AUTH_ROUTES.chefLogin} element={<ChefLogin />} />
+        <Route
+          path={AUTH_ROUTES.chefForgotPassword}
+          element={<ChefForgotPassword />}
+        />
 
-    </Route>
-  </Routes>
-);
+        {/* WAITER */}
+        <Route path={AUTH_ROUTES.chefLogin} element={<ChefLogin />} />
+
+        {/* COMPANY */}
+        <Route path={AUTH_ROUTES.companySignUp} element={<CompanySignUp />} />
+        <Route path={AUTH_ROUTES.companyLogin} element={<CompanyLogin />} />
+        <Route
+          path={AUTH_ROUTES.companyForgotPassword}
+          element={<CompanyForgotPassword />}
+        />
+        <Route
+          path={AUTH_ROUTES.companyResetPassword}
+          element={<CompanyResetPassword />}
+        />
+      </Route>
+    </Routes>
+  );
+};
 
 export default AuthRoutes;
