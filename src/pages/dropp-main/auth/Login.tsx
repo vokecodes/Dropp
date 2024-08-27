@@ -8,6 +8,7 @@ import { AUTH_DATA } from "../../../reducers/type";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL, CHEF_LOGIN_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
+import { SUB_CHEF_USER } from "../../../config/UserType";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -29,13 +30,14 @@ const LoginPage = () => {
         ...values,
       })
       .then(({ data }) => {
-        // dispatch({
-        //   type: AUTH_DATA,
-        //   payload: data,
-        // });
-        // sessionStorage.setItem("auth", JSON.stringify(data));
+        const user = data?.data?.user;
+
+        if (user?.userType === SUB_CHEF_USER) {
+          navigate("/sub-chef");
+        } else {
+          navigate(`/${user?.userType}`);
+        }
         dispatch(registerLoginAccount({ ...data?.data }));
-        navigate("/chef");
       })
       .catch((error) => {
         const { message } = error.response.data;
