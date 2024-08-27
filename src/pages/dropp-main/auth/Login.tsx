@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { AUTH_DATA } from "../../../reducers/type";
 import Navbar from "../../../components/Navbar";
-import { BASE_API_URL } from "../../../_redux/urls";
+import { BASE_API_URL, CHEF_LOGIN_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
 
 const LoginPage = () => {
@@ -25,7 +25,7 @@ const LoginPage = () => {
 
   const loginUser = (values: any, formikBag: any) => {
     axios
-      .post(`${BASE_API_URL}/auth/restaurant/login`, {
+      .post(CHEF_LOGIN_URL, {
         ...values,
       })
       .then(({ data }) => {
