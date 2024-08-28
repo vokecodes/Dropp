@@ -700,7 +700,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
                 </Menu>
                 <a
                   // href="#pricing"
-                  onClick={() => handleScrollTo('pricing', 2000)}
+                  onClick={() => handleScrollTo('pricing', 3000)}
                   className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer"
                 >
                   Pricing
