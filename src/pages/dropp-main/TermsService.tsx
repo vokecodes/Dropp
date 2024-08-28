@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import TopNav from "../../components/landing-page/TopNav";
 import { AUTH_ROUTES, HOME_ROUTES } from "../../routes/routes";
-import Footer from "../../components/landing-page/Footer";
+import Footer from "../../components/Footer";
 import Testimonials from "../../components/landing-page/Testimonials";
+import Navbar from "../../components/Navbar";
+import { Images } from "../../config/images";
 
 const TermsService = () => {
   const navigate = useNavigate();
@@ -13,9 +15,13 @@ const TermsService = () => {
     // window.open("https://forms.gle/jZNVL3Xt7S3CS9gj8");
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   return (
     <div className="bg-white w-full m-0 p-0">
-      <TopNav
+      {/* <TopNav
         textUrl={AUTH_ROUTES.linkChefSignUp}
         text="Home Chef"
         login="Login"
@@ -23,9 +29,10 @@ const TermsService = () => {
         // signUpUrl="https://forms.gle/JZESyX6oGBMibewy6"
         loginUrl={AUTH_ROUTES.linkChefLogin}
         signUpUrl={AUTH_ROUTES.linkChefSignUp}
-      />
+      /> */}
+      <Navbar />
 
-      <div className="flex flex-col justify-center items-center lg:h-80 h-64 w-full" style={{ backgroundColor: `#4E0B2B`, }}>
+      <div className="flex flex-col justify-center items-center lg:h-80 h-64 w-full bg_primary">
         <h2 className="mb-5 text-3xl text-white font_bold font-bold lg:text-7xl text-center">
           Terms of Service
         </h2>
@@ -153,7 +160,7 @@ const TermsService = () => {
 
       <Testimonials buttonClick={() => goToExplore()} />
 
-      <Footer />
+      <Footer logo={Images.logo} />
     </div>
   );
 };

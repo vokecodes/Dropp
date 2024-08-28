@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const Header = ({ itemsImage, setShowModal, handleScrollTo }) => {
   return (
     <section className="header_bg lg:pb-20">
-      <Navbar setShowModal={setShowModal} handleScrollTo={() => handleScrollTo()} />
+      <Navbar setShowModal={setShowModal} handleScrollTo={handleScrollTo} />
 
       <main className="w-4/5 lg:w-5/6 mx-auto pt-5 lg:flex flex-row items-center">
         <div className="lg:w-3/5 lg:flex-1">
