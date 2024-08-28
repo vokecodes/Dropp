@@ -41,7 +41,7 @@ import { GiKnifeFork } from "react-icons/gi";
 import { USER_TYPE } from "../utils/Globals";
 import LogoutButton from "./LogoutButton";
 
-const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
+const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -559,7 +559,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
   ];
 
   const mobileNavigation = [
-    { name: "Pricing", href: "#pricing", current: false },
+    { name: "Pricing", href: "", onclick: () => handleScrollTo('pricing', 2000), current: false },
     { name: "Marketplace", href: HOME_ROUTES.linkExplore, current: false },
   ];
 
@@ -580,20 +580,24 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
   ];
 
   return (
-    <Disclosure as="header" className="pt-8 z-40 w-full">
+    <Disclosure as="header" className="pt-8 px-3 lg:px-0 z-40 w-full">
       <div className="px-2 sm:px-4 lg:px-32">
         <div className="relative flex h-16 justify-between">
+
+          {/* LOGO */}
           <div className="relative z-50 flex px-2 lg:px-0">
             <div className="flex flex-shrink-0 items-center">
               <Link to={"/"}>
                 <img
                   alt="Dropp"
                   src={Images.logo}
-                  className="h-8 w-auto z-50"
+                  className="h-6 lg:h-8 w-auto z-50"
                 />
               </Link>
             </div>
           </div>
+
+          {/* DESKTOP START */}
           {!authPage && (
             <div className="relative z-40 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
               <nav
@@ -645,8 +649,9 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
                   </MenuItems>
                 </Menu>
                 <a
-                  href="#restaurant"
-                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
+                  // href="#restaurant"
+                  onClick={() => handleScrollTo('restaurant', 1000)}
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer"
                 >
                   Private Chef
                 </a>
@@ -694,8 +699,9 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
                   </MenuItems>
                 </Menu>
                 <a
-                  href="#pricing"
-                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
+                  // href="#pricing"
+                  onClick={() => handleScrollTo('pricing', 2000)}
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer"
                 >
                   Pricing
                 </a>
@@ -708,52 +714,64 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
               </nav>
             </div>
           )}
-          {/* <div className="relative z-40 flex items-center lg:hidden">
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open menu</span>
-              <Bars3Icon
-                aria-hidden="true"
-                className="block h-6 w-6 group-data-[open]:hidden"
-              />
-              <XMarkIcon
-                aria-hidden="true"
-                className="hidden h-6 w-6 group-data-[open]:block"
-              />
-            </DisclosureButton>
-          </div> */}
+          
+          <div className="relative lg:z-50 lg:ml-4 flex lg:gap-3 lg:items-center">
+            {auth?.user ? (
+              <>
+                <div className="relative z-40 flex items-center">
+                  {/* Mobile menu button */}
+                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                    <span className="absolute -inset-0.5" />
+                    <span className="sr-only">Open menu</span>
+                    <Bars3Icon
+                      aria-hidden="true"
+                      className="block h-6 w-6 group-data-[open]:hidden"
+                    />
+                    <XMarkIcon
+                      aria-hidden="true"
+                      className="hidden h-6 w-6 group-data-[open]:block text-black"
+                    />
+                  </DisclosureButton>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="hidden lg:flex gap-x-3">
+                  <Link to={"/auth/login"}>
+                    <OutlineButton title="Log in" extraClasses="w-24" />
+                  </Link>
+                  <Link to={"/auth/register"}>
+                    <Button title="Sign up" extraClasses="w-24" />
+                  </Link>
+                </div>
+
+                <div className="lg:hidden relative z-40 flex items-center">
+                  {/* Mobile menu button */}
+                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                    <span className="absolute -inset-0.5" />
+                    <span className="sr-only">Open menu</span>
+                    <Bars3Icon
+                      aria-hidden="true"
+                      className="block h-6 w-6 group-data-[open]:hidden"
+                    />
+                    <XMarkIcon
+                      aria-hidden="true"
+                      className="hidden h-6 w-6 group-data-[open]:block text-black"
+                    />
+                  </DisclosureButton>
+                </div>
+              </>
+            )}
+          </div>
 
           <DisclosurePanel
             as="nav"
             aria-label="Global"
             // className="bg-red-900 h-full"
-            className="absolute right-0 w-96 flex flex-col gallery_bg pt-3 rounded-t-xl"
+            className="absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col gallery_bg pt-3 pb-3 lg:pb-0 rounded-xl z-50"
           >
-            <DisclosureButton
-              as="a"
-              href=""
-              className="block rounded-md text-lg text-[#4A443A] font_medium"
-            >
-              {person && (
-                <div className="flex flex-col items-center justify-center mb-2">
-                  {person?.user?.image ? (
-                    <img
-                      src={person?.user?.image}
-                      alt="user"
-                      className="w-11 h-11 rounded-full"
-                    />
-                  ) : (
-                    <CiUser size={52} color="#fff" />
-                  )}
-                  <div className="text-center text-white">
-                    <p className="font_medium text-3xl">
-                      {person?.firstName} {person?.lastName}
-                    </p>
-                    <p className="font_regular">{person?.email}</p>
-                  </div>
-                </div>
-              )}
-              <div className="bg-white">
+            {auth?.user ? (
+              <div className="bg-white lg:rounded-b-xl">
                 {menuItems?.map((item, i) => (
                   <MenuItemLocal
                     key={i}
@@ -768,166 +786,159 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage }: any) => {
                   <Button title="Help center" extraClasses="w-5/6 text-sm" />
                 </div>
               </div>
-            </DisclosureButton>
-          </DisclosurePanel>
-
-          <div className="hidden lg:relative lg:z-50 lg:ml-4 lg:flex lg:gap-3 lg:items-center">
-            {auth?.user ? (
-              <>
-                <div className="relative z-40 flex items-center">
-                  {/* Mobile menu button */}
-                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                    <span className="absolute -inset-0.5" />
-                    <span className="sr-only">Open menu</span>
-                    <Bars3Icon
-                      aria-hidden="true"
-                      className="block h-6 w-6 group-data-[open]:hidden"
-                    />
-                    <XMarkIcon
-                      aria-hidden="true"
-                      className="hidden h-6 w-6 group-data-[open]:block text-white"
-                    />
-                  </DisclosureButton>
-                </div>
-              </>
             ) : (
-              <>
+              <div className="flex flex-row items-center justify-around">
                 <Link to={"/auth/login"}>
                   <OutlineButton title="Log in" extraClasses="w-24" />
                 </Link>
                 <Link to={"/auth/register"}>
                   <Button title="Sign up" extraClasses="w-24" />
                 </Link>
-              </>
+              </div>
             )}
-          </div>
+          </DisclosurePanel>
+
+          {/* DESKTOP END */}
+
+          {/* <DisclosureButton
+            as="a"
+            href=""
+            className="block rounded-md text-black text-lg text-[#4A443A] font_medium"
+          >
+            <span className="absolute -inset-0.5" />
+            <span className="sr-only">Open menu</span>
+            <Bars3Icon
+              aria-hidden="true"
+              className="block h-6 w-6 group-data-[open]:hidden"
+            />
+            <XMarkIcon
+              aria-hidden="true"
+              className="hidden h-6 w-6 group-data-[open]:block text-white"
+            />
+          </DisclosureButton> */}
+          
+          
+          {/* <DisclosurePanel as="nav" aria-label="Global" className="flex lg:hidden">
+            <div className="space-y-1 px-2 pb-3 pt-2">
+              <Disclosure as="div" className="">
+
+                <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
+                  Restaurant
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="#4A443A"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </DisclosureButton>
+
+                <DisclosurePanel className="mt-2 space-y-2">
+                  {restaurantNavigation.map((item) => (
+                    <DisclosureButton
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className="block rounded-lg py-2 pl-6 pr-3 text-sm font_medium leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.name}
+                    </DisclosureButton>
+                  ))}
+                </DisclosurePanel>
+              </Disclosure>
+              <DisclosureButton
+                as="a"
+                href=""
+                onClick={() => handleScrollTo('restaurant', 1000)}
+                className="block rounded-md px-3 py-2 text-lg text-[#4A443A] font_medium"
+              >
+                Private Chef
+              </DisclosureButton>
+              <Disclosure as="div" className="">
+                <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
+                  Product
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="#4A443A"
+                    width={16}
+                    height={16}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </DisclosureButton>
+                <DisclosurePanel className="mt-2 space-y-2">
+                  {productNavigation.map((item) => (
+                    <DisclosureButton
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className="block rounded-lg py-2 pl-6 pr-3 text-sm font_medium leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.name}
+                    </DisclosureButton>
+                  ))}
+                </DisclosurePanel>
+              </Disclosure>
+
+              {mobileNavigation.map((item: any) => (
+                <DisclosureButton
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  aria-current={item.current ? "page" : undefined}
+                  className="block rounded-md px-3 py-2 text-lg text-[#4A443A] font_medium cursor-pointer"
+                  onClick={item?.onclick}
+                >
+                  {item.name}
+                </DisclosureButton>
+              ))}
+            </div>
+
+            <div className="border-t border-gray-200 pb-3 pt-4">
+              {auth?.user ? (
+                <Button
+                  title="Log out"
+                  onClick={() => handleLogout()}
+                  extraClasses="w-24 ms-4"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-start mt-3 gap-5 px-4">
+                  <Link to={"/auth/login"}>
+                    <OutlineButton
+                      title="Log in"
+                      extraClasses="w-44"
+                    />
+                  </Link>
+                  <Link to={"/auth/register"}>
+                    <Button
+                      title="Sign up"
+                      extraClasses="w-44"
+                    />
+                  </Link>
+                </div>
+              )}
+            </div>
+          </DisclosurePanel> */}
+
+          
         </div>
       </div>
 
-      <DisclosurePanel as="nav" aria-label="Global" className="lg:hidden">
-        <div className="space-y-1 px-2 pb-3 pt-2">
-          <Disclosure as="div" className="">
-            <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
-              Restaurant
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="#4A443A"
-                width={16}
-                height={16}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-            </DisclosureButton>
-            <DisclosurePanel className="mt-2 space-y-2">
-              {restaurantNavigation.map((item) => (
-                <DisclosureButton
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className="block rounded-lg py-2 pl-6 pr-3 text-sm font_medium leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  {item.name}
-                </DisclosureButton>
-              ))}
-            </DisclosurePanel>
-          </Disclosure>
-          <DisclosureButton
-            as="a"
-            href=""
-            className="block rounded-md px-3 py-2 text-lg text-[#4A443A] font_medium"
-          >
-            Private Chef
-          </DisclosureButton>
-          <Disclosure as="div" className="">
-            <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
-              Product
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="#4A443A"
-                width={16}
-                height={16}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-            </DisclosureButton>
-            <DisclosurePanel className="mt-2 space-y-2">
-              {productNavigation.map((item) => (
-                <DisclosureButton
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className="block rounded-lg py-2 pl-6 pr-3 text-sm font_medium leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  {item.name}
-                </DisclosureButton>
-              ))}
-            </DisclosurePanel>
-          </Disclosure>
-          {mobileNavigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="a"
-              href={item.href}
-              aria-current={item.current ? "page" : undefined}
-              className="block rounded-md px-3 py-2 text-lg text-[#4A443A] font_medium"
-            >
-              {item.name}
-            </DisclosureButton>
-          ))}
-        </div>
-        <div className="border-t border-gray-200 pb-3 pt-4">
-          {/* {user && (
-            <div className="hidden lg:block ml-5">
-              <div className="absolute mt-4 ml-5">
-                <img src={Images.carbon_location} alt="location" className="" />
-              </div>
-              <input
-                className="px-12 py-4 w_483 address_input rounded-2xl outline-none focus:outline-none"
-                value={address}
-                onChange={(e) => handleChangeAddress(e.target.value)}
-              />
-            </div>
-          )} */}
-          {auth?.user ? (
-            <Button
-              title="Log out"
-              onClick={() => handleLogout()}
-              extraClasses="w-24 ms-4"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-start mt-3 gap-5 px-4">
-              <Link to={"/auth/login"}>
-                <OutlineButton
-                  title="Log in"
-                  // onClick={() => setShowModal(true)}
-                  extraClasses="w-44"
-                />
-              </Link>
-              <Link to={"/auth/register"}>
-                <Button
-                  title="Sign up"
-                  // onClick={() => setShowModal(true)}
-                  extraClasses="w-44"
-                />
-              </Link>
-            </div>
-          )}
-        </div>
-      </DisclosurePanel>
     </Disclosure>
   );
 };

@@ -34,7 +34,7 @@ const CATEGORIES = [
 
 const CATEGORIES_POST = [
   {
-    image: "/images/Restaurant.png",
+    image: "/images/restaurant.png",
     title: "Dine-In",
     subtitle: "Serve up a memorable dining experience.",
     description:
@@ -270,8 +270,8 @@ const Home = () => {
 
   const [activeCard, setActiveCard] = useState(0);
 
-  const handleScrollTo = (id: any) => {
-    smoothScrollTo(id);
+  const handleScrollTo = (id: any, duration: any) => {
+    smoothScrollTo(id, duration);
   };
 
   const bookDemoSchema = Yup.object().shape({
@@ -288,7 +288,7 @@ const Home = () => {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
 
-  const bookADemo = (values, formikBag) => {
+  const bookADemo = (values: any, formikBag: any) => {
     axios
       .post(`${BASE_API_URL}/dropp-book-demo`, {
         ...values,
@@ -345,7 +345,7 @@ const Home = () => {
           </div>
 
           <div className="lg:hidden w-full h-full relative">
-            <div className="w-full my-5 flex justify-center space-x-4 overflow-x-auto my-scroll-container">
+            <div className="w-full my-5 flex flex-row items-center justify-start space-x-4 overflow-x-auto my-scroll-container">
               {CATEGORIES.map((cat, i) => (
                 <div
                   key={i}
