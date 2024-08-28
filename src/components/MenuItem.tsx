@@ -35,6 +35,7 @@ const MenuItem = ({
       });
 
       console.log(data);
+      setShowPro(false);
     } catch (error) {
       console.log(error);
     } finally {
