@@ -68,7 +68,7 @@ const Testimonials = ({ navigate, buttonClick }: any) => {
   return (
     <div className="py-16">
       <h1 className="text-4xl text-center text-white font_bold mb-10">
-        People love Homemade. <br />{" "}
+        People love Dropp. <br />{" "}
         <span className="text-[#06c16b] italic">See for yourself.</span>
       </h1>
       <div className="w-4/5 mx-auto my-14">
