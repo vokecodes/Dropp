@@ -44,6 +44,22 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
     },
     {
       icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefReports
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Reports",
+      active: location?.pathname === CHEF_ROUTES.linkChefReports,
+      to: CHEF_ROUTES.linkChefReports,
+      pro: true,
+    },
+    {
+      icon: (
         <CgFileDocument
           size={24}
           color={
@@ -56,6 +72,26 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
       title: "Orders",
       active: location?.pathname === CHEF_ROUTES.linkChefOrders,
       to: CHEF_ROUTES.linkChefOrders,
+    },
+    {
+      icon: (
+        <CiForkAndKnife
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefDineIn
+              ? "#06c167"
+              : location?.pathname === CHEF_ROUTES.linkChefTableManagement
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Dine-in",
+      active:
+        location?.pathname === CHEF_ROUTES.linkChefDineIn ||
+        location?.pathname === CHEF_ROUTES.linkChefTableManagement,
+      to: CHEF_ROUTES.linkChefDineIn,
+      pro: true,
     },
     {
       icon: (
@@ -78,6 +114,22 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
         location?.pathname === CHEF_ROUTES.linkChefMenuOnline ||
         location?.pathname === CHEF_ROUTES.linkChefMenuDineIn,
       to: CHEF_ROUTES.linkChefMenu,
+    },
+    {
+      icon: (
+        <GiKnifeFork
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkKitchen
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Kitchen",
+      active: location?.pathname === CHEF_ROUTES.linkKitchen,
+      to: CHEF_ROUTES.linkKitchen,
+      pro: true,
     },
     {
       icon: (
@@ -108,6 +160,22 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
       title: "Chat",
       active: location?.pathname === CHEF_ROUTES.linkChefChat,
       to: CHEF_ROUTES.linkChefChat,
+    },
+    {
+      icon: (
+        <LuUsers
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkSubChefs
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Sub Admins",
+      active: location?.pathname === CHEF_ROUTES.linkSubChefs,
+      to: CHEF_ROUTES.linkSubChefs,
+      pro: true,
     },
     {
       icon: (
@@ -404,9 +472,9 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
                         />
                       ))}
                     </>
-                  ) : auth?.user?.isRestaurant ? (
+                  ) : !auth?.user?.isRestaurant ? (
                     <>
-                      {restaurantMenuItems?.map((item, i) => (
+                      {restaurantMenuItems?.map((item: any, i) => (
                         <MenuItem
                           key={i}
                           icon={item?.icon}
@@ -415,18 +483,22 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
                           to={item?.to}
                           newTab={item?.newTab}
                           beta={item?.beta}
+                          pro={item?.pro}
                         />
                       ))}
                     </>
                   ) : (
                     <>
-                      {menuItems?.map((item, i) => (
+                      {menuItems?.map((item: any, i) => (
                         <MenuItem
                           key={i}
                           icon={item?.icon}
                           title={item?.title}
                           active={item?.active}
                           to={item?.to}
+                          newTab={item?.newTab}
+                          beta={item?.beta}
+                          pro={item?.pro}
                         />
                       ))}
                     </>

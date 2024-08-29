@@ -34,7 +34,7 @@ const CATEGORIES = [
 
 const CATEGORIES_POST = [
   {
-    image: "/images/Restaurant.png",
+    image: "/images/restaurant.png",
     title: "Dine-In",
     subtitle: "Serve up a memorable dining experience.",
     description:
@@ -270,8 +270,9 @@ const Home = () => {
 
   const [activeCard, setActiveCard] = useState(0);
 
-  const handleScrollTo = (id: any) => {
-    smoothScrollTo(id);
+  const handleScrollTo = (id: any, duration: any) => {
+    console.log('hvbhdgjkgbkjgf= ', id, duration)
+    smoothScrollTo(id, duration);
   };
 
   const bookDemoSchema = Yup.object().shape({
@@ -288,7 +289,7 @@ const Home = () => {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
 
-  const bookADemo = (values, formikBag) => {
+  const bookADemo = (values: any, formikBag: any) => {
     axios
       .post(`${BASE_API_URL}/dropp-book-demo`, {
         ...values,
@@ -345,7 +346,7 @@ const Home = () => {
           </div>
 
           <div className="lg:hidden w-full h-full relative">
-            <div className="w-full my-5 flex justify-center space-x-4 overflow-x-auto my-scroll-container">
+            <div className="w-full my-5 flex flex-row items-center justify-start space-x-4 overflow-x-auto my-scroll-container">
               {CATEGORIES.map((cat, i) => (
                 <div
                   key={i}
@@ -701,13 +702,15 @@ const Home = () => {
               150+ food businesses use Dropp to get the job done.
             </p>
           </div>
-          <div className="flex items-center relative">
+
+          <div className="w-full overflow-x-hidden flex flex-row items-center relative">
             <div
               className="absolute z-20 left-3 lg:left-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
               onClick={scrollBusinessesPostLeft}
             >
               <img src="/images/arrow-left.svg" alt="arrow-left" />
             </div>
+
             <div
               className="my-20 flex space-x-4 overflow-x-auto my-scroll-container animate-scroll"
               ref={businessesRef}
@@ -728,6 +731,7 @@ const Home = () => {
                 <img src="/images/okonkwo.png" alt="okonkwo" />
               </div>
             </div>
+
             <div
               className="absolute z-10 right-3 lg:right-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
               onClick={scrollBusinessesPostRight}

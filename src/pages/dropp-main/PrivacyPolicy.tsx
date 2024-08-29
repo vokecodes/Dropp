@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import TopNav from "../../components/landing-page/TopNav";
 import { AUTH_ROUTES, HOME_ROUTES } from "../../routes/routes";
-import Footer from "../../components/landing-page/Footer";
+import Footer from "../../components/Footer";
 import Testimonials from "../../components/landing-page/Testimonials";
+import Navbar from "../../components/Navbar";
+import { Images } from "../../config/images";
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
@@ -13,9 +15,13 @@ const PrivacyPolicy = () => {
     // window.open("https://forms.gle/jZNVL3Xt7S3CS9gj8");
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   return (
     <div className="bg-white">
-      <TopNav
+      {/* <TopNav
         textUrl={AUTH_ROUTES.linkChefSignUp}
         text="Home Chef"
         login="Login"
@@ -23,12 +29,11 @@ const PrivacyPolicy = () => {
         // signUpUrl="https://forms.gle/JZESyX6oGBMibewy6"
         loginUrl={AUTH_ROUTES.linkChefLogin}
         signUpUrl={AUTH_ROUTES.linkChefSignUp}
-      />
+      /> */}
+      <Navbar />
 
       <div
-        className="flex flex-col justify-center items-center lg:h-80 h-64 w-full break-words"
-        style={{ backgroundColor: `#4E0B2B` }}
-      >
+        className="flex flex-col justify-center items-center lg:h-80 h-64 w-full break-words bg_primary">
         <h2 className="mb-5 text-3xl text-white font_bold font-bold lg:text-7xl text-center">
           Privacy Policy
         </h2>
@@ -36,18 +41,18 @@ const PrivacyPolicy = () => {
 
       <div className="w-11/12 lg:w-3/4 mx-auto mt-10 mb-20">
         <div className="mb-5">
-          <p className="text-black text-2xl font_bold">Homemade, Inc.</p>
+          <p className="text-black text-2xl font_bold">Dropp, Inc.</p>
 
           <p className="mt-2 font-normal text-black text-base font_regular">
-            Welcome to the website (the “Site”) of Homemade, Inc. (“Homemade,”
-            “we,” “us,” or “our”). Homemade provides an online marketplace in
+            Welcome to the website (the “Site”) of Dropp, Inc. (“Dropp,”
+            “we,” “us,” or “our”). Dropp provides an online marketplace in
             which Sellers (defined below) can list, offer, sell and deliver food
             items and meal orders to the general public, and customers can
             browse and purchase Meals (collectively, including the Site and any
             related mobile applications, the “Service”). This Privacy Policy
             explains what information we collect, how we use and share that
             data, and your choices concerning our data practices. Before using
-            the Service or submitting any information to Homemade, please review
+            the Service or submitting any information to Dropp, please review
             this Privacy Policy carefully and contact us at{" "}
             <a
               href="mailto:hello@getdropp.com"
@@ -78,7 +83,7 @@ const PrivacyPolicy = () => {
           </p>
           <p className="mt-2 font-normal text-black text-base font_regular">
             Information You Provide: We collect information that you provide to
-            Homemade when (i) filling out or updating required and optional
+            Dropp when (i) filling out or updating required and optional
             profile information when signing up for and using the Service, (ii)
             contacting us by email, (iii) filling out a contact form on the
             Service; (iv) making a purchase; (v) participating in a promotion;
@@ -106,13 +111,13 @@ const PrivacyPolicy = () => {
             on Twitter), we will collect the information that you provide to us,
             such as your contact details. Also, if you publicly reference our
             Service on social media (e.g., by using a hashtag associated with
-            Homemade in a tweet or post), we may use your reference on or in
+            Dropp in a tweet or post), we may use your reference on or in
             connection with our Service. In addition, the companies that host
             our Social Media Pages may provide us with aggregate information and
             analytics regarding the use of our Social Media Pages. Information
             We Collect When You Log-in Through Social Media: We may embed a
             pixel or SDK on our Service that allows you to log-in to your
-            Homemade account through social media. If you choose to engage with
+            Dropp account through social media. If you choose to engage with
             such integration, we may receive information from the social media
             platform that you have authorized to share with us. Please note that
             the social media platform may independently collect information
@@ -502,7 +507,7 @@ const PrivacyPolicy = () => {
 
       <Testimonials buttonClick={() => goToExplore()} />
 
-      <Footer />
+      <Footer logo={Images.logo} />
     </div>
   );
 };

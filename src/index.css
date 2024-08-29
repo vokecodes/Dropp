@@ -5,7 +5,7 @@
 @font-face {
   font-family: "Gilroy_Regular";
   src: local("Gilroy_Regular"),
-    url(/public/fonts/Gilroy-Regular.ttf) format("woff");
+    url(/fonts/Gilroy-Regular.ttf) format("woff");
 }
 
 body {
@@ -22,6 +22,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* * {
+  outline: 1px solid #f00 !important;
+} */
 
 .primary_bg_color {
   background-color: #06c167;

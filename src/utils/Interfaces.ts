@@ -112,6 +112,7 @@ export type MenuItemProps = {
   to?: string | any;
   newTab?: boolean | any;
   beta?: boolean;
+  pro?: boolean;
 };
 
 export type DashboardLayoutProps = {
@@ -326,9 +327,8 @@ export type testimonailPropsData = {
   data: testimonailProps[];
 };
 
-
 export type alertDialogProps = {
-  message: string,
-  handleClose: any,
-  open: any
-}
+  message: string;
+  handleClose: any;
+  open: any;
+};

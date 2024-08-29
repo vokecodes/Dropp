@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const Header = ({ itemsImage, setShowModal, handleScrollTo }) => {
   return (
     <section className="header_bg lg:pb-20">
-      <Navbar setShowModal={setShowModal} />
+      <Navbar setShowModal={setShowModal} handleScrollTo={handleScrollTo} />
 
       <main className="w-4/5 lg:w-5/6 mx-auto pt-5 lg:flex flex-row items-center">
         <div className="lg:w-3/5 lg:flex-1">
@@ -34,11 +34,11 @@ const Header = ({ itemsImage, setShowModal, handleScrollTo }) => {
             {/* <a href="#demoForm" className=""> */}
             <OutlineButton
               title="Book a Demo"
-              extraClasses="w-36 lg:w-2/6"
-              onClick={() => handleScrollTo("demoForm")}
+              extraClasses="w-32 lg:w-2/6"
+              onClick={() => handleScrollTo("demoForm", 3000)}
             />
             {/* </a> */}
-            <Link to={"/auth/register"} className="w-36 lg:w-2/6">
+            <Link to={"/auth/register"} className="w-32 lg:w-2/6">
               <Button
                 title="Get started"
                 extraClasses="w-full h-full"
