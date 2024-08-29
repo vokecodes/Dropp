@@ -60,11 +60,11 @@ const MenuItem = ({
             >
               {title}
             </p>
-            {pro && (
+            {/* {pro && (
               <div className="ms-5 bg-yellow-400 rounded-full w-12 h-8 flex items-center justify-center">
                 <p className="text-black text-sm font_medium">PRO</p>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       ) : (
@@ -99,11 +99,13 @@ const MenuItem = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <div className="absolute top-1/2 left-1/2 w-80 h-40 -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
-          <h3 className="text-center font_bold text-2xl black2">PRO Enquiry</h3>
+        <div className="absolute top-1/2 left-1/2 w-80 h-48 -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
+          <h3 className="text-center font_bold text-2xl black2">
+            Upgrade to Pro to get acessy
+          </h3>
           <div className="mt-5 flex justify-center" role="status">
             <Button
-              title="Request Now"
+              title="Request Upgrade"
               loading={loading}
               onClick={handleRequest}
             />

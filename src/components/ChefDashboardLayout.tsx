@@ -472,7 +472,7 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
                         />
                       ))}
                     </>
-                  ) : !auth?.user?.isRestaurant ? (
+                  ) : auth?.user?.isRestaurant ? (
                     <>
                       {restaurantMenuItems?.map((item: any, i) => (
                         <MenuItem
