@@ -606,7 +606,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
               >
                 <Menu as="div" className="relative flex-shrink-0 z-50">
                   <div>
-                    <MenuButton className="relative flex">
+                    <MenuButton className="relative flex shadow-xl">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
@@ -720,7 +720,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
               <>
                 <div className="relative z-40 flex items-center">
                   {/* Mobile menu button */}
-                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 shadow-xl">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open menu</span>
                     <Bars3Icon
@@ -768,7 +768,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
             as="nav"
             aria-label="Global"
             // className="bg-red-900 h-full"
-            className="absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col gallery_bg pt-3 pb-3 lg:pb-0 rounded-xl z-50"
+            className={`absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col  pt-3 pb-3 lg:pb-0 rounded-xl z-50 shadow-xl ${auth?.user ? 'gallery_bg' : 'bg-white'} `}
           >
             {auth?.user ? (
               <div className="bg-white lg:rounded-b-xl">
@@ -789,13 +789,13 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
             ) : (
               <div className="flex flex-col items-start justify-start gap-y-4 px-2">
                 
-                <Menu as="div" className="relative flex-shrink-0 h-full w-full border-white border-b border-solid">
+                <Menu as="div" className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid">
                   <div>
                     <MenuButton className="relative flex">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
-                        <p className="text-lg font_medium text-[#ffffff]">
+                        <p className="text-lg font_medium text-[#4A443A]">
                           Restaurant
                         </p>
                         <svg
@@ -803,7 +803,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
                           fill="none"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="#ffffff"
+                          stroke="#4A443A"
                           width={16}
                           height={16}
                         >
@@ -841,18 +841,18 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
                 <a
                   // href="#restaurant"
                   onClick={() => handleScrollTo('restaurant', 1000)}
-                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#ffffff] cursor-pointer h-full w-full border-white border-b border-solid"
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer h-full w-full border-[#4A443A] border-b border-solid"
                 >
                   Private Chef
                 </a>
 
-                <Menu as="div" className="relative flex-shrink-0 h-full w-full border-white border-b border-solid">
+                <Menu as="div" className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid">
                   <div>
                     <MenuButton className="relative flex">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
-                        <p className="text-lg font_medium text-[#ffffff]">
+                        <p className="text-lg font_medium text-[#4A443A]">
                           Product
                         </p>
                         <svg
@@ -860,7 +860,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
                           fill="none"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="#ffffff"
+                          stroke="#4A443A"
                           width={16}
                           height={16}
                         >
@@ -893,14 +893,14 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
                 <a
                   // href="#pricing"
                   onClick={() => handleScrollTo('pricing', 3000)}
-                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#ffffff] cursor-pointer h-full w-full border-white border-b border-solid"
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer h-full w-full border-[#4A443A] border-b border-solid"
                 >
                   Pricing
                 </a>
 
                 <a
                   href={HOME_ROUTES.linkExplore}
-                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#ffffff] h-full w-full border-white border-b border-solid"
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] h-full w-full border-[#4A443A] border-b border-solid"
                 >
                   Marketplace
                 </a>
