@@ -788,24 +788,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
               </div>
             ) : (
             <>
-            <DisclosureButton className="group flex w-full items-center gap-5 rounded-lg py-2 px-3 text-lg font_medium leading-7 text-gray-900 hover:bg-gray-50">
-                  Restaurant
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="#4A443A"
-                    width={16}
-                    height={16}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
-                </DisclosureButton>
+          
               <div className="flex flex-row items-center justify-around">
                 <Link to={"/auth/login"}>
                   <OutlineButton title="Log in" extraClasses="w-24" />
