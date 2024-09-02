@@ -564,12 +564,12 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
   ];
 
   const restaurantNavigation = [
-    { name: "Dine-in", href: "#restaurant" },
-    { name: "Private Chef", href: "#restaurant" },
-    { name: "Bar & Lounge", href: "#restaurant" },
-    { name: "Cafe", href: "#restaurant" },
-    { name: "Food Truck", href: "#restaurant" },
-    { name: "Fast Casual", href: "#restaurant" },
+    { name: "Dine-in", href: "restaurant" },
+    { name: "Private Chef", href: "restaurant" },
+    { name: "Bar & Lounge", href: "restaurant" },
+    { name: "Cafe & Bakery", href: "restaurant" },
+    { name: "Food Truck", href: "restaurant" },
+    { name: "Fast Casual", href: "restaurant" },
   ];
 
   const productNavigation = [
@@ -720,7 +720,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
               <>
                 <div className="relative z-40 flex items-center">
                   {/* Mobile menu button */}
-                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 shadow-xl">
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Open menu</span>
                     <Bars3Icon
@@ -768,7 +768,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
             as="nav"
             aria-label="Global"
             // className="bg-red-900 h-full"
-            className="absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col gallery_bg pt-3 pb-3 lg:pb-0 rounded-xl z-50"
+            className={`absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col  pt-3 pb-3 lg:pb-0 rounded-xl z-50 shadow-xl ${auth?.user ? 'gallery_bg' : 'bg-white'} `}
           >
             {auth?.user ? (
               <div className="bg-white lg:rounded-b-xl">
@@ -787,17 +787,133 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo }:
                 </div>
               </div>
             ) : (
-            <>
-          
-              <div className="flex flex-row items-center justify-around">
-                <Link to={"/auth/login"}>
-                  <OutlineButton title="Log in" extraClasses="w-24" />
-                </Link>
-                <Link to={"/auth/register"}>
-                  <Button title="Sign up" extraClasses="w-24" />
-                </Link>
+              <div className="flex flex-col items-start justify-start gap-y-4 px-2">
+                
+                <Menu as="div" className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid">
+                  <div>
+                    <MenuButton className="relative flex">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
+                        <p className="text-lg font_medium text-[#4A443A]">
+                          Restaurant
+                        </p>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="#4A443A"
+                          width={16}
+                          height={16}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                          />
+                        </svg>
+                      </div>
+                    </MenuButton>
+                  </div>
+                  <MenuItems
+                    transition
+                    className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
+                  >
+                    {restaurantNavigation.map((item) => (
+                      <MenuItem key={item.name}>
+                        <a
+                          // href={item.href}
+                          className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            console.log('click')
+                            setSelectedCategory(item.name);
+                            handleScrollTo(item.href, 1000);
+                          }}
+                        >
+                          {item.name}
+                        </a>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
+
+                <a
+                  // href="#restaurant"
+                  onClick={() => handleScrollTo('restaurant', 1000)}
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer h-full w-full border-[#4A443A] border-b border-solid"
+                >
+                  Private Chef
+                </a>
+
+                <Menu as="div" className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid">
+                  <div>
+                    <MenuButton className="relative flex">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <div className="flex items-center gap-1 inline-flex items-center px-3 py-2">
+                        <p className="text-lg font_medium text-[#4A443A]">
+                          Product
+                        </p>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="#4A443A"
+                          width={16}
+                          height={16}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                          />
+                        </svg>
+                      </div>
+                    </MenuButton>
+                  </div>
+                  <MenuItems
+                    transition
+                    className="absolute left-0 w-48 origin-top-right rounded-2xl bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in z-50"
+                  >
+                    {productNavigation.map((item) => (
+                      <MenuItem key={item.name}>
+                        <a
+                          href={item.href}
+                          className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100"
+                        >
+                          {item.name}
+                        </a>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
+
+                <a
+                  // href="#pricing"
+                  onClick={() => handleScrollTo('pricing', 3000)}
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer h-full w-full border-[#4A443A] border-b border-solid"
+                >
+                  Pricing
+                </a>
+
+                <a
+                  href={HOME_ROUTES.linkExplore}
+                  className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] h-full w-full border-[#4A443A] border-b border-solid"
+                >
+                  Marketplace
+                </a>
+
+                <div className="w-full flex flex-row items-center justify-center gap-x-4">
+                  <Link to={"/auth/login"}>
+                    <OutlineButton title="Log in" extraClasses="w-24" />
+                  </Link>
+                  <Link to={"/auth/register"}>
+                    <Button title="Sign up" extraClasses="w-24" />
+                  </Link>
+                </div>
               </div>
-              </>
             )}
           </DisclosurePanel>
 
