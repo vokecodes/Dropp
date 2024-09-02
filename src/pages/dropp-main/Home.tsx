@@ -185,6 +185,11 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('selectedCategory= ', selectedCategory)
+    scrollToCategoryPost(CATEGORIES.indexOf(selectedCategory))
+  }, [selectedCategory])
+
   const businessesRef = useRef<any>(null);
   const [businessScrollDirection, setBusinessScrollDirection] = useState(1); // 1 for right, -1 for left
 
@@ -271,7 +276,7 @@ const Home = () => {
   const [activeCard, setActiveCard] = useState(0);
 
   const handleScrollTo = (id: any, duration: any) => {
-    console.log('hvbhdgjkgbkjgf= ', id, duration)
+    // console.log('hvbhdgjkgbkjgf= ', id, duration)
     smoothScrollTo(id, duration);
   };
 
@@ -313,6 +318,7 @@ const Home = () => {
           itemsImage={Images.itemsGif}
           setShowModal={setShowModal}
           handleScrollTo={handleScrollTo}
+          setSelectedCategory={setSelectedCategory}
         />
 
         <div
@@ -369,7 +375,7 @@ const Home = () => {
           <div className="z-30 absolute w-full h-full lg:mx-auto top-64">
             <div className="flex items-center relative">
               <div
-                className="absolute z-20 left-3 lg:left-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-20 top-[10rem] lg:top-1/2 left-3 lg:left-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostLeft}
               >
                 <img src="/images/arrow-left.svg" alt="arrow-left" />
@@ -419,7 +425,7 @@ const Home = () => {
                 ))}
               </div>
               <div
-                className="absolute z-10 right-3 lg:right-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
+                className="absolute z-10 top-[10rem] lg:top-1/2 right-3 lg:right-10 w-[60px] h-[60px] shadow-2xl rounded-full bg-white flex items-center justify-center cursor-pointer"
                 onClick={scrollPostRight}
               >
                 <img src="/images/arrow-right.svg" alt="arrow-right" />
