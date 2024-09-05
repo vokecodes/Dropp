@@ -10,6 +10,7 @@ import Home from "../pages/dropp-main/Home";
 import Dashboard from "../pages/dropp-main/Dashboard";
 import AuthRoutes from "./authRoutes";
 import {
+  ADMIN_ROUTES,
   AUTH_ROUTES,
   CHEF_ROUTES,
   COMPANY_ROUTES,
@@ -19,7 +20,7 @@ import {
   WAITER_ROUTES,
 } from "./routes";
 import NotFound from "../components/NotFound";
-import { CHEF_USER, COMPANY_USER, SUB_CHEF_USER } from "../config/UserType";
+import { ADMIN_USER, CHEF_USER, COMPANY_USER, SUB_CHEF_USER } from "../config/UserType";
 import Explore from "../pages/customer/Explore";
 import ChefShop from "../pages/chef/ChefShop";
 import RestaurantShop from "../pages/chef/RestaurantShop";
@@ -38,6 +39,8 @@ import CompanyRoutes from "../pages/company/Routes";
 import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";
 import CustomerEventSignUp from "../pages/events/SignUp";
+import DashRoutes from "../pages/dashboard/Routes";
+import AdminRoutes from "../pages/dashboard/Routes";
 
 const AppRoutes = () => {
   const { user } = useSelector(
@@ -92,6 +95,11 @@ const AppRoutes = () => {
               <Route
                 path={COMPANY_ROUTES.company}
                 element={<CompanyRoutes />}
+              />
+            ) : user?.user?.userType === ADMIN_USER ? (
+              <Route
+                path={ADMIN_ROUTES.admin}
+                element={<AdminRoutes />}
               />
             ) : (
               <>

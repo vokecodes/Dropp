@@ -30,6 +30,9 @@ export const AUTH_ROUTES = {
   linkCompanyForgotPassword: "/auth/company-forgot-password",
   companyResetPassword: "company-reset-password",
   linkCompanyResetPassword: "/auth/company-reset-password",
+
+  adminLogin: "admin-login",
+  linkAdminLogin: "/auth/admin-login",
 };
 
 export const DROPP_ROUTES = {
@@ -145,6 +148,13 @@ export const SUB_CHEF_ROUTES = {
 export const WAITER_ROUTES = {
   waiter: "/waiter/*",
   linkWaiter: "/waiter",
+};
+
+export const ADMIN_ROUTES = {
+  admin: "/admin/*",
+  linkAdmin: "/admin",
+  adminSettings: "settings",
+  linkAdminSettings: "/admin/settings",
 };
 
 export const COMPANY_ROUTES = {

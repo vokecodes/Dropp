@@ -11,6 +11,7 @@ const initialState = {
   subChefs: null,
   dashboardLoading: false,
   dashboard: null,
+  chartData: null,
 };
 
 export const userSLice = createSlice({
@@ -76,6 +77,16 @@ export const userSLice = createSlice({
       state.dashboardLoading = false;
       state.dashboard = action.payload;
     },
+    // get admin dash
+    getAdminDashboard: (state, action) => {
+      state.dashboardLoading = false;
+      state.dashboard = action.payload;
+    },
+    // get chart
+    getMonthlyChart: (state, action) => {
+      state.dashboardLoading = false;
+      state.chartData = action.payload;
+    },
     // delete user profile
     logoutUserProfile: (state) => {
       state.loading = false;
@@ -88,6 +99,7 @@ export const userSLice = createSlice({
       state.subChefs = null;
       state.dashboardLoading = false;
       state.dashboard = null;
+      state.chartData = null;
     },
   },
 });
@@ -103,6 +115,8 @@ export const {
   getRestaurantWalletTransaction,
   getSubChefs,
   getRestaurantDashboard,
+  getAdminDashboard,
+  getMonthlyChart,
   startDashboardCall,
   stopDashboardCall,
 } = userSLice.actions;
