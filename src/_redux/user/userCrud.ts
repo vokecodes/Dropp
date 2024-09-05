@@ -6,6 +6,8 @@ import {
   COMPANY_URL,
   SUB_CHEF_URL,
   RESTAURANT_ORDER_URL,
+  ADMIN_ORDER_URL,
+  ADMIN_ALL_RESTAURANTS,
 } from "../urls";
 import { SERVER } from "../../config/axios";
 
@@ -143,6 +145,7 @@ export const changeSubChefPassword = (data: any) => {
   });
 };
 
+
 export const getRestaurantDashboardCrud = (
   fromDate = "",
   toDate = "",
@@ -173,3 +176,37 @@ export const getRestaurantOrdersPage = (
     `${RESTAURANT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
   );
 };
+
+export const getAdminDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = ""
+) => {
+  return SERVER.get(
+    `${ADMIN_ORDER_URL}/all?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+  );
+};
+
+export const getAdminRestaurantsCrud = () => {
+  return SERVER.get(
+    `${ADMIN_ALL_RESTAURANTS}`
+  );
+};
+
+export const getAdminChartCrud = () => {
+  return SERVER.get(`${ADMIN_ORDER_URL}/chart`);
+};
+
+// export const getAdminDashboardCrud = (
+//   fromDate = "",
+//   toDate = "",
+//   payment = "",
+//   section = "",
+//   table = ""
+// ) => {
+//   return SERVER.get(
+//     `${ADMIN_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+//   );
+// };

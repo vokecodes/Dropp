@@ -21,6 +21,8 @@ import {
   updateSubChefProfile,
   changeSubChefPassword,
   getRestaurantDashboardCrud,
+  getAdminDashboardCrud,
+  getAdminChartCrud,
 } from "./userCrud";
 import {
   startCall,
@@ -34,6 +36,8 @@ import {
   getRestaurantDashboard,
   startDashboardCall,
   stopDashboardCall,
+  getAdminDashboard,
+  getMonthlyChart,
 } from "./userSlice";
 
 export const getProfileUserAccount = () => (dispatch: any) => {
@@ -330,6 +334,28 @@ export const getRestaurantDashboardAccount =
     return getRestaurantDashboardCrud(fromDate, toDate, payment, section, table)
       .then(({ data }) => {
         dispatch(getRestaurantDashboard({ ...data?.data }));
+      })
+      .finally(() => dispatch(stopDashboardCall()));
+  };
+
+  export const getAdminDashboardAccount =
+  (fromDate = "", toDate = "", payment = "", section = "", table = "") =>
+  (dispatch: any) => {
+    dispatch(startDashboardCall());
+    return getAdminDashboardCrud(fromDate, toDate, payment, section, table)
+      .then(({ data }) => {
+        dispatch(getAdminDashboard({ ...data?.data }));
+      })
+      .finally(() => dispatch(stopDashboardCall()));
+  };
+  
+  export const getAdminMonthlyChart =
+  () => (dispatch: any) => {
+    dispatch(startDashboardCall());
+    return getAdminChartCrud()
+      .then(({ data }) => {
+        console.log('datacu= ', data)
+        dispatch(getMonthlyChart({ ...data?.data }));
       })
       .finally(() => dispatch(stopDashboardCall()));
   };

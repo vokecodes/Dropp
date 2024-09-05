@@ -21,6 +21,7 @@ import SignUpPage from "../pages/dropp-main/auth/SignUp";
 import LoginPage from "../pages/dropp-main/auth/Login";
 import ForgotPasswordPage from "../pages/dropp-main/auth/ForgotPassword";
 import ResetPasswordPage from "../pages/dropp-main/auth/ResetPassword";
+import AdminLogin from "../pages/dashboard/Login";
 
 const AuthRoutes = () => {
   const { user } = useSelector(
@@ -84,6 +85,10 @@ const AuthRoutes = () => {
           path={AUTH_ROUTES.companyResetPassword}
           element={<CompanyResetPassword />}
         />
+
+        {/* ADMIN */}
+        <Route path={AUTH_ROUTES.adminLogin} element={<AdminLogin />} />
+
       </Route>
     </Routes>
   );
