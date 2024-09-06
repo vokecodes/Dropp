@@ -48,7 +48,7 @@ const AdminLogin = () => {
 
       <main className="w-full h-full flex flex-row items-center justify-center">
         <div className="bg-white rounded-3xl w-11/12 lg:w-1/3 mx-auto lg:flex flex-row items-center justify-center">
-          <div className="relative pt-5 px-3 lg:px-8">
+          <div className="w-full lg:w-11/12 mx-auto relative py-5 px-3 lg:px-8">
             <div className='w-full space-y-2 my-2'>
                 <Link to={"/"}>
                     <img
@@ -73,7 +73,7 @@ const AdminLogin = () => {
               {(props) => (
                 <Form
                   onSubmit={props.handleSubmit}
-                  className="flex flex-col gap-y-2"
+                  className="w-full flex flex-col gap-y-2"
                 >
                   {/* email */}
                   <div className="mb-3">
@@ -166,17 +166,6 @@ const AdminLogin = () => {
                     />
                   </div>
 
-                  <div className="w-full">
-                    <Link to={"/auth/forgot-password"}>
-                      <p className="text-xs font_regular hover:underline font-semibold">
-                        <span className="text-[#747372]">
-                          Forgot Password?{" "}
-                        </span>
-                        <span className="text-[#4A443A]"></span>Reset
-                      </p>
-                    </Link>
-                  </div>
-
                   {errorMessage && (
                     <div className="w-full py-2">
                       <p className="text-center text-xs text-red-400">
@@ -216,29 +205,6 @@ const AdminLogin = () => {
                 </Form>
               )}
             </Formik>
-            <div className="flex justify-center items-center mt-3 mb-5">
-              <Link to={"/auth/register"}>
-                <p
-                  className="text-gray-500 cursor-pointer font_regular"
-                  // onClick={() => setAuthType(!authType)}
-                >
-                  Don't have an account?
-                  <span className="text-black font_bold">Register</span>
-                </p>
-              </Link>
-            </div>
-            <p className="mt-2 mb-5 text-center text-gray-500 text-sm font_regular">
-              By creating an account, I confirm that I have read and understood
-              the Dropp{" "}
-              <a
-                href="https://opposite-pet-88e.notion.site/Terms-of-Service-750a370ccc434a16b2b80c3f277f4968"
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
-                Terms of Use
-              </a>
-            </p>
           </div>
         </div>
       </main>
