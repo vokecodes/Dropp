@@ -7,7 +7,7 @@ import { getAdminDashboardAccount, getAdminMonthlyChart, getChefRestaurantWallet
 import { shallowEqual, useSelector } from 'react-redux';
 import { useAppDispatch } from '../../redux/hooks';
 import { Tooltip } from 'react-tooltip';
-import { formatRemoteAmountKobo } from '../../utils/formatMethods';
+import { formatRemoteAmountDollar, formatRemoteAmountKobo } from '../../utils/formatMethods';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 import { ClickAwayListener } from '@mui/material';
 import axios from 'axios';
@@ -71,11 +71,13 @@ const DashboardPage = () => {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalCustomers, setTotalCustomers] = useState(0);
 
-
+  const [currencyType, setCurrencyType] = useState('Naira');
   const [currentChartData, setCurrentChartData] = useState({})
   const [currentChartYears, setCurrentChartYears] = useState([])
   const [currentChartYear, setCurrentChartYear] = useState('')
   const [openCurrentChartData, setOpenCurrentChartData] = useState(false);
+
+  const [conversion, setConversion] = useState(0);
 
   const dashboardItems = [
     {
@@ -98,12 +100,19 @@ const DashboardPage = () => {
     },
     {
       title: "AOV",
-      value: formatRemoteAmountKobo(
-        safeDivide(dashboard?.totalNetSales, totalOrders)
-      ).naira +
-      formatRemoteAmountKobo(
-        safeDivide(dashboard?.totalNetSales, totalOrders)
-      ).kobo,
+      value: (conversion != 0 && currencyType == "Dollars") ? (formatRemoteAmountDollar(
+        safeDivide(dashboard?.totalNetSales, totalOrders) / conversion
+      ).dollar +
+      formatRemoteAmountDollar(
+        safeDivide(dashboard?.totalNetSales, totalOrders) / conversion
+      ).cents) : (
+        formatRemoteAmountKobo(
+          safeDivide(dashboard?.totalNetSales, totalOrders)
+        ).naira +
+        formatRemoteAmountKobo(
+          safeDivide(dashboard?.totalNetSales, totalOrders)
+        ).kobo
+      ),
       toolTipId: "aov",
       toolTipContent: "Total order value/number of orders",
     },
@@ -131,7 +140,7 @@ const DashboardPage = () => {
   const [endDate, setEndDate] = useState("");
 
   
-  const [currencyType, setCurrencyType] = useState('Naira');
+  
 
 
   useEffect(() => {
@@ -143,9 +152,9 @@ const DashboardPage = () => {
     );
 
     dispatch(getAdminMonthlyChart());
-    setCurrentChartData(chartData)
-    setCurrentChartYears(Object.keys(chartData).reverse())
-    setCurrentChartYear(Object.keys(chartData).reverse()[0])
+    chartData && setCurrentChartData(chartData)
+    chartData && setCurrentChartYears(Object.keys(chartData).reverse())
+    chartData && setCurrentChartYear(Object.keys(chartData).reverse()[0])
 
     axios
       .get(ADMIN_ALL_RESTAURANTS)
@@ -179,6 +188,22 @@ const DashboardPage = () => {
       .then(({ data }) => {
         console.log('customers= ', data)
         setTotalCustomers(data?.data.length)
+      })
+      .catch((error) => {
+        const { message } = error.response.data;
+        if (message) alert(message);
+      })
+
+      axios
+      .get("https://v6.exchangerate-api.com/v6/5ce22ab53db63681b9dd1eee/latest/USD")
+      .then(({ data }) => {
+        console.log('rests= ', data)
+
+        // const numOfRestaurants = data.data.filter((item :any, i :any) => item.profile.isRestaurant === true)
+
+        console.log('currency= ', data?.conversion_rates["NGN"])
+
+        setConversion(data?.conversion_rates["NGN"])
       })
       .catch((error) => {
         const { message } = error.response.data;
@@ -349,17 +374,32 @@ const DashboardPage = () => {
                 </svg>
                 <Tooltip id="net-sales" />
               </div>
-              <p className="my-3 text-3xl text-[#000000] font_medium">
-                {formatRemoteAmountKobo(dashboard?.totalNetSales).naira}
-                {formatRemoteAmountKobo(dashboard?.totalNetSales).kobo}
-              </p>
-              <p className="text-base text-black font_medium">
-                {formatRemoteAmountKobo(dashboard?.todayTotalNetSales).naira}
-                {
-                  formatRemoteAmountKobo(dashboard?.todayTotalNetSales).kobo
-                }{" "}
-                <span className="font_bold">today</span>
-              </p>
+                {(conversion != 0 && currencyType == "Dollars") ? (
+                  <p className="my-3 text-3xl text-[#000000] font_medium">
+                    {formatRemoteAmountDollar(dashboard?.totalNetSales / conversion).dollar}
+                    {formatRemoteAmountDollar(dashboard?.totalNetSales / conversion).cents}
+                  </p>                
+                ) : (
+                  <p className="my-3 text-3xl text-[#000000] font_medium">
+                    {formatRemoteAmountKobo(dashboard?.totalNetSales).naira}
+                    {formatRemoteAmountKobo(dashboard?.totalNetSales).kobo}
+                  </p>
+                )}
+              {(conversion != 0 && currencyType == "Dollars") ? (
+                <p className="text-base text-black font_medium">
+                  {formatRemoteAmountDollar(dashboard?.todayTotalNetSales / conversion).dollar}
+                  {formatRemoteAmountDollar(dashboard?.todayTotalNetSales / conversion).cents}
+                  {" "}
+                  <span className="font_bold">today</span>
+                </p>
+                ) : (
+                <p className="text-base text-black font_medium">
+                  {formatRemoteAmountKobo(dashboard?.todayTotalNetSales).naira}
+                  {formatRemoteAmountKobo(dashboard?.todayTotalNetSales).kobo}
+                  {" "}
+                  <span className="font_bold">today</span>
+                </p>
+              )}
             </div>
           )}
         </div>
