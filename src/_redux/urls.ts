@@ -62,6 +62,9 @@ export const COMPANY_FORGOT_PASSWORD_URL = `${BASE_API_URL}/auth/company/forgot-
 
 export const COMPANY_RESET_PASSWORD_URL = `${BASE_API_URL}/auth/company/reset-password`;
 
+// ADMIN
+export const ADMIN_LOGIN_URL = `${BASE_API_URL}/admin/login`
+
 export const ORDER_URL = `${BASE_API_URL}/orders`;
 
 export const TRANSACTION_URL = `${BASE_API_URL}/transaction`;
@@ -83,6 +86,14 @@ export const DINNING_MENU_CATEGORY_URL = `${BASE_API_URL}/dinning-menu-category`
 export const DINNING_MENU_TAG_URL = `${BASE_API_URL}/dinning-menu-tag`;
 
 export const RESTAURANT_ORDER_URL = `${BASE_API_URL}/restaurant-order`;
+
+export const ADMIN_ORDER_URL = `${BASE_API_URL}/admin/dropp-dashboard`;
+
+export const ADMIN_ALL_RESTAURANTS = `${BASE_API_URL}/admin/chefs/all`;
+
+export const ADMIN_ALL_ORDERS = `${BASE_API_URL}/admin/orders/all`;
+
+export const ADMIN_ALL_CUSTOMERS = `${BASE_API_URL}/admin/customers/all`;
 
 export const RESTAURANT_TABLE_URL = `${BASE_API_URL}/restaurant-table`;
 

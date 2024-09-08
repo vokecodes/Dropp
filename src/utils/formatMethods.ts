@@ -69,6 +69,38 @@ export const formatRemoteAmountKobo = (amount: any) => {
   return amountKobo;
 };
 
+
+// Format remote amount
+export const formatRemoteAmountDollar = (amount: any) => {
+  let amountCents = {
+    dollar: "$0",
+    cents: ".00",
+  };
+
+  if (!amount) {
+    return amountCents;
+  }
+
+  // const dividedAmount = amount / 100;
+
+  const formattedAmount = amount.toFixed(2);
+
+  const [dollar, cents] = formattedAmount.split(".");
+
+  // console.log(naira, kobo);
+
+  if (!dollar) {
+    return amountCents;
+  }
+
+  amountCents = {
+    dollar: "$" + parseInt(dollar).toLocaleString(),
+    cents: cents ? "." + cents : cents || ".00",
+  };
+
+  return amountCents;
+};
+
 export const COMMON_DATE_FORMAT = "MMM DD, YYYY";
 
 export const truncateText = (str: any, max: any, len: any) => {
