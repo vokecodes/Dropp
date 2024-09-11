@@ -567,7 +567,7 @@ const DashboardPage = () => {
             ))}
           </div>
         ) : (
-          <div className="my-4 grid grid-cols-2 gap-3">
+          <div className="my-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
             {dashboardItems.map((item, i) => (
               <div
                 key={i}
