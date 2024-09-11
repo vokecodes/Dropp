@@ -148,7 +148,7 @@ const DashboardPage = () => {
     },
     {
       title: "Restaurants",
-      value: restaurants?.length,
+      value: dashboard?.orders || restaurants?.length,
       toolTipId: "restaurants",
       toolTipContent: "Total number of restaurants",
     },
