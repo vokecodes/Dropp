@@ -102,7 +102,7 @@ const DashboardPage = () => {
 
   const dashboardItems = [
     {
-      title: "Revenue",
+      title: "Commission Revenue",
       value:
         conversion != 0 && currencyType == "Dollars"
           ? formatRemoteAmountDollar(
@@ -118,10 +118,39 @@ const DashboardPage = () => {
       toolTipContent: "2.5% of GMV",
     },
     {
+      title: "Subscription Revenue",
+      value:
+        conversion != 0 && currencyType == "Dollars"
+          ? formatRemoteAmountDollar(0).dollar +
+            formatRemoteAmountDollar(0).cents
+          : formatRemoteAmountKobo(0).naira + formatRemoteAmountKobo(0).kobo,
+      toolTipId: "revenue",
+      toolTipContent: "2.5% of GMV",
+    },
+    {
+      title: "MRR",
+      value:
+        conversion != 0 && currencyType == "Dollars"
+          ? formatRemoteAmountDollar(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12 / conversion
+            ).dollar +
+            formatRemoteAmountDollar(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12 / conversion
+            ).cents
+          : formatRemoteAmountKobo(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12
+            ).naira +
+            formatRemoteAmountKobo(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12
+            ).kobo,
+      toolTipId: "mrr",
+      toolTipContent: "Average revenue per month",
+    },
+    {
       title: "Restaurants",
       value: restaurants?.length,
-      toolTipId: "restuarants",
-      toolTipContent: "Total number of restuarants",
+      toolTipId: "restaurants",
+      toolTipContent: "Total number of restaurants",
     },
     {
       title: "Orders",
@@ -130,20 +159,28 @@ const DashboardPage = () => {
       toolTipContent: "Total number of orders",
     },
     {
+      title: "Meals",
+      value: dashboard?.meals,
+      toolTipId: "orders",
+      toolTipContent: "Total number of meals",
+    },
+    {
       title: "AOV",
       value:
         conversion != 0 && currencyType == "Dollars"
           ? formatRemoteAmountDollar(
-              safeDivide(dashboard?.totalNetSales, totalOrders) / conversion
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders) /
+                conversion
             ).dollar +
             formatRemoteAmountDollar(
-              safeDivide(dashboard?.totalNetSales, totalOrders) / conversion
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders) /
+                conversion
             ).cents
           : formatRemoteAmountKobo(
-              safeDivide(dashboard?.totalNetSales, totalOrders)
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders)
             ).naira +
             formatRemoteAmountKobo(
-              safeDivide(dashboard?.totalNetSales, totalOrders)
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders)
             ).kobo,
       toolTipId: "aov",
       toolTipContent: "Total order value/number of orders",
@@ -153,12 +190,6 @@ const DashboardPage = () => {
       value: dashboard?.customers,
       toolTipId: "customers",
       toolTipContent: "Total number of customers",
-    },
-    {
-      title: "MRR",
-      value: ((dashboard?.totalNetSales * (2.5 / 100)) / 12).toFixed(2),
-      toolTipId: "mrr",
-      toolTipContent: "Average revenue per month",
     },
   ];
 
