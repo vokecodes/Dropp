@@ -6,10 +6,6 @@ import Skeleton from "react-loading-skeleton";
 import {
   getAdminDashboardAccount,
   getAdminMonthlyChart,
-  getChefRestaurantWalletAccount,
-  getChefWalletAccount,
-  getProfileChefAccount,
-  getRestaurantDashboardAccount,
 } from "../../_redux/user/userAction";
 import { shallowEqual, useSelector } from "react-redux";
 import { useAppDispatch } from "../../redux/hooks";
@@ -20,7 +16,6 @@ import {
 } from "../../utils/formatMethods";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { ClickAwayListener } from "@mui/material";
-import axios from "axios";
 import {
   ADMIN_ALL_CUSTOMERS,
   ADMIN_ALL_ORDERS,
@@ -38,6 +33,11 @@ import {
   YAxis,
 } from "recharts";
 import { SERVER } from "../../config/axios";
+
+
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 
 const BannerSkeletonLoader = () => (
   <div className="p-6">
@@ -61,6 +61,21 @@ const DashboardItemSkeletonLoader = () => (
   </div>
 );
 
+const CustomTooltip = ({ payload, label }: any) => {
+  if (payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="custom-tooltip">
+        <p>{`Month: ${monthNames[data.month - 1]}`}</p>
+        <p>{`GMV: ${data?.GMV.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}`}</p>
+        <p>{`Revenue: ${data?.revenue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
   const { user, dashboardLoading, dashboard, chartData, section, table } =
@@ -82,6 +97,8 @@ const DashboardPage = () => {
     }
     return a / b;
   };
+
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const [restaurants, setRestaurants] = useState([]);
   const [currentRestaurant, setCurrentRestaurant] = useState("All");
@@ -267,6 +284,70 @@ const DashboardPage = () => {
     }
   };
 
+  const formatYAxis = number => currencyType == 'Dollars' ? `$${number.toLocaleString()}` : `₦${number.toLocaleString()}`;
+  
+  const formatMonth = month => monthNames[month - 1];
+
+  const convertDollars = chartData && chartData[currentChartYear]?.map((item: any) => {
+      return {
+        month: item.month,
+        GMV: item.GMV / conversion,
+        revenue: item.revenue / conversion
+      };
+    });
+
+  
+  
+  const convertMonthNumbersToNames = (data: any) => {
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+    return data.map(item => {
+      return {
+        ...item,
+        month: monthNames[item.month - 1]
+      };
+    });
+  }
+
+  const downloadChart = () => {
+    
+    if(!chartData){
+      alert("No data to download!")
+    }
+
+    const csvRows = [];
+    const filename = 'data.csv'
+    const initialData = chartData && currencyType !== "Dollars" ? chartData[currentChartYear] : currencyType === "Dollars" ? convertDollars : []
+    const data = chartData && convertMonthNumbersToNames(initialData)
+    
+    const headers = Object.keys(data[0]);
+    csvRows.push(headers.join(','));
+    
+    data.forEach(row => {
+      const values = headers.map(header => {
+        const escaped = ('' + row[header]).replace(/"/g, '""');
+        return `"${escaped}"`;
+      });
+      csvRows.push(values.join(','));
+    });
+    
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+
+
+  console.log("chartData= ", chartData);
   console.log("currentChartData= ", currentChartData);
   console.log("restaurants= ", restaurants);
 
@@ -355,7 +436,7 @@ const DashboardPage = () => {
                         key={i}
                         onClick={() => {
                           setCurrentRestaurant(
-                            restaurant.business.businessName
+                            restaurant?.business?.businessName
                           );
                           setOpenRestaurantOptions(false);
                         }}
@@ -363,7 +444,7 @@ const DashboardPage = () => {
                         <div
                           className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
                             currentRestaurant ===
-                            restaurant.business.businessName
+                            restaurant?.business?.businessName
                               ? "primary_bg_color"
                               : "bg_gray_color"
                           }`}
@@ -371,7 +452,7 @@ const DashboardPage = () => {
                         <p
                           className={`text-xs lg:text-sm secondary_gray_color text-black`}
                         >
-                          {restaurant.business.businessName}
+                          {restaurant?.business?.businessName}
                         </p>
                       </div>
                     ))}
@@ -480,13 +561,13 @@ const DashboardPage = () => {
         </div>
 
         {dashboardLoading ? (
-          <div className="my-4 grid grid-cols-2 gap-3">
-            {[...Array(6)]?.map((_, i) => (
-              <DashboardItemSkeletonLoader key={i} />
+          <div className="my-4 grid grid-cols-1 gap-3">
+            {[...Array(2)]?.map((_, i) => (
+              <BannerSkeletonLoader key={i} />
             ))}
           </div>
         ) : (
-          <div className="my-4 grid grid-cols-2 gap-3">
+          <div className="my-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
             {dashboardItems.map((item, i) => (
               <div
                 key={i}
@@ -524,7 +605,8 @@ const DashboardPage = () => {
         )}
 
         <div className="w-full h-fit min-h-64">
-          <div className="flex flex-col lg:flex-row items-center justify-start lg:justify-between px-3 my-5">
+          <div className="flex flex-col lg:flex-row items-center justify-start lg:justify-between gap-y-3 px-3 my-5">
+            
             <div className="w-full lg:w-fit flex flex-row items-center gap-x-3">
               <span className="p-2 bg-[#F4F4F4] rounded-lg">
                 <svg
@@ -545,10 +627,52 @@ const DashboardPage = () => {
               </p>
             </div>
 
-            <div className="w-full lg:w-1/5">
-              <div className="mt-2 lg:mt-0">
+            <div className="flex flex-row items-center gap-x-3 w-full lg:w-fit">
+              <button className="flex flex-row items-center bg_primary rounded-xl text-white p-3 text-center font_medium text-lg" onClick={() => downloadChart()}>
+                {isDownloading ? (
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="#6D6D6D"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                  ) : (
+                    <>
+                      <span>Download</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2.5}
+                        stroke="#ffffff"
+                        className="h-5 w-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
+                        />
+                      </svg>
+                    </>
+                )}
+              </button>
+
+              <div className="">
                 <div
-                  className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                  className="bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                   onClick={() => {
                     setOpenCurrentChartData(!openCurrentChartData);
                   }}
@@ -567,7 +691,7 @@ const DashboardPage = () => {
                     onClickAway={() => handleClickAway("chartData")}
                   >
                     <div
-                      className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                      className={`absolute z-10 bg-white mb-2 w-24 lg:w-28 shadow-2xl p-2 lg:p-3 rounded-2xl secondary_gray_color text-black`}
                     >
                       {currentChartYears?.map((year: any, i: number) => (
                         <div
@@ -599,22 +723,32 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          <div className="w-full h-72">
-            <ResponsiveContainer width={"100%"} height={"100%"}>
-              <BarChart
-                width={730}
-                height={250}
-                data={chartData ? chartData[currentChartYear] : {}}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={"month"} />
-                <YAxis />
-                <ChartTooltip />
-                <Legend />
-                <Bar dataKey={"totalNetSales"} fill="#06C167" />
-                <Bar dataKey={"revenue"} fill="#FFCD29" />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="w-full h-72 overflow-x-scroll">
+            {dashboardLoading ? (
+              <div className="my-4 grid grid-cols-2 gap-3">
+                {[...Array(6)]?.map((_, i) => (
+                  <DashboardItemSkeletonLoader key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="w-[30rem] lg:w-full min-w-[30rem] h-full">
+                <ResponsiveContainer width={"100%"} height={"100%"}>
+                  <BarChart
+                    width={730}
+                    height={250}
+                    data={chartData && currencyType !== "Dollars" ? chartData[currentChartYear] : currencyType === "Dollars" ? convertDollars : []}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey={"month"} tickFormatter={formatMonth} />
+                    <YAxis width={100} tickFormatter={formatYAxis} />
+                    <ChartTooltip content={<CustomTooltip />} />
+                    <Legend />
+                    <Bar dataKey={"GMV"} fill="#06C167" />
+                    <Bar dataKey={"revenue"} fill="#FFCD29" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </div>
         </div>
       </div>
