@@ -133,7 +133,7 @@ const AdminDashboardLayout = ({ children }) => {
                   />
                 ))}
 
-                <LogoutButton />
+                <LogoutButton admin={true} />
               </div>
               <div className="ml-8">
                 <Button
