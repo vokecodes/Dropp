@@ -67,8 +67,8 @@ const CustomTooltip = ({ payload, label }: any) => {
     return (
       <div className="custom-tooltip">
         <p>{`Month: ${monthNames[data.month - 1]}`}</p>
-        <p>{`GMV: ${data.GMV.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}`}</p>
-        <p>{`Revenue: ${data.revenue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}`}</p>
+        <p>{`GMV: ${data?.GMV.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}`}</p>
+        <p>{`Revenue: ${data?.revenue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}`}</p>
       </div>
     );
   }
@@ -561,9 +561,9 @@ const DashboardPage = () => {
         </div>
 
         {dashboardLoading ? (
-          <div className="my-4 grid grid-cols-2 gap-3">
-            {[...Array(6)]?.map((_, i) => (
-              <DashboardItemSkeletonLoader key={i} />
+          <div className="my-4 grid grid-cols-1 gap-3">
+            {[...Array(2)]?.map((_, i) => (
+              <BannerSkeletonLoader key={i} />
             ))}
           </div>
         ) : (
@@ -724,23 +724,31 @@ const DashboardPage = () => {
           </div>
 
           <div className="w-full h-72 overflow-x-scroll">
-            <div className="w-[30rem] lg:w-full min-w-[30rem] h-full">
-              <ResponsiveContainer width={"100%"} height={"100%"}>
-                <BarChart
-                  width={730}
-                  height={250}
-                  data={chartData && currencyType !== "Dollars" ? chartData[currentChartYear] : currencyType === "Dollars" ? convertDollars : []}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey={"month"} tickFormatter={formatMonth} />
-                  <YAxis width={100} tickFormatter={formatYAxis} />
-                  <ChartTooltip content={<CustomTooltip />} />
-                  <Legend />
-                  <Bar dataKey={"GMV"} fill="#06C167" />
-                  <Bar dataKey={"revenue"} fill="#FFCD29" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            {dashboardLoading ? (
+              <div className="my-4 grid grid-cols-2 gap-3">
+                {[...Array(6)]?.map((_, i) => (
+                  <DashboardItemSkeletonLoader key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="w-[30rem] lg:w-full min-w-[30rem] h-full">
+                <ResponsiveContainer width={"100%"} height={"100%"}>
+                  <BarChart
+                    width={730}
+                    height={250}
+                    data={chartData && currencyType !== "Dollars" ? chartData[currentChartYear] : currencyType === "Dollars" ? convertDollars : []}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey={"month"} tickFormatter={formatMonth} />
+                    <YAxis width={100} tickFormatter={formatYAxis} />
+                    <ChartTooltip content={<CustomTooltip />} />
+                    <Legend />
+                    <Bar dataKey={"GMV"} fill="#06C167" />
+                    <Bar dataKey={"revenue"} fill="#FFCD29" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </div>
         </div>
       </div>
