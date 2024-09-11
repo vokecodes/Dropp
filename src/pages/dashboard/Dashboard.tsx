@@ -134,16 +134,18 @@ const DashboardPage = () => {
       value:
         conversion != 0 && currencyType == "Dollars"
           ? formatRemoteAmountDollar(
-              safeDivide(dashboard?.totalNetSales, totalOrders) / conversion
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders) /
+                conversion
             ).dollar +
             formatRemoteAmountDollar(
-              safeDivide(dashboard?.totalNetSales, totalOrders) / conversion
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders) /
+                conversion
             ).cents
           : formatRemoteAmountKobo(
-              safeDivide(dashboard?.totalNetSales, totalOrders)
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders)
             ).naira +
             formatRemoteAmountKobo(
-              safeDivide(dashboard?.totalNetSales, totalOrders)
+              safeDivide(dashboard?.totalNetSales, dashboard?.orders)
             ).kobo,
       toolTipId: "aov",
       toolTipContent: "Total order value/number of orders",
@@ -156,7 +158,20 @@ const DashboardPage = () => {
     },
     {
       title: "MRR",
-      value: ((dashboard?.totalNetSales * (2.5 / 100)) / 12).toFixed(2),
+      value:
+        conversion != 0 && currencyType == "Dollars"
+          ? formatRemoteAmountDollar(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12 / conversion
+            ).dollar +
+            formatRemoteAmountDollar(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12 / conversion
+            ).cents
+          : formatRemoteAmountKobo(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12
+            ).naira +
+            formatRemoteAmountKobo(
+              (dashboard?.totalNetSales * (2.5 / 100)) / 12
+            ).kobo,
       toolTipId: "mrr",
       toolTipContent: "Average revenue per month",
     },
