@@ -241,8 +241,6 @@ const RestaurantShop = () => {
     try {
       const { data } = await createARestaurantOrder({ ...orderItem, table });
 
-      console.log("data.success", data.success);
-
       if (data.success) {
         let handler = window.PaystackPop.setup({
           key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY, // Replace with your public key
