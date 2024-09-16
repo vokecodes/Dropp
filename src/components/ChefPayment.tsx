@@ -63,9 +63,7 @@ const ChefPayment = () => {
     axios
       .get("https://api.paystack.co/bank?currency=NGN", {
         headers: {
-          Authorization: `Bearer ${
-            import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY
-          }`,
+          Authorization: `Bearer ${import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}`,
         },
       })
       .then(({ data }) => {
@@ -92,9 +90,7 @@ const ChefPayment = () => {
         `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`,
         {
           headers: {
-            Authorization: `Bearer ${
-              import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
-            }`,
+            Authorization: `Bearer ${import.meta.env.VITE_PAYSTACK_SECRET_KEY}`,
           },
         }
       )
@@ -123,9 +119,7 @@ const ChefPayment = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${
-              import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
-            }`,
+            Authorization: `Bearer ${import.meta.env.VITE_PAYSTACK_SECRET_KEY}`,
           },
         }
       );

@@ -20,7 +20,7 @@ export const HandleImageUpload = async (
       formData.append("file", result);
       formData.append(
         "upload_preset",
-        `${import.meta.env.REACT_APP_CLOUDINARY_PRESET}`
+        `${import.meta.env.VITE_CLOUDINARY_PRESET}`
       );
       setIsLoading(true);
       try {

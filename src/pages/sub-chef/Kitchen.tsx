@@ -16,7 +16,7 @@ import { SUB_CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
 // import io from "socket.io-client";
 
-// const socket = io(import.meta.env.REACT_APP_BASE_API_URL, {
+// const socket = io(import.meta.env.VITE_BASE_API_URL, {
 //   withCredentials: true,
 // });
 

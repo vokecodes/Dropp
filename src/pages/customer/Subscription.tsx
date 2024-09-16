@@ -417,7 +417,7 @@ const CustomerSubscription = () => {
 
       if (data.success) {
         let handler = window.PaystackPop.setup({
-          key: import.meta.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
+          key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
           email: user.email,
           amount: totalAmount * 100,
           // plan: data?.planCode,
@@ -908,7 +908,7 @@ const CustomerSubscription = () => {
                           Delivery address
                         </label>
                         <AutoComplete
-                          apiKey={import.meta.env.REACT_APP_GOOGLE_MAPS_KEY}
+                          apiKey={import.meta.env.VITE_GOOGLE_MAPS_KEY}
                           defaultValue={values.deliveryAddress}
                           onPlaceSelected={(place) => {
                             setFieldValue(
@@ -1446,9 +1446,7 @@ const CustomerSubscription = () => {
                                   Delivery address
                                 </label>
                                 <AutoComplete
-                                  apiKey={
-                                    import.meta.env.REACT_APP_GOOGLE_MAPS_KEY
-                                  }
+                                  apiKey={import.meta.env.VITE_GOOGLE_MAPS_KEY}
                                   defaultValue={values.deliveryAddress}
                                   onPlaceSelected={(place) => {
                                     setFieldValue(
