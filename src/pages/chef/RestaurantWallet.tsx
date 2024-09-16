@@ -127,9 +127,7 @@ const RestaurantWallet = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${
-              import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
-            }`,
+            Authorization: `Bearer ${import.meta.env.VITE_PAYSTACK_SECRET_KEY}`,
           },
         }
       );
@@ -197,9 +195,7 @@ const RestaurantWallet = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${
-              import.meta.env.REACT_APP_PAYSTACK_SECRET_KEY
-            }`,
+            Authorization: `Bearer ${import.meta.env.VITE_PAYSTACK_SECRET_KEY}`,
           },
         }
       );
