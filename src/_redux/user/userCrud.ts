@@ -184,7 +184,18 @@ export const getAdminDashboardCrud = (
   table = ""
 ) => {
   return SERVER.get(
-    `${ADMIN_DROPP_DASHBOARD_URL}/all?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+    `${ADMIN_DROPP_DASHBOARD_URL}/all?fromDate=${fromDate}&toDate=${toDate}`
+  );
+};
+
+export const getAdminDashboardSingleCrud = (
+  fromDate = "",
+  toDate = "",
+  restaurant = ""
+) => {
+  console.log('crud= ', restaurant)
+  return SERVER.get(
+    `${ADMIN_DROPP_DASHBOARD_URL}/${restaurant}?fromDate=${fromDate}&toDate=${toDate}&restaurantId=${restaurant}`
   );
 };
 
@@ -196,14 +207,3 @@ export const getAdminChartCrud = () => {
   return SERVER.get(`${ADMIN_DROPP_DASHBOARD_URL}/chart`);
 };
 
-// export const getAdminDashboardCrud = (
-//   fromDate = "",
-//   toDate = "",
-//   payment = "",
-//   section = "",
-//   table = ""
-// ) => {
-//   return SERVER.get(
-//     `${ADMIN_DROPP_DASHBOARD_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
-//   );
-// };
