@@ -23,6 +23,7 @@ import {
   getRestaurantDashboardCrud,
   getAdminDashboardCrud,
   getAdminChartCrud,
+  getAdminDashboardSingleCrud,
 } from "./userCrud";
 import {
   startCall,
@@ -339,11 +340,25 @@ export const getRestaurantDashboardAccount =
   };
 
   export const getAdminDashboardAccount =
-  (fromDate = "", toDate = "", payment = "", section = "", table = "") =>
+  (fromDate = "", toDate = "", restaurant = "") =>
   (dispatch: any) => {
     dispatch(startDashboardCall());
-    return getAdminDashboardCrud(fromDate, toDate, payment, section, table)
+    console.log('rdx= ', fromDate)
+    return getAdminDashboardCrud(fromDate, toDate, restaurant)
       .then(({ data }) => {
+        console.log('getAdminDashboard= ', data?.data )
+        dispatch(getAdminDashboard({ ...data?.data }));
+      })
+      .finally(() => dispatch(stopDashboardCall()));
+  };
+  
+  export const getAdminDashboardAccountSingle =
+  (fromDate = "", toDate = "", restaurant = "") =>
+  (dispatch: any) => {
+    dispatch(startDashboardCall());
+    return getAdminDashboardSingleCrud(fromDate, toDate, restaurant)
+      .then(({ data }) => {
+        console.log('getAdminDashboardAccountSingle= ', data?.data )
         dispatch(getAdminDashboard({ ...data?.data }));
       })
       .finally(() => dispatch(stopDashboardCall()));

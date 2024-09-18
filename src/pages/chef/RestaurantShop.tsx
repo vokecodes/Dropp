@@ -7,7 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { GiCook, GiHotMeal, GiKnifeFork, GiMeat } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import Hotjar from "@hotjar/browser";
-import Footer from "../../components/landing-page/Footer";
+import Footer from "../../components/Footer";
 import TopNav from "../../components/landing-page/TopNav";
 import { CiShare2 } from "react-icons/ci";
 import { BiArrowBack } from "react-icons/bi";
@@ -45,6 +45,7 @@ import * as Yup from "yup";
 import RestaurantCart from "../../components/RestaurantCart";
 import { IoSearchSharp } from "react-icons/io5";
 import RestaurantMeal from "../../components/RestaurantMeal";
+import { Images } from "../../config/images";
 
 const RestaurantShop = () => {
   const navigate = useNavigate();
@@ -677,7 +678,7 @@ const RestaurantShop = () => {
                 </div>
               </div>
 
-              <Footer noLove={true} />
+              <Footer  logo={Images.logo} />
 
               <CartFloat
                 cartMenu={cartMenu}
