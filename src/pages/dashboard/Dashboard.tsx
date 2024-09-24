@@ -5,6 +5,7 @@ import moment from "moment";
 import Skeleton from "react-loading-skeleton";
 import {
   getAdminDashboardAccount,
+  getAdminDashboardAccountSingle,
   getAdminMonthlyChart,
 } from "../../_redux/user/userAction";
 import { shallowEqual, useSelector } from "react-redux";
@@ -93,15 +94,12 @@ const CustomTooltip = ({ payload, label }: any) => {
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
-  const { user, dashboardLoading, dashboard, chartData, section, table } =
+  const { user, dashboardLoading, dashboard } =
     useSelector(
       (state: any) => ({
         user: state.user.user,
         dashboardLoading: state.user.dashboardLoading,
         dashboard: state.user.dashboard,
-        chartData: state.user.chartData,
-        section: state.section.section,
-        table: state.table.table,
       }),
       shallowEqual
     );
@@ -121,11 +119,12 @@ const DashboardPage = () => {
 
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalCustomers, setTotalCustomers] = useState(0);
+  const [totalRestaurants, setTotalRestaurants] = useState(0);
 
   const [dashboardData, setDashboardData] = useState({});
+  const [chartData, setChartData] = useState({});
 
   const [currencyType, setCurrencyType] = useState("Naira");
-  const [currentChartData, setCurrentChartData] = useState({});
   const [currentChartYears, setCurrentChartYears] = useState([]);
   const [currentChartYear, setCurrentChartYear] = useState("");
   const [openCurrentChartData, setOpenCurrentChartData] = useState(false);
@@ -180,7 +179,7 @@ const DashboardPage = () => {
     },
     {
       title: "Restaurants",
-      value: dashboard?.restaurants || restaurants?.length,
+      value: currentRestaurant !== "All" ? 1 : dashboard?.restaurants || restaurants?.length,
       toolTipId: "restaurants",
       toolTipContent: "Total number of restaurants",
     },
@@ -237,6 +236,7 @@ const DashboardPage = () => {
         customersRes,
         dashboardRes,
         exchangeRes,
+        chartRes,
       ] = await Promise.all([
         SERVER.get(ADMIN_ALL_RESTAURANTS),
         SERVER.get(ADMIN_ALL_ORDERS),
@@ -245,12 +245,14 @@ const DashboardPage = () => {
         SERVER.get(
           "https://v6.exchangerate-api.com/v6/5ce22ab53db63681b9dd1eee/latest/USD"
         ),
+        SERVER.get(`${ADMIN_DROPP_DASHBOARD_URL}/chart?fromDate=${startDate}&toDate=${endDate}&restaurantId=${currentRestaurant !== "All" ? restaurants.filter(item => item?.business?.businessName === currentRestaurant)[0]?.profile?._id : '' }`),
       ]);
 
       // Handle restaurants data
       const numOfRestaurants = restaurantsRes.data.data;
       console.log("Restaurants= ", numOfRestaurants);
       setRestaurants(numOfRestaurants);
+      setTotalRestaurants(numOfRestaurants?.length);
 
       // Handle orders data
       const totalOrders = ordersRes.data?.data.length;
@@ -271,6 +273,11 @@ const DashboardPage = () => {
       const conversionRate = exchangeRes.data?.conversion_rates["NGN"];
       console.log("Currency (NGN)= ", conversionRate);
       setConversion(conversionRate);
+      
+      const adminChart = chartRes.data?.data
+      setChartData(adminChart)
+      setCurrentChartYears(Object.keys(adminChart).reverse());
+      setCurrentChartYear(Object.keys(adminChart).reverse()[0]);
     } catch (error) {
       // Generalized error handling
       const message = error?.response?.data?.message || "An error occurred";
@@ -280,17 +287,20 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getAdminDashboardAccount(startDate, endDate));
+    if(currentRestaurant !== "All"){
+      const restaurantId = restaurants.filter(item => item?.business?.businessName === currentRestaurant)
+      
+      dispatch(getAdminDashboardAccountSingle(startDate, endDate, restaurantId[0]?.profile?._id));
 
-    dispatch(getAdminMonthlyChart());
-    chartData && setCurrentChartData(chartData);
-    chartData && setCurrentChartYears(Object.keys(chartData).reverse());
-    chartData && setCurrentChartYear(Object.keys(chartData).reverse()[0]);
-
+      setTotalRestaurants(1)
+    }else{
+      dispatch(getAdminDashboardAccount(startDate, endDate));
+    }
+    
     // Call the function to fetch data
     fetchData();
-  }, []);
-
+  }, [startDate, endDate, currentRestaurant]);
+  
   const handleClickAway = (flag: string) => {
     if (flag === "restaurant") {
       setOpenRestaurantOptions(false);
@@ -298,6 +308,7 @@ const DashboardPage = () => {
       setOpenCurrentChartData(false);
     }
   };
+<<<<<<< HEAD
 
   const formatYAxis = (number) =>
     currencyType == "Dollars"
@@ -316,6 +327,23 @@ const DashboardPage = () => {
       };
     });
 
+=======
+  
+  const formatYAxis = number => currencyType == 'Dollars' ? `$${number.toLocaleString()}` : `₦${number.toLocaleString()}`;
+  
+  const formatMonth = month => monthNames[month - 1];
+  
+  const convertDollars = chartData && chartData[currentChartYear]?.map((item: any) => {
+    return {
+      month: item.month,
+      GMV: item.GMV / conversion,
+      revenue: item.revenue / conversion
+    };
+  });
+  
+  
+  
+>>>>>>> bd9d802b4e6878b27dfe38140b3c3b226dee2dd2
   const convertMonthNumbersToNames = (data: any) => {
     const monthNames = [
       "January",
@@ -336,15 +364,24 @@ const DashboardPage = () => {
       return {
         ...item,
         month: monthNames[item.month - 1],
+<<<<<<< HEAD
       };
     });
   };
 
+=======
+        GMV: item.GMV.toLocaleString(),
+        revenue: item.revenue.toLocaleString()
+      };
+    });
+  }
+  
+>>>>>>> bd9d802b4e6878b27dfe38140b3c3b226dee2dd2
   const downloadChart = () => {
     if (!chartData) {
       alert("No data to download!");
     }
-
+    
     const csvRows = [];
     const filename = "data.csv";
     const initialData =
@@ -378,12 +415,19 @@ const DashboardPage = () => {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+<<<<<<< HEAD
   };
 
   console.log("chartData= ", chartData);
   console.log("currentChartData= ", currentChartData);
   console.log("restaurants= ", restaurants);
 
+=======
+  }
+  
+  const todaysDate = new Date().toJSON().slice(0, 10);
+  
+>>>>>>> bd9d802b4e6878b27dfe38140b3c3b226dee2dd2
   return (
     <AdminDashboardLayout>
       <div className="w-full px-6 py-4 bg-white" style={{}}>
@@ -399,6 +443,7 @@ const DashboardPage = () => {
               className="h-14 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
               placeholder="Start Date:"
               onChange={(e: any) => setStartDate(e.target.value)}
+              max={endDate ? endDate : undefined}
             />
           </div>
 
@@ -412,6 +457,8 @@ const DashboardPage = () => {
               className="h-14 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
               placeholder="End Date:"
               onChange={(e: any) => setEndDate(e.target.value)}
+              max={todaysDate}
+              min={startDate ? startDate : undefined}
             />
           </div>
 
@@ -517,6 +564,23 @@ const DashboardPage = () => {
                 onClick={() => setCurrencyType("Dollars")}
               >
                 <p className="font_medium">Dollars</p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="#BABABA"
+                    className="h-5 w-5"
+                    data-tooltip-id={"converter"}
+                    data-tooltip-content={`$1 = ₦${conversion.toLocaleString()}`}
+                    data-tooltip-place="right-end"
+                    data-tooltip-type="light"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                <Tooltip id={"converter"} />
               </div>
             </div>
           </div>
@@ -761,7 +825,7 @@ const DashboardPage = () => {
           <div className="w-full h-72 overflow-x-scroll">
             {dashboardLoading ? (
               <div className="my-4 grid grid-cols-2 gap-3">
-                {[...Array(6)]?.map((_, i) => (
+                {[...Array(2)]?.map((_, i) => (
                   <DashboardItemSkeletonLoader key={i} />
                 ))}
               </div>
