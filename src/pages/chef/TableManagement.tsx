@@ -116,7 +116,7 @@ const TableManagement = () => {
                     {table?.length > 0 ? (
                       <div className="grid grid-cols-1 lg:grid-cols-4 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
                         {table?.map((table: any, i: number) => (
-                          <div className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
+                          <div key={i} className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
                             <div className="flex flex-row items-center justify-between">
                               <div className="flex-1 ">
                                 <p className="text-xl text-black font_medium">
