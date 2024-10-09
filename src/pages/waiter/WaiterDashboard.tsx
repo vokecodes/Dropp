@@ -87,27 +87,81 @@ const WaiterDashboard = () => {
     getTableOrders(page);
   }, []);
 
-  const getCategoryLength = (category: any) => {
-    // console.log(
-    //   "whebjkww",
-    //   category,
-    //   category.label === "New order"
-    //     ? tableOrders?.length > 0 &&
-    //         tableOrders?.filter((t) => t.status === category.value)?.length
-    //     : category.label !== "New order"
-    //     ? tableOrders?.length > 0 &&
-    //       tableOrders
-    //         ?.filter((t) => t.status === "kitchen")
-    //         ?.map((tb: any) => {
-    //           return tb?.order?.filter((o: any) => o?.status === category.value)
-    //             ?.length;
-    //         })
-    //     : null
-    // );
 
-    return 1;
-  };
+  const [columnCount, setColumnCount] = useState({
+    "New order": 0,
+    "Kitchen": 0,
+    "Cooking": 0,
+    "Ready": 0,
+    "Completed": 0,
+  });
+  
+  useEffect(() => {
+    setColumnCount({
+      "New order": 0,
+      "Kitchen": 0,
+      "Cooking": 0,
+      "Ready": 0,
+      "Completed": 0,
+    });
+    
+    tableOrders && tableOrders?.length > 0 && tableOrders?.map((item, i) => {
 
+      if(item?.status === "pending"){
+
+        setColumnCount(prevState => ({
+          ...prevState,
+          "New order": prevState["New order"] + 1
+        }));
+
+      }
+      
+      if(item?.status === "kitchen"){
+
+        item?.order?.map((o: any) => {
+          if(o?.status === "pending"){
+            setColumnCount(prevState => ({
+              ...prevState,
+              "Kitchen": prevState["Kitchen"] + 1
+            }));
+          }
+
+          if(o?.status === "ready" || o?.status === "sent"){
+            setColumnCount(prevState => ({
+              ...prevState,
+              "Ready": prevState["Ready"] + 1
+            }));
+          }
+        });
+
+      } 
+      
+      if(item?.status === "kitchen"){
+        item?.order?.map((o: any) => {
+          if(o?.status === "cooking"){
+            tableOrders.filter((order) => {
+              if(order.order.some((orderItem) => orderItem.status === o.status)){
+                setColumnCount(prevState => ({
+                  ...prevState,
+                  "Cooking": prevState["Cooking"] + 1
+                }));
+              }
+            })
+          }
+        })
+      }
+      
+      if(item?.status === "completed"){
+          setColumnCount(prevState => ({
+            ...prevState,
+            "Completed": prevState["Completed"] + 1
+        }));
+      }
+
+    });
+  }, [tableOrders])
+      
+  
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -153,7 +207,7 @@ const WaiterDashboard = () => {
                         <p className="text-xs font-bold font_regular">
                           {`${cat?.label}`}
                         </p>
-                        {/* <div
+                        <div
                           className={`ml-2 w-6 h-6 rounded-full flex items-center justify-center ${
                             selectedCategory?.label === cat?.label
                               ? "bg-black"
@@ -167,9 +221,9 @@ const WaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            {getCategoryLength(cat)}
+                            {columnCount[cat?.label]}
                           </p>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -198,6 +252,8 @@ const WaiterDashboard = () => {
                 </p>
               } // Message when all items have been loaded
             >
+
+              {/* NEW ORDERS */}
               <div className="flex flex-col mt-2">
                 {selectedCategory.label === "New order" && (
                   <>
