@@ -2,12 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Modal } from "@mui/material";
+import { ClickAwayListener, Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import { useAppDispatch } from "../../redux/hooks";
 import { getTables } from "../../_redux/table/tableAction";
 import { SERVER } from "../../config/axios";
-import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
+import { DINNING_MENU_CATEGORY_URL, RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import Button from "../../components/Button";
 import OutlineButton from "../../components/OutlineButton";
 import KitchenButton from "../../components/KitchenButton";
@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
 import moment from "moment";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 // import io from "socket.io-client";
 
 // const socket = io(import.meta.env.VITE_BASE_API_URL, {
@@ -65,8 +66,26 @@ const Kitchen = () => {
       .catch((err) => {});
   };
 
+  const [dinningMenuCategories, setDinningMenuCategories] = useState<any>([]);
+  const getDinningMenuCategories = () => {
+    SERVER.get(DINNING_MENU_CATEGORY_URL)
+      .then(({ data }) => {
+        if (
+          data?.dinningMenuCategory?.categories &&
+          data?.dinningMenuCategory?.categories?.length > 0
+        ) {
+          console.log('catssss= ', data, data?.dinningMenuCategory?.categories)
+          setDinningMenuCategories(data?.dinningMenuCategory?.categories);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     dispatch(getTables());
+    getDinningMenuCategories();
     getRestaurantOrders(page);
   }, []);
 
@@ -272,6 +291,34 @@ const Kitchen = () => {
     }
   };
 
+  const [openTablesOptions, setOpenTablesOptions] = useState(false);
+  const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
+
+
+  console.log("restaurantOrders= ", restaurantOrders)
+  
+  const [selectedTable, setSelectedTable] = useState("");
+  const filteredTable = !selectedTable
+  ? restaurantOrders
+  : restaurantOrders.filter((item: any, i: any) => {
+    return item.table?.table == selectedTable?.table;
+  });
+  
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const filteredCategory = !selectedCategory
+  ? filteredTable
+  : filteredTable.filter((item: any, i: any) => {
+    return item.menu?.category == selectedCategory?.value;
+  });
+  
+  const filteredRestaurantOrders = filteredCategory;
+
+  console.log("filteredRestaurantOrders= ", filteredRestaurantOrders)
+  console.log('table= ', table)
+  console.log('dinningMenuCategories= ', dinningMenuCategories)
+  console.log('selectedCategory= ', selectedCategory)
+  console.log('selectedTable= ', selectedTable)
+
   const [columnCount, setColumnCount] = useState({
     new_orders: 0,
     cooking: 0,
@@ -293,7 +340,7 @@ const Kitchen = () => {
       void: 0,
     });
 
-    restaurantOrders && restaurantOrders?.length > 0 && restaurantOrders?.map((order, i) => {
+    filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
       if(order?.parentStatus === "kitchen" &&
       order?.status === "pending"){
         setColumnCount(prevState => ({
@@ -350,10 +397,16 @@ const Kitchen = () => {
         }));
       }
     })
-  }, [restaurantOrders])
+  }, [restaurantOrders, selectedTable, selectedCategory])
 
-
-
+  const handleClickAway = (flag: string) => {
+    if (flag === "categories") {
+      setOpenCategoriesOptions(false);
+    } else if (flag === "table") {
+      setOpenTableOptions(false);
+    }
+  };
+  
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -374,7 +427,157 @@ const Kitchen = () => {
         </div>
       </div>
 
-      <div className="lg:mx-5 px-4 sm:px-6 flex flex-row items-center justify-end">
+      <div className="lg:mx-5 px-4 sm:px-6 flex flex-row items-end justify-end gap-x-3">
+        <div className="w-36">
+          <label className="text-sm font_medium text-black">Tables</label>
+          <div className="mt-2 lg:mt-0">
+            <div
+              className="h-10 bg-[#F8F8F8] block w-full flex justify-between items-center rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+              onClick={() => {
+                setOpenTablesOptions(!openTablesOptions);
+              }}
+            >
+              <p className={`text-xs lg:text-sm filter_text font_medium`}>
+                {selectedTable ? selectedTable?.table : "All"}
+              </p>
+              {openTablesOptions ? (
+                <TiArrowSortedUp color="#8E8E8E" size={20} />
+              ) : (
+                <TiArrowSortedDown color="#8E8E8E" size={20} />
+              )}
+            </div>
+            {openTablesOptions && (
+              <ClickAwayListener
+                onClickAway={() => handleClickAway("table")}
+              >
+                <div
+                  className={`absolute z-10 bg-white mb-2 w-24 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                >
+                  <div
+                    className="flex items-center cursor-pointer mb-2"
+                    onClick={() => {
+                      setSelectedTable("");
+                      setOpenTablesOptions(false);
+                    }}
+                  >
+                    <div
+                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                        selectedTable === ""
+                          ? "primary_bg_color"
+                          : "bg_gray_color"
+                      }`}
+                    />
+                    <p
+                      className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                    >
+                      All
+                    </p>
+                  </div>
+                  {table?.length > 0 &&
+                    table?.map((s: any, i: number) => (
+                      <div
+                        className="flex items-center cursor-pointer mb-2"
+                        key={i}
+                        onClick={() => {
+                          setSelectedTable(s);
+                          setOpenTablesOptions(false);
+                        }}
+                      >
+                        <div
+                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                            selectedTable?.table === s?.table
+                              ? "primary_bg_color"
+                              : "bg_gray_color"
+                          }`}
+                        />
+                        <p
+                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                        >
+                          {s?.table}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </ClickAwayListener>
+            )}
+          </div>
+        </div>
+        
+        <div className="w-36">
+          <label className="text-sm font_medium text-black">Categories</label>
+          <div className="mt-2 lg:mt-0">
+            <div
+              className="h-10 bg-[#F8F8F8] block w-full flex justify-between items-center rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+              onClick={() => {
+                setOpenCategoriesOptions(!openCategoriesOptions);
+              }}
+            >
+              <p className={`text-xs lg:text-sm filter_text font_medium`}>
+                {selectedCategory ? selectedCategory?.value : "All"}
+              </p>
+              {openCategoriesOptions ? (
+                <TiArrowSortedUp color="#8E8E8E" size={20} />
+              ) : (
+                <TiArrowSortedDown color="#8E8E8E" size={20} />
+              )}
+            </div>
+            {openCategoriesOptions && (
+              <ClickAwayListener
+                onClickAway={() => handleClickAway("categories")}
+              >
+                <div
+                  className={`absolute z-10 bg-white mb-2 w-24 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                >
+                  <div
+                    className="flex items-center cursor-pointer mb-2"
+                    onClick={() => {
+                      setSelectedCategory("");
+                      setOpenCategoriesOptions(false);
+                    }}
+                  >
+                    <div
+                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                        selectedCategory === ""
+                          ? "primary_bg_color"
+                          : "bg_gray_color"
+                      }`}
+                    />
+                    <p
+                      className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                    >
+                      All
+                    </p>
+                  </div>
+                  {dinningMenuCategories?.length > 0 &&
+                    dinningMenuCategories?.map((s: any, i: number) => (
+                      <div
+                        className="flex items-center cursor-pointer mb-2"
+                        key={i}
+                        onClick={() => {
+                          setSelectedCategory(s);
+                          setOpenCategoriesOptions(false);
+                        }}
+                      >
+                        <div
+                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                            selectedCategory?.value === s?.value
+                              ? "primary_bg_color"
+                              : "bg_gray_color"
+                          }`}
+                        />
+                        <p
+                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                        >
+                          {s?.value}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </ClickAwayListener>
+            )}
+          </div>
+        </div>
+
         <div
           className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
           onClick={() => {
@@ -418,8 +621,8 @@ const Kitchen = () => {
       </div>
 
       <div className="w-fit md:w-full md:px-6 py-4">
-        <div className="w-full h-fit py-1">
-          {/* {table && table?.length > 0 && (
+        {/* <div className="w-full h-fit py-1">
+          {table && table?.length > 0 && (
             <div
               className="flex flex-row h-fit w-full px-2 pb-1 rounded my-1 gap-x-3 overflow-x-scroll"
               style={{ maxHeight: "250px" }}
@@ -427,8 +630,8 @@ const Kitchen = () => {
               <div className="bg-gray-200 flex flex-row justify-between items-center w-fit h-fit py-2 px-4 rounded-full shrink-0 cursor-pointer">
                 <p className="text-xs font-bold font_regular text-black">All</p>
                 
-              </div> */}
-          {/* {table.map((table: any, i: number) => (
+              </div>
+              {table.map((table: any, i: number) => (
                 <div
                   key={i}
                   className="bg-gray-200 flex flex-row justify-between items-center w-fit h-fit py-2 px-4 rounded-full shrink-0 cursor-pointer"
@@ -442,10 +645,10 @@ const Kitchen = () => {
                     </span>
                   </p>
                 </div>
-              ))} */}
-          {/* </div>
-          )} */}
-        </div>
+              ))}
+          </div>
+          )}
+        </div> */}
         <InfiniteScroll
           dataLength={restaurantOrders?.length} // This is important to track the length of your data array
           next={() => {
@@ -485,7 +688,7 @@ const Kitchen = () => {
                 {/* <div className="w-full h-full min-h-screen max-h-screen flex flex-col items-center justify-start gap-y-3 p-4 rounded-xl"> */}
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "kitchen" &&
@@ -547,7 +750,7 @@ const Kitchen = () => {
                 </div>
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "kitchen" &&
@@ -611,7 +814,7 @@ const Kitchen = () => {
 
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "kitchen" && ro?.status === "ready"
@@ -670,7 +873,7 @@ const Kitchen = () => {
 
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "kitchen" && ro?.status === "sent"
@@ -724,7 +927,7 @@ const Kitchen = () => {
 
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "completed" &&
@@ -768,7 +971,7 @@ const Kitchen = () => {
 
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "kitchen" &&
@@ -812,7 +1015,7 @@ const Kitchen = () => {
 
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
-                  restaurantOrders
+                  filteredRestaurantOrders
                     ?.filter(
                       (ro) =>
                         ro?.parentStatus === "kitchen" &&
