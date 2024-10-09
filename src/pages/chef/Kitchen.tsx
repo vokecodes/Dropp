@@ -272,8 +272,6 @@ const Kitchen = () => {
     }
   };
 
-  console.log("restaurantOrders= ", restaurantOrders);
-
   const [columnCount, setColumnCount] = useState({
     new_orders: 0,
     cooking: 0,
