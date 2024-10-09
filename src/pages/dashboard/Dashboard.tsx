@@ -308,26 +308,6 @@ const DashboardPage = () => {
       setOpenCurrentChartData(false);
     }
   };
-<<<<<<< HEAD
-
-  const formatYAxis = (number) =>
-    currencyType == "Dollars"
-      ? `$${number.toLocaleString()}`
-      : `₦${number.toLocaleString()}`;
-
-  const formatMonth = (month) => monthNames[month - 1];
-
-  const convertDollars =
-    chartData &&
-    chartData[currentChartYear]?.map((item: any) => {
-      return {
-        month: item.month,
-        GMV: item.GMV / conversion,
-        revenue: item.revenue / conversion,
-      };
-    });
-
-=======
   
   const formatYAxis = number => currencyType == 'Dollars' ? `$${number.toLocaleString()}` : `₦${number.toLocaleString()}`;
   
@@ -343,7 +323,6 @@ const DashboardPage = () => {
   
   
   
->>>>>>> bd9d802b4e6878b27dfe38140b3c3b226dee2dd2
   const convertMonthNumbersToNames = (data: any) => {
     const monthNames = [
       "January",
@@ -364,19 +343,12 @@ const DashboardPage = () => {
       return {
         ...item,
         month: monthNames[item.month - 1],
-<<<<<<< HEAD
-      };
-    });
-  };
-
-=======
         GMV: item.GMV.toLocaleString(),
         revenue: item.revenue.toLocaleString()
       };
     });
   }
   
->>>>>>> bd9d802b4e6878b27dfe38140b3c3b226dee2dd2
   const downloadChart = () => {
     if (!chartData) {
       alert("No data to download!");
@@ -415,19 +387,10 @@ const DashboardPage = () => {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-<<<<<<< HEAD
-  };
-
-  console.log("chartData= ", chartData);
-  console.log("currentChartData= ", currentChartData);
-  console.log("restaurants= ", restaurants);
-
-=======
   }
   
   const todaysDate = new Date().toJSON().slice(0, 10);
   
->>>>>>> bd9d802b4e6878b27dfe38140b3c3b226dee2dd2
   return (
     <AdminDashboardLayout>
       <div className="w-full px-6 py-4 bg-white" style={{}}>

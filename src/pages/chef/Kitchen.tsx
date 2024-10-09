@@ -192,7 +192,7 @@ const Kitchen = () => {
         if (
           response.data.pagination.totalPages > currentPage &&
           response.data.pagination.currentPage !==
-            response.data.pagination.totalPages
+          response.data.pagination.totalPages
         ) {
           currentPage++;
           await fetchAllOrders(currentPage);
@@ -273,6 +273,88 @@ const Kitchen = () => {
   };
 
   console.log("restaurantOrders= ", restaurantOrders);
+
+  const [columnCount, setColumnCount] = useState({
+    new_orders: 0,
+    cooking: 0,
+    pickup: 0,
+    sent: 0,
+    completed: 0,
+    decline: 0,
+    void: 0,
+  });
+
+  useEffect(() => {
+    setColumnCount({
+      new_orders: 0,
+      cooking: 0,
+      pickup: 0,
+      sent: 0,
+      completed: 0,
+      decline: 0,
+      void: 0,
+    });
+
+    restaurantOrders && restaurantOrders?.length > 0 && restaurantOrders?.map((order, i) => {
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "pending"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          new_orders: prevState.new_orders + 1
+        }));
+      }
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "cooking"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          cooking: prevState.cooking + 1
+        }));
+      }
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "ready"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          pickup: prevState.pickup + 1
+        }));
+      }
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "sent"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          sent: prevState.sent + 1
+        }));
+      } 
+      
+      if(order?.parentStatus === "completed" &&
+      order?.status === "completed"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          completed: prevState.completed + 1
+        }));
+      } 
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "declined"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          decline: prevState.decline + 1
+        }));
+      } 
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "archived"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          void: prevState.void + 1
+        }));
+      }
+    })
+  }, [restaurantOrders])
+
+
 
   return (
     <>
@@ -397,9 +479,9 @@ const Kitchen = () => {
                   <p className="text-center font_medium text-white">
                     New orders
                   </p>
-                  {/* <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                  <span className="text-white font_regular text-xs">40</span>
-                </p> */}
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.new_orders : 0}</span>
+                  </p>
                 </div>
 
                 {/* <div className="w-full h-full min-h-screen max-h-screen flex flex-col items-center justify-start gap-y-3 p-4 rounded-xl"> */}
@@ -461,6 +543,9 @@ const Kitchen = () => {
               <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll bg-zinc-200 rounded-xl p-2 snap-center">
                 <div className="sticky top-0 flex flex-row justify-center items-center w-full gap-x-2 px-3 py-3 bg-zinc-500 rounded-xl">
                   <p className="text-center font_medium text-white">Cooking</p>
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.cooking : 0}</span>
+                  </p>
                 </div>
                 {restaurantOrders &&
                   restaurantOrders?.length > 0 &&
@@ -521,6 +606,9 @@ const Kitchen = () => {
                   <p className="text-center font_medium text-white">
                     Ready for pickup
                   </p>
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.pickup : 0}</span>
+                  </p>
                 </div>
 
                 {restaurantOrders &&
@@ -577,6 +665,9 @@ const Kitchen = () => {
               <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll bg-yellow-100 rounded-xl p-2 snap-center">
                 <div className="sticky top-0 flex flex-row justify-center bg-yellow-500 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
                   <p className="text-center font_medium text-white">Sent</p>
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.sent : 0}</span>
+                  </p>
                 </div>
 
                 {restaurantOrders &&
@@ -628,6 +719,9 @@ const Kitchen = () => {
                   <p className="text-center font_medium text-white">
                     Completed
                   </p>
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.completed : 0}</span>
+                  </p>
                 </div>
 
                 {restaurantOrders &&
@@ -669,6 +763,9 @@ const Kitchen = () => {
               <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg-red-100 rounded-xl p-2 snap-center">
                 <div className="sticky top-0 flex flex-row justify-center bg-red-900 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
                   <p className="text-center font_medium text-white">Decline</p>
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.decline : 0}</span>
+                  </p>
                 </div>
 
                 {restaurantOrders &&
@@ -710,6 +807,9 @@ const Kitchen = () => {
               <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg-neutral-100 rounded-xl p-2 snap-center">
                 <div className="sticky top-0 flex flex-row justify-center bg-black items-center w-full gap-x-2 px-3 py-3 rounded-xl">
                   <p className="text-center font_medium text-white">Void</p>
+                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
+                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.void : 0}</span>
+                  </p>
                 </div>
 
                 {restaurantOrders &&
