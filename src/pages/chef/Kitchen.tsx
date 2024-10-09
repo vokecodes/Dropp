@@ -403,7 +403,7 @@ const Kitchen = () => {
     if (flag === "categories") {
       setOpenCategoriesOptions(false);
     } else if (flag === "table") {
-      setOpenTableOptions(false);
+      setOpenTablesOptions(false);
     }
   };
   
@@ -427,8 +427,8 @@ const Kitchen = () => {
         </div>
       </div>
 
-      <div className="lg:mx-5 px-4 sm:px-6 flex flex-row items-end justify-end gap-x-3">
-        <div className="w-36">
+      <div className="lg:mx-5 px-4 sm:px-6 flex flex-col lg:flex-row items-center lg:items-end justify-start lg:justify-end gap-y-3 gap-x-3">
+        <div className="w-full lg:w-36">
           <label className="text-sm font_medium text-black">Tables</label>
           <div className="mt-2 lg:mt-0">
             <div
@@ -451,7 +451,7 @@ const Kitchen = () => {
                 onClickAway={() => handleClickAway("table")}
               >
                 <div
-                  className={`absolute z-10 bg-white mb-2 w-24 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                 >
                   <div
                     className="flex items-center cursor-pointer mb-2"
@@ -503,7 +503,7 @@ const Kitchen = () => {
           </div>
         </div>
         
-        <div className="w-36">
+        <div className="w-full lg:w-36">
           <label className="text-sm font_medium text-black">Categories</label>
           <div className="mt-2 lg:mt-0">
             <div
@@ -526,7 +526,7 @@ const Kitchen = () => {
                 onClickAway={() => handleClickAway("categories")}
               >
                 <div
-                  className={`absolute z-10 bg-white mb-2 w-24 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                 >
                   <div
                     className="flex items-center cursor-pointer mb-2"
