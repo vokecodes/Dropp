@@ -91,7 +91,7 @@ export const forgotResetPasswordUserAccount =
       });
   };
 
-export const logOutUserAccount = (navigate: any, admin: any) => (dispatch: any) => {
+export const logOutUserAccount = (navigate: any, admin= false) => (dispatch: any) => {
   dispatch(logoutAccount());
   dispatch(logoutUserProfile());
   dispatch(logoutBusiness());
