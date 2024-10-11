@@ -7,6 +7,8 @@ import { SERVER } from "../../config/axios";
 import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import MenuOrderItem from "./MenuOrderItem";
 import WaiterLogoutButton from "../../components/WaiterLogoutButton";
+import Button from "../../components/Button";
+import { Link, useNavigate } from "react-router-dom";
 // import io from "socket.io-client";
 
 // const socket = io(import.meta.env.VITE_BASE_API_URL, {
@@ -20,6 +22,7 @@ const WaiterDashboard = () => {
     }),
     shallowEqual
   );
+  const navigate = useNavigate();
 
   const [tableOrders, setTableOrders] = useState([]);
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
@@ -87,81 +90,77 @@ const WaiterDashboard = () => {
     getTableOrders(page);
   }, []);
 
-
   const [columnCount, setColumnCount] = useState({
     "New order": 0,
-    "Kitchen": 0,
-    "Cooking": 0,
-    "Ready": 0,
-    "Completed": 0,
+    Kitchen: 0,
+    Cooking: 0,
+    Ready: 0,
+    Completed: 0,
   });
-  
+
   useEffect(() => {
     setColumnCount({
       "New order": 0,
-      "Kitchen": 0,
-      "Cooking": 0,
-      "Ready": 0,
-      "Completed": 0,
+      Kitchen: 0,
+      Cooking: 0,
+      Ready: 0,
+      Completed: 0,
     });
-    
-    tableOrders && tableOrders?.length > 0 && tableOrders?.map((item, i) => {
 
-      if(item?.status === "pending"){
-
-        setColumnCount(prevState => ({
-          ...prevState,
-          "New order": prevState["New order"] + 1
-        }));
-
-      }
-      
-      if(item?.status === "kitchen"){
-
-        item?.order?.map((o: any) => {
-          if(o?.status === "pending"){
-            setColumnCount(prevState => ({
-              ...prevState,
-              "Kitchen": prevState["Kitchen"] + 1
-            }));
-          }
-
-          if(o?.status === "ready" || o?.status === "sent"){
-            setColumnCount(prevState => ({
-              ...prevState,
-              "Ready": prevState["Ready"] + 1
-            }));
-          }
-        });
-
-      } 
-      
-      if(item?.status === "kitchen"){
-        item?.order?.map((o: any) => {
-          if(o?.status === "cooking"){
-            tableOrders.filter((order) => {
-              if(order.order.some((orderItem) => orderItem.status === o.status)){
-                setColumnCount(prevState => ({
-                  ...prevState,
-                  "Cooking": prevState["Cooking"] + 1
-                }));
-              }
-            })
-          }
-        })
-      }
-      
-      if(item?.status === "completed"){
-          setColumnCount(prevState => ({
+    tableOrders &&
+      tableOrders?.length > 0 &&
+      tableOrders?.map((item, i) => {
+        if (item?.status === "pending") {
+          setColumnCount((prevState) => ({
             ...prevState,
-            "Completed": prevState["Completed"] + 1
-        }));
-      }
+            "New order": prevState["New order"] + 1,
+          }));
+        }
 
-    });
-  }, [tableOrders])
-      
-  
+        if (item?.status === "kitchen") {
+          item?.order?.map((o: any) => {
+            if (o?.status === "pending") {
+              setColumnCount((prevState) => ({
+                ...prevState,
+                Kitchen: prevState["Kitchen"] + 1,
+              }));
+            }
+
+            if (o?.status === "ready" || o?.status === "sent") {
+              setColumnCount((prevState) => ({
+                ...prevState,
+                Ready: prevState["Ready"] + 1,
+              }));
+            }
+          });
+        }
+
+        if (item?.status === "kitchen") {
+          item?.order?.map((o: any) => {
+            if (o?.status === "cooking") {
+              tableOrders.filter((order) => {
+                if (
+                  order.order.some((orderItem) => orderItem.status === o.status)
+                ) {
+                  setColumnCount((prevState) => ({
+                    ...prevState,
+                    Cooking: prevState["Cooking"] + 1,
+                  }));
+                }
+              });
+            }
+          });
+        }
+
+        if (item?.status === "completed") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            Completed: prevState["Completed"] + 1,
+          }));
+        }
+      });
+  }, [tableOrders]);
+
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -180,8 +179,15 @@ const WaiterDashboard = () => {
         className="w-full h-screen px-3 lg:px-6 py-4"
         style={{ backgroundColor: "#F9F9F9" }}
       >
-        <div className="px-2">
+        <div className="px-2 flex justify-between items-center">
           <h3 className="font_bold text-2xl font-semibold">{waiter?.table}</h3>
+          <Link
+            to={`/restaurant/${waiter?.businessName}/${waiter?.table}`}
+            target="_blank"
+            className="inline-flex items-center justify-center primary_bg_color p-2 whitespace-nowrap text-lg text-white shadow-sm cursor-pointer rounded-xl font_medium"
+          >
+            Place an order
+          </Link>
         </div>
         <div className="w-full h-fit py-1">
           {/* CATEGORIES */}
@@ -252,7 +258,6 @@ const WaiterDashboard = () => {
                 </p>
               } // Message when all items have been loaded
             >
-
               {/* NEW ORDERS */}
               <div className="flex flex-col mt-2">
                 {selectedCategory.label === "New order" && (
