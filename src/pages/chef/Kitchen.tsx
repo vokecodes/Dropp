@@ -295,7 +295,11 @@ const Kitchen = () => {
   const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
 
 
-  console.log("restaurantOrders= ", restaurantOrders)
+  // console.log("restaurantOrders= ", restaurantOrders)
+
+  const todaysDate = new Date().toJSON().slice(0, 10);
+  
+  
   
   const [selectedTable, setSelectedTable] = useState("");
   const filteredTable = !selectedTable
@@ -311,13 +315,36 @@ const Kitchen = () => {
     return item.menu?.category == selectedCategory?.value;
   });
   
-  const filteredRestaurantOrders = filteredCategory;
+  const [startDate, setStartDate] = useState("");
+  const filteredStartDate = !startDate
+  ? filteredCategory
+  : filteredCategory.filter((item: any, i: any) => {
+    const createdAt = new Date(item.createdAt);
+    const date = new Date(startDate);
+    // console.log('dates= ', createdAt, date)
+    return createdAt >= date;
+  });
+  
+  
+  const [endDate, setEndDate] = useState("");
+  const filteredEndDate = !endDate
+  ? filteredStartDate
+  : filteredStartDate.filter((item: any, i: any) => {
+    const createdAt = new Date(item.createdAt);
+    const date = new Date(endDate);
+    return createdAt <= date;
+  });
 
-  console.log("filteredRestaurantOrders= ", filteredRestaurantOrders)
-  console.log('table= ', table)
-  console.log('dinningMenuCategories= ', dinningMenuCategories)
-  console.log('selectedCategory= ', selectedCategory)
-  console.log('selectedTable= ', selectedTable)
+
+  const filteredRestaurantOrders = filteredEndDate;
+  
+  // console.log("filteredRestaurantOrders= ", filteredRestaurantOrders)
+  // console.log('table= ', table)
+  // console.log('dinningMenuCategories= ', dinningMenuCategories)
+  // console.log('selectedCategory= ', selectedCategory)
+  // console.log('selectedTable= ', selectedTable)
+  // console.log('startDate= ', startDate)
+  // console.log('endDate= ', endDate)
 
   const [columnCount, setColumnCount] = useState({
     new_orders: 0,
@@ -397,7 +424,7 @@ const Kitchen = () => {
         }));
       }
     })
-  }, [restaurantOrders, selectedTable, selectedCategory])
+  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate])
 
   const handleClickAway = (flag: string) => {
     if (flag === "categories") {
@@ -427,8 +454,52 @@ const Kitchen = () => {
         </div>
       </div>
 
-      <div className="lg:mx-5 px-4 sm:px-6 flex flex-row items-end justify-end gap-x-3">
-        <div className="w-36">
+      <div className="lg:mx-5 px-4 sm:px-6 flex flex-col lg:flex-row items-center lg:items-end justify-start lg:justify-end gap-x-3 gap-y-3">
+        <div
+          className="py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
+          onClick={() => {
+            setEndDate("");
+            setStartDate("");
+            setSelectedTable("");
+            setSelectedCategory("");
+          }}
+        >
+          <p className="font_medium">Reset</p>
+              
+        </div>
+        
+        {/* START DATE */}
+        <div className="w-4/5 lg:w-36">
+          <label className="text-sm font_medium text-black">From Date</label>
+          <input
+            type="date"
+            name="startDate"
+            id="startDate"
+            className="h-10 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+            placeholder="Start Date:"
+            value={startDate ? startDate : ""}
+            onChange={(e: any) => setStartDate(e.target.value)}
+            max={endDate ? endDate : todaysDate}
+          />
+        </div>
+
+        {/* TO DATE */}
+        <div className="w-4/5 lg:w-36">
+          <label className="text-sm font_medium text-black">To Date</label>
+          <input
+            type="date"
+            name="endDate"
+            id="endDate"
+            className="h-10 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+            placeholder="End Date:"
+            value={endDate ? endDate : ""}
+            onChange={(e: any) => setEndDate(e.target.value)}
+            max={todaysDate}
+            min={startDate ? startDate : undefined}
+          />
+        </div>
+
+        <div className="w-4/5 lg:w-36">
           <label className="text-sm font_medium text-black">Tables</label>
           <div className="mt-2 lg:mt-0">
             <div
@@ -503,7 +574,7 @@ const Kitchen = () => {
           </div>
         </div>
         
-        <div className="w-36">
+        <div className="w-4/5 lg:w-36">
           <label className="text-sm font_medium text-black">Categories</label>
           <div className="mt-2 lg:mt-0">
             <div
@@ -579,7 +650,7 @@ const Kitchen = () => {
         </div>
 
         <div
-          className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
+          className="py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
           onClick={() => {
             kitchenExportToCSV(restaurantOrders);
           }}
@@ -621,34 +692,6 @@ const Kitchen = () => {
       </div>
 
       <div className="w-fit md:w-full md:px-6 py-4">
-        {/* <div className="w-full h-fit py-1">
-          {table && table?.length > 0 && (
-            <div
-              className="flex flex-row h-fit w-full px-2 pb-1 rounded my-1 gap-x-3 overflow-x-scroll"
-              style={{ maxHeight: "250px" }}
-            >
-              <div className="bg-gray-200 flex flex-row justify-between items-center w-fit h-fit py-2 px-4 rounded-full shrink-0 cursor-pointer">
-                <p className="text-xs font-bold font_regular text-black">All</p>
-                
-              </div>
-              {table.map((table: any, i: number) => (
-                <div
-                  key={i}
-                  className="bg-gray-200 flex flex-row justify-between items-center w-fit h-fit py-2 px-4 rounded-full shrink-0 cursor-pointer"
-                >
-                  <p className="text-xs font-bold font_regular text-black">
-                    {`${table?.table}`}
-                  </p>
-                  <p className="h-fit w-fit rounded-full px-2 bg-white">
-                    <span className="primary_txt_color font_regular text-xs">
-                      {table.orders}
-                    </span>
-                  </p>
-                </div>
-              ))}
-          </div>
-          )}
-        </div> */}
         <InfiniteScroll
           dataLength={restaurantOrders?.length} // This is important to track the length of your data array
           next={() => {
