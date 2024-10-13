@@ -46,6 +46,7 @@ import RestaurantCart from "../../components/RestaurantCart";
 import { IoSearchSharp } from "react-icons/io5";
 import RestaurantMeal from "../../components/RestaurantMeal";
 import { Images } from "../../config/images";
+import AlertDialog from "../../components/AlertDialog";
 
 const RestaurantShop = () => {
   const navigate = useNavigate();
@@ -139,6 +140,16 @@ const RestaurantShop = () => {
   const [businessModal, setBusinessModal] = useState(false);
   const openBusinessModal = () => setBusinessModal(true);
   const closeBusinessModal = () => setBusinessModal(false);
+
+  const [openAlertModal, setOpenAlertModal] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenAlertModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenAlertModal(false);
+  };
 
   const resetCartView = () => {
     setCartView(true);
@@ -283,6 +294,7 @@ const RestaurantShop = () => {
         handler.openIframe();
       }
     } catch (err) {
+      handleClickOpen()
     } finally {
       setCheckoutLoading(false);
     }
@@ -959,6 +971,8 @@ const RestaurantShop = () => {
                   </div>
                 </div>
               </Modal>
+
+              <AlertDialog message='An error has occured, ensure you have the correct Table number and an internet connection.' handleClose={handleClose} open={openAlertModal} />
             </div>
           ) : (
             <NotFound />

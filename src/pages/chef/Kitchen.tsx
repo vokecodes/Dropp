@@ -7,7 +7,10 @@ import { IoMdClose } from "react-icons/io";
 import { useAppDispatch } from "../../redux/hooks";
 import { getTables } from "../../_redux/table/tableAction";
 import { SERVER } from "../../config/axios";
-import { DINNING_MENU_CATEGORY_URL, RESTAURANT_ORDER_URL } from "../../_redux/urls";
+import {
+  DINNING_MENU_CATEGORY_URL,
+  RESTAURANT_ORDER_URL,
+} from "../../_redux/urls";
 import Button from "../../components/Button";
 import OutlineButton from "../../components/OutlineButton";
 import KitchenButton from "../../components/KitchenButton";
@@ -74,7 +77,7 @@ const Kitchen = () => {
           data?.dinningMenuCategory?.categories &&
           data?.dinningMenuCategory?.categories?.length > 0
         ) {
-          console.log('catssss= ', data, data?.dinningMenuCategory?.categories)
+          console.log("catssss= ", data, data?.dinningMenuCategory?.categories);
           setDinningMenuCategories(data?.dinningMenuCategory?.categories);
         }
       })
@@ -211,7 +214,7 @@ const Kitchen = () => {
         if (
           response.data.pagination.totalPages > currentPage &&
           response.data.pagination.currentPage !==
-          response.data.pagination.totalPages
+            response.data.pagination.totalPages
         ) {
           currentPage++;
           await fetchAllOrders(currentPage);
@@ -303,11 +306,11 @@ const Kitchen = () => {
   
   const [selectedTable, setSelectedTable] = useState("");
   const filteredTable = !selectedTable
-  ? restaurantOrders
-  : restaurantOrders.filter((item: any, i: any) => {
-    return item.table?.table == selectedTable?.table;
-  });
-  
+    ? restaurantOrders
+    : restaurantOrders.filter((item: any, i: any) => {
+        return item.table?.table == selectedTable?.table;
+      });
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const filteredCategory = !selectedCategory
   ? filteredTable
@@ -430,10 +433,10 @@ const Kitchen = () => {
     if (flag === "categories") {
       setOpenCategoriesOptions(false);
     } else if (flag === "table") {
-      setOpenTableOptions(false);
+      setOpenTablesOptions(false);
     }
   };
-  
+
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -518,11 +521,9 @@ const Kitchen = () => {
               )}
             </div>
             {openTablesOptions && (
-              <ClickAwayListener
-                onClickAway={() => handleClickAway("table")}
-              >
+              <ClickAwayListener onClickAway={() => handleClickAway("table")}>
                 <div
-                  className={`absolute z-10 bg-white mb-2 w-24 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                 >
                   <div
                     className="flex items-center cursor-pointer mb-2"
@@ -597,7 +598,7 @@ const Kitchen = () => {
                 onClickAway={() => handleClickAway("categories")}
               >
                 <div
-                  className={`absolute z-10 bg-white mb-2 w-24 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                 >
                   <div
                     className="flex items-center cursor-pointer mb-2"
@@ -724,7 +725,11 @@ const Kitchen = () => {
                     New orders
                   </p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.new_orders : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.new_orders
+                        : 0}
+                    </span>
                   </p>
                 </div>
 
@@ -743,6 +748,9 @@ const Kitchen = () => {
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
                         <p className="font-semibold font_medium">
+                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
+                        <p className="font-semibold font_medium mb-2">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
                         </p>
@@ -788,7 +796,11 @@ const Kitchen = () => {
                 <div className="sticky top-0 flex flex-row justify-center items-center w-full gap-x-2 px-3 py-3 bg-zinc-500 rounded-xl">
                   <p className="text-center font_medium text-white">Cooking</p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.cooking : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.cooking
+                        : 0}
+                    </span>
                   </p>
                 </div>
                 {restaurantOrders &&
@@ -805,6 +817,9 @@ const Kitchen = () => {
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
                         <p className="font-semibold font_medium">
+                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
+                        <p className="font-semibold font_medium mb-2">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
                         </p>
@@ -851,7 +866,11 @@ const Kitchen = () => {
                     Ready for pickup
                   </p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.pickup : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.pickup
+                        : 0}
+                    </span>
                   </p>
                 </div>
 
@@ -868,6 +887,9 @@ const Kitchen = () => {
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
                         <p className="font-semibold font_medium">
+                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
+                        <p className="font-semibold font_medium mb-2">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
                         </p>
@@ -910,7 +932,11 @@ const Kitchen = () => {
                 <div className="sticky top-0 flex flex-row justify-center bg-yellow-500 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
                   <p className="text-center font_medium text-white">Sent</p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.sent : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.sent
+                        : 0}
+                    </span>
                   </p>
                 </div>
 
@@ -927,6 +953,9 @@ const Kitchen = () => {
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
                         <p className="font-semibold font_medium">
+                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
+                        <p className="font-semibold font_medium mb-2">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
                         </p>
@@ -964,7 +993,11 @@ const Kitchen = () => {
                     Completed
                   </p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.completed : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.completed
+                        : 0}
+                    </span>
                   </p>
                 </div>
 
@@ -982,6 +1015,9 @@ const Kitchen = () => {
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
                         <p className="font-semibold font_medium">
+                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
+                        <p className="font-semibold font_medium mb-2">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
                         </p>
@@ -1008,7 +1044,11 @@ const Kitchen = () => {
                 <div className="sticky top-0 flex flex-row justify-center bg-red-900 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
                   <p className="text-center font_medium text-white">Decline</p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.decline : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.decline
+                        : 0}
+                    </span>
                   </p>
                 </div>
 
@@ -1026,6 +1066,9 @@ const Kitchen = () => {
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
                         <p className="font-semibold font_medium">
+                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
+                        <p className="font-semibold font_medium mb-2">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
                         </p>
@@ -1052,7 +1095,11 @@ const Kitchen = () => {
                 <div className="sticky top-0 flex flex-row justify-center bg-black items-center w-full gap-x-2 px-3 py-3 rounded-xl">
                   <p className="text-center font_medium text-white">Void</p>
                   <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">{restaurantOrders && restaurantOrders?.length > 0 ? columnCount.void : 0}</span>
+                    <span className="text-white font_regular text-xs">
+                      {restaurantOrders && restaurantOrders?.length > 0
+                        ? columnCount.void
+                        : 0}
+                    </span>
                   </p>
                 </div>
 
@@ -1069,6 +1116,9 @@ const Kitchen = () => {
                         key={order?._id}
                         className="bg-white w-full  mb-2 p-3 rounded-xl"
                       >
+                        <p className="font-semibold font_medium">
+                          {moment(order?.createdAt).format("DD/MM/YYYY H:MM A")}
+                        </p>
                         <p className="font-semibold font_medium">
                           {order?.name} - {order?.table?.table} #
                           {order?._id?.substring(order?._id?.length - 5)}
