@@ -19,6 +19,12 @@ import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
 import moment from "moment";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
+import invariant from "tiny-invariant";
+import {
+  draggable,
+  dropTargetForElements,
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import KitchenCard from "../../components/kitchenCard";
 // import io from "socket.io-client";
 
 // const socket = io(import.meta.env.VITE_BASE_API_URL, {
@@ -743,51 +749,17 @@ const Kitchen = () => {
                         ro?.status === "pending"
                     )
                     ?.map((order: any) => (
-                      <div
+                      <KitchenCard
                         key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-
-                        <KitchenButton
-                          title="Start Cooking"
-                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                          loading={startCooking === order?._id}
-                          onClick={() =>
-                            handleStartCooking(order?.parent, order?._id)
-                          }
-                        />
-
-                        <KitchenButton
-                          title="Decline"
-                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                          onClick={() => {
-                            setDeclineOrder(order?.parent);
-                            setDeclineOrderMenu(order?._id);
-                            openDeclineModal();
-                          }}
-                        />
-                      </div>
+                        order={order}
+                        startCooking={startCooking}
+                        handleStartCooking={handleStartCooking}
+                        setDeclineOrder={setDeclineOrder}
+                        setDeclineOrderMenu={setDeclineOrderMenu}
+                        openDeclineModal={openDeclineModal}
+                        restaurantOrders={restaurantOrders}
+                        filteredRestaurantOrders={filteredRestaurantOrders}
+                      />
                     ))}
               </div>
 
