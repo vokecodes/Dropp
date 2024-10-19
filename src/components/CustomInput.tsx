@@ -21,8 +21,9 @@ const Input = ({
   isReferralCodeLoading,
   selectPlaceholder,
   container,
+  touched,
 }: InputProps) => {
-  // console.log("InputProps", error);
+  console.log("InputProps", touched);
 
   return (
     <div className={`relative my-5 ${container}`}>
@@ -32,6 +33,7 @@ const Input = ({
           value={value}
           name={name}
           onChange={onChange}
+          onBlur={onBlur}
           disabled={disabled}
           onInput={onInput}
           className={`block w-full rounded-xl border gray_border_color input_text font_medium py-4 pl-8 pr-4 sm:text-sm outline-none ${extraClasses}`}
@@ -96,7 +98,14 @@ const Input = ({
           )}
         </div>
       )}
-      {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
+      {error && name === "password" ? (
+        <p className="text-[12px] font_light text-red-500">Password should be a minimum of 8 characters. These includes a capital letter, a number and a special character.</p>
+        ) : error && name !== "password" ? (
+          <p className="text-sm text-red-500 text-center">{error}</p>
+        ) : null
+      }
+
       {name === "referralCode" && referralCodeError && (
         <p className="text-sm text-red-500 text-center">{referralCodeError}</p>
       )}
