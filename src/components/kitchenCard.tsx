@@ -1,18 +1,14 @@
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react'
-import KitchenButton from './KitchenButton';
+import { useEffect, useRef, useState } from 'react'
 import invariant from 'tiny-invariant';
-import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 
 const KitchenCard = ({
     order,
-    startCooking,
-    handleStartCooking,
-    setDeclineOrder,
-    setDeclineOrderMenu,
-    openDeclineModal,
     restaurantOrders,
-    filteredRestaurantOrders
+    filteredRestaurantOrders,
+    kitchenCardButtons,
+    title
 }) => {
 
     const dragRef = useRef(null)
@@ -24,9 +20,12 @@ const KitchenCard = ({
 
         return draggable({
         element: el,
-        getInitialData: () => ({ data: 'works' }),
+        getInitialData: () => ({ order: order, title: title }),
         onDragStart: () => setDragging(true),
-        onDrop: () => setDragging(true)
+        onDrop: () => {
+            setDragging(false)
+            console.log('dragging has started')
+        }
         })
     }, [restaurantOrders, filteredRestaurantOrders])
 
@@ -59,24 +58,11 @@ const KitchenCard = ({
             </div>
         </div>
 
-        <KitchenButton
-            title="Start Cooking"
-            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-            loading={startCooking === order?._id}
-            onClick={() =>
-            handleStartCooking(order?.parent, order?._id)
-            }
-        />
+        {
+            kitchenCardButtons && kitchenCardButtons.map((cardButton: any) => cardButton)
+        }
 
-        <KitchenButton
-            title="Decline"
-            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-            onClick={() => {
-            setDeclineOrder(order?.parent);
-            setDeclineOrderMenu(order?._id);
-            openDeclineModal();
-            }}
-        />
+        
     </div>
   )
 }
