@@ -19,6 +19,14 @@ import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
 import moment from "moment";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
+import invariant from "tiny-invariant";
+import {
+  draggable,
+  dropTargetForElements,
+  monitorForElements,
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import KitchenCard from "../../components/kitchenCard";
+import KitchenBoard from "../../components/KitchenBoard";
 // import io from "socket.io-client";
 
 // const socket = io(import.meta.env.VITE_BASE_API_URL, {
@@ -77,7 +85,6 @@ const Kitchen = () => {
           data?.dinningMenuCategory?.categories &&
           data?.dinningMenuCategory?.categories?.length > 0
         ) {
-          console.log("catssss= ", data, data?.dinningMenuCategory?.categories);
           setDinningMenuCategories(data?.dinningMenuCategory?.categories);
         }
       })
@@ -298,7 +305,14 @@ const Kitchen = () => {
   const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
 
 
-  // console.log("restaurantOrders= ", restaurantOrders)
+
+  const sortByUpdatedAt = (arr) => {
+    return arr.sort((a, b) => {
+      const dateA = new Date(a.updatedAt);
+      const dateB = new Date(b.updatedAt);
+      return dateB - dateA;
+    });
+  }
 
   const todaysDate = new Date().toJSON().slice(0, 10);
   
@@ -324,7 +338,6 @@ const Kitchen = () => {
   : filteredCategory.filter((item: any, i: any) => {
     const createdAt = new Date(item.createdAt);
     const date = new Date(startDate);
-    // console.log('dates= ', createdAt, date)
     return createdAt >= date;
   });
   
@@ -339,15 +352,8 @@ const Kitchen = () => {
   });
 
 
-  const filteredRestaurantOrders = filteredEndDate;
+  const filteredRestaurantOrders = sortByUpdatedAt(filteredEndDate);
   
-  // console.log("filteredRestaurantOrders= ", filteredRestaurantOrders)
-  // console.log('table= ', table)
-  // console.log('dinningMenuCategories= ', dinningMenuCategories)
-  // console.log('selectedCategory= ', selectedCategory)
-  // console.log('selectedTable= ', selectedTable)
-  // console.log('startDate= ', startDate)
-  // console.log('endDate= ', endDate)
 
   const [columnCount, setColumnCount] = useState({
     new_orders: 0,
@@ -436,6 +442,39 @@ const Kitchen = () => {
       setOpenTablesOptions(false);
     }
   };
+
+
+  useEffect(() => {
+    return monitorForElements({
+        onDrop({ source, location }) {
+            const destination = location.current.dropTargets[0];
+
+            if (!destination) {
+                return;
+            }
+
+            const destinationLocation = destination.data.title;
+            const sourceLocation = source.data.title;
+            const order = source.data.order;
+
+            if (destinationLocation === 'Cooking'){
+              console.log('cooking')
+              handleStartCooking(order?.parent, order?._id)
+            }else if(destinationLocation === 'Ready for pickup'){
+              handleReadyForPickup(order?.parent, order?._id)
+            }else if(destinationLocation === 'Sent'){
+              handleSent(order?.parent, order?._id)
+            }else if(destinationLocation === 'Decline' && sourceLocation === 'New orders'){
+              setDeclineOrder(order?.parent);
+              setDeclineOrderMenu(order?._id);
+              openDeclineModal();
+            }else if(destinationLocation === 'Void'){
+              handleVoided(order?.parent, order?._id);
+            }
+
+        },
+    });
+  }, [restaurantOrders]);
 
   return (
     <>
@@ -719,22 +758,13 @@ const Kitchen = () => {
 
             <div className="snap-x md:snap-none snap-mandatory flex flex-row w-screen overflow-x-scroll md:w-fit h-full px-5 md:px-0 gap-x-5 no-scroll-bar">
               {/* NEW ORDERS */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg_pink rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center bg-gray-200 items-center w-full gap-x-2 px-3 py-3 primary_bg_color rounded-xl">
-                  <p className="text-center font_medium text-white">
-                    New orders
-                  </p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.new_orders
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-
-                {/* <div className="w-full h-full min-h-screen max-h-screen flex flex-col items-center justify-start gap-y-3 p-4 rounded-xl"> */}
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='New orders'
+                headerBg='primary_bg_color'
+                bodyBg='bg_pink'
+                columnCount={columnCount.new_orders}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
                     ?.filter(
@@ -743,403 +773,235 @@ const Kitchen = () => {
                         ro?.status === "pending"
                     )
                     ?.map((order: any) => (
-                      <div
+                      <KitchenCard
                         key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-
-                        <KitchenButton
-                          title="Start Cooking"
-                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                          loading={startCooking === order?._id}
-                          onClick={() =>
+                        order={order}
+                        restaurantOrders={restaurantOrders}
+                        filteredRestaurantOrders={filteredRestaurantOrders}
+                        title={'New orders'}
+                        kitchenCardButtons={[
+                          <KitchenButton
+                            title="Start Cooking"
+                            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                            loading={startCooking === order?._id}
+                            onClick={() =>
                             handleStartCooking(order?.parent, order?._id)
-                          }
-                        />
-
-                        <KitchenButton
-                          title="Decline"
-                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                          onClick={() => {
+                            }
+                          />,
+                          <KitchenButton
+                            title="Decline"
+                            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                            onClick={() => {
                             setDeclineOrder(order?.parent);
                             setDeclineOrderMenu(order?._id);
                             openDeclineModal();
-                          }}
-                        />
-                      </div>
+                            }}
+                          />
+                        ]}
+                      />
                     ))}
-              </div>
+              />
 
               {/* COOKING */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll bg-zinc-200 rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center items-center w-full gap-x-2 px-3 py-3 bg-zinc-500 rounded-xl">
-                  <p className="text-center font_medium text-white">Cooking</p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.cooking
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='Cooking'
+                headerBg='bg-zinc-500'
+                bodyBg='bg-zinc-200'
+                columnCount={columnCount.cooking}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
-                    ?.filter(
+                  ?.filter(
                       (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "cooking"
-                    )
-                    ?.map((order: any) => (
-                      <div
-                        key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-
-                        <KitchenButton
-                          title="Ready For Pickup"
-                          extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                          loading={readyForPickup === order?._id}
-                          onClick={() =>
-                            handleReadyForPickup(order?.parent, order?._id)
-                          }
-                        />
-
-                        <KitchenButton
-                          title="Void"
-                          extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                          loading={voided === order?._id}
-                          onClick={() => {
-                            handleVoided(order?.parent, order?._id);
-                          }}
-                        />
-                      </div>
-                    ))}
-              </div>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "cooking"
+                  )
+                  ?.map((order: any) => (
+                      <KitchenCard
+                          key={order?._id}
+                          order={order}
+                          restaurantOrders={restaurantOrders}
+                          filteredRestaurantOrders={filteredRestaurantOrders}
+                          title={'Cooking'}
+                          kitchenCardButtons={[
+                              <KitchenButton
+                                  title="Ready For Pickup"
+                                  extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
+                                  loading={readyForPickup === order?._id}
+                                  onClick={() =>
+                                  handleReadyForPickup(order?.parent, order?._id)
+                                  }
+                              />,
+                              <KitchenButton
+                                  title="Void"
+                                  extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
+                                  loading={voided === order?._id}
+                                  onClick={() => {
+                                  handleVoided(order?.parent, order?._id);
+                                  }}
+                              />
+                          ]}
+                      />
+                  ))}
+              />
 
               {/* READY */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg-green-100 rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center bg-gray-200 items-center w-full gap-x-2 px-3 py-3 bg-green-600 rounded-xl">
-                  <p className="text-center font_medium text-white">
-                    Ready for pickup
-                  </p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.pickup
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='Ready for pickup'
+                headerBg='bg-green-600'
+                bodyBg='bg-green-100'
+                columnCount={columnCount.pickup}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
-                    ?.filter(
+                  ?.filter(
                       (ro) =>
-                        ro?.parentStatus === "kitchen" && ro?.status === "ready"
-                    )
-                    ?.map((order: any) => (
-                      <div
-                        key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-
-                        <KitchenButton
-                          title="Sent"
-                          extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                          loading={sent === order?._id}
-                          onClick={() => handleSent(order?.parent, order?._id)}
-                        />
-
-                        <KitchenButton
-                          title="Void"
-                          extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                          loading={voided === order?._id}
-                          onClick={() => {
-                            handleVoided(order?.parent, order?._id);
-                          }}
-                        />
-                      </div>
-                    ))}
-              </div>
+                      ro?.parentStatus === "kitchen" && ro?.status === "ready"
+                  )
+                  ?.map((order: any) => (
+                      <KitchenCard
+                          key={order?._id}
+                          order={order}
+                          restaurantOrders={restaurantOrders}
+                          filteredRestaurantOrders={filteredRestaurantOrders}
+                          title={'Ready for pickup'}
+                          kitchenCardButtons={[
+                            <KitchenButton
+                              title="Sent"
+                              extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                              loading={sent === order?._id}
+                              onClick={() => handleSent(order?.parent, order?._id)}
+                            />,
+                            <KitchenButton
+                              title="Void"
+                              extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                              loading={voided === order?._id}
+                              onClick={() => {
+                                handleVoided(order?.parent, order?._id);
+                              }}
+                            />
+                          ]}
+                      />
+                  ))}
+              />
 
               {/* SENT */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll bg-yellow-100 rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center bg-yellow-500 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
-                  <p className="text-center font_medium text-white">Sent</p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.sent
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='Sent'
+                headerBg='bg-yellow-500'
+                bodyBg='bg-yellow-100'
+                columnCount={columnCount.sent}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
-                    ?.filter(
+                  ?.filter(
                       (ro) =>
-                        ro?.parentStatus === "kitchen" && ro?.status === "sent"
-                    )
-                    ?.map((order: any) => (
-                      <div
-                        key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-
-                        <KitchenButton
-                          title="Void"
-                          extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
-                          loading={voided === order?._id}
-                          onClick={() => {
-                            handleVoided(order?.parent, order?._id);
-                          }}
-                        />
-                      </div>
-                    ))}
-              </div>
+                      ro?.parentStatus === "kitchen" && ro?.status === "sent"
+                  )
+                  ?.map((order: any) => (
+                      <KitchenCard
+                          key={order?._id}
+                          order={order}
+                          restaurantOrders={restaurantOrders}
+                          filteredRestaurantOrders={filteredRestaurantOrders}
+                          title={'Sent'}
+                          kitchenCardButtons={[
+                            <KitchenButton
+                              title="Void"
+                              extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
+                              loading={voided === order?._id}
+                              onClick={() => {
+                                handleVoided(order?.parent, order?._id);
+                              }}
+                            />
+                          ]}
+                      />
+                  ))}
+              />
 
               {/* COMPLETED */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg-gray-100 rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center bg-green-900 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
-                  <p className="text-center font_medium text-white">
-                    Completed
-                  </p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.completed
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='Completed'
+                headerBg='bg-green-900'
+                bodyBg='bg-gray-100'
+                columnCount={columnCount.sent}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "completed" &&
-                        ro?.status === "completed"
-                    )
-                    ?.map((order: any) => (
-                      <div
-                        key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-              </div>
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "completed" &&
+                      ro?.status === "completed"
+                  )
+                  ?.map((order: any) => (
+                      <KitchenCard
+                          key={order?._id}
+                          order={order}
+                          restaurantOrders={restaurantOrders}
+                          filteredRestaurantOrders={filteredRestaurantOrders}
+                          title={'Completed'}
+                      />
+                  ))}
+              />
+              
 
               {/* DECLINE */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg-red-100 rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center bg-red-900 items-center w-full gap-x-2 px-3 py-3 rounded-xl">
-                  <p className="text-center font_medium text-white">Decline</p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.decline
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='Decline'
+                headerBg='bg-red-900'
+                bodyBg='bg-red-100'
+                columnCount={columnCount.decline}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "declined"
-                    )
-                    ?.map((order: any) => (
-                      <div
-                        key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium mb-2">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-              </div>
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "declined"
+                  )
+                  ?.map((order: any) => (
+                      <KitchenCard
+                          key={order?._id}
+                          order={order}
+                          restaurantOrders={restaurantOrders}
+                          filteredRestaurantOrders={filteredRestaurantOrders}
+                          title={'Decline'}
+                      />
+                  ))}
+              />
+              
 
               {/* VOIDED */}
-              <div className="relative flex flex-col items-center justify-start gap-y-3 w-[90vw] md:w-80 shrink-0 max-h-svh overflow-y-scroll  bg-neutral-100 rounded-xl p-2 snap-center">
-                <div className="sticky top-0 flex flex-row justify-center bg-black items-center w-full gap-x-2 px-3 py-3 rounded-xl">
-                  <p className="text-center font_medium text-white">Void</p>
-                  <p className="h-fit w-fit rounded-full p-1 bg-black flex flex-row items-center justify-center">
-                    <span className="text-white font_regular text-xs">
-                      {restaurantOrders && restaurantOrders?.length > 0
-                        ? columnCount.void
-                        : 0}
-                    </span>
-                  </p>
-                </div>
-
-                {restaurantOrders &&
+              <KitchenBoard 
+                restaurantOrders={restaurantOrders}
+                title='Void'
+                headerBg='bg-black'
+                bodyBg='bg-neutral-100'
+                columnCount={columnCount.void}
+                orders={restaurantOrders &&
                   restaurantOrders?.length > 0 &&
                   filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "archived"
-                    )
-                    ?.map((order: any) => (
-                      <div
-                        key={order?._id}
-                        className="bg-white w-full  mb-2 p-3 rounded-xl"
-                      >
-                        <p className="font-semibold font_medium">
-                          {moment(order?.createdAt).format("DD/MM/YYYY H:MM A")}
-                        </p>
-                        <p className="font-semibold font_medium">
-                          {order?.name} - {order?.table?.table} #
-                          {order?._id?.substring(order?._id?.length - 5)}
-                        </p>
-                        <div className="flex flex-row">
-                          <img
-                            src={order?.menu?.images[0]}
-                            className="w-10 h-auto rounded-md"
-                            alt="menu"
-                          />
-                          <div className="ml-2 font_bold text-sm space-y-2">
-                            <p>{order?.menu?.foodName}</p>
-                            <p>
-                              {order?.quantity} portion
-                              {order?.quantity > 1 && "s"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-              </div>
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "archived"
+                  )
+                  ?.map((order: any) => (
+                      <KitchenCard
+                          key={order?._id}
+                          order={order}
+                          restaurantOrders={restaurantOrders}
+                          filteredRestaurantOrders={filteredRestaurantOrders}
+                          title={'Void'}
+                      />
+                  ))}
+              />
+              
             </div>
             {/* </div> */}
             {/* </div> */}
