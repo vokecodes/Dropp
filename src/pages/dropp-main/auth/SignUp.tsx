@@ -37,8 +37,12 @@ const SignUpPage = () => {
     lastName: Yup.string().required("Last name is required."),
     email: Yup.string().email().required("Email is required."),
     password: Yup.string()
-      .min(8, "Password must be minimum of 8 letters.")
-      .required("Password is required."),
+      .min(8, 'Password must be at least 8 characters')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/\d/, 'Password must contain at least one number')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
+      .required('Password is required'),
     confirmPassword: Yup.string()
       .required("Confirm password is required.")
       .oneOf([Yup.ref("password")], "Passwords do not match"),
@@ -286,11 +290,16 @@ const SignUpPage = () => {
                       </svg>
                     )}
                   </div>
-                  <ErrorMessage
+                  {props.touched.password && props.errors.password ? (
+                    <div className="w-full">
+                      <p className="text-[12px] font_light text-red-500 mt-1">Password should be a minimum of 8 characters. These includes letters, numbers and special characters.</p>
+                    </div>
+                  ) : null}
+                  {/* <ErrorMessage
                     name="password"
                     component="span"
                     className="text-xs text-red-500 font_regular"
-                  />
+                  /> */}
                 </div>
 
                 {/* confirm password */}

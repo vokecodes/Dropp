@@ -184,9 +184,9 @@ const WaiterDashboard = () => {
           <Link
             to={`/restaurant/${waiter?.businessName}/${waiter?.table}`}
             target="_blank"
-            className="inline-flex items-center justify-center primary_bg_color p-2 whitespace-nowrap text-lg text-white shadow-sm cursor-pointer rounded-xl font_medium"
+            className="inline-flex items-center justify-center primary_bg_color px-5 py-2 whitespace-nowrap text-lg text-white shadow-sm cursor-pointer rounded-xl font_medium"
           >
-            Place an order
+            Place Order
           </Link>
         </div>
         <div className="w-full h-fit py-1">

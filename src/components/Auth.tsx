@@ -252,6 +252,7 @@ const Auth = ({
                   }}
                   referralCodeError={referralCodeError}
                   isReferralCodeLoading={isReferralCodeLoading}
+                  touched={touched}
                 />
               ))}
 

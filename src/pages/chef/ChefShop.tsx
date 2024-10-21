@@ -354,6 +354,19 @@ const ChefShop = () => {
 
   const closeCartModal = () => setCartModal(false);
 
+  const getChefJoinDate = (createdAt) => {
+    const joinDate = moment(createdAt);
+    const now = moment();
+    const yearsDifference = now.diff(joinDate, 'years');
+    
+    if (yearsDifference === 0) {
+      return `Joined since ${joinDate.format('MMM')}`;
+    } else {
+      return `Joined ${yearsDifference} year${yearsDifference > 1 ? 's' : ''} ago`;
+    }
+  };
+
+
   return (
     <>
       {isLoading ? (
@@ -395,6 +408,7 @@ const ChefShop = () => {
                           alt="chefBanner"
                           className="rounded-3xl lg:rounded-xl h-96 w-full object-cover"
                         />
+
                         <div className="lg:hidden absolute right-10 -mt-14">
                           <div className="justify-end flex flex-row input_text">
                             <div
@@ -437,6 +451,7 @@ const ChefShop = () => {
                             </div>
                           </div>
                         </div>
+
                       </div>
                       <div className="flex flex-row mt-5 mx-5">
                         <div className="">
@@ -464,9 +479,14 @@ const ChefShop = () => {
                         <div className="flex-1 ml-4">
                           <div>
                             <div className="flex flex-row items-center">
-                              <h1 className="text-xl lg:text-3xl font_bold ">
-                                {chef?.business?.businessName}
-                              </h1>
+                              <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-x-10 grow">
+                                <h1 className="text-xl lg:text-3xl font_bold ">
+                                  {chef?.business?.businessName}
+                                </h1>
+
+                                <p className="text-small font_regular input_text">{getChefJoinDate(chef?.business?.createdAt)}</p>
+                              </div>
+
                               <div className="flex-1 hidden lg:block">
                                 <div className="justify-end flex flex-row input_text">
                                   <div

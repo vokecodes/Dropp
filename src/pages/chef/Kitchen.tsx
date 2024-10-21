@@ -496,199 +496,201 @@ const Kitchen = () => {
         </div>
       </div>
 
-      <div className="lg:mx-5 px-4 sm:px-6 flex flex-col lg:flex-row items-center lg:items-end justify-start lg:justify-end gap-x-3 gap-y-3">
-        <div
-          className="py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
-          onClick={() => {
-            setEndDate("");
-            setStartDate("");
-            setSelectedTable("");
-            setSelectedCategory("");
-          }}
-        >
-          <p className="font_medium">Reset</p>
-              
-        </div>
-        
-        {/* START DATE */}
-        <div className="w-4/5 lg:w-36">
-          <label className="text-sm font_medium text-black">From Date</label>
-          <input
-            type="date"
-            name="startDate"
-            id="startDate"
-            className="h-10 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
-            placeholder="Start Date:"
-            value={startDate ? startDate : ""}
-            onChange={(e: any) => setStartDate(e.target.value)}
-            max={endDate ? endDate : todaysDate}
-          />
-        </div>
-
-        {/* TO DATE */}
-        <div className="w-4/5 lg:w-36">
-          <label className="text-sm font_medium text-black">To Date</label>
-          <input
-            type="date"
-            name="endDate"
-            id="endDate"
-            className="h-10 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
-            placeholder="End Date:"
-            value={endDate ? endDate : ""}
-            onChange={(e: any) => setEndDate(e.target.value)}
-            max={todaysDate}
-            min={startDate ? startDate : undefined}
-          />
-        </div>
-
-        <div className="w-4/5 lg:w-36">
-          <label className="text-sm font_medium text-black">Tables</label>
-          <div className="mt-2 lg:mt-0">
-            <div
-              className="h-10 bg-[#F8F8F8] block w-full flex justify-between items-center rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
-              onClick={() => {
-                setOpenTablesOptions(!openTablesOptions);
-              }}
-            >
-              <p className={`text-xs lg:text-sm filter_text font_medium`}>
-                {selectedTable ? selectedTable?.table : "All"}
-              </p>
-              {openTablesOptions ? (
-                <TiArrowSortedUp color="#8E8E8E" size={20} />
-              ) : (
-                <TiArrowSortedDown color="#8E8E8E" size={20} />
-              )}
-            </div>
-            {openTablesOptions && (
-              <ClickAwayListener onClickAway={() => handleClickAway("table")}>
-                <div
-                  className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
-                >
-                  <div
-                    className="flex items-center cursor-pointer mb-2"
-                    onClick={() => {
-                      setSelectedTable("");
-                      setOpenTablesOptions(false);
-                    }}
-                  >
-                    <div
-                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                        selectedTable === ""
-                          ? "primary_bg_color"
-                          : "bg_gray_color"
-                      }`}
-                    />
-                    <p
-                      className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                    >
-                      All
-                    </p>
-                  </div>
-                  {table?.length > 0 &&
-                    table?.map((s: any, i: number) => (
-                      <div
-                        className="flex items-center cursor-pointer mb-2"
-                        key={i}
-                        onClick={() => {
-                          setSelectedTable(s);
-                          setOpenTablesOptions(false);
-                        }}
-                      >
-                        <div
-                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                            selectedTable?.table === s?.table
-                              ? "primary_bg_color"
-                              : "bg_gray_color"
-                          }`}
-                        />
-                        <p
-                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                        >
-                          {s?.table}
-                        </p>
-                      </div>
-                    ))}
-                </div>
-              </ClickAwayListener>
-            )}
+      <div className="lg:mx-5 lg:px-4 px-6 flex flex-col lg:flex-row items-center lg:items-end justify-start lg:justify-between gap-x-3 gap-y-3">
+        <div className="w-full lg:w-fit flex flex-col lg:flex-row items-center lg:items-end justify-start lg:justify-end gap-x-3 gap-y-3">
+          {/* START DATE */}
+          <div className="w-4/5 lg:w-36">
+            <label className="text-sm font_medium text-black">From Date</label>
+            <input
+              type="date"
+              name="startDate"
+              id="startDate"
+              className="h-10 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+              placeholder="Start Date:"
+              value={startDate ? startDate : ""}
+              onChange={(e: any) => setStartDate(e.target.value)}
+              max={endDate ? endDate : todaysDate}
+            />
           </div>
-        </div>
-        
-        <div className="w-4/5 lg:w-36">
-          <label className="text-sm font_medium text-black">Categories</label>
-          <div className="mt-2 lg:mt-0">
-            <div
-              className="h-10 bg-[#F8F8F8] block w-full flex justify-between items-center rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
-              onClick={() => {
-                setOpenCategoriesOptions(!openCategoriesOptions);
-              }}
-            >
-              <p className={`text-xs lg:text-sm filter_text font_medium`}>
-                {selectedCategory ? selectedCategory?.value : "All"}
-              </p>
-              {openCategoriesOptions ? (
-                <TiArrowSortedUp color="#8E8E8E" size={20} />
-              ) : (
-                <TiArrowSortedDown color="#8E8E8E" size={20} />
-              )}
-            </div>
-            {openCategoriesOptions && (
-              <ClickAwayListener
-                onClickAway={() => handleClickAway("categories")}
+
+          {/* TO DATE */}
+          <div className="w-4/5 lg:w-36">
+            <label className="text-sm font_medium text-black">To Date</label>
+            <input
+              type="date"
+              name="endDate"
+              id="endDate"
+              className="h-10 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+              placeholder="End Date:"
+              value={endDate ? endDate : ""}
+              onChange={(e: any) => setEndDate(e.target.value)}
+              max={todaysDate}
+              min={startDate ? startDate : undefined}
+            />
+          </div>
+
+          <div className="w-4/5 lg:w-36">
+            <label className="text-sm font_medium text-black">Tables</label>
+            <div className="mt-2 lg:mt-0">
+              <div
+                className="h-10 bg-[#F8F8F8] block w-full flex justify-between items-center rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                onClick={() => {
+                  setOpenTablesOptions(!openTablesOptions);
+                }}
               >
-                <div
-                  className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
-                >
+                <p className={`text-xs lg:text-sm filter_text font_medium`}>
+                  {selectedTable ? selectedTable?.table : "All"}
+                </p>
+                {openTablesOptions ? (
+                  <TiArrowSortedUp color="#8E8E8E" size={20} />
+                ) : (
+                  <TiArrowSortedDown color="#8E8E8E" size={20} />
+                )}
+              </div>
+              {openTablesOptions && (
+                <ClickAwayListener onClickAway={() => handleClickAway("table")}>
                   <div
-                    className="flex items-center cursor-pointer mb-2"
-                    onClick={() => {
-                      setSelectedCategory("");
-                      setOpenCategoriesOptions(false);
-                    }}
+                    className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                   >
                     <div
-                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                        selectedCategory === ""
-                          ? "primary_bg_color"
-                          : "bg_gray_color"
-                      }`}
-                    />
-                    <p
-                      className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                      className="flex items-center cursor-pointer mb-2"
+                      onClick={() => {
+                        setSelectedTable("");
+                        setOpenTablesOptions(false);
+                      }}
                     >
-                      All
-                    </p>
-                  </div>
-                  {dinningMenuCategories?.length > 0 &&
-                    dinningMenuCategories?.map((s: any, i: number) => (
                       <div
-                        className="flex items-center cursor-pointer mb-2"
-                        key={i}
-                        onClick={() => {
-                          setSelectedCategory(s);
-                          setOpenCategoriesOptions(false);
-                        }}
+                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                          selectedTable === ""
+                            ? "primary_bg_color"
+                            : "bg_gray_color"
+                        }`}
+                      />
+                      <p
+                        className={`text-xs lg:text-sm secondary_gray_color text-black`}
                       >
+                        All
+                      </p>
+                    </div>
+                    {table?.length > 0 &&
+                      table?.map((s: any, i: number) => (
                         <div
-                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                            selectedCategory?.value === s?.value
-                              ? "primary_bg_color"
-                              : "bg_gray_color"
-                          }`}
-                        />
-                        <p
-                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                          className="flex items-center cursor-pointer mb-2"
+                          key={i}
+                          onClick={() => {
+                            setSelectedTable(s);
+                            setOpenTablesOptions(false);
+                          }}
                         >
-                          {s?.value}
-                        </p>
-                      </div>
-                    ))}
-                </div>
-              </ClickAwayListener>
-            )}
+                          <div
+                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                              selectedTable?.table === s?.table
+                                ? "primary_bg_color"
+                                : "bg_gray_color"
+                            }`}
+                          />
+                          <p
+                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                          >
+                            {s?.table}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                </ClickAwayListener>
+              )}
+            </div>
+          </div>
+          
+          <div className="w-4/5 lg:w-36">
+            <label className="text-sm font_medium text-black">Categories</label>
+            <div className="mt-2 lg:mt-0">
+              <div
+                className="h-10 bg-[#F8F8F8] block w-full flex justify-between items-center rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                onClick={() => {
+                  setOpenCategoriesOptions(!openCategoriesOptions);
+                }}
+              >
+                <p className={`text-xs lg:text-sm filter_text font_medium`}>
+                  {selectedCategory ? selectedCategory?.value : "All"}
+                </p>
+                {openCategoriesOptions ? (
+                  <TiArrowSortedUp color="#8E8E8E" size={20} />
+                ) : (
+                  <TiArrowSortedDown color="#8E8E8E" size={20} />
+                )}
+              </div>
+              {openCategoriesOptions && (
+                <ClickAwayListener
+                  onClickAway={() => handleClickAway("categories")}
+                >
+                  <div
+                    className={`absolute z-10 bg-white mb-2 w-full lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  >
+                    <div
+                      className="flex items-center cursor-pointer mb-2"
+                      onClick={() => {
+                        setSelectedCategory("");
+                        setOpenCategoriesOptions(false);
+                      }}
+                    >
+                      <div
+                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                          selectedCategory === ""
+                            ? "primary_bg_color"
+                            : "bg_gray_color"
+                        }`}
+                      />
+                      <p
+                        className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                      >
+                        All
+                      </p>
+                    </div>
+                    {dinningMenuCategories?.length > 0 &&
+                      dinningMenuCategories?.map((s: any, i: number) => (
+                        <div
+                          className="flex items-center cursor-pointer mb-2"
+                          key={i}
+                          onClick={() => {
+                            setSelectedCategory(s);
+                            setOpenCategoriesOptions(false);
+                          }}
+                        >
+                          <div
+                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                              selectedCategory?.value === s?.value
+                                ? "primary_bg_color"
+                                : "bg_gray_color"
+                            }`}
+                          />
+                          <p
+                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                          >
+                            {s?.value}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                </ClickAwayListener>
+              )}
+            </div>
+          </div>
+          
+          <div
+            className={`py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer ${endDate || startDate || selectedTable || selectedCategory ? 'text-white primary_bg_color' : 'text-black bg-[#EDECEC]'}`}
+            onClick={() => {
+              setEndDate("");
+              setStartDate("");
+              setSelectedTable("");
+              setSelectedCategory("");
+            }}
+          >
+            <p className="font_medium">Reset</p>
+                
           </div>
         </div>
-
+        
         <div
           className="py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
           onClick={() => {
