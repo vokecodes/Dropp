@@ -54,7 +54,7 @@ const WaiterDashboard = () => {
   useEffect(() => {
     socket.on("newRestaurantOrder", () => {
       getTableOrders(1);
-      setPlaySound(true);
+      receiveNotification();
     });
 
     return () => {
@@ -165,6 +165,16 @@ const WaiterDashboard = () => {
   const [soundNotification, setSoundNotification] = useState(false);
   const [playSound, setPlaySound] = useState(false);
 
+  // Function to simulate receiving a new notification
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    // Reset playSound after the sound plays for 5 seconds
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 5000); // 5 seconds
+  };
+
   const SoundNotification = ({ playSound }) => {
     const soundUrl = "/sounds/digital-clock-digital-alarm-buzzer.wav";
 
@@ -218,7 +228,7 @@ const WaiterDashboard = () => {
                   setSoundNotification(false);
                 } else {
                   setSoundNotification(true);
-                  setPlaySound(true);
+                  receiveNotification();
                 }
               }}
             >
