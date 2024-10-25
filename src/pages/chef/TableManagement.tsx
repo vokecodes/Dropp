@@ -34,18 +34,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+
 
 const TableManagement = () => {
   const dispatch = useAppDispatch();
@@ -102,7 +91,7 @@ const TableManagement = () => {
         } else {
           await dispatch(addSuperWaiter(values, closeSuperWaiterModal, resetForm));
         }
-        
+
         setEditSuperWaiter(null);
       }
     },
@@ -206,10 +195,10 @@ const TableManagement = () => {
                                 <div className="flex flex-row items-center justify-between">
                                   <div className="flex-1 ">
                                     <p className="text-xl text-black font_medium">
-                                      {table?.table}
+                                      {table?.employeeAssigned}
                                     </p>
                                     <p className="text-md primary_txt_color font_medium ">
-                                      {table?.employeeAssigned}
+                                      {table?.employeeID}
                                     </p>
                                   </div>
                                   <Chip label="Details" size="small" />
