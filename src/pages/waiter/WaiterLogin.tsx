@@ -5,9 +5,9 @@ import { shallowEqual, useSelector } from "react-redux";
 import Auth from "../../components/Auth";
 import TopNav from "../../components/TopNav";
 import { AUTH_ROUTES } from "../../routes/routes";
-import { WaiterLoginValues } from "../../utils/FormInitialValue";
+import { SuperWaiterLoginValues, WaiterLoginValues } from "../../utils/FormInitialValue";
 import { USER_TYPE } from "../../utils/Globals";
-import { LoginSchema, WaiterLoginSchema } from "../../utils/ValidationSchema";
+import { LoginSchema, SuperWaiterLoginSchema, WaiterLoginSchema } from "../../utils/ValidationSchema";
 import { CHEF_LOGIN_URL, RESTAURANT_TABLE_URL } from "../../_redux/urls";
 import { useAppDispatch } from "../../redux/hooks";
 import { RootState } from "../../store";
@@ -15,7 +15,7 @@ import TrackGoogleAnalyticsEvent from "../../components/TrackGoogleAnalyticsEven
 import Input from "../../components/CustomInput";
 import Button from "../../components/Button";
 import { SERVER } from "../../config/axios";
-import { loginWaiter } from "../../_redux/waiter/waiterSlice";
+import { loginSuperWaiter, loginWaiter } from "../../_redux/waiter/waiterSlice";
 
 const WaiterLogin = () => {
   const dispatch = useAppDispatch();
@@ -25,9 +25,20 @@ const WaiterLogin = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [togglePassword, setTogglePassword] = useState("password");
 
+  const [superWaiter, setSuperWaiter] = useState(false);
+
   const formInputs = [
     { type: "text", placeholder: "Employee ID", name: "employeeID" },
     { type: "text", placeholder: "Table", name: "table" },
+    {
+      type: "password",
+      placeholder: "Password",
+      name: "password",
+    },
+  ];
+  
+  const superWaiterFormInputs = [
+    { type: "text", placeholder: "Employee ID", name: "employeeID" },
     {
       type: "password",
       placeholder: "Password",
@@ -53,15 +64,27 @@ const WaiterLogin = () => {
     isSubmitting,
     setSubmitting,
   } = useFormik({
-    initialValues: WaiterLoginValues,
-    validationSchema: WaiterLoginSchema,
+    initialValues: superWaiter ? SuperWaiterLoginValues : WaiterLoginValues,
+    validationSchema: superWaiter ? SuperWaiterLoginSchema : WaiterLoginSchema,
     onSubmit: () => {
-      SERVER.post(`${RESTAURANT_TABLE_URL}/login`, { ...values })
-        .then(({ data }) => {
-          dispatch(loginWaiter({ ...data?.data, userType: "waiter" }));
-        })
-        .catch((error) => {})
-        .finally(() => setSubmitting(false));
+      if(superWaiter){
+        SERVER.post(`${RESTAURANT_TABLE_URL}/super-login`, { ...values })
+          .then(({ data }) => {
+            dispatch(loginSuperWaiter({ ...data?.data, userType: "superWaiter" }));
+          })
+          .catch((error) => {})
+          .finally(() => {
+            setSubmitting(false)
+            navigate("/waiter/super-waiter")
+          });
+      }else{
+        SERVER.post(`${RESTAURANT_TABLE_URL}/login`, { ...values })
+          .then(({ data }) => {
+            dispatch(loginWaiter({ ...data?.data, userType: "waiter" }));
+          })
+          .catch((error) => {})
+          .finally(() => setSubmitting(false));
+      }
 
       // TrackGoogleAnalyticsEvent(
       //   "LOGIN",
@@ -116,38 +139,84 @@ const WaiterLogin = () => {
                   </h5>
                 </div>
 
-                <div className="mt-10 mb-5 w-full">
-                  {formInputs?.map((input: any, i) => (
-                    <Input
-                      key={i}
-                      type={
-                        input?.type === "password"
-                          ? togglePassword
-                          : input?.type
-                      }
-                      password={input?.type === "password"}
-                      placeholder={input?.placeholder}
-                      name={input?.name}
-                      value={values[input.name as keyof typeof values]}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      options={input?.options}
-                      selectPlaceholder={input?.selectPlaceholder}
-                      error={
-                        errors[input?.name as keyof typeof values] &&
-                        touched[input?.name as keyof typeof values] &&
-                        errors[input?.name as keyof typeof values]
-                      }
-                      onClickPassword={() => {
-                        const localValue = togglePassword;
-                        if (localValue === "password") {
-                          setTogglePassword("text");
-                        } else {
-                          setTogglePassword("password");
-                        }
-                      }}
-                    />
-                  ))}
+                <div className="w-full my-3">
+                  <div className="w-fit h-fit flex flex-row items-center rounded-full bg-[#EDECEC] font_medium lg:space-x-3 text-nowrap">
+                    <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? '' : 'primary_bg_color text-white'}`} onClick={() => setSuperWaiter(false)}>Regular waiter</span>
+
+                    <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? 'primary_bg_color text-white' : ''}`} onClick={() => setSuperWaiter(true)}>Super waiter</span>
+                  </div>
+                </div>
+
+                <div className="mt-5 mb-5 w-full">
+                  {superWaiter ? (
+                    <>
+                      {superWaiterFormInputs?.map((input: any, i) => (
+                        <Input
+                          key={i}
+                          type={
+                            input?.type === "password"
+                              ? togglePassword
+                              : input?.type
+                          }
+                          password={input?.type === "password"}
+                          placeholder={input?.placeholder}
+                          name={input?.name}
+                          value={values[input.name as keyof typeof values]}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          options={input?.options}
+                          selectPlaceholder={input?.selectPlaceholder}
+                          error={
+                            errors[input?.name as keyof typeof values] &&
+                            touched[input?.name as keyof typeof values] &&
+                            errors[input?.name as keyof typeof values]
+                          }
+                          onClickPassword={() => {
+                            const localValue = togglePassword;
+                            if (localValue === "password") {
+                              setTogglePassword("text");
+                            } else {
+                              setTogglePassword("password");
+                            }
+                          }}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {formInputs?.map((input: any, i) => (
+                        <Input
+                          key={i}
+                          type={
+                            input?.type === "password"
+                              ? togglePassword
+                              : input?.type
+                          }
+                          password={input?.type === "password"}
+                          placeholder={input?.placeholder}
+                          name={input?.name}
+                          value={values[input.name as keyof typeof values]}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          options={input?.options}
+                          selectPlaceholder={input?.selectPlaceholder}
+                          error={
+                            errors[input?.name as keyof typeof values] &&
+                            touched[input?.name as keyof typeof values] &&
+                            errors[input?.name as keyof typeof values]
+                          }
+                          onClickPassword={() => {
+                            const localValue = togglePassword;
+                            if (localValue === "password") {
+                              setTogglePassword("text");
+                            } else {
+                              setTogglePassword("password");
+                            }
+                          }}
+                        />
+                      ))}
+                    </>
+                  )}
 
                   {errorMessage && (
                     <p className="text-sm text-center text-red-600 my-2">

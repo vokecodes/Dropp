@@ -63,6 +63,7 @@ export type InputProps = {
   selectPlaceholder?: string;
   container?: string;
   touched?: any;
+  multipleSelect?: boolean;
 };
 
 export type TextAreaProps = {
