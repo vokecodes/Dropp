@@ -102,6 +102,7 @@ const TableManagement = () => {
         } else {
           await dispatch(addSuperWaiter(values, closeSuperWaiterModal, resetForm));
         }
+        
         setEditSuperWaiter(null);
       }
     },
