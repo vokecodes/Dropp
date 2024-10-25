@@ -30,7 +30,7 @@ const Input = ({
       {type !== "dropdown" && (
         <input
           type={type}
-          value={value}
+          value={value ? value : ""}
           name={name}
           onChange={onChange}
           onBlur={onBlur}

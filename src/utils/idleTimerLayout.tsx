@@ -10,7 +10,7 @@ import useIdleTimeout from "../utils/useIdleTimeout";
 import { useAppDispatch } from "../redux/hooks";
 import { logOutUserAccount } from "../_redux/auth/authAction";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 
 const IdleTimerLayout = ({ children }) => {
@@ -23,6 +23,7 @@ const IdleTimerLayout = ({ children }) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [open, setOpen] = useState(false);
 
@@ -40,8 +41,11 @@ const IdleTimerLayout = ({ children }) => {
     stay();
   };
 
+  
   const handleIdle = () => {
-    if (user) {
+    const isProtectedPage = ['/waiter', '/waiter/super-waiter', '/kitchen'].includes(location.pathname);
+
+    if (user && !isProtectedPage) {
       handleClickOpen();
     }
   };
