@@ -104,12 +104,14 @@ const SuperWaiterDashboard = () => {
     getRestaurantOrders(page);
   }, []);
 
+  console.log('superWaiter= ', superWaiter)
+  console.log('table= ', table)
   
 
   useEffect(() => {
     const tableOrderMap = {};
 
-    table && table?.length > 0 && table.filter(table => table.userType === 'waiter').map((item, i) => {
+    table && superWaiter && table?.length > 0 && table.filter(table => table.userType === 'waiter' && superWaiter.subTables.includes(table._id) ).map((item, i) => {
       tableOrderMap[item?.table] = {
         "New order": [],
         Kitchen: [],
@@ -119,13 +121,15 @@ const SuperWaiterDashboard = () => {
       }
     })
 
+    console.log('tableOrderMap= ', tableOrderMap)
+
     restaurantOrders &&
       restaurantOrders?.length > 0 && restaurantOrders.forEach(order => {
         const tableNumber = order?.table?.table;
         const orderArray = order?.order;
         const orderStatus = order?.status;
 
-        if(!tableNumber){
+        if(!tableNumber || !superWaiter.subTables.includes(order?.table._id)){
           return;
         }
 
@@ -242,7 +246,7 @@ const SuperWaiterDashboard = () => {
                 {Object.keys(tablesMap).map((cat: any, i: number) => (
                   <div
                     key={i}
-                    className={`flex flex-row justify-between bg-white items-center w-fit h-fit py-2 px-4 my-1 gap-x-1 rounded-full shrink-0 cursor-pointer ${
+                    className={`flex flex-row justify-between items-center w-fit h-fit py-2 px-4 my-1 gap-x-1 rounded-full shrink-0 cursor-pointer ${
                       selectedTable === cat
                         ? "bg-[#888888] text-white"
                         : "bg_sec_gray_color text-gray-600"
