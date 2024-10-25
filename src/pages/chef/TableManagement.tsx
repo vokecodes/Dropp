@@ -28,6 +28,13 @@ import { CHEF_ROUTES } from "../../routes/routes";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { getSections } from "../../_redux/section/sectionAction";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+
 
 const TableManagement = () => {
   const dispatch = useAppDispatch();
@@ -58,6 +65,7 @@ const TableManagement = () => {
     handleSubmit,
     values,
     setValues,
+    setFieldValue,
     resetForm,
     errors,
     touched,
@@ -75,7 +83,7 @@ const TableManagement = () => {
         }
         setEditTable(null);
       }else{
-        console.log('values= ', values);
+        // console.log('values= ', values);
         if (editSuperWaiter) {
           await dispatch(
             updateSuperWaiter(values, editSuperWaiter?._id, closeSuperWaiterModal, resetForm)
@@ -83,6 +91,7 @@ const TableManagement = () => {
         } else {
           await dispatch(addSuperWaiter(values, closeSuperWaiterModal, resetForm));
         }
+
         setEditSuperWaiter(null);
       }
     },
@@ -115,9 +124,21 @@ const TableManagement = () => {
   const closeSuperWaiterModal = () => {
     setSuperWaiterModal(false);
     resetForm()
+    setPersonName()
   }
 
-  console.log('tables= ', table)
+  const [personName, setPersonName] = useState<string[]>([]);
+
+  const handleChangeTables = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      typeof value === 'string' ? value.split(',') : value,
+    );
+    setFieldValue('subTables', typeof value === 'string' ? value.split(',') : value)
+  };
+
 
   return (
     <>
@@ -141,7 +162,6 @@ const TableManagement = () => {
                     setSuperWaiter(true);
                     openSuperWaiterModal();
                     setEditSuperWaiter(null);
-                    setSuperWaiterValues(WaiterTableValues);
                   }}
                 />
                 
@@ -175,10 +195,10 @@ const TableManagement = () => {
                                 <div className="flex flex-row items-center justify-between">
                                   <div className="flex-1 ">
                                     <p className="text-xl text-black font_medium">
-                                      {table?.table}
+                                      {table?.employeeAssigned}
                                     </p>
                                     <p className="text-md primary_txt_color font_medium ">
-                                      {table?.employeeAssigned}
+                                      {table?.employeeID}
                                     </p>
                                   </div>
                                   <Chip label="Details" size="small" />
@@ -191,6 +211,7 @@ const TableManagement = () => {
                                       openSuperWaiterModal();
                                       setEditSuperWaiter(table);
                                       setValues(table);
+                                      setPersonName(table.subTables)
                                     }}
                                   />
                                   <OutlineButton
@@ -449,8 +470,31 @@ const TableManagement = () => {
                         errors.section && touched.section && errors.section
                       }
                     />
+
+                    <FormControl sx={{ m: 1, width: '100%' }}>
+                      <InputLabel id="demo-multiple-name-label">Tables</InputLabel>
+                      <Select
+                        labelId="demo-multiple-name-label"
+                        id="demo-multiple-name"
+                        multiple
+                        value={personName}
+                        onChange={handleChangeTables}
+                        input={<OutlinedInput label="Tables" />}
+                        name="subTables"
+                      >
+                        {table?.length > 0
+                          ? table?.map((name) => (
+                          <MenuItem
+                            key={name._id}
+                            value={name._id}
+                          >
+                            {name.table}
+                          </MenuItem>
+                        )) : [] }
+                      </Select>
+                    </FormControl>
                     
-                    <Input
+                    {/* <Input
                       type="dropdown"
                       placeholder="Tables"
                       name="subTables"
@@ -468,7 +512,7 @@ const TableManagement = () => {
                       error={
                         errors.subTables && touched.subTables && errors.subTables
                       }
-                    />
+                    /> */}
 
                     <Input
                       type="text"

@@ -109,30 +109,30 @@ const WaiterLogin = () => {
 
           <div
             className="absolute top-0 bottom-0 left-0 right-0"
-            style={{ backgroundColor: "rgb(255 235 237 / 88%)" }}
+            style={{ backgroundColor: "#F2FFF1" }}
           >
             <div className="relative flex flex-col items-center justify-center gap-y-2 md:gap-y-5 h-full w-full">
               <div className="w-1/3 md:w-1/6 h-auto">
                 <img
-                  src="/img/pappies.png"
+                  src="/images/logo.svg"
                   alt="logo"
                   className="object-cover w-full h-auto"
                 />
               </div>
 
-              <p className="card_headerText font_bold text-2xl md:text-4xl w-3/5 font-extrabold text-center">
+              {/* <p className="card_headerText font_bold text-2xl md:text-4xl w-3/5 font-extrabold text-center">
                 Welcome to Papiee's&nbsp;Meatro
-              </p>
+              </p> */}
 
               <div
-                className="h-fit mb-20 w-5/6 lg:w-2/5 rounded-2xl bg-white p-5 bg-cover md:bg-contain lg:bg-cover xl:bg-contain"
+                className="h-fit lg:mb-20 w-5/6 lg:w-2/5 rounded-2xl bg-white p-5 bg-cover md:bg-contain lg:bg-cover xl:bg-contain"
                 style={{
                   backgroundImage: "url('/img/waiter-bg.png')",
                   backgroundRepeat: "no-repeat",
                   backgroundPositionX: "right",
                 }}
               >
-                <div className="text-start spacing-y-2">
+                <div className="text-start lg:text-center spacing-y-2">
                   <h2 className="text-2xl text-black font_bold">Staff login</h2>
                   <h5 className="font_regular text-xs font-semibold">
                     Enter your login details to continue
@@ -140,7 +140,7 @@ const WaiterLogin = () => {
                 </div>
 
                 <div className="w-full my-3">
-                  <div className="w-fit h-fit flex flex-row items-center rounded-full bg-[#EDECEC] font_medium lg:space-x-3 text-nowrap">
+                  <div className="w-fit h-fit mx-auto flex flex-row items-center rounded-full bg-[#EDECEC] font_medium lg:space-x-3 text-nowrap">
                     <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? '' : 'primary_bg_color text-white'}`} onClick={() => setSuperWaiter(false)}>Regular waiter</span>
 
                     <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? 'primary_bg_color text-white' : ''}`} onClick={() => setSuperWaiter(true)}>Super waiter</span>
@@ -232,7 +232,7 @@ const WaiterLogin = () => {
                 </div>
               </div>
 
-              <div
+              {/* <div
                 className="absolute bottom-0 left-0 right-0 flex flex-row items-center justify-between px-3 py-4 h-fit bg-repeat"
                 style={{ backgroundImage: "url('/img/waiter-footer-bg.png')" }}
               >
@@ -243,7 +243,7 @@ const WaiterLogin = () => {
                     Tryhomemade.app
                   </button>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
