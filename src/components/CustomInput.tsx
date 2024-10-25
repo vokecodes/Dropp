@@ -22,8 +22,8 @@ const Input = ({
   selectPlaceholder,
   container,
   touched,
+  multipleSelect,
 }: InputProps) => {
-  console.log("InputProps", touched);
 
   return (
     <div className={`relative my-5 ${container}`}>
@@ -47,9 +47,10 @@ const Input = ({
           onChange={onChange}
           name={name}
           value={value}
+          multiple={multipleSelect}
         >
           <option value="select">
-            Select a category
+            Select {multipleSelect ? 'tables' : 'a category'}
           </option>
           {options &&
             options?.length > 0 &&

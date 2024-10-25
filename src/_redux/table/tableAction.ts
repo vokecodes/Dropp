@@ -7,11 +7,15 @@ import {
   addSubChefRestaurantTable,
   updateSubChefRestaurantTable,
   deleteSubChefRestaurantTable,
+  addRestaurantSuperWaiter,
+  updateRestaurantSuperWaiter,
+  deleteRestaurantSuperWaiter,
 } from "./tableCrud";
 import {
   startCall,
   catchError,
   getAddUpdateRestaurantTable,
+  getAddUpdateSuperWaiter,
 } from "./tableSlice";
 
 export const getTables = () => (dispatch: any) => {
@@ -63,6 +67,52 @@ export const updateTables =
 export const deleteTables = (menuId: string) => (dispatch: any) => {
   dispatch(startCall());
   return deleteRestaurantTable(menuId)
+    .then(({ data }) => {
+      dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
+      dispatch(getTables());
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+      dispatch(catchError({ error: error?.message }));
+    });
+};
+
+export const addSuperWaiter =
+  (data: any, closeSuperWaiterModal: any, resetForm?: any) => (dispatch: any) => {
+    dispatch(startCall());
+    return addRestaurantSuperWaiter(data)
+      .then(({ data }) => {
+        dispatch(getAddUpdateSuperWaiter(data?.restaurantTable));
+        resetForm();
+        closeSuperWaiterModal();
+        dispatch(getTables());
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
+export const updateSuperWaiter =
+  (data: any, menuId: string, closeSuperWaiterModal: any, resetForm?: any) =>
+  (dispatch: any) => {
+    dispatch(startCall());
+    return updateRestaurantSuperWaiter(data, menuId)
+      .then(({ data }) => {
+        dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
+        resetForm();
+        closeSuperWaiterModal();
+        dispatch(getTables());
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
+export const deleteSuperWaiter = (menuId: string) => (dispatch: any) => {
+  dispatch(startCall());
+  return deleteRestaurantSuperWaiter(menuId)
     .then(({ data }) => {
       dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
       dispatch(getTables());

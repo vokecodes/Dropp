@@ -74,6 +74,8 @@ const ChefDineIn = () => {
     setRefundModal(false);
   };
 
+  console.log('restaurantOrders= ', restaurantOrders)
+
   return (
     <>
       <ChefDashboardLayout>
