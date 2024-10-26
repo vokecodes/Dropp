@@ -41,9 +41,9 @@ const IdleTimerLayout = ({ children }) => {
     stay();
   };
 
+  const isProtectedPage = ['/waiter', '/waiter/super-waiter', '/chef/kitchen'].includes(location.pathname);
   
   const handleIdle = () => {
-    const isProtectedPage = ['/waiter', '/waiter/super-waiter', '/kitchen'].includes(location.pathname);
 
     if (user && !isProtectedPage) {
       handleClickOpen();
@@ -53,7 +53,7 @@ const IdleTimerLayout = ({ children }) => {
   const { idleTimer } = useIdleTimeout({
     onIdle: handleIdle,
     idleTime: 1800,
-    logoutHandler: handleLogout,
+    logoutHandler: !isProtectedPage ? handleLogout : () => {}
   });
 
   const stay = () => {
