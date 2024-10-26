@@ -11,7 +11,7 @@ import { SuperWaiterTableValues, WaiterTableValues } from "../../utils/FormIniti
 import { useFormik } from "formik";
 import { useAppDispatch } from "../../redux/hooks";
 import { SuperWaiterTableInputsSchema, WaiterTableInputsSchema } from "../../utils/ValidationSchema";
-import { Chip } from "@mui/material";
+import { Chip, ListItemText } from "@mui/material";
 import EmptyState from "../../components/EmptyState";
 import { FaAngleLeft } from "react-icons/fa";
 import OutlineButton from "../../components/OutlineButton";
@@ -33,7 +33,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
+import Checkbox from '@mui/material/Checkbox';
 
 
 const TableManagement = () => {
@@ -162,6 +162,7 @@ const TableManagement = () => {
                     setSuperWaiter(true);
                     openSuperWaiterModal();
                     setEditSuperWaiter(null);
+                    setValues(SuperWaiterTableValues)
                   }}
                 />
                 
@@ -169,6 +170,7 @@ const TableManagement = () => {
                   title="Create a new table"
                   extraClasses="w-fit p-3 rounded-full"
                   onClick={() => {
+                    setSuperWaiter(false);
                     openOrdersModal();
                     setEditTable(null);
                     setValues(WaiterTableValues);
@@ -219,7 +221,6 @@ const TableManagement = () => {
                                     extraClasses="w-full my-2 rounded-full"
                                     loading={selectedLoading === table?._id}
                                     onClick={() => {
-                                      console.log('table id= ', table?._id)
                                       deleteSuper(table?._id);
                                     }}
                                   />
@@ -371,7 +372,7 @@ const TableManagement = () => {
 
                     <Input
                       type="text"
-                      placeholder="Whatasapp Number"
+                      placeholder="Whatasapp Number (Optional)"
                       name="whatasappNumber"
                       container="w-full"
                       onChange={handleChange}
@@ -436,7 +437,7 @@ const TableManagement = () => {
                 >
                   <div className="flex flex-row w-full py-1 ">
                     <p className="w-10/12 text-center font_medium font-bold text-xl">
-                      {editSuperWaiter ? "Edit Super waiter" : "Super waiter"}
+                      Super waiter
                     </p>
                     <div className="w-2/12 flex flex-row items-center justify-center">
                       <IoMdClose
@@ -477,43 +478,29 @@ const TableManagement = () => {
                         labelId="demo-multiple-name-label"
                         id="demo-multiple-name"
                         multiple
-                        value={personName}
+                        value={personName ? personName : []}
                         onChange={handleChangeTables}
                         input={<OutlinedInput label="Tables" />}
+                        renderValue={(selected) => {
+                          const newSelected = table?.filter(item => selected.includes(item?._id)).map(item =>  item?.table)
+                          
+                          return newSelected.join(', ')
+                        }}
                         name="subTables"
                       >
                         {table?.length > 0
-                          ? table?.map((name) => (
+                          ? table?.filter((table) => !!table?.table).map((name) => (
                           <MenuItem
                             key={name._id}
                             value={name._id}
                           >
-                            {name.table}
+                            <Checkbox checked={personName?.includes(name._id)} />
+                            <ListItemText primary={name.table} />
                           </MenuItem>
                         )) : [] }
                       </Select>
                     </FormControl>
                     
-                    {/* <Input
-                      type="dropdown"
-                      placeholder="Tables"
-                      name="subTables"
-                      container="w-full"
-                      onChange={handleChange}
-                      value={values.subTables}
-                      multipleSelect={true}
-                      options={
-                        table?.length > 0
-                          ? table?.map((s) => {
-                              return { label: s.table, value: s._id };
-                            })
-                          : []
-                      }
-                      error={
-                        errors.subTables && touched.subTables && errors.subTables
-                      }
-                    /> */}
-
                     <Input
                       type="text"
                       placeholder="Employee assigned"
@@ -544,7 +531,7 @@ const TableManagement = () => {
 
                     <Input
                       type="text"
-                      placeholder="Whatasapp Number"
+                      placeholder="Whatasapp Number (Optional)"
                       name="whatsappNumber"
                       container="w-full"
                       onChange={handleChange}

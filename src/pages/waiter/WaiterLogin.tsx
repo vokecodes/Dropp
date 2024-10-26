@@ -141,9 +141,9 @@ const WaiterLogin = () => {
 
                 <div className="w-full my-3">
                   <div className="w-fit h-fit mx-auto flex flex-row items-center rounded-full bg-[#EDECEC] font_medium lg:space-x-3 text-nowrap">
-                    <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? '' : 'primary_bg_color text-white'}`} onClick={() => setSuperWaiter(false)}>Regular waiter</span>
+                    <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? '' : 'primary_bg_color text-white'}`} onClick={() => setSuperWaiter(false)}>Regular Waiter</span>
 
-                    <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? 'primary_bg_color text-white' : ''}`} onClick={() => setSuperWaiter(true)}>Super waiter</span>
+                    <span className={`inline-block px-2 lg:px-3 py-2 rounded-full cursor-pointer ${superWaiter ? 'primary_bg_color text-white' : ''}`} onClick={() => setSuperWaiter(true)}>Super Waiter</span>
                   </div>
                 </div>
 

@@ -13,11 +13,11 @@ import { getTables } from "../../_redux/table/tableAction";
 import { useAppDispatch } from "../../redux/hooks";
 import { ClickAwayListener } from "@mui/material";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-// import io from "socket.io-client";
+import io from "socket.io-client";
 
-// const socket = io(import.meta.env.VITE_BASE_API_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_API_URL, {
+  withCredentials: true,
+});
 
 
 
@@ -59,15 +59,15 @@ const SuperWaiterDashboard = () => {
   };
 
   // Listen for new orders from the server
-  // useEffect(() => {
-  //   socket.on("newRestaurantOrder", () => {
-  //     getTableOrders(1);
-  //   });
+  useEffect(() => {
+    socket.on("newRestaurantOrder", () => {
+      getRestaurantOrders(1);
+    });
 
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
 
   const CATEGORIES = [
     { label: "New order", value: "pending" },
@@ -104,8 +104,6 @@ const SuperWaiterDashboard = () => {
     getRestaurantOrders(page);
   }, []);
 
-  console.log('superWaiter= ', superWaiter)
-  console.log('table= ', table)
   
 
   useEffect(() => {
@@ -120,8 +118,6 @@ const SuperWaiterDashboard = () => {
         Completed: [],
       }
     })
-
-    console.log('tableOrderMap= ', tableOrderMap)
 
     restaurantOrders &&
       restaurantOrders?.length > 0 && restaurantOrders.forEach(order => {
@@ -169,7 +165,7 @@ const SuperWaiterDashboard = () => {
     });
 
     setTablesMap(tableOrderMap)
-    setSelectedTable(Object.keys(tableOrderMap)[0])
+    !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0])
   }, [restaurantOrders, table])
 
 
