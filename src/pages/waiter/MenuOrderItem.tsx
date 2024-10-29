@@ -1,5 +1,5 @@
 import { IoIosArrowDropdown, IoMdClose } from "react-icons/io";
-import { formatPrice } from "../../utils/formatMethods";
+import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
 import { useState } from "react";
@@ -18,6 +18,7 @@ const MenuOrderItem = ({
   openOrdersModal,
   closeOrdersModal,
   getTableOrders,
+  selectedCategory
 }: any) => {
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -64,6 +65,8 @@ const MenuOrderItem = ({
     </div>
   );
 
+  // console.log('menu order=', selectedCategory, order)
+
   return (
     <>
       <div
@@ -76,12 +79,10 @@ const MenuOrderItem = ({
               {order.name} #{order?.id?.substring(order?.id?.length - 5)}
             </p>
             <p className="flex-1 text-sm text-start font_regular black2 font-semibold">
-              {selectedOrder?.email}
+              {order?.email}
             </p>
             <p className="text-sm text-start font_regular black2 font-semibold">
-              {moment(
-                selectedOrder?.updatedAt || selectedOrder?.createdAt
-              ).format("DD MMM, YYYY hh:mm a")}
+              {dateFormatter.format(new Date(order?.updatedAt))}
             </p>
           </div>
           {/* <IoIosArrowDropdown size={22} color={"#000000"} /> */}
@@ -157,7 +158,7 @@ const MenuOrderItem = ({
           </div>
         )}
       </div>
-      ~{/* ORDER PLACED */}
+      {/* ORDER PLACED */}
       {/* <Modal
         open={ordersModal}
         onClose={closeOrdersModal}

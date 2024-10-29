@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import useIdleTimeout from "../utils/useIdleTimeout";
+import useIdleTimeout from "./useIdleTimeout";
 import { useAppDispatch } from "../redux/hooks";
 import { logOutUserAccount } from "../_redux/auth/authAction";
 import { useState } from "react";
