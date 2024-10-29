@@ -476,6 +476,9 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
+  console.log('restaurantOrders= ', restaurantOrders)
+  console.log('filteredRestaurantOrders= ', filteredRestaurantOrders)
+
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -573,7 +576,7 @@ const Kitchen = () => {
                       </p>
                     </div>
                     {table?.length > 0 &&
-                      table?.map((s: any, i: number) => (
+                      table?.filter(item => !!item?.table).map((s: any, i: number) => (
                         <div
                           className="flex items-center cursor-pointer mb-2"
                           key={i}

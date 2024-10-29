@@ -140,7 +140,7 @@ export const WaiterTableInputsSchema = Yup.object().shape({
 });
 
 export const SuperWaiterTableInputsSchema = Yup.object().shape({
-  section: Yup.string().required("Section is required."),
+  section: Yup.array(Yup.string()).required("Section is required."),
   subTables: Yup.array(Yup.string()).required("Table is required."),
   employeeAssigned: Yup.string().required("Employee name is required."),
   employeeID: Yup.string().required("Employee ID is required."),

@@ -83,7 +83,7 @@ const TableManagement = () => {
         }
         setEditTable(null);
       }else{
-        // console.log('values= ', values);
+        console.log('values= ', values);
         if (editSuperWaiter) {
           await dispatch(
             updateSuperWaiter(values, editSuperWaiter?._id, closeSuperWaiterModal, resetForm)
@@ -138,6 +138,20 @@ const TableManagement = () => {
     );
     setFieldValue('subTables', typeof value === 'string' ? value.split(',') : value)
   };
+  
+  const [selectedSection, setSelectedSection] = useState<string[]>([]);
+
+  const handleChangeSections = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedSection(
+      typeof value === 'string' ? value.split(',') : value,
+    );
+    setFieldValue('section', typeof value === 'string' ? value.split(',') : value)
+  };
+
+  console.log('section= ', section)
 
 
   return (
@@ -214,6 +228,7 @@ const TableManagement = () => {
                                       setEditSuperWaiter(table);
                                       setValues(table);
                                       setPersonName(table.subTables)
+                                      setSelectedSection(table.section)
                                     }}
                                   />
                                   <OutlineButton
@@ -453,7 +468,7 @@ const TableManagement = () => {
                     className="flex flex-col justify-start items-center h-full w-full mb-5"
                     style={{ minHeight: "80%" }}
                   >
-                    <Input
+                    {/* <Input
                       type="dropdown"
                       placeholder="Section"
                       name="section"
@@ -470,8 +485,37 @@ const TableManagement = () => {
                       error={
                         errors.section && touched.section && errors.section
                       }
-                    />
+                    /> */}
 
+                    <FormControl sx={{ m: 1, width: '100%' }}>
+                      <InputLabel id="demo-multiple-name-label">Section</InputLabel>
+                      <Select
+                        labelId="demo-multiple-name-label"
+                        id="demo-multiple-name"
+                        multiple
+                        value={selectedSection ? selectedSection : []}
+                        onChange={handleChangeSections}
+                        input={<OutlinedInput label="Section" />}
+                        renderValue={(selected) => {
+                          const newSelected = section?.filter(item => selected.includes(item?._id)).map(item =>  item?.name)
+                          
+                          return newSelected.join(', ')
+                        }}
+                        name="section"
+                      >
+                        {section?.length > 0
+                          ? section?.map((name) => (
+                          <MenuItem
+                            key={name._id}
+                            value={name._id}
+                          >
+                            <Checkbox checked={selectedSection?.includes(name._id)} />
+                            <ListItemText primary={name.name} />
+                          </MenuItem>
+                        )) : [] }
+                      </Select>
+                    </FormControl>
+                    
                     <FormControl sx={{ m: 1, width: '100%' }}>
                       <InputLabel id="demo-multiple-name-label">Tables</InputLabel>
                       <Select

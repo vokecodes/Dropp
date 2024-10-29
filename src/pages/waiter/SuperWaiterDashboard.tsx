@@ -4,7 +4,7 @@ import { useSelector, shallowEqual } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import OrderItem from "./OrderItem";
 import { SERVER } from "../../config/axios";
-import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
+import { RESTAURANT_ORDER_URL, RESTAURANT_TABLE_URL } from "../../_redux/urls";
 import MenuOrderItem from "./MenuOrderItem";
 import WaiterLogoutButton from "../../components/WaiterLogoutButton";
 import Button from "../../components/Button";
@@ -22,10 +22,9 @@ const socket = io(import.meta.env.VITE_BASE_API_URL, {
 
 
 const SuperWaiterDashboard = () => {
-  const { superWaiter, table } = useSelector(
+  const { superWaiter } = useSelector(
     (state: any) => ({
       superWaiter: state.waiter.superWaiter,
-      table: state.table.table,
     }),
     shallowEqual
   );
@@ -33,6 +32,7 @@ const SuperWaiterDashboard = () => {
   const dispatch = useAppDispatch();
 
   const [restaurantOrders, setRestaurantOrders] = useState([]);
+  const [table, setTable] = useState([]);
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
 
@@ -54,6 +54,17 @@ const SuperWaiterDashboard = () => {
           data.pagination.totalPages > 0 &&
             data.pagination.currentPage !== data.pagination.totalPages
         );
+      })
+      .catch((err) => {});
+  };
+  
+  const getRestaurantTables = async () => {
+    SERVER.get(
+      `${RESTAURANT_TABLE_URL}/super-tables/${superWaiter?.restaurant}`
+    )
+      .then(({ data }) => {
+        console.log('tables= ', data?.data)
+        setTable(data?.data);
       })
       .catch((err) => {});
   };
@@ -100,7 +111,7 @@ const SuperWaiterDashboard = () => {
   const handleClickAway = () => setOpenTableLinks(false);
 
   useEffect(() => {
-    dispatch(getTables());
+    getRestaurantTables();
     getRestaurantOrders(page);
   }, []);
 
@@ -119,7 +130,7 @@ const SuperWaiterDashboard = () => {
       }
     })
 
-    restaurantOrders &&
+    table && superWaiter && restaurantOrders &&
       restaurantOrders?.length > 0 && restaurantOrders.forEach(order => {
         const tableNumber = order?.table?.table;
         const orderArray = order?.order;
@@ -234,7 +245,7 @@ const SuperWaiterDashboard = () => {
         <div className="w-full h-fit py-1">
           {/* TABLES */}
           <div className="w-full h-fit py-1">
-            {table.length > 0 && (
+            {table?.length > 0 && (
               <div
                 className="flex flex-row h-fit w-full px-2 pb-1 rounded my-1 gap-x-3 overflow-x-scroll reduce-scrollbar"
                 style={{ maxHeight: "250px" }}

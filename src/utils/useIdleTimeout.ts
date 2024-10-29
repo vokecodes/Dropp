@@ -13,7 +13,7 @@ const useIdleTimeout = ({ onIdle, idleTime = 1, logoutHandler }) => {
     }
     const idleTimer = useIdleTimer({
         timeout: idleTimeout,
-        promptBeforeIdle: idleTimeout / 6,
+        promptBeforeIdle: 1000 * 60 * 5,
         onPrompt: onIdle,
         onIdle: handleIdle,
         debounce: 500

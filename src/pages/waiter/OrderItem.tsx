@@ -1,5 +1,5 @@
 import { IoIosArrowDropdown, IoMdClose } from "react-icons/io";
-import { formatPrice } from "../../utils/formatMethods";
+import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
 import { useState } from "react";
@@ -66,9 +66,7 @@ const OrderItem = ({
               {order?.email}
             </p>
             <p className="text-sm text-start font_regular black2 font-semibold">
-              {moment(order?.updatedAt || order?.createdAt).format(
-                "DD MMM, YYYY hh:mm a"
-              )}
+              {dateFormatter.format(new Date(order?.updatedAt))}
             </p>
           </div>
           {/* <IoIosArrowDropdown size={22} color={"#000000"} /> */}

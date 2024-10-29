@@ -101,7 +101,7 @@ export const WaiterTableValues = {
 };
 
 export const SuperWaiterTableValues = {
-  section: "",
+  section: [],
   employeeAssigned: "",
   employeeID: "",
   subTables: [],

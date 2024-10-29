@@ -106,3 +106,17 @@ export const COMMON_DATE_FORMAT = "MMM DD, YYYY";
 export const truncateText = (str: any, max: any, len: any) => {
   return str.length > max ? str.substring(0, len) + "..." : str;
 };
+
+
+const dateOptions = {
+  timeZone: 'Africa/Lagos', // Change to desired timezone
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hourCycle: 'h23',
+};
+
+export const dateFormatter = new Intl.DateTimeFormat('en-GB', dateOptions);
