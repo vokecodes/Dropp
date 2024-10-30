@@ -52,14 +52,18 @@ const WaiterDashboard = () => {
   };
 
 
-  const [soundNotification, setSoundNotification] = useState(false);
+  const [soundNotification, setSoundNotification] = useState(() => {
+    return JSON.parse(localStorage.getItem("playSound")) || false;
+  });
   const [playSound, setPlaySound] = useState(false);
 
   const receiveNotification = () => {
     setPlaySound(true);
+    localStorage.setItem("playSound", JSON.stringify(true));
 
     setTimeout(() => {
       setPlaySound(false);
+      localStorage.setItem("playSound", JSON.stringify(false));
     }, 5000);
   };
 
