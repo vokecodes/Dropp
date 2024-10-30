@@ -83,7 +83,10 @@ const WaiterLogin = () => {
             dispatch(loginWaiter({ ...data?.data, userType: "waiter" }));
           })
           .catch((error) => {})
-          .finally(() => setSubmitting(false));
+          .finally(() => {
+            setSubmitting(false)
+            navigate("/waiter")
+          });
       }
 
       // TrackGoogleAnalyticsEvent(
