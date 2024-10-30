@@ -108,15 +108,15 @@ export const truncateText = (str: any, max: any, len: any) => {
 };
 
 
-const dateOptions = {
-  timeZone: 'Africa/Lagos', // Change to desired timezone
+const dateOptions: Intl.DateTimeFormatOptions = {
+  timeZone: 'Africa/Lagos',
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
   hour: '2-digit',
   minute: '2-digit',
   second: '2-digit',
-  hourCycle: 'h23',
+  hourCycle: 'h24',
 };
 
 export const dateFormatter = new Intl.DateTimeFormat('en-GB', dateOptions);

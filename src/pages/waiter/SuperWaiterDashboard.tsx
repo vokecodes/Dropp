@@ -14,8 +14,9 @@ import { useAppDispatch } from "../../redux/hooks";
 import { ClickAwayListener } from "@mui/material";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
 
-const socket = io(import.meta.env.VITE_BASE_API_URL, {
+const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
 });
 
@@ -63,20 +64,39 @@ const SuperWaiterDashboard = () => {
       `${RESTAURANT_TABLE_URL}/super-tables/${superWaiter?.restaurant}`
     )
       .then(({ data }) => {
-        console.log('tables= ', data?.data)
         setTable(data?.data);
       })
       .catch((err) => {});
   };
 
+
+  const [soundNotification, setSoundNotification] = useState(false);
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 5000);
+  };
+
+
   // Listen for new orders from the server
   useEffect(() => {
-    socket.on("newRestaurantOrder", () => {
+    const handleNewOrder = () => {
       getRestaurantOrders(1);
-    });
-
+      receiveNotification();
+    };
+  
+    socket.on("newRestaurantOrder", handleNewOrder);
+    socket.on("newReadyOrder", handleNewOrder);
+    socket.on("updatedOrder", () => {getRestaurantOrders(1)});
+    
     return () => {
-      socket.off("newRestaurantOrder");
+      socket.off("newRestaurantOrder", handleNewOrder);
+      socket.off("newReadyOrder", handleNewOrder);
+      socket.off("updatedOrder", () => {getRestaurantOrders(1)});
     };
   }, []);
 
@@ -121,6 +141,7 @@ const SuperWaiterDashboard = () => {
     const tableOrderMap = {};
 
     table && superWaiter && table?.length > 0 && table.filter(table => table.userType === 'waiter' && superWaiter.subTables.includes(table._id) ).map((item, i) => {
+
       tableOrderMap[item?.table] = {
         "New order": [],
         Kitchen: [],
@@ -145,27 +166,29 @@ const SuperWaiterDashboard = () => {
         }
         
         if (orderStatus === "kitchen") {
-          order?.order?.map((o: any) => {
+          order?.order?.forEach((o: any) => {
             if (o?.status === "pending") {
-              tableOrderMap[tableNumber]["Kitchen"]?.push(order)
+              if(tableOrderMap[tableNumber]["Kitchen"].some(item => item.id === order.id)){
+                return
+              }else{
+                tableOrderMap[tableNumber]["Kitchen"]?.push(order)
+              }
             }
             
             if (o?.status === "ready" || o?.status === "sent") {
-              tableOrderMap[tableNumber]["Ready"]?.push(order)
+              if(tableOrderMap[tableNumber]["Ready"].some(item => item.id === order.id)){
+                return
+              }else{
+                tableOrderMap[tableNumber]["Ready"]?.push(order)
+              }
             }
-          });
-        }
-        
-        if (orderStatus === "kitchen") {
-          order?.order?.map((o: any) => {
+            
             if (o?.status === "cooking") {
-              restaurantOrders.filter((order) => {
-                if (
-                  order.order.some((orderItem) => orderItem.status === o.status)
-                ) {
-                  tableOrderMap[tableNumber]["Cooking"]?.push(order)
-                }
-              });
+              if(tableOrderMap[tableNumber]["Cooking"].some(item => item.id === order.id)){
+                return
+              }else{
+                tableOrderMap[tableNumber]["Cooking"]?.push(order)
+              }
             }
           });
         }
@@ -173,7 +196,8 @@ const SuperWaiterDashboard = () => {
         if (orderStatus === "completed") {
           tableOrderMap[tableNumber]["Completed"]?.push(order)
         }
-    });
+      }
+    );
 
     setTablesMap(tableOrderMap)
     !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0])
@@ -193,7 +217,15 @@ const SuperWaiterDashboard = () => {
             </>
           </div>
 
-          <WaiterLogoutButton />
+          <div className="flex items-center justify-end">
+            <SoundNotification 
+              playNotif={playSound && soundNotification} 
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+            />
+
+            <WaiterLogoutButton />
+          </div>
         </div>
       </div>
       <div
@@ -359,18 +391,36 @@ const SuperWaiterDashboard = () => {
                   tablesMap[selectedTable] ? (
                     tablesMap[selectedTable][selectedCategory?.label] && tablesMap[selectedTable][selectedCategory?.label].length > 0 ? (
                       tablesMap[selectedTable][selectedCategory?.label]?.map(
-                        (tableOrder: any, i: number) => (
-                          <OrderItem
-                            key={i}
-                            order={tableOrder}
-                            selectedOrder={selectedOrder}
-                            ordersModal={ordersModal}
-                            openOrdersModal={() => openOrdersModal(tableOrder)}
-                            closeOrdersModal={closeOrdersModal}
-                            getTableOrders={getRestaurantOrders}
-                            selectedCategory={selectedCategory?.value}
-                          />
-                        )
+                        (tableOrder: any, i: number) => {
+                          if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
+                            return (<OrderItem
+                              key={i}
+                              order={tableOrder}
+                              selectedOrder={selectedOrder}
+                              ordersModal={ordersModal}
+                              openOrdersModal={() => openOrdersModal(tableOrder)}
+                              closeOrdersModal={closeOrdersModal}
+                              getTableOrders={getRestaurantOrders}
+                              selectedCategory={selectedCategory?.value}
+                            />)
+                          }else{
+                            return (<MenuOrderItem
+                              key={i}
+                              orderStatus={selectedCategory?.value}
+                              secondOrderStatus="sent"
+                              thirdOrderStatus="declined"
+                              order={tableOrder}
+                              orderLength={tableOrder?.order?.length}
+                              selectedOrder={selectedReadyOrder}
+                              ordersModal={ordersModal} 
+                              selectedCategory={selectedCategory?.value}
+                              openOrdersModal={() => openOrdersModal(tableOrder)}
+                              closeOrdersModal={() => closeOrdersModal()}
+                              getTableOrders={getRestaurantOrders}
+                              selectedCategory={selectedCategory?.value}
+                            />)
+                          }
+                        }
                       )
                     ) : (
                       <div>No orders for the selected category.</div>
