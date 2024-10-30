@@ -63,7 +63,6 @@ const SuperWaiterDashboard = () => {
       `${RESTAURANT_TABLE_URL}/super-tables/${superWaiter?.restaurant}`
     )
       .then(({ data }) => {
-        console.log('tables= ', data?.data)
         setTable(data?.data);
       })
       .catch((err) => {});
@@ -121,6 +120,7 @@ const SuperWaiterDashboard = () => {
     const tableOrderMap = {};
 
     table && superWaiter && table?.length > 0 && table.filter(table => table.userType === 'waiter' && superWaiter.subTables.includes(table._id) ).map((item, i) => {
+
       tableOrderMap[item?.table] = {
         "New order": [],
         Kitchen: [],
@@ -145,27 +145,29 @@ const SuperWaiterDashboard = () => {
         }
         
         if (orderStatus === "kitchen") {
-          order?.order?.map((o: any) => {
+          order?.order?.forEach((o: any) => {
             if (o?.status === "pending") {
-              tableOrderMap[tableNumber]["Kitchen"]?.push(order)
+              if(tableOrderMap[tableNumber]["Kitchen"].some(item => item.id === order.id)){
+                return
+              }else{
+                tableOrderMap[tableNumber]["Kitchen"]?.push(order)
+              }
             }
             
             if (o?.status === "ready" || o?.status === "sent") {
-              tableOrderMap[tableNumber]["Ready"]?.push(order)
+              if(tableOrderMap[tableNumber]["Ready"].some(item => item.id === order.id)){
+                return
+              }else{
+                tableOrderMap[tableNumber]["Ready"]?.push(order)
+              }
             }
-          });
-        }
-        
-        if (orderStatus === "kitchen") {
-          order?.order?.map((o: any) => {
+            
             if (o?.status === "cooking") {
-              restaurantOrders.filter((order) => {
-                if (
-                  order.order.some((orderItem) => orderItem.status === o.status)
-                ) {
-                  tableOrderMap[tableNumber]["Cooking"]?.push(order)
-                }
-              });
+              if(tableOrderMap[tableNumber]["Cooking"].some(item => item.id === order.id)){
+                return
+              }else{
+                tableOrderMap[tableNumber]["Cooking"]?.push(order)
+              }
             }
           });
         }
@@ -173,7 +175,8 @@ const SuperWaiterDashboard = () => {
         if (orderStatus === "completed") {
           tableOrderMap[tableNumber]["Completed"]?.push(order)
         }
-    });
+      }
+    );
 
     setTablesMap(tableOrderMap)
     !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0])
@@ -359,18 +362,37 @@ const SuperWaiterDashboard = () => {
                   tablesMap[selectedTable] ? (
                     tablesMap[selectedTable][selectedCategory?.label] && tablesMap[selectedTable][selectedCategory?.label].length > 0 ? (
                       tablesMap[selectedTable][selectedCategory?.label]?.map(
-                        (tableOrder: any, i: number) => (
-                          <OrderItem
-                            key={i}
-                            order={tableOrder}
-                            selectedOrder={selectedOrder}
-                            ordersModal={ordersModal}
-                            openOrdersModal={() => openOrdersModal(tableOrder)}
-                            closeOrdersModal={closeOrdersModal}
-                            getTableOrders={getRestaurantOrders}
-                            selectedCategory={selectedCategory?.value}
-                          />
-                        )
+                        (tableOrder: any, i: number) => {
+                          // console.log('tableorder= ', tableOrder)
+                          if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
+                            return (<OrderItem
+                              key={i}
+                              order={tableOrder}
+                              selectedOrder={selectedOrder}
+                              ordersModal={ordersModal}
+                              openOrdersModal={() => openOrdersModal(tableOrder)}
+                              closeOrdersModal={closeOrdersModal}
+                              getTableOrders={getRestaurantOrders}
+                              selectedCategory={selectedCategory?.value}
+                            />)
+                          }else{
+                            return (<MenuOrderItem
+                              key={i}
+                              orderStatus={selectedCategory?.value}
+                              secondOrderStatus="sent"
+                              thirdOrderStatus="declined"
+                              order={tableOrder}
+                              orderLength={tableOrder?.order?.length}
+                              selectedOrder={selectedReadyOrder}
+                              ordersModal={ordersModal} 
+                              selectedCategory={selectedCategory?.value}
+                              openOrdersModal={() => openOrdersModal(tableOrder)}
+                              closeOrdersModal={() => closeOrdersModal()}
+                              getTableOrders={getRestaurantOrders}
+                              selectedCategory={selectedCategory?.value}
+                            />)
+                          }
+                        }
                       )
                     ) : (
                       <div>No orders for the selected category.</div>

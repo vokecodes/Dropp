@@ -33,6 +33,7 @@ const WaiterDashboard = () => {
       `${RESTAURANT_ORDER_URL}/${waiter?.restaurant}/${waiter?.table}?page=${currentPage}`
     )
       .then(({ data }) => {
+        console.log('ordersss= ', data)
         if (currentPage === 1) {
           setTableOrders(data.data);
         } else {
@@ -92,74 +93,46 @@ const WaiterDashboard = () => {
   }, []);
 
   const [columnCount, setColumnCount] = useState({
-    "New order": 0,
-    Kitchen: 0,
-    Cooking: 0,
-    Ready: 0,
-    Completed: 0,
+    "New order": [],
+    Kitchen: [],
+    Cooking: [],
+    Ready: [],
+    Completed: [],
   });
 
   useEffect(() => {
-    setColumnCount({
-      "New order": 0,
-      Kitchen: 0,
-      Cooking: 0,
-      Ready: 0,
-      Completed: 0,
-    });
+    const updatedColumnCount = { ...columnCount };
 
     tableOrders &&
       tableOrders?.length > 0 &&
-      tableOrders?.map((item, i) => {
-        if (item?.status === "pending") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            "New order": prevState["New order"] + 1,
-          }));
+      tableOrders?.forEach((item, i) => {
+        if (item?.status === "pending" && !updatedColumnCount["New order"]?.some(s => s.id === item.id)) {
+          updatedColumnCount["New order"] = [...updatedColumnCount["New order"], item];
         }
 
         if (item?.status === "kitchen") {
-          item?.order?.map((o: any) => {
-            if (o?.status === "pending") {
-              setColumnCount((prevState) => ({
-                ...prevState,
-                Kitchen: prevState["Kitchen"] + 1,
-              }));
+          item?.order?.forEach((o: any) => {
+
+            if (o?.status === "pending" && !updatedColumnCount["Kitchen"]?.some(s => s.id === item.id)){
+              updatedColumnCount["Kitchen"] = [...updatedColumnCount["Kitchen"], item];
             }
 
-            if (o?.status === "ready" || o?.status === "sent") {
-              setColumnCount((prevState) => ({
-                ...prevState,
-                Ready: prevState["Ready"] + 1,
-              }));
+            if ((o?.status === "ready" || o?.status === "sent") && !updatedColumnCount["Ready"]?.some(s => s.id === item.id)){
+              updatedColumnCount["Ready"] = [...updatedColumnCount["Ready"], item];
+            }
+
+            if (o?.status === "cooking" && !updatedColumnCount["Cooking"]?.some(s => s.id === item.id)){
+              updatedColumnCount["Cooking"] = [...updatedColumnCount["Cooking"], item];
             }
           });
         }
 
-        if (item?.status === "kitchen") {
-          item?.order?.map((o: any) => {
-            if (o?.status === "cooking") {
-              tableOrders.filter((order) => {
-                if (
-                  order.order.some((orderItem) => orderItem.status === o.status)
-                ) {
-                  setColumnCount((prevState) => ({
-                    ...prevState,
-                    Cooking: prevState["Cooking"] + 1,
-                  }));
-                }
-              });
-            }
-          });
-        }
-
-        if (item?.status === "completed") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            Completed: prevState["Completed"] + 1,
-          }));
+        if (item?.status === "completed" && !updatedColumnCount["Completed"]?.some(s => s.id === item.id)) {
+          updatedColumnCount["Completed"] = [...updatedColumnCount["Completed"], item];
         }
       });
+
+    setColumnCount(updatedColumnCount);
   }, [tableOrders]);
 
   const [soundNotification, setSoundNotification] = useState(false);
@@ -324,7 +297,7 @@ const WaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            {columnCount[cat?.label]}
+                            {columnCount[cat?.label]?.length}
                           </p>
                         </div>
                       </div>
@@ -354,158 +327,70 @@ const WaiterDashboard = () => {
                   Yay, you've seen it all.
                 </p>
               } // Message when all items have been loaded
-            >
-              {/* NEW ORDERS */}
+            >              
               <div className="flex flex-col mt-2">
-                {selectedCategory.label === "New order" && (
-                  <>
-                    {tableOrders &&
-                      tableOrders?.length > 0 &&
-                      tableOrders
-                        .filter((t) => t.status === selectedCategory.value)
-                        .map((tableOrder: any, i: number) => (
-                          <OrderItem
-                            key={i}
-                            order={tableOrder}
-                            selectedOrder={selectedOrder}
-                            ordersModal={ordersModal}
-                            openOrdersModal={() => openOrdersModal(tableOrder)}
-                            closeOrdersModal={() => closeOrdersModal()}
-                            getTableOrders={getTableOrders}
-                            selectedCategory={selectedCategory?.value}
-                          />
-                        ))}
-                  </>
-                )}
 
-                {selectedCategory.label === "Kitchen" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    ?.filter((t) => t.status === "kitchen")
-                    ?.map((tableOrder: any, i: number) => {
-                      const filteredOrder = tableOrder?.order?.filter(
-                        (o: any) => o?.status === "pending"
-                      );
-                      return (
-                        <Fragment key={i}>
-                          {filteredOrder?.length > 0 && (
-                            <MenuOrderItem
-                              key={i}
-                              order={tableOrder}
-                              orderStatus="pending"
-                              orderLength={filteredOrder.length}
-                              selectedOrder={selectedOrder}
-                              ordersModal={ordersModal}
-                              openOrdersModal={() =>
-                                openOrdersModal(tableOrder)
-                              }
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getTableOrders}
-                              selectedCategory={selectedCategory?.value}
-                            />
-                          )}
-                        </Fragment>
-                      );
-                    })
-                }
-
-                {selectedCategory.label === "Cooking" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    ?.filter((t) => t.status === "kitchen")
-                    ?.map((tableOrder: any, i: number) => {
-                      const filteredOrder = tableOrder?.order?.filter(
-                        (o: any) => o?.status === "cooking"
-                      );
-
-                      // Extract statuses from array2
-                      const statusesToFilter = filteredOrder.map(
-                        (item) => item.status
-                      );
-
-                      // Filter array1 based on statuses from array2
-                      const filteredArray2 = tableOrders.filter((order) => {
-                        return order.order.some((orderItem) =>
-                          statusesToFilter.includes(orderItem.status)
-                        );
-                      });
-
-                      return (
-                        <Fragment key={i}>
-                          {filteredArray2?.map((order: any, i) => (
-                            <MenuOrderItem
-                              key={i}
-                              orderStatus="cooking"
-                              order={order}
-                              orderLength={filteredOrder.length}
-                              selectedOrder={selectedOrder}
-                              ordersModal={ordersModal}
-                              selectedCategory={selectedCategory?.value}
-                              openOrdersModal={() => openOrdersModal(order)}
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getTableOrders}
-                            />
-                          ))}
-                        </Fragment>
-                      );
-                    })
-                }
-
-
-                {selectedCategory.label === "Ready" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    ?.filter((t) => t.status === "kitchen")
-                    ?.filter((item) => {
-                      console.log('first= ', item)
-                      return item?.order?.some(
-                        (o: any) => ['ready', 'sent'].includes(o.status));
-                    })
-                    ?.map((order: any, i: number) => {
-                      return (
-                        <Fragment key={i}>
-                          <MenuOrderItem
-                            key={i}
-                            orderStatus="ready"
-                            secondOrderStatus="sent"
-                            thirdOrderStatus="declined"
-                            order={order}
-                            orderLength={order.order.length}
-                            selectedOrder={selectedReadyOrder}
-                            ordersModal={ordersModal} 
-                            selectedCategory={selectedCategory?.value}
-                            openOrdersModal={() => openOrdersModal(order)}
-                            closeOrdersModal={() => closeOrdersModal()}
-                            getTableOrders={getTableOrders}
-                            selectedCategory={selectedCategory}
-                          />
-                        </Fragment>
-                      );
-                    })
-                }
-
-
-                {selectedCategory.label === "Completed" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    .filter((t) => t.status === "completed")
-                    .map((tableOrder: any, i: number) => (
-                      <OrderItem
-                        key={i}
-                        order={tableOrder}
-                        selectedOrder={selectedOrder}
-                        ordersModal={ordersModal}
-                        openOrdersModal={() => openOrdersModal(tableOrder)}
-                        closeOrdersModal={() => closeOrdersModal()}
-                        getTableOrders={getTableOrders}
-                        selectedCategory={selectedCategory?.value}
-                      />
-                    ))
-                }
+              {tableOrders ? (
+                columnCount[selectedCategory?.label] && columnCount[selectedCategory?.label].length > 0 ? (
+                  columnCount[selectedCategory?.label]?.map(
+                    (tableOrder: any, i: number) => {
+                      // console.log('tableorder= ', tableOrder)
+                      if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
+                        return (<OrderItem
+                          key={i}
+                          order={tableOrder}
+                          selectedOrder={selectedOrder}
+                          ordersModal={ordersModal}
+                          openOrdersModal={() => openOrdersModal(tableOrder)}
+                          closeOrdersModal={closeOrdersModal}
+                          getTableOrders={getTableOrders}
+                          selectedCategory={selectedCategory?.value}
+                        />)
+                      }else{
+                        return (<MenuOrderItem
+                          key={i}
+                          orderStatus={selectedCategory?.value}
+                          secondOrderStatus="sent"
+                          thirdOrderStatus="declined"
+                          order={tableOrder}
+                          orderLength={tableOrder?.order?.length}
+                          selectedOrder={selectedReadyOrder}
+                          ordersModal={ordersModal} 
+                          selectedCategory={selectedCategory?.value}
+                          openOrdersModal={() => openOrdersModal(tableOrder)}
+                          closeOrdersModal={() => closeOrdersModal()}
+                          getTableOrders={getTableOrders}
+                          selectedCategory={selectedCategory?.value}
+                        />)
+                      }
+                    }
+                  )
+                ) : (
+                  <div>No orders for the selected category.</div>
+                )
+              ) : (
+                <div className="h-48 w-full flex flex-row items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="#6D6D6D"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                </div>
+              )}
                 
               </div>
             </InfiniteScroll>
