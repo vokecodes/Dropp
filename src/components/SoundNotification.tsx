@@ -4,6 +4,12 @@ export const SoundNotification = ({ playNotif, soundNotification, setSoundNotifi
   const soundUrl = "/sounds/digital-clock-digital-alarm-buzzer.wav";
   const audioRef = useRef(null);
 
+  const toggleSoundNotification = () => {
+    const newSoundNotification = !soundNotification;
+    setSoundNotification(newSoundNotification);
+    localStorage.setItem("playSound", JSON.stringify(newSoundNotification));
+  };
+
   useEffect(() => {
     audioRef.current = new Audio(soundUrl);
     const audio = audioRef.current;
@@ -36,7 +42,7 @@ export const SoundNotification = ({ playNotif, soundNotification, setSoundNotifi
   return (
     <div
         className="flex items-center gap-1 bg-[#EDECEC] px-3 py-2 rounded-full text-xs font_medium cursor-pointer"
-        onClick={() => setSoundNotification(!soundNotification)}
+        onClick={toggleSoundNotification}
     >
         {soundNotification ? (
         <>
