@@ -116,7 +116,7 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   hour: '2-digit',
   minute: '2-digit',
   second: '2-digit',
-  hourCycle: 'h24',
+  hourCycle: 'h23',
 };
 
 export const dateFormatter = new Intl.DateTimeFormat('en-GB', dateOptions);

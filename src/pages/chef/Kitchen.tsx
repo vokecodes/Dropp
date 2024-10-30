@@ -125,6 +125,17 @@ const Kitchen = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("kitchenTabActive");
+    };
+  
+    localStorage.setItem("kitchenTabActive", "true");
+  
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, []);
+
   const [declineModal, setDeclineModal] = useState(false);
   const openDeclineModal = () => setDeclineModal(true);
   const closeDeclineModal = () => setDeclineModal(false);
