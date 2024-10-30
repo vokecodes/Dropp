@@ -109,6 +109,14 @@ const WaiterDashboard = () => {
     getTableOrders(page);
   }, []);
 
+  const sortByUpdatedAt = (arr) => {
+    return arr.sort((a, b) => {
+      const dateA = new Date(a.updatedAt);
+      const dateB = new Date(b.updatedAt);
+      return dateB - dateA;
+    });
+  }
+
   const [columnCount, setColumnCount] = useState({
     "New order": [],
     Kitchen: [],
@@ -126,9 +134,11 @@ const WaiterDashboard = () => {
       Completed: [],
     };
 
-    tableOrders &&
-      tableOrders?.length > 0 &&
-      tableOrders?.forEach((item, i) => {
+    const sortedByDate = sortByUpdatedAt(tableOrders)
+
+    sortedByDate &&
+      sortedByDate?.length > 0 &&
+      sortedByDate?.forEach((item, i) => {
         if (item?.status === "pending" && !updatedColumnCount["New order"]?.some(s => s.id === item.id)) {
           updatedColumnCount["New order"] = [...updatedColumnCount["New order"], item];
         }

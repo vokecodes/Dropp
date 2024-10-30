@@ -62,10 +62,6 @@ const MenuOrderItem = ({
     </div>
   );
 
-  console.log('button', order?.order?.filter(
-    (o: any) =>
-      o?.status === secondOrderStatus || o?.status === thirdOrderStatus
-  )?.length, order?.order?.length)
   return (
     <>
       <div

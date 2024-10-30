@@ -135,10 +135,17 @@ const SuperWaiterDashboard = () => {
     getRestaurantOrders(page);
   }, []);
 
-  
+  const sortByUpdatedAt = (arr) => {
+    return arr.sort((a, b) => {
+      const dateA = new Date(a.updatedAt);
+      const dateB = new Date(b.updatedAt);
+      return dateB - dateA;
+    });
+  }
 
   useEffect(() => {
     const tableOrderMap = {};
+    const sortedByDate = sortByUpdatedAt(restaurantOrders)
 
     table && superWaiter && table?.length > 0 && table.filter(table => table.userType === 'waiter' && superWaiter.subTables.includes(table._id) ).map((item, i) => {
 
@@ -151,8 +158,8 @@ const SuperWaiterDashboard = () => {
       }
     })
 
-    table && superWaiter && restaurantOrders &&
-      restaurantOrders?.length > 0 && restaurantOrders.forEach(order => {
+    table && superWaiter && sortedByDate &&
+      sortedByDate?.length > 0 && sortedByDate.forEach(order => {
         const tableNumber = order?.table?.table;
         const orderArray = order?.order;
         const orderStatus = order?.status;
@@ -202,8 +209,6 @@ const SuperWaiterDashboard = () => {
     setTablesMap(tableOrderMap)
     !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0])
   }, [restaurantOrders, table])
-
-
 
 
   return (
