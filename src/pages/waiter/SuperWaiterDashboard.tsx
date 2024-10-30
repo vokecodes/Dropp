@@ -14,8 +14,9 @@ import { useAppDispatch } from "../../redux/hooks";
 import { ClickAwayListener } from "@mui/material";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
 
-const socket = io(import.meta.env.VITE_BASE_API_URL, {
+const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
 });
 
@@ -68,14 +69,34 @@ const SuperWaiterDashboard = () => {
       .catch((err) => {});
   };
 
+
+  const [soundNotification, setSoundNotification] = useState(false);
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 5000);
+  };
+
+
   // Listen for new orders from the server
   useEffect(() => {
-    socket.on("newRestaurantOrder", () => {
+    const handleNewOrder = () => {
       getRestaurantOrders(1);
-    });
-
+      receiveNotification();
+    };
+  
+    socket.on("newRestaurantOrder", handleNewOrder);
+    socket.on("newReadyOrder", handleNewOrder);
+    socket.on("updatedOrder", () => {getRestaurantOrders(1)});
+    
     return () => {
-      socket.off("newRestaurantOrder");
+      socket.off("newRestaurantOrder", handleNewOrder);
+      socket.off("newReadyOrder", handleNewOrder);
+      socket.off("updatedOrder", () => {getRestaurantOrders(1)});
     };
   }, []);
 
@@ -196,7 +217,15 @@ const SuperWaiterDashboard = () => {
             </>
           </div>
 
-          <WaiterLogoutButton />
+          <div className="flex items-center justify-end">
+            <SoundNotification 
+              playNotif={playSound && soundNotification} 
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+            />
+
+            <WaiterLogoutButton />
+          </div>
         </div>
       </div>
       <div
@@ -363,7 +392,6 @@ const SuperWaiterDashboard = () => {
                     tablesMap[selectedTable][selectedCategory?.label] && tablesMap[selectedTable][selectedCategory?.label].length > 0 ? (
                       tablesMap[selectedTable][selectedCategory?.label]?.map(
                         (tableOrder: any, i: number) => {
-                          // console.log('tableorder= ', tableOrder)
                           if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
                             return (<OrderItem
                               key={i}

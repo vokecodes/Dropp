@@ -10,8 +10,9 @@ import WaiterLogoutButton from "../../components/WaiterLogoutButton";
 import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
 
-const socket = io(import.meta.env.VITE_BASE_API_URL, {
+const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
 });
 
@@ -33,7 +34,6 @@ const WaiterDashboard = () => {
       `${RESTAURANT_ORDER_URL}/${waiter?.restaurant}/${waiter?.table}?page=${currentPage}`
     )
       .then(({ data }) => {
-        console.log('ordersss= ', data)
         if (currentPage === 1) {
           setTableOrders(data.data);
         } else {
@@ -51,15 +51,32 @@ const WaiterDashboard = () => {
       .catch((err) => {});
   };
 
-  // Listen for new orders from the server
+
+  const [soundNotification, setSoundNotification] = useState(false);
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 5000);
+  };
+
   useEffect(() => {
-    socket.on("newRestaurantOrder", () => {
+    const handleNewOrder = () => {
       getTableOrders(1);
       receiveNotification();
-    });
-
+    };
+  
+    socket.on("newRestaurantOrder", handleNewOrder);
+    socket.on("newReadyOrder", handleNewOrder);
+    socket.on("updatedOrder", () => {getTableOrders(1)});
+    
     return () => {
-      socket.off("newRestaurantOrder");
+      socket.off("newRestaurantOrder", handleNewOrder);
+      socket.off("newReadyOrder", handleNewOrder);
+      socket.off("updatedOrder", () => {getTableOrders(1)});
     };
   }, []);
 
@@ -101,7 +118,13 @@ const WaiterDashboard = () => {
   });
 
   useEffect(() => {
-    const updatedColumnCount = { ...columnCount };
+    const updatedColumnCount = {
+      "New order": [],
+      Kitchen: [],
+      Cooking: [],
+      Ready: [],
+      Completed: [],
+    };
 
     tableOrders &&
       tableOrders?.length > 0 &&
@@ -135,53 +158,8 @@ const WaiterDashboard = () => {
     setColumnCount(updatedColumnCount);
   }, [tableOrders]);
 
-  const [soundNotification, setSoundNotification] = useState(false);
-  const [playSound, setPlaySound] = useState(false);
-
-  // Function to simulate receiving a new notification
-  const receiveNotification = () => {
-    setPlaySound(true);
-
-    // Reset playSound after the sound plays for 5 seconds
-    setTimeout(() => {
-      setPlaySound(false);
-    }, 5000); // 5 seconds
-  };
-
-  const SoundNotification = ({ playSound }) => {
-    const soundUrl = "/sounds/digital-clock-digital-alarm-buzzer.wav";
-
-    useEffect(() => {
-      let audio;
-      if (soundNotification && playSound) {
-        audio = new Audio(soundUrl);
-
-        // Play the sound
-        audio.play().catch((error) => {
-          console.error("Error playing sound:", error);
-        });
-
-        // Ensure the sound plays for at least 5 seconds
-        const duration = 5000; // 5 seconds in milliseconds
-        const timer = setTimeout(() => {
-          audio.pause(); // Pause the sound after 5 seconds
-          audio.currentTime = 0; // Reset the sound to the beginning
-        }, duration);
-
-        // Clean up the timer and audio object
-        return () => {
-          clearTimeout(timer);
-          if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-          }
-        };
-      }
-    }, [playSound]);
-
-    return null; // No visible UI element needed
-  };
-
+  
+  
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -194,53 +172,12 @@ const WaiterDashboard = () => {
           </div>
 
           <div className="flex items-center justify-end">
-            <div
-              className="flex items-center gap-1 bg-[#EDECEC] px-3 py-2 rounded-full text-xs font_medium cursor-pointer"
-              onClick={() => {
-                if (soundNotification) {
-                  setSoundNotification(false);
-                } else {
-                  setSoundNotification(true);
-                  receiveNotification();
-                }
-              }}
-            >
-              {soundNotification ? (
-                <>
-                  <p className="text-base font_bold text-[#6D6D6D]">On</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="#06C167"
-                    className="size-6"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </>
-              ) : (
-                <>
-                  <p className="text-base font_bold text-[#6D6D6D]">Off</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="#292D32"
-                    className="size-6"
-                  >
-                    <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.57 16.476c-.223.082-.448.161-.674.238L7.319 4.137A6.75 6.75 0 0 1 18.75 9v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206Z" />
-                    <path
-                      fillRule="evenodd"
-                      d="M5.25 9c0-.184.007-.366.022-.546l10.384 10.384a3.751 3.751 0 0 1-7.396-1.119 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </>
-              )}
-              <SoundNotification playSound={setPlaySound} />
-            </div>
+            <SoundNotification 
+              playNotif={playSound && soundNotification} 
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+            />
+
             <WaiterLogoutButton />
           </div>
         </div>
@@ -334,7 +271,6 @@ const WaiterDashboard = () => {
                 columnCount[selectedCategory?.label] && columnCount[selectedCategory?.label].length > 0 ? (
                   columnCount[selectedCategory?.label]?.map(
                     (tableOrder: any, i: number) => {
-                      // console.log('tableorder= ', tableOrder)
                       if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
                         return (<OrderItem
                           key={i}

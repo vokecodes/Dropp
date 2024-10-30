@@ -27,11 +27,12 @@ import {
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import KitchenCard from "../../components/kitchenCard";
 import KitchenBoard from "../../components/KitchenBoard";
-// import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
+import io from "socket.io-client";
 
-// const socket = io(import.meta.env.VITE_BASE_API_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -99,16 +100,30 @@ const Kitchen = () => {
     getRestaurantOrders(page);
   }, []);
 
+
+  const [soundNotification, setSoundNotification] = useState(false);
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 5000);
+  };
+
+
   // Listen for new orders from the server
-  // useState(() => {
-  //   socket.on("newRestaurantOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrders();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useState(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrders();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
 
   const [declineModal, setDeclineModal] = useState(false);
   const openDeclineModal = () => setDeclineModal(true);
@@ -490,10 +505,17 @@ const Kitchen = () => {
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
+            <SoundNotification 
+              playNotif={playSound && soundNotification} 
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+            />
+
             <OutlineButton
               title="Menu"
               onClick={() => navigate(CHEF_ROUTES.linkKitchenMenu)}
             />
+
             <LogoutButton />
           </div>
         </div>
