@@ -67,7 +67,7 @@ export const SoundNotification = ({ playNotif, soundNotification, setSoundNotifi
 
     if (playNotif && isSoundEnabled) {
       const playPromise = audio.play();
-      const duration = 5000;
+      const duration = 3000;
   
       if (playPromise !== undefined) {
         playPromise?.then(() => {
