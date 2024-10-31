@@ -77,12 +77,10 @@ const SuperWaiterDashboard = () => {
 
   const receiveNotification = () => {
     setPlaySound(true);
-    localStorage.setItem("playSound", JSON.stringify(true));
 
     setTimeout(() => {
       setPlaySound(false);
-      localStorage.setItem("playSound", JSON.stringify(false));
-    }, 5000);
+    }, 3000);
   };
 
 
@@ -231,6 +229,7 @@ const SuperWaiterDashboard = () => {
               playNotif={playSound && soundNotification} 
               soundNotification={soundNotification}
               setSoundNotification={setSoundNotification}
+              setPlaySound={setPlaySound}
             />
 
             <WaiterLogoutButton />
