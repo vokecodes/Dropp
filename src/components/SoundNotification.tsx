@@ -71,13 +71,11 @@ export const SoundNotification = ({ playNotif, soundNotification, setSoundNotifi
   
       if (playPromise !== undefined) {
         playPromise?.then(() => {
-          // Audio started playing successfully; set a timer to pause it
           const timer = setTimeout(() => {
             audio.pause();
             audio.currentTime = 0;
           }, duration);
     
-          // Clear timer and reset audio if the component unmounts or dependencies change
           return () => {
             clearTimeout(timer);
             audio.pause();
