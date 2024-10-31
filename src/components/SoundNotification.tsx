@@ -13,7 +13,6 @@ export const SoundNotification = ({ playNotif, soundNotification, setSoundNotifi
   
   
   const enableSound = (verdict: boolean) => {
-    // const allowSound = confirm('Please click allow to enable sound notifications')
     if(open){
       setOpen(false)
     }
@@ -66,30 +65,30 @@ export const SoundNotification = ({ playNotif, soundNotification, setSoundNotifi
     audioRef.current = new Audio(soundUrl);
     const audio = audioRef.current;
 
-    const playAudio = () => {
-      audio.play().catch((error: any) => {
-        console.error("Error playing sound:", error);
-      });
-    };
-
     if (playNotif && isSoundEnabled) {
-      playAudio();
-
+      const playPromise = audio.play();
       const duration = 5000;
-      const timer = setTimeout(() => {
-        audio.pause();
-        audio.currentTime = 0;
-      }, duration);
-
-      return () => {
-        clearTimeout(timer);
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-      };
+  
+      if (playPromise !== undefined) {
+        playPromise?.then(() => {
+          // Audio started playing successfully; set a timer to pause it
+          const timer = setTimeout(() => {
+            audio.pause();
+            audio.currentTime = 0;
+          }, duration);
+    
+          // Clear timer and reset audio if the component unmounts or dependencies change
+          return () => {
+            clearTimeout(timer);
+            audio.pause();
+            audio.currentTime = 0;
+          };
+        }).catch((error: any) => {
+          console.error("Error playing sound:", error);
+        });
+      }
     }
-  }, [playNotif]);
+  }, [playNotif, isSoundEnabled, soundUrl]);
 
   return (
     <>
