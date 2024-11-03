@@ -62,6 +62,8 @@ export type InputProps = {
   isReferralCodeLoading?: boolean;
   selectPlaceholder?: string;
   container?: string;
+  touched?: any;
+  multipleSelect?: boolean;
 };
 
 export type TextAreaProps = {

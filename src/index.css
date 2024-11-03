@@ -1104,3 +1104,29 @@ html {
   background-size: cover;
   border-radius: 20px;
 }
+
+
+/* For Webkit browsers (Chrome, Safari, Edge) */
+.reduce-scrollbar {
+  scrollbar-width: thin; /* For Firefox */
+}
+
+.reduce-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+/* Style the scrollbar track (the empty space behind the scrollbar) */
+.reduce-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color */
+}
+
+/* Style the scrollbar thumb (the moving part of the scrollbar) */
+.reduce-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar color */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Hover effect for the scrollbar thumb */
+.reduce-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker on hover */
+}

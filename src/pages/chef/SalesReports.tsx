@@ -527,9 +527,7 @@ const SalesReports = () => {
                 Payment Type
               </label>
               <div className="mt-2 lg:mt-0">
-                <div
-                  // className="w-24 lg:w-36 h-10 filter_gray border calendarBorder rounded-full cursor-pointer px-3 flex items-center justify-between"
-                  className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                <div className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                   onClick={() => {
                     setOpenPaymentOptions(!openPaymentOptions);
                   }}
