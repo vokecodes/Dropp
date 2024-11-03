@@ -7,11 +7,12 @@ const OutlineButton = ({
   onClick,
   loading,
   disabled,
+  blackTrue,
 }: any) => {
   return (
     <button
       type="submit"
-      className={`inline-flex items-center px-10 py-3 justify-center whitespace-nowrap bg-transparent border-2 border-[#313130] text-base font_bold text_black shadow-sm cursor-pointer rounded-xl ${extraClasses}`}
+      className={`inline-flex items-center px-10 py-3 justify-center whitespace-nowrap bg-transparent border-2 text-base font_bold text_black shadow-sm cursor-pointer rounded-xl ${ blackTrue ? 'border-black' : 'border-[#313130]' } ${extraClasses}`}
       onClick={onClick}
       disabled={disabled || loading}
     >

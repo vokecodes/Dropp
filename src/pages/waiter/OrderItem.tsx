@@ -1,5 +1,5 @@
 import { IoIosArrowDropdown, IoMdClose } from "react-icons/io";
-import { formatPrice } from "../../utils/formatMethods";
+import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
 import { useState } from "react";
@@ -66,9 +66,7 @@ const OrderItem = ({
               {order?.email}
             </p>
             <p className="text-sm text-start font_regular black2 font-semibold">
-              {moment(order?.updatedAt || order?.createdAt).format(
-                "DD MMM, YYYY hh:mm a"
-              )}
+              {dateFormatter.format(new Date(order?.updatedAt))}
             </p>
           </div>
           {/* <IoIosArrowDropdown size={22} color={"#000000"} /> */}
@@ -80,38 +78,36 @@ const OrderItem = ({
             order?.order
               ?.filter((o: any) => o?.status === selectedCategory)
               .map((menuOrder: any, num: number) => (
-                <>
-                  <div
-                    className="flex flex-row justify-between items-start w-full mb-2"
-                    key={num}
-                  >
-                    <div className="">
-                      <img
-                        src={menuOrder?.menu?.images[0]}
-                        alt="menu"
-                        className="w-40 h-20 rounded-xl object-center object-cover mr-auto"
-                      />
-                    </div>
-                    <div className="ml-2 w-full text-start">
-                      <p className="text-md input_text capitalize font_medium">
-                        {menuOrder?.menu?.foodName}
-                      </p>
-                      <p className="text-md input_text capitalize font_medium">
-                        {menuOrder?.quantity} portion
-                        {Number(menuOrder?.menu?.quantity) > 1 && "s"}
-                      </p>
-                    </div>
-                    <div className="flex shrink-0">
-                      <p className="text-1xl pt-1 font-bold">
-                        ₦
-                        {menuOrder?.menu?.discount
-                          ? menuOrder?.amount -
-                            (menuOrder?.amount / 100) * menuOrder?.menu.discount
-                          : menuOrder?.amount}
-                      </p>
-                    </div>
+                <div
+                  className="flex flex-row justify-between items-start w-full mb-2"
+                  key={num}
+                >
+                  <div className="">
+                    <img
+                      src={menuOrder?.menu?.images[0]}
+                      alt="menu"
+                      className="w-40 h-20 rounded-xl object-center object-cover mr-auto"
+                    />
                   </div>
-                </>
+                  <div className="ml-2 w-full text-start">
+                    <p className="text-md input_text capitalize font_medium">
+                      {menuOrder?.menu?.foodName}
+                    </p>
+                    <p className="text-md input_text capitalize font_medium">
+                      {menuOrder?.quantity} portion
+                      {Number(menuOrder?.menu?.quantity) > 1 && "s"}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0">
+                    <p className="text-1xl pt-1 font-bold">
+                      ₦
+                      {menuOrder?.menu?.discount
+                        ? menuOrder?.amount -
+                          (menuOrder?.amount / 100) * menuOrder?.menu.discount
+                        : menuOrder?.amount}
+                    </p>
+                  </div>
+                </div>
               ))}
         </div>
 

@@ -74,6 +74,8 @@ const ChefDineIn = () => {
     setRefundModal(false);
   };
 
+  console.log('restaurantOrders= ', restaurantOrders)
+
   return (
     <>
       <ChefDashboardLayout>
@@ -181,7 +183,7 @@ const ChefDineIn = () => {
                     {renderTableHeader()}
                     {restaurantOrders && restaurantOrders?.length > 0 ? (
                       restaurantOrders?.map((order: any, i: number) => (
-                        <div>
+                        <div key={i}>
                           <RestaurantOrderItem
                             key={i}
                             id={order?.id}
