@@ -9,6 +9,7 @@ import ChefDineIn from "./ChefDineIn";
 import TableManagement from "./TableManagement";
 import Kitchen from "./Kitchen";
 import KitchenMenu from "./KitchenMenu";
+import SalesReports from "./SalesReports";
 
 const SubChefRoutes = () => (
   <Routes>
@@ -33,6 +34,7 @@ const SubChefRoutes = () => (
       />
       <Route path={SUB_CHEF_ROUTES.kitchen} element={<Kitchen />} />
       <Route path={SUB_CHEF_ROUTES.kitchenMenu} element={<KitchenMenu />} />
+      <Route path={SUB_CHEF_ROUTES.subChefReports} element={<SalesReports />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   </Routes>

@@ -28,6 +28,7 @@ import {
 import { CHEF_ROUTES } from "../../routes/routes";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { getSubChefRestaurantSections } from "../../_redux/section/sectionCrud";
 
 const TableManagement = () => {
   const dispatch = useAppDispatch();
@@ -42,6 +43,23 @@ const TableManagement = () => {
 
   useEffect(() => {
     dispatch(subChefGetTables());
+  }, []);
+
+  const [section, setSection] = useState([])
+
+  const fetchSections = async () => {
+    await getSubChefRestaurantSections()
+    .then(({ data }) => {
+      setSection(data.data);
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+      console.log(error);
+    });;
+  };
+
+  useEffect(() => {
+    fetchSections()
   }, []);
 
   const [togglePassword, setTogglePassword] = useState("password");
@@ -117,7 +135,7 @@ const TableManagement = () => {
                     {table?.length > 0 ? (
                       <div className="grid grid-cols-1 lg:grid-cols-4 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
                         {table?.map((table: any, i: number) => (
-                          <div className="bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
+                          <div key={i} className="bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
                             <div className="flex flex-row items-center justify-between">
                               <div className="flex-1 ">
                                 <p className="text-xl text-black font_medium">
@@ -167,8 +185,8 @@ const TableManagement = () => {
             aria-labelledby="parent-modal-title"
             aria-describedby="parent-modal-description"
           >
-            <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-4 lg:p-7 my-10 outline-none">
-              <div className="flex flex-col justify-between items-center p-0 h-full">
+            <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-4 lg:p-7 my-10 outline-none overflow-y-scroll">
+              <div className="flex flex-col justify-between items-center p-0 h-fit">
                 <div
                   className="h-fit my-3 w-full flex flex-col"
                   style={{ minHeight: "80%" }}
@@ -191,6 +209,25 @@ const TableManagement = () => {
                     className="flex flex-col justify-start items-center h-full w-full mb-5"
                     style={{ minHeight: "80%" }}
                   >
+                    <Input
+                      type="dropdown"
+                      placeholder="Section"
+                      name="section"
+                      container="w-full"
+                      onChange={handleChange}
+                      value={values.section}
+                      options={
+                        section?.length > 0
+                          ? section?.map((s) => {
+                              return { label: s.name, value: s._id };
+                            })
+                          : []
+                      }
+                      error={
+                        errors.section && touched.section && errors.section
+                      }
+                    />
+
                     <Input
                       type="text"
                       placeholder="Employee assigned"
@@ -231,7 +268,7 @@ const TableManagement = () => {
 
                     <Input
                       type="text"
-                      placeholder="Whatasapp Number"
+                      placeholder="Whatasapp Number (Optional)"
                       name="whatasappNumber"
                       container="w-full"
                       onChange={handleChange}
