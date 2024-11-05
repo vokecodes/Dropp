@@ -127,6 +127,8 @@ export const CHEF_ROUTES = {
 export const SUB_CHEF_ROUTES = {
   subChef: "/sub-chef/*",
   linkSubChef: "/sub-chef",
+  subChefReports: "reports",
+  linkSubChefReports: "/sub-chef/reports",
   subChefDineIn: "dine-in",
   linkSubChefDineIn: "/sub-chef/dine-in",
   subChefTableManagement: "tables",

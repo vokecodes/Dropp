@@ -157,9 +157,27 @@ export const getRestaurantDashboardCrud = (
   );
 };
 
+export const getRestaurantSubChefDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = ""
+) => {
+  return SERVER.get(
+    `${SUB_CHEF_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+  );
+};
+
 export const getOrdersPage = (page = 1, fromDate = "", toDate = "") => {
   return SERVER.get(
     `${RESTAURANT_ORDER_URL}/orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}`
+  );
+};
+
+export const getSubChefOrdersPage = (page = 1, fromDate = "", toDate = "") => {
+  return SERVER.get(
+    `${SUB_CHEF_URL}/orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}`
   );
 };
 
@@ -174,6 +192,17 @@ export const getRestaurantOrdersPage = (
   return SERVER.get(
     `${RESTAURANT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
   );
+};
+
+export const getSubChefRestaurantOrdersPage = (
+  page = 1,
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = ""
+) => {
+  return SERVER.get(`${SUB_CHEF_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`);
 };
 
 export const getAdminDashboardCrud = (
