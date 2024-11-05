@@ -481,6 +481,22 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
     },
     {
       icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === SUB_CHEF_ROUTES.linkSubChefReports
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Reports",
+      active: location?.pathname === SUB_CHEF_ROUTES.linkSubChefReports,
+      to: SUB_CHEF_ROUTES.linkSubChefReports,
+      beta: true,
+    },
+    {
+      icon: (
         <CiForkAndKnife
           size={24}
           color={

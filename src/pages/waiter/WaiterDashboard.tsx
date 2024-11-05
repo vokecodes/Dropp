@@ -10,8 +10,9 @@ import WaiterLogoutButton from "../../components/WaiterLogoutButton";
 import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
 
-const socket = io(import.meta.env.VITE_BASE_API_URL, {
+const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
 });
 
@@ -50,15 +51,34 @@ const WaiterDashboard = () => {
       .catch((err) => {});
   };
 
-  // Listen for new orders from the server
+
+  const [soundNotification, setSoundNotification] = useState(() => {
+    return JSON.parse(localStorage.getItem("playSound")) || false;
+  });
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 3000);
+  };
+
   useEffect(() => {
-    socket.on("newRestaurantOrder", () => {
+    const handleNewOrder = () => {
       getTableOrders(1);
       receiveNotification();
-    });
-
+    };
+  
+    socket.on("newRestaurantOrder", handleNewOrder);
+    socket.on("newReadyOrder", handleNewOrder);
+    socket.on("updatedOrder", () => {getTableOrders(1)});
+    
     return () => {
-      socket.off("newRestaurantOrder");
+      socket.off("newRestaurantOrder", handleNewOrder);
+      socket.off("newReadyOrder", handleNewOrder);
+      socket.off("updatedOrder", () => {getTableOrders(1)});
     };
   }, []);
 
@@ -91,124 +111,67 @@ const WaiterDashboard = () => {
     getTableOrders(page);
   }, []);
 
+  const sortByUpdatedAt = (arr) => {
+    return arr.sort((a, b) => {
+      const dateA = new Date(a.updatedAt);
+      const dateB = new Date(b.updatedAt);
+      return dateB - dateA;
+    });
+  }
+
   const [columnCount, setColumnCount] = useState({
-    "New order": 0,
-    Kitchen: 0,
-    Cooking: 0,
-    Ready: 0,
-    Completed: 0,
+    "New order": [],
+    Kitchen: [],
+    Cooking: [],
+    Ready: [],
+    Completed: [],
   });
 
   useEffect(() => {
-    setColumnCount({
-      "New order": 0,
-      Kitchen: 0,
-      Cooking: 0,
-      Ready: 0,
-      Completed: 0,
-    });
+    const updatedColumnCount = {
+      "New order": [],
+      Kitchen: [],
+      Cooking: [],
+      Ready: [],
+      Completed: [],
+    };
 
-    tableOrders &&
-      tableOrders?.length > 0 &&
-      tableOrders?.map((item, i) => {
-        if (item?.status === "pending") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            "New order": prevState["New order"] + 1,
-          }));
+    const sortedByDate = sortByUpdatedAt(tableOrders)
+
+    sortedByDate &&
+      sortedByDate?.length > 0 &&
+      sortedByDate?.forEach((item, i) => {
+        if (item?.status === "pending" && !updatedColumnCount["New order"]?.some(s => s.id === item.id)) {
+          updatedColumnCount["New order"] = [...updatedColumnCount["New order"], item];
         }
 
         if (item?.status === "kitchen") {
-          item?.order?.map((o: any) => {
-            if (o?.status === "pending") {
-              setColumnCount((prevState) => ({
-                ...prevState,
-                Kitchen: prevState["Kitchen"] + 1,
-              }));
+          item?.order?.forEach((o: any) => {
+
+            if (o?.status === "pending" && !updatedColumnCount["Kitchen"]?.some(s => s.id === item.id)){
+              updatedColumnCount["Kitchen"] = [...updatedColumnCount["Kitchen"], item];
             }
 
-            if (o?.status === "ready" || o?.status === "sent") {
-              setColumnCount((prevState) => ({
-                ...prevState,
-                Ready: prevState["Ready"] + 1,
-              }));
+            if ((o?.status === "ready" || o?.status === "sent") && !updatedColumnCount["Ready"]?.some(s => s.id === item.id)){
+              updatedColumnCount["Ready"] = [...updatedColumnCount["Ready"], item];
+            }
+
+            if (o?.status === "cooking" && !updatedColumnCount["Cooking"]?.some(s => s.id === item.id)){
+              updatedColumnCount["Cooking"] = [...updatedColumnCount["Cooking"], item];
             }
           });
         }
 
-        if (item?.status === "kitchen") {
-          item?.order?.map((o: any) => {
-            if (o?.status === "cooking") {
-              tableOrders.filter((order) => {
-                if (
-                  order.order.some((orderItem) => orderItem.status === o.status)
-                ) {
-                  setColumnCount((prevState) => ({
-                    ...prevState,
-                    Cooking: prevState["Cooking"] + 1,
-                  }));
-                }
-              });
-            }
-          });
-        }
-
-        if (item?.status === "completed") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            Completed: prevState["Completed"] + 1,
-          }));
+        if (item?.status === "completed" && !updatedColumnCount["Completed"]?.some(s => s.id === item.id)) {
+          updatedColumnCount["Completed"] = [...updatedColumnCount["Completed"], item];
         }
       });
+
+    setColumnCount(updatedColumnCount);
   }, [tableOrders]);
 
-  const [soundNotification, setSoundNotification] = useState(false);
-  const [playSound, setPlaySound] = useState(false);
-
-  // Function to simulate receiving a new notification
-  const receiveNotification = () => {
-    setPlaySound(true);
-
-    // Reset playSound after the sound plays for 5 seconds
-    setTimeout(() => {
-      setPlaySound(false);
-    }, 5000); // 5 seconds
-  };
-
-  const SoundNotification = ({ playSound }) => {
-    const soundUrl = "/sounds/digital-clock-digital-alarm-buzzer.wav";
-
-    useEffect(() => {
-      let audio;
-      if (soundNotification && playSound) {
-        audio = new Audio(soundUrl);
-
-        // Play the sound
-        audio.play().catch((error) => {
-          console.error("Error playing sound:", error);
-        });
-
-        // Ensure the sound plays for at least 5 seconds
-        const duration = 5000; // 5 seconds in milliseconds
-        const timer = setTimeout(() => {
-          audio.pause(); // Pause the sound after 5 seconds
-          audio.currentTime = 0; // Reset the sound to the beginning
-        }, duration);
-
-        // Clean up the timer and audio object
-        return () => {
-          clearTimeout(timer);
-          if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-          }
-        };
-      }
-    }, [playSound]);
-
-    return null; // No visible UI element needed
-  };
-
+  
+  
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -221,53 +184,13 @@ const WaiterDashboard = () => {
           </div>
 
           <div className="flex items-center justify-end">
-            <div
-              className="flex items-center gap-1 bg-[#EDECEC] px-3 py-2 rounded-full text-xs font_medium cursor-pointer"
-              onClick={() => {
-                if (soundNotification) {
-                  setSoundNotification(false);
-                } else {
-                  setSoundNotification(true);
-                  receiveNotification();
-                }
-              }}
-            >
-              {soundNotification ? (
-                <>
-                  <p className="text-base font_bold text-[#6D6D6D]">On</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="#06C167"
-                    className="size-6"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </>
-              ) : (
-                <>
-                  <p className="text-base font_bold text-[#6D6D6D]">Off</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="#292D32"
-                    className="size-6"
-                  >
-                    <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.57 16.476c-.223.082-.448.161-.674.238L7.319 4.137A6.75 6.75 0 0 1 18.75 9v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206Z" />
-                    <path
-                      fillRule="evenodd"
-                      d="M5.25 9c0-.184.007-.366.022-.546l10.384 10.384a3.751 3.751 0 0 1-7.396-1.119 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </>
-              )}
-              <SoundNotification playSound={setPlaySound} />
-            </div>
+            <SoundNotification 
+              playNotif={playSound && soundNotification} 
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+              setPlaySound={setPlaySound}
+            />
+
             <WaiterLogoutButton />
           </div>
         </div>
@@ -324,7 +247,7 @@ const WaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            {columnCount[cat?.label]}
+                            {columnCount[cat?.label]?.length}
                           </p>
                         </div>
                       </div>
@@ -354,238 +277,70 @@ const WaiterDashboard = () => {
                   Yay, you've seen it all.
                 </p>
               } // Message when all items have been loaded
-            >
-              {/* NEW ORDERS */}
+            >              
               <div className="flex flex-col mt-2">
-                {selectedCategory.label === "New order" && (
-                  <>
-                    {tableOrders &&
-                      tableOrders?.length > 0 &&
-                      tableOrders
-                        .filter((t) => t.status === selectedCategory.value)
-                        .map((tableOrder: any, i: number) => (
-                          <OrderItem
-                            key={i}
-                            order={tableOrder}
-                            selectedOrder={selectedOrder}
-                            ordersModal={ordersModal}
-                            openOrdersModal={() => openOrdersModal(tableOrder)}
-                            closeOrdersModal={() => closeOrdersModal()}
-                            getTableOrders={getTableOrders}
-                            selectedCategory={selectedCategory?.value}
-                          />
-                        ))}
-                  </>
-                )}
 
-                {selectedCategory.label === "Kitchen" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    ?.filter((t) => t.status === "kitchen")
-                    ?.map((tableOrder: any, i: number) => {
-                      const filteredOrder = tableOrder?.order?.filter(
-                        (o: any) => o?.status === "pending"
-                      );
-                      return (
-                        <>
-                          {filteredOrder?.length > 0 && (
-                            <MenuOrderItem
-                              key={i}
-                              order={tableOrder}
-                              orderStatus="pending"
-                              orderLength={filteredOrder.length}
-                              selectedOrder={selectedOrder}
-                              ordersModal={ordersModal}
-                              openOrdersModal={() =>
-                                openOrdersModal(tableOrder)
-                              }
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getTableOrders}
-                              selectedCategory={selectedCategory?.value}
-                            />
-                          )}
-                        </>
-                      );
-                    })}
-
-                {selectedCategory.label === "Cooking" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    ?.filter((t) => t.status === "kitchen")
-                    ?.map((tableOrder: any, i: number) => {
-                      const filteredOrder = tableOrder?.order?.filter(
-                        (o: any) => o?.status === "cooking"
-                      );
-
-                      // Extract statuses from array2
-                      const statusesToFilter = filteredOrder.map(
-                        (item) => item.status
-                      );
-
-                      // Filter array1 based on statuses from array2
-                      const filteredArray2 = tableOrders.filter((order) => {
-                        return order.order.some((orderItem) =>
-                          statusesToFilter.includes(orderItem.status)
-                        );
-                      });
-
-                      return (
-                        <Fragment key={i}>
-                          {filteredArray2?.map((order: any, i) => (
-                            <MenuOrderItem
-                              key={i}
-                              orderStatus="cooking"
-                              order={order}
-                              orderLength={filteredOrder.length}
-                              selectedOrder={selectedOrder}
-                              ordersModal={ordersModal}
-                              selectedCategory={selectedCategory?.value}
-                              openOrdersModal={() => openOrdersModal(order)}
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getTableOrders}
-                            />
-                          ))}
-                        </Fragment>
-                      );
-                    })}
-
-                {/* {selectedCategory.label === "Ready" &&
-                tableOrders &&
-                tableOrders.length > 0 &&
-                tableOrders
-                  .filter((t) => t.status === "kitchen")
-                  .map((tableOrder: any, i: number) => {
-                    const filteredOrder = tableOrder.order.filter(
-                      (o: any) => o?.status === "ready" || o?.status === "sent"
-                    );
-
-                    return (
-                      <Fragment key={i}>
-                        {filteredOrder.map((order: any, j: number) => (
-                          <MenuOrderItem
-                            key={`${i}-${j}`}
-                            orderStatus="ready"
-                            secondOrderStatus="sent"
-                            order={order}
-                            orderLength={filteredOrder.length}
-                            selectedOrder={selectedOrder}
-                            ordersModal={ordersModal}
-                            selectedCategory={selectedCategory?.value}
-                            openOrdersModal={() => openOrdersModal(order)}
-                            closeOrdersModal={() => closeOrdersModal()}
-                            getTableOrders={getTableOrders}
-                          />
-                        ))}
-                      </Fragment>
-                    );
-                  })} */}
-
-                {selectedCategory.label === "Ready" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    ?.filter((t) => t.status === "kitchen")
-                    ?.map((tableOrder: any, i: number) => {
-                      const filteredOrder = tableOrder?.order?.filter(
-                        (o: any) =>
-                          o?.status === "ready" || o?.status === "sent"
-                      );
-
-                      // Extract statuses from array2
-                      const statusesToFilter = filteredOrder.map(
-                        (item) => item.status
-                      );
-
-                      // Filter array1 based on statuses from array2
-                      const filteredArray2 = tableOrders.filter((order) => {
-                        return order.order.some((orderItem) =>
-                          statusesToFilter.includes(orderItem.status)
-                        );
-                      });
-
-                      return (
-                        <Fragment key={i}>
-                          {filteredArray2?.map((order: any, i) => (
-                            <MenuOrderItem
-                              key={i}
-                              orderStatus="ready"
-                              secondOrderStatus="sent"
-                              thirdOrderStatus="declined"
-                              order={order}
-                              orderLength={filteredOrder.length}
-                              selectedOrder={selectedReadyOrder}
-                              ordersModal={ordersModal}
-                              selectedCategory={selectedCategory?.value}
-                              openOrdersModal={() => openOrdersModal(order)}
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getTableOrders}
-                            />
-                          ))}
-                        </Fragment>
-                      );
-                    })}
-
-                {selectedCategory.label === "Completed" &&
-                  tableOrders &&
-                  tableOrders?.length > 0 &&
-                  tableOrders
-                    .filter((t) => t.status === "completed")
-                    .map((tableOrder: any, i: number) => (
-                      <OrderItem
-                        key={i}
-                        order={tableOrder}
-                        selectedOrder={selectedOrder}
-                        ordersModal={ordersModal}
-                        openOrdersModal={() => openOrdersModal(tableOrder)}
-                        closeOrdersModal={() => closeOrdersModal()}
-                        getTableOrders={getTableOrders}
-                        selectedCategory={selectedCategory?.value}
-                      />
-                    ))}
-
-                {/* {selectedCategory.label === "Completed" &&
-                tableOrders &&
-                tableOrders?.length > 0 &&
-                tableOrders
-                  ?.filter((t) => t.status === "completed")
-                  ?.map((tableOrder: any, i: number) => {
-                    const filteredOrder = tableOrder?.order?.filter(
-                      (o: any) => o?.status === "completed"
-                    );
-
-                    // Extract statuses from array2
-                    const statusesToFilter = filteredOrder.map(
-                      (item) => item.status
-                    );
-
-                    // Filter array1 based on statuses from array2
-                    const filteredArray2 = tableOrders.filter((order) => {
-                      return order.order.some((orderItem) =>
-                        statusesToFilter.includes(orderItem.status)
-                      );
-                    });
-
-                    return (
-                      <Fragment key={i}>
-                        {filteredArray2?.map((order: any, i) => (
-                          <MenuOrderItem
-                            key={i}
-                            orderStatus="completed"
-                            order={order}
-                            orderLength={filteredOrder.length}
-                            selectedOrder={selectedOrder}
-                            ordersModal={ordersModal}
-                            selectedCategory={selectedCategory?.value}
-                            openOrdersModal={() => openOrdersModal(order)}
-                            closeOrdersModal={() => closeOrdersModal()}
-                            getTableOrders={getTableOrders}
-                          />
-                        ))}
-                      </Fragment>
-                    );
-                  })} */}
+              {tableOrders ? (
+                columnCount[selectedCategory?.label] && columnCount[selectedCategory?.label].length > 0 ? (
+                  columnCount[selectedCategory?.label]?.map(
+                    (tableOrder: any, i: number) => {
+                      if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
+                        return (<OrderItem
+                          key={i}
+                          order={tableOrder}
+                          selectedOrder={selectedOrder}
+                          ordersModal={ordersModal}
+                          openOrdersModal={() => openOrdersModal(tableOrder)}
+                          closeOrdersModal={closeOrdersModal}
+                          getTableOrders={getTableOrders}
+                          selectedCategory={selectedCategory?.value}
+                        />)
+                      }else{
+                        return (<MenuOrderItem
+                          key={i}
+                          orderStatus={selectedCategory?.value}
+                          secondOrderStatus="sent"
+                          thirdOrderStatus="declined"
+                          order={tableOrder}
+                          orderLength={tableOrder?.order?.length}
+                          selectedOrder={selectedReadyOrder}
+                          ordersModal={ordersModal} 
+                          selectedCategory={selectedCategory?.value}
+                          openOrdersModal={() => openOrdersModal(tableOrder)}
+                          closeOrdersModal={() => closeOrdersModal()}
+                          getTableOrders={getTableOrders}
+                          selectedCategory={selectedCategory?.value}
+                        />)
+                      }
+                    }
+                  )
+                ) : (
+                  <div>No orders for the selected category.</div>
+                )
+              ) : (
+                <div className="h-48 w-full flex flex-row items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="#6D6D6D"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                </div>
+              )}
+                
               </div>
             </InfiniteScroll>
           </div>

@@ -6,6 +6,7 @@ const initialState = {
   hideLoading: false,
   error: null,
   table: null,
+  superWaiter: null,
 };
 
 export const tableSlice = createSlice({
@@ -27,6 +28,12 @@ export const tableSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.table = action.payload;
+    },
+    // add update menu
+    getAddUpdateSuperWaiter: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.superWaiter = action.payload;
     },
     // hide start call
     hideStartCall: (state) => {
@@ -58,6 +65,7 @@ export const {
   startCall,
   catchError,
   getAddUpdateRestaurantTable,
+  getAddUpdateSuperWaiter,
   hideStartCall,
   hideCatchError,
   showHideDinningMenuUpdate,

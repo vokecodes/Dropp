@@ -6,12 +6,15 @@ import {
   DialogTitle,
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import useIdleTimeout from "../utils/useIdleTimeout";
 import { useAppDispatch } from "../redux/hooks";
 import { logOutUserAccount } from "../_redux/auth/authAction";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
+import { useIdleTimer } from "react-idle-timer";
+
+const timeout = 30 * 60_000
+const promptBeforeIdle = 5 * 60_000
 
 const IdleTimerLayout = ({ children }) => {
   const { user } = useSelector(
@@ -23,6 +26,10 @@ const IdleTimerLayout = ({ children }) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isKitchenTabOpen, setIsKitchenTabOpen] = useState(
+    !!localStorage.getItem("kitchenTabActive")
+  );
 
   const [open, setOpen] = useState(false);
 
@@ -31,36 +38,61 @@ const IdleTimerLayout = ({ children }) => {
     setOpen(false);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const isProtectedPage = ['/waiter', '/waiter/super-waiter', '/chef/kitchen'].includes(location.pathname);
+  
+  
+  const onIdle = () => {
+    if (user && !isProtectedPage && !isKitchenTabOpen) {
+      handleLogout()
+      setOpen(false)
+    }
+  }
+
+  const onActive = () => {
+    setOpen(false)
+  }
+
+  const onPrompt = () => {
+    if (user && !isProtectedPage && !isKitchenTabOpen) {
+      setOpen(true)
+    }
+  }
+
+  const { activate } = useIdleTimer({
+    onIdle,
+    onActive,
+    onPrompt,
+    timeout,
+    promptBeforeIdle,
+    throttle: 500
+  })
+
+  const handleStillHere = () => {
+    activate()
+  }
 
   const handleClose = () => {
     setOpen(false);
-    stay();
-  };
-
-  const handleIdle = () => {
-    if (user) {
-      handleClickOpen();
-    }
-  };
-
-  const { idleTimer } = useIdleTimeout({
-    onIdle: handleIdle,
-    idleTime: 1800,
-    logoutHandler: handleLogout,
-  });
-
-  const stay = () => {
-    handleClose();
-    idleTimer.reset();
+    handleStillHere();
   };
 
   const handleClickLogout = () => {
     handleLogout();
     handleClose();
   };
+
+  useEffect(() => {
+    const handleStorageChange = (event: any) => {
+      if (event.key === "kitchenTabActive") {
+        setIsKitchenTabOpen(!!event.newValue);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <>
@@ -82,7 +114,7 @@ const IdleTimerLayout = ({ children }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClickLogout}>Sign out now</Button>
-          <Button onClick={stay} autoFocus>
+          <Button onClick={handleStillHere} autoFocus>
             Stay signed in
           </Button>
         </DialogActions>

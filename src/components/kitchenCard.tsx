@@ -2,6 +2,7 @@ import moment from 'moment';
 import { useEffect, useRef, useState } from 'react'
 import invariant from 'tiny-invariant';
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { dateFormatter } from '../utils/formatMethods';
 
 const KitchenCard = ({
     order,
@@ -37,7 +38,7 @@ const KitchenCard = ({
         style={dragging ? { opacity: 0.4, borderColor: '#16a34a', borderStyle: 'solid', borderWidth: '6px' } : {}}
     >
         <p className="font-semibold font_medium">
-            {moment(order?.updatedAt).format("DD/MM/YYYY H:MM A")}
+            {dateFormatter.format(new Date(order?.updatedAt))}
         </p>
         <p className="font-semibold font_medium mb-2">
             {order?.name} - {order?.table?.table} #
@@ -59,7 +60,11 @@ const KitchenCard = ({
         </div>
 
         {
-            kitchenCardButtons && kitchenCardButtons.map((cardButton: any) => cardButton)
+            kitchenCardButtons && kitchenCardButtons.map((cardButton: any, i: any) => (
+                <div key={i}>
+                    {cardButton}
+                </div>
+            ))
         }
 
         

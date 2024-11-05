@@ -16,7 +16,7 @@ import OutlineButton from "../../components/OutlineButton";
 import { CHEF_ROUTES } from "../../routes/routes";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
-import { addSection, getSections } from "../../_redux/section/sectionAction";
+import { addSection, deleteSection, getSections } from "../../_redux/section/sectionAction";
 
 const SectionManagement = () => {
   const dispatch = useAppDispatch();
@@ -51,7 +51,7 @@ const SectionManagement = () => {
 
   const [selectedLoading, setSelectedLoading] = useState();
 
-  const deleteSection = async (sectionId) => {
+  const deleteSectionFunc = async (sectionId) => {
     setSelectedLoading(sectionId);
     await dispatch(deleteSection(sectionId));
     setTimeout(() => {
@@ -95,7 +95,7 @@ const SectionManagement = () => {
                     {section?.length > 0 ? (
                       <div className="grid grid-cols-1 lg:grid-cols-4 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
                         {section?.map((section: any, i: number) => (
-                          <div className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
+                          <div key={i} className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
                             <div className="flex flex-row items-center justify-between">
                               <div className="flex-1 ">
                                 <p className="text-xl text-black font_medium">
@@ -109,7 +109,7 @@ const SectionManagement = () => {
                                 extraClasses="w-full my-2 rounded-full"
                                 loading={selectedLoading === section?._id}
                                 onClick={() => {
-                                  deleteSection(section?._id);
+                                  deleteSectionFunc(section?._id);
                                 }}
                               />
                             </div>

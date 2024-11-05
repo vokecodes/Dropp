@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -61,7 +61,7 @@ const RestaurantOrderItem = ({
               <div className="w-2/4">
                 {cartMenu?.length > 0 &&
                   cartMenu?.map((order: any, i: number) => (
-                    <div className="h-11 flex items-center mb-5">
+                    <div key={i} className="h-11 flex items-center mb-5">
                       <img
                         src={order?.images[0]}
                         alt="food"
@@ -93,7 +93,7 @@ const RestaurantOrderItem = ({
 
               <div className="w-1/4">
                 {cartMenu?.length > 0 &&
-                  cartMenu?.map((order: any) => {
+                  cartMenu?.map((order: any, i: any) => {
                     const price =
                       (order?.discount
                         ? order?.price - (order?.price / 100) * order?.discount
@@ -102,7 +102,7 @@ const RestaurantOrderItem = ({
                     // const priceAfterTax = (price / 100) * 85;
 
                     return (
-                      <p className="h-11 mb-5 text-xl font_bold text-black">
+                      <p key={i} className="h-11 mb-5 text-xl font_bold text-black">
                         ₦{formatPrice(price)}
                       </p>
                     );
@@ -170,7 +170,7 @@ const RestaurantOrderItem = ({
                     // const priceAfterTax = (price / 100) * 85;
 
                     return (
-                      <>
+                      <Fragment key={i}>
                         <p className="text-base font-bold font_regular text-black">
                           #{id?.substring(id?.length - 5)}
                         </p>
@@ -193,7 +193,7 @@ const RestaurantOrderItem = ({
                             ₦{formatPrice(price)}
                           </p>
                         </div>
-                      </>
+                      </Fragment>
                     );
                   })}
               </div>
@@ -478,8 +478,8 @@ const RestaurantOrderItem = ({
             <div className="flex px-8 pb-4">
               <div className="w-1/3">
                 {cartMenu?.length > 0 &&
-                  cartMenu?.map((order: any) => (
-                    <div className="h-11 flex items-center mb-5">
+                  cartMenu?.map((order: any, i: any) => (
+                    <div key={i} className="h-11 flex items-center mb-5">
                       <img
                         src={order?.images[0]}
                         alt="food"
@@ -499,7 +499,7 @@ const RestaurantOrderItem = ({
 
               <div className="w-1/3">
                 {cartMenu?.length > 0 &&
-                  cartMenu?.map((order: any) => {
+                  cartMenu?.map((order: any, i: any) => {
                     const price =
                       (order?.discount
                         ? order?.price - (order?.price / 100) * order?.discount
@@ -508,7 +508,7 @@ const RestaurantOrderItem = ({
                     // const priceAfterTax = (price / 100) * 85;
 
                     return (
-                      <p className="h-11 mb-5 text-xl font_bold text-black">
+                      <p key={i} className="h-11 mb-5 text-xl font_bold text-black">
                         ₦{formatPrice(price)}
                       </p>
                     );
@@ -550,7 +550,7 @@ const RestaurantOrderItem = ({
             <div className="flex">
               <div className="flex-1">
                 {cartMenu?.length > 0 &&
-                  cartMenu?.map((order: any) => {
+                  cartMenu?.map((order: any, i: any) => {
                     const price =
                       (order?.discount
                         ? order?.price - (order?.price / 100) * order?.discount
@@ -559,7 +559,7 @@ const RestaurantOrderItem = ({
                     // const priceAfterTax = (price / 100) * 85;
 
                     return (
-                      <div className="flex mb-3">
+                      <div key={i} className="flex mb-3">
                         <img
                           src={order?.images[0]}
                           alt="food"

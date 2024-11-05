@@ -27,11 +27,12 @@ import {
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import KitchenCard from "../../components/kitchenCard";
 import KitchenBoard from "../../components/KitchenBoard";
-// import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
+import io from "socket.io-client";
 
-// const socket = io(import.meta.env.VITE_BASE_API_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -99,16 +100,43 @@ const Kitchen = () => {
     getRestaurantOrders(page);
   }, []);
 
+
+  const [soundNotification, setSoundNotification] = useState(() => {
+    return JSON.parse(localStorage.getItem("playSound")) || false;
+  });
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 3000);
+  };
+
+
   // Listen for new orders from the server
-  // useState(() => {
-  //   socket.on("newRestaurantOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrders();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useState(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrders();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("kitchenTabActive");
+    };
+  
+    localStorage.setItem("kitchenTabActive", "true");
+  
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, []);
 
   const [declineModal, setDeclineModal] = useState(false);
   const openDeclineModal = () => setDeclineModal(true);
@@ -476,6 +504,9 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
+  console.log('restaurantOrders= ', restaurantOrders)
+  console.log('filteredRestaurantOrders= ', filteredRestaurantOrders)
+
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -487,10 +518,18 @@ const Kitchen = () => {
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
+            <SoundNotification 
+              playNotif={playSound && soundNotification} 
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+              setPlaySound={setPlaySound}
+            />
+
             <OutlineButton
               title="Menu"
               onClick={() => navigate(CHEF_ROUTES.linkKitchenMenu)}
             />
+
             <LogoutButton />
           </div>
         </div>
@@ -573,7 +612,7 @@ const Kitchen = () => {
                       </p>
                     </div>
                     {table?.length > 0 &&
-                      table?.map((s: any, i: number) => (
+                      table?.filter(item => !!item?.table).map((s: any, i: number) => (
                         <div
                           className="flex items-center cursor-pointer mb-2"
                           key={i}

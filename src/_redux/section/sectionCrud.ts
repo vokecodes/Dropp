@@ -24,3 +24,7 @@ export const addSubChefRestaurantSection = (data: any) => {
 export const deleteSubChefRestaurantSection = (sectionId: string) => {
   return SERVER.delete(`${SUB_CHEF_URL}/restaurant-section/${sectionId}`);
 };
+
+export const getSubChefRestaurantSections = () => {
+  return SERVER.get(`${SUB_CHEF_URL}/sections`);
+};

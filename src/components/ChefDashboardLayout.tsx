@@ -17,7 +17,7 @@ import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { SUB_CHEF_USER } from "../config/UserType";
 
-const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
+const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
 
   const { user, auth } = useSelector(
@@ -380,6 +380,22 @@ const ChefDashboardLayout = ({ page, children }: DashboardLayoutProps) => {
         location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline ||
         location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn,
       to: SUB_CHEF_ROUTES.linkSubChef,
+    },
+    {
+      icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === SUB_CHEF_ROUTES.linkSubChefReports
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Reports",
+      active: location?.pathname === SUB_CHEF_ROUTES.linkSubChefReports,
+      to: SUB_CHEF_ROUTES.linkSubChefReports,
+      beta: true,
     },
     {
       icon: (

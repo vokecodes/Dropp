@@ -20,6 +20,20 @@ export const deleteRestaurantTable = (tableId: string) => {
   return SERVER.delete(`${RESTAURANT_TABLE_URL}/${tableId}`);
 };
 
+export const addRestaurantSuperWaiter = (data: any) => {
+  return SERVER.post(`${RESTAURANT_TABLE_URL}/super`, { ...data });
+};
+
+export const updateRestaurantSuperWaiter = (data: any, tableId: string) => {
+  return SERVER.patch(`${RESTAURANT_TABLE_URL}/super/${tableId}`, {
+    ...data,
+  });
+};
+
+export const deleteRestaurantSuperWaiter = (tableId: string) => {
+  return SERVER.delete(`${RESTAURANT_TABLE_URL}/super/${tableId}`);
+};
+
 export const getSubChefRestaurantTable = () => {
   return SERVER.get(`${SUB_CHEF_URL}/restaurant-table`);
 };

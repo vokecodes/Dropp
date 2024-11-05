@@ -100,6 +100,15 @@ export const WaiterTableValues = {
   whatasappNumber: "",
 };
 
+export const SuperWaiterTableValues = {
+  section: [],
+  employeeAssigned: "",
+  employeeID: "",
+  subTables: [],
+  password: "",
+  whatsappNumber: "",
+};
+
 export const NewSubscriptionMenuValues = {
   foodName: "",
   price: "",
@@ -131,6 +140,11 @@ export const RestaurantCheckoutValues = {
 export const WaiterLoginValues = {
   employeeID: "",
   table: "",
+  password: "",
+};
+
+export const SuperWaiterLoginValues = {
+  employeeID: "",
   password: "",
 };
 

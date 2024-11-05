@@ -20,13 +20,15 @@ const Input = ({
   referralCodeError,
   isReferralCodeLoading,
   container,
+  touched,
+  multipleSelect,
 }: InputProps) => {
   return (
     <div className={`relative my-5 ${container}`}>
       {type !== "dropdown" && type !== "textarea" && (
         <input
           type={type}
-          value={value}
+          value={value ? value : ""}
           name={name}
           onChange={onChange}
           onBlur={onBlur}
@@ -56,8 +58,11 @@ const Input = ({
           onChange={onChange}
           name={name}
           value={value}
+          multiple={multipleSelect}
         >
-          <option value="select">Select a category</option>
+          <option value="select">
+            Select {multipleSelect ? "tables" : "a category"}
+          </option>
           {options &&
             options?.length > 0 &&
             options?.map((option: any, i: number) => (

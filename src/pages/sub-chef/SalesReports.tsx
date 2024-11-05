@@ -11,23 +11,20 @@ import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import PageTitle from "../../components/PageTitle";
 import { useAppDispatch } from "../../redux/hooks";
 import {
-  getChefRestaurantWalletAccount,
-  getChefWalletAccount,
-  getProfileChefAccount,
-  getRestaurantDashboardAccount,
+  getRestaurantSubChefDashboardAccount,
 } from "../../_redux/user/userAction";
 import { formatRemoteAmountKobo } from "../../utils/formatMethods";
 import {
-  getOrdersPage,
-  getRestaurantOrdersPage,
+  getSubChefOrdersPage,
+  getSubChefRestaurantOrdersPage,
 } from "../../_redux/user/userCrud";
-import { getSections } from "../../_redux/section/sectionAction";
-import { getTables } from "../../_redux/table/tableAction";
+import { subChefGetTables } from "../../_redux/table/tableAction";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { Popover, RadioGroup, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
+import { getSubChefRestaurantSections } from "../../_redux/section/sectionCrud";
 
 const PAYMENT_OPTIONS = ["All", "Online", "POS"];
 
@@ -60,23 +57,32 @@ const statusOptions = ["Completed", "Kitchen", "Declined", "Void"];
 
 const SalesReports = () => {
   const dispatch = useAppDispatch();
-  const { user, dashboardLoading, dashboard, section, table } = useSelector(
+  const { user, dashboardLoading, dashboard, table } = useSelector(
     (state: any) => ({
       user: state.user.user,
       dashboardLoading: state.user.dashboardLoading,
       dashboard: state.user.dashboard,
-      section: state.section.section,
       table: state.table.table,
     }),
     shallowEqual
   );
 
+
+  const [section, setSection] = useState([])
+
+  const fetchSections = async () => {
+    await getSubChefRestaurantSections().then(({ data }) => {
+        setSection(data.data);
+    }).catch((err) => {
+        const error = err?.response?.data;
+        console.log(error);
+      });;
+  };
+
+
   useEffect(() => {
-    dispatch(getProfileChefAccount());
-    dispatch(getChefWalletAccount());
-    dispatch(getChefRestaurantWalletAccount());
-    dispatch(getSections());
-    dispatch(getTables());
+    dispatch(subChefGetTables());
+    fetchSections()
   }, []);
 
   useEffect(() => {
@@ -146,6 +152,7 @@ const SalesReports = () => {
     },
   ];
 
+  
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -175,7 +182,7 @@ const SalesReports = () => {
 
   // Function to fetch more data when scrolling
   const fetchRestaurantOrders = async () => {
-    await getRestaurantOrdersPage(
+    await getSubChefRestaurantOrdersPage(
       page,
       startDate,
       endDate,
@@ -200,7 +207,7 @@ const SalesReports = () => {
   };
 
   const fetchOrders = async () => {
-    await getOrdersPage(ordersPage, startDate, endDate).then(({ data }) => {
+    await getSubChefOrdersPage(ordersPage, startDate, endDate).then(({ data }) => {
       if (page === 1) {
         setOrdersTransactions(data.data);
       } else {
@@ -215,6 +222,8 @@ const SalesReports = () => {
       );
     });
   };
+  
+  
 
   // Reset page and data when filters change
   const resetFilters = () => {
@@ -226,7 +235,7 @@ const SalesReports = () => {
 
   useEffect(() => {
     dispatch(
-      getRestaurantDashboardAccount(
+        getRestaurantSubChefDashboardAccount(
         startDate,
         endDate,
         paymentType,
@@ -237,6 +246,8 @@ const SalesReports = () => {
     fetchRestaurantOrders();
     fetchOrders();
   }, [endDate, paymentType, filterSection, filterTable]);
+
+  
 
   const [isDownloading, setIsDownloading] = useState(false);
 
