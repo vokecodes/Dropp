@@ -166,6 +166,7 @@ export const RestaurantCheckoutSchema = Yup.object().shape({
   name: Yup.string().optional(),
   email: Yup.string().email().optional(),
   phoneNumber: Yup.string().required("Phone Number is required."),
+  notes: Yup.string().optional(),
 });
 
 export const WaiterLoginSchema = Yup.object().shape({
