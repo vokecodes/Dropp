@@ -10,7 +10,11 @@ import { RestaurantCheckoutValues } from "../utils/FormInitialValue";
 import { RestaurantCheckoutSchema } from "../utils/ValidationSchema";
 import axios from "axios";
 import { CHECKOUT_CODE_URL } from "../_redux/urls";
-import { formatPrice, handlePhoneNumber, truncateText } from "../utils/formatMethods";
+import {
+  formatPrice,
+  handlePhoneNumber,
+  truncateText,
+} from "../utils/formatMethods";
 import { useAppDispatch } from "../redux/hooks";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Modal } from "@mui/material";
@@ -22,6 +26,7 @@ const deliveryFormInputs = [
   { type: "text", placeholder: "Name", name: "name" },
   { type: "email", placeholder: "Email", name: "email" },
   { type: "text", placeholder: "WhatsApp No.", name: "phoneNumber" },
+  { type: "textarea", placeholder: "Notes", name: "notes" },
 ];
 
 const RestaurantCart = ({
@@ -202,15 +207,17 @@ const RestaurantCart = ({
   const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
-    if(cartMenu.length < 1){
-      setCartModal(!cartModal)
+    if (cartMenu.length < 1) {
+      setCartModal(!cartModal);
     }
-  }, [cartMenu])
+  }, [cartMenu]);
 
   return (
     <div className="box-border w-screen lg:w-full h-screen bg-neutral-100 lg:bg-white py-1 lg:py-6 lg:px-2 shadow scroller">
       <div className="w-full lg:block flex justify-between items-center my-3 px-2 lg:px-1">
-        <h1 className="text-3xl font_regular font-semibold text-black">Your bag</h1>
+        <h1 className="text-3xl font_regular font-semibold text-black">
+          Your bag
+        </h1>
         <div
           className="lg:hidden rounded-full bg-neutral-300 flex items-center justify-center w-10 h-10 cursor-pointer"
           onClick={() => setCartModal(!cartModal)}
@@ -228,7 +235,10 @@ const RestaurantCart = ({
                 cartMenu?.map((meal: any, index: number) => {
                   return (
                     <div key={index} className="w-full bg-white p-1">
-                      <div className="h-28 w-full flex flex-row justify-between gap-x-2" key={index}>
+                      <div
+                        className="h-28 w-full flex flex-row justify-between gap-x-2"
+                        key={index}
+                      >
                         <div className="w-1/3">
                           <img
                             src={meal.images[0]}
@@ -238,11 +248,10 @@ const RestaurantCart = ({
                         </div>
 
                         <div className="w-2/3 h-full flex flex-row items-center justify-between gap-x-2">
-
                           {/* NAME & PRICE */}
                           <div className="h-full w-1/2 text-start flex flex-col items-start justify-around">
                             <p className="text-md input_text capitalize font-medium ">
-                            {truncateText(meal?.foodName, 25, 23)}
+                              {truncateText(meal?.foodName, 25, 23)}
                             </p>
                             <p className="text-xl pt-1 font-bold">
                               ₦
@@ -292,9 +301,13 @@ const RestaurantCart = ({
               {cartMenu?.length > 0 && (
                 <>
                   <div className="w-full flex flex-row items-center justify-between py-3 bg-white px-2">
-                    <p className="text-xl font-semibold font_regular">{cartMenu?.length} Item{cartMenu?.length > 1 && "s" }</p>
+                    <p className="text-xl font-semibold font_regular">
+                      {cartMenu?.length} Item{cartMenu?.length > 1 && "s"}
+                    </p>
 
-                    <p className="text-xl font-bold font_bold">₦{formatPrice(totalAmount)}</p>
+                    <p className="text-xl font-bold font_bold">
+                      ₦{formatPrice(totalAmount)}
+                    </p>
                   </div>
 
                   <div className="py-6 w-full px-2">
@@ -326,33 +339,38 @@ const RestaurantCart = ({
                         You may also like
                       </p>
                       <div className="flex items-start justify-start gap-y-1 gap-x-2 overflow-x-scroll h-fit w-full py-3">
-                        {chefRecommendedMenu?.filter((item: any) => !cartMenu?.find((m: any) => m._id === item._id )).map((recommendedMenu: any) => (
-                          <div
-                            key={recommendedMenu._id}
-                            className="w-64 h-36 shrink-0"
-                          >
-                            <RestaurantShopCartMenuCard
-                              chefName={chef?.business?.businessName}
-                              menu={recommendedMenu}
-                              onClickAddToBag={() =>
-                                handleAddToBag(recommendedMenu)
-                              }
-                              inCart={cartMenu?.find(
-                                (m: any) => m._id === recommendedMenu._id
-                              )}
-                              cartMenu={cartMenu}
-                              handleIncrement={handleIncrement}
-                              handleDecrement={handleDecrement}
-                              selectedMealQuantityReached={
-                                selectedMealQuantityReached
-                              }
-                              showMinimumQuantityReached={
-                                showMinimumQuantityReached
-                              }
-                              addMenuError={addMenuError}
-                            />
-                          </div>
-                        ))}
+                        {chefRecommendedMenu
+                          ?.filter(
+                            (item: any) =>
+                              !cartMenu?.find((m: any) => m._id === item._id)
+                          )
+                          .map((recommendedMenu: any) => (
+                            <div
+                              key={recommendedMenu._id}
+                              className="w-64 h-36 shrink-0"
+                            >
+                              <RestaurantShopCartMenuCard
+                                chefName={chef?.business?.businessName}
+                                menu={recommendedMenu}
+                                onClickAddToBag={() =>
+                                  handleAddToBag(recommendedMenu)
+                                }
+                                inCart={cartMenu?.find(
+                                  (m: any) => m._id === recommendedMenu._id
+                                )}
+                                cartMenu={cartMenu}
+                                handleIncrement={handleIncrement}
+                                handleDecrement={handleDecrement}
+                                selectedMealQuantityReached={
+                                  selectedMealQuantityReached
+                                }
+                                showMinimumQuantityReached={
+                                  showMinimumQuantityReached
+                                }
+                                addMenuError={addMenuError}
+                              />
+                            </div>
+                          ))}
                       </div>
                     </div>
                   )}
@@ -394,12 +412,11 @@ const RestaurantCart = ({
                   loading={checkoutLoading}
                   extraClasses="w-full p-3 rounded-full"
                   onClick={() => {
-                    if(values.email && values.phoneNumber){
-                      handleSubmit()
-                    }else{
-                      handleClickOpen()
+                    if (values.email && values.phoneNumber) {
+                      handleSubmit();
+                    } else {
+                      handleClickOpen();
                     }
-                    
                   }}
                 />
                 <OutlineButton
@@ -407,16 +424,14 @@ const RestaurantCart = ({
                   loading={checkoutLaterLoading}
                   extraClasses="w-full p-3 rounded-full px-8 py-2"
                   onClick={() => {
-                    if (isValid) {
-                      handlePayLaterCheckout({
-                        order: cartOrder,
-                        totalAmount,
-                        discountAmount,
-                        ...values,
-                        restaurant: chef?.profile?._id,
-                        cartMenu,
-                      });
-                    }
+                    handlePayLaterCheckout({
+                      order: cartOrder,
+                      totalAmount,
+                      discountAmount,
+                      ...values,
+                      restaurant: chef?.profile?._id,
+                      cartMenu,
+                    });
                   }}
                 />
 
@@ -496,7 +511,11 @@ const RestaurantCart = ({
         </div>
       </Modal>
 
-      <AlertDialog message='Your email and Whatsapp number are required for online payments' handleClose={handleClose} open={openAlertModal} />
+      <AlertDialog
+        message="Your email and Whatsapp number are required for online payments"
+        handleClose={handleClose}
+        open={openAlertModal}
+      />
     </div>
   );
 };

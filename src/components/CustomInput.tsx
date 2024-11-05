@@ -19,18 +19,29 @@ const Input = ({
   onkeyup,
   referralCodeError,
   isReferralCodeLoading,
-  selectPlaceholder,
   container,
   touched,
   multipleSelect,
 }: InputProps) => {
-
   return (
     <div className={`relative my-5 ${container}`}>
-      {type !== "dropdown" && (
+      {type !== "dropdown" && type !== "textarea" && (
         <input
           type={type}
           value={value ? value : ""}
+          name={name}
+          onChange={onChange}
+          onBlur={onBlur}
+          disabled={disabled}
+          onInput={onInput}
+          className={`block w-full rounded-xl border gray_border_color input_text font_medium py-4 pl-8 pr-4 sm:text-sm outline-none ${extraClasses}`}
+          autoComplete="off"
+          onKeyUp={onkeyup}
+        />
+      )}
+      {type === "textarea" && (
+        <textarea
+          value={value}
           name={name}
           onChange={onChange}
           onBlur={onBlur}
@@ -50,7 +61,7 @@ const Input = ({
           multiple={multipleSelect}
         >
           <option value="select">
-            Select {multipleSelect ? 'tables' : 'a category'}
+            Select {multipleSelect ? "tables" : "a category"}
           </option>
           {options &&
             options?.length > 0 &&
@@ -101,11 +112,13 @@ const Input = ({
       )}
 
       {error && name === "password" ? (
-        <p className="text-[12px] font_light text-red-500">Password should be a minimum of 8 characters. These includes a capital letter, a number and a special character.</p>
-        ) : error && name !== "password" ? (
-          <p className="text-sm text-red-500 text-center">{error}</p>
-        ) : null
-      }
+        <p className="text-[12px] font_light text-red-500">
+          Password should be a minimum of 8 characters. These includes a capital
+          letter, a number and a special character.
+        </p>
+      ) : error && name !== "password" ? (
+        <p className="text-sm text-red-500 text-center">{error}</p>
+      ) : null}
 
       {name === "referralCode" && referralCodeError && (
         <p className="text-sm text-red-500 text-center">{referralCodeError}</p>

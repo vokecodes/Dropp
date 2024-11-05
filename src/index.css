@@ -4,8 +4,7 @@
 
 @font-face {
   font-family: "Gilroy_Regular";
-  src: local("Gilroy_Regular"),
-    url(/fonts/Gilroy-Regular.ttf) format("woff");
+  src: local("Gilroy_Regular"), url(/fonts/Gilroy-Regular.ttf) format("woff");
 }
 
 body {
@@ -294,6 +293,13 @@ code {
 }
 
 input + .placeholder_text_container .placeholder_text {
+  background-color: #fff;
+  font-size: 12px;
+  transform: translate(0, -110%);
+  color: #8e8e8e;
+}
+
+textarea + .placeholder_text_container .placeholder_text {
   background-color: #fff;
   font-size: 12px;
   transform: translate(0, -110%);

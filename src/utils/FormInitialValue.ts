@@ -134,6 +134,7 @@ export const RestaurantCheckoutValues = {
   name: "",
   email: "",
   phoneNumber: "",
+  notes: "",
 };
 
 export const WaiterLoginValues = {
