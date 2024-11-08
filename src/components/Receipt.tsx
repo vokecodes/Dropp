@@ -94,8 +94,8 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
     
                   return (
                     <div key={i} className='w-full flex flex-row justify-between items-center gap-x-5'>
-                      <p className='w-fit font-semibold'>{meal?.foodName}</p>
-                      <p className='w-fit font-semibold'>₦{meal.price * meal.quantity}</p>
+                      <p className='w-fit font-semibold text-wrap'>{meal?.foodName}</p>
+                      <p className='w-fit font-semibold text-nowrap'>₦{meal.price * meal.quantity}</p>
                     </div>
                   )
                 })}
