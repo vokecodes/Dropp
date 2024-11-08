@@ -20,7 +20,6 @@ const Input = ({
   referralCodeError,
   isReferralCodeLoading,
   container,
-  touched,
   multipleSelect,
 }: InputProps) => {
   return (
