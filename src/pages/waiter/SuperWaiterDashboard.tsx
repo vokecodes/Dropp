@@ -220,7 +220,7 @@ const SuperWaiterDashboard = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <>
               <span className="sr-only">Dropp</span>
-              <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
             </>
           </div>
 

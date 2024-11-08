@@ -25,6 +25,7 @@ import axios from "axios";
 import {
   DELIVERY_COST,
   DINNING_MENU_CATEGORY_URL,
+  RESTAURANT_TABLE_URL,
   TRANSACTION_URL,
 } from "../../_redux/urls";
 import { CUSTOMER_ROUTES, HOME_ROUTES } from "../../routes/routes";
@@ -47,6 +48,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import RestaurantMeal from "../../components/RestaurantMeal";
 import { Images } from "../../config/images";
 import AlertDialog from "../../components/AlertDialog";
+import DownloadPDFButton from "../../components/Receipt";
 
 const RestaurantShop = () => {
   const navigate = useNavigate();
@@ -65,6 +67,9 @@ const RestaurantShop = () => {
   const { businessName, table } = useParams();
 
   const [chef, setChef] = useState<any>(null);
+  const [waiter, setWaiter] = useState<any>(null);
+  const [receiptValues, setReceiptValues] = useState<any>({})
+  const [orderId, setOrderId] = useState<any>('')
 
   const [chefRecommendedMenu, setChefRecommendedMenu] = useState<any>(null);
 
@@ -96,6 +101,16 @@ const RestaurantShop = () => {
     }
   };
 
+  const getWaiter = async () => {
+    SERVER.get(
+      `${RESTAURANT_TABLE_URL}/waiter/${table}`
+    )
+      .then(({ data }) => {
+        setWaiter(data.data);
+      })
+      .catch((err) => {});
+  };
+
   useEffect(() => {
     ReactGA.send({
       hitType: "pageview",
@@ -106,6 +121,7 @@ const RestaurantShop = () => {
 
   useEffect(() => {
     getChef();
+    getWaiter();
   }, []);
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -234,6 +250,9 @@ const RestaurantShop = () => {
         `${TRANSACTION_URL}/verify/${referenceId}`
       );
       const result = data?.data;
+      
+      console.log('data= ', data)
+      console.log('result= ', result)
 
       if (result?.status) {
         closeVerifyPaymentModal();
@@ -267,6 +286,7 @@ const RestaurantShop = () => {
             alert("Transaction was not completed, window closed.");
           },
           callback: function (response: any) {
+            console.log('response= ', response)
             // let message = "Payment complete! Reference: " + response.reference;
             // alert(message);
             // TrackGoogleAnalyticsEvent(
@@ -286,6 +306,7 @@ const RestaurantShop = () => {
             resetCartView();
             dispatch(clearCart());
             setCartMenu([]);
+            setOrderId(data.data.orderId);
             openVerifyPaymentModal();
             verifyTransaction(data.data.orderId);
           },
@@ -316,6 +337,7 @@ const RestaurantShop = () => {
         resetCartView();
         dispatch(clearCart());
         setCartMenu([]);
+        setOrderId(data.data.orderId);
         openModal();
       }
     } catch (err) {
@@ -752,6 +774,7 @@ const RestaurantShop = () => {
                     cartModal={cartModal}
                     setCartModal={setCartModal}
                     totalAmount={totalAmount}
+                    setReceiptValues={setReceiptValues}
                   />
                 </div>
               </Modal>
@@ -917,8 +940,7 @@ const RestaurantShop = () => {
                 <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
                   <div className="flex flex-col justify-between items-center p-0 h-full">
                     <div
-                      className="h-fit my-3 w-100 w-full flex flex-col gap-y-10"
-                      style={{ minHeight: "80%" }}
+                      className="h-fit my-3 w-100 w-full flex flex-col gap-y-10 min-h-60% lg:min-h-[80%]"
                     >
                       <div className="flex">
                         <p className="flex-1 text-xl text-center font_bold black2"></p>
@@ -933,8 +955,7 @@ const RestaurantShop = () => {
                       </div>
 
                       <div
-                        className="flex flex-col justify-center items-center h-full w-full mb-5"
-                        style={{ minHeight: "80%" }}
+                        className="flex flex-col justify-center items-center h-full w-full mb-5 h-fit lg:min-h-[80%]"
                       >
                         <div className="flex flex-col justify-center items-center w-full">
                           <div className="my-6 w-20 lg:w-28 h-20 lg:h-28 border-8 primary_border_color rounded-full flex justify-center items-center">
@@ -961,12 +982,14 @@ const RestaurantShop = () => {
                       </div>
                     </div>
 
-                    <div className="my-10 w-full">
-                      <Button
-                        title="Okay"
-                        extraClasses="w-full p-3 rounded-full"
-                        onClick={() => closeModal()}
-                      />
+                    <div className="my-3 lg:my-10 w-full">
+                      <DownloadPDFButton chef={chef} waiter={waiter}receiptValues={receiptValues} orderId={orderId}>
+                        <Button
+                          title="Download receipt"
+                          extraClasses="w-full p-3 rounded-full"
+                          // onClick={() => closeModal()}
+                        />
+                      </DownloadPDFButton>
                     </div>
                   </div>
                 </div>
