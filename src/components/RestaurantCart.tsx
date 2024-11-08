@@ -418,7 +418,6 @@ const RestaurantCart = ({
                         customerName: values?.name,
                         order: cartOrder,
                         totalAmount: totalAmount,
-                        discountAmount: discountAmount,
                         cartMenu,
                         paidBy: 'Online'
                       })
@@ -447,7 +446,6 @@ const RestaurantCart = ({
                       customerName: values?.name,
                       order: cartOrder,
                       totalAmount: totalAmount,
-                      discountAmount: discountAmount,
                       cartMenu,
                       paidBy: 'POS'
                     })
