@@ -15,6 +15,7 @@ import { ClickAwayListener } from "@mui/material";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
+import { getABusinessByName } from "../../_redux/business/businessCrud";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -36,6 +37,18 @@ const SuperWaiterDashboard = () => {
   const [table, setTable] = useState([]);
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
+  const [chef, setChef] = useState<any>(null);
+
+  const getChef = async () => {
+    try {
+      const { data } = await getABusinessByName(superWaiter?.businessName);
+
+      if (data) {
+        setChef(data.data);
+      }
+    } catch (error) {
+    }
+  };
 
   const getRestaurantOrders = async (currentPage = 1) => {
     SERVER.get(
@@ -135,6 +148,7 @@ const SuperWaiterDashboard = () => {
   useEffect(() => {
     getRestaurantTables();
     getRestaurantOrders(page);
+    getChef();
   }, []);
 
   const sortByUpdatedAt = (arr) => {
@@ -220,7 +234,7 @@ const SuperWaiterDashboard = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <>
               <span className="sr-only">Dropp</span>
-              <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
             </>
           </div>
 
@@ -410,6 +424,8 @@ const SuperWaiterDashboard = () => {
                               closeOrdersModal={closeOrdersModal}
                               getTableOrders={getRestaurantOrders}
                               selectedCategory={selectedCategory?.value}
+                              chef={chef}
+                              waiter={table.filter(item => item.table === selectedTable)[0]}
                             />)
                           }else{
                             return (<MenuOrderItem

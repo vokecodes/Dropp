@@ -57,6 +57,7 @@ const RestaurantCart = ({
   handleAddToBag,
   cartModal,
   setCartModal,
+  setReceiptValues,
 }: any) => {
   const { user, auth } = useSelector(
     (state: any) => ({
@@ -413,6 +414,14 @@ const RestaurantCart = ({
                   extraClasses="w-full p-3 rounded-full"
                   onClick={() => {
                     if (values.email && values.phoneNumber) {
+                      setReceiptValues({
+                        customerName: values?.name,
+                        order: cartOrder,
+                        totalAmount: totalAmount,
+                        cartMenu,
+                        paidBy: 'Online'
+                      })
+
                       handleSubmit();
                     } else {
                       handleClickOpen();
@@ -432,6 +441,14 @@ const RestaurantCart = ({
                       restaurant: chef?.profile?._id,
                       cartMenu,
                     });
+                    
+                    setReceiptValues({
+                      customerName: values?.name,
+                      order: cartOrder,
+                      totalAmount: totalAmount,
+                      cartMenu,
+                      paidBy: 'POS'
+                    })
                   }}
                 />
 

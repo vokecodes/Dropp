@@ -514,7 +514,7 @@ const Kitchen = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/">
               <span className="sr-only">Homemade</span>
-              <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
