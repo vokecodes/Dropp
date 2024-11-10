@@ -414,14 +414,7 @@ const RestaurantCart = ({
                   extraClasses="w-full p-3 rounded-full"
                   onClick={() => {
                     if (values.email && values.phoneNumber) {
-                      setReceiptValues({
-                        customerName: values?.name,
-                        order: cartOrder,
-                        totalAmount: totalAmount + processingFee,
-                        cartMenu,
-                        paidBy: 'Online',
-                        processingFee: processingFee
-                      })
+                      
 
                       handleSubmit();
                     } else {
@@ -513,7 +506,17 @@ const RestaurantCart = ({
                 title="Proceed"
                 extraClasses="w-full p-3 rounded-full mt-3"
                 onClick={() => {
+                  setReceiptValues({
+                    customerName: values?.name,
+                    order: cartOrder,
+                    totalAmount: totalAmount + processingFee,
+                    cartMenu,
+                    paidBy: 'Online',
+                    processingFee: processingFee
+                  })
+                  
                   closePayNowModal();
+                  
                   handleCheckout({
                     order: cartOrder,
                     totalAmount: totalAmount + processingFee,

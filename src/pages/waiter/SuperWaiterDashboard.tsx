@@ -174,6 +174,8 @@ const SuperWaiterDashboard = () => {
       }
     })
 
+    const suffixes = {};
+
     table && superWaiter && sortedByDate &&
       sortedByDate?.length > 0 && sortedByDate.forEach(order => {
         const tableNumber = order?.table?.table;
@@ -213,6 +215,15 @@ const SuperWaiterDashboard = () => {
                 tableOrderMap[tableNumber]["Cooking"]?.push(order)
               }
             }
+
+            if (!suffixes[order?.id]) {
+              suffixes[order?.id] = 0;
+            }
+      
+            const suffix = String.fromCharCode(97 + suffixes[order?.id]);
+            o.displayId = `${order?.id}-${suffix}`;
+      
+            suffixes[order?.id] += 1;
           });
         }
         

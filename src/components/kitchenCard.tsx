@@ -42,7 +42,7 @@ const KitchenCard = ({
         </p>
         <p className="font-semibold font_medium mb-2">
             {order?.name} - {order?.table?.table} #
-            {order?._id?.substring(order?._id?.length - 5)}
+            {order?.displayId?.slice(-6)}
         </p>
         <div className="flex flex-row">
             <img
