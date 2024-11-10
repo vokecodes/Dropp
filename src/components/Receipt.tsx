@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { GiCook } from 'react-icons/gi';
-import { dateFormatter, formatPrice } from '../utils/formatMethods';
+import { dateFormatter, formatPrice, formatRemoteAmountKobo } from '../utils/formatMethods';
 
 type ReceiptProps = {
   chef: any,
@@ -80,7 +80,10 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
                   return (
                     <div key={i} className='w-full flex flex-row justify-between items-center gap-x-5'>
                       <p className='w-fit font-semibold text-wrap'>{meal?.menu.foodName}</p>
-                      <p className='w-fit font-semibold text-nowrap'>₦{meal.menu.price * meal.quantity}</p>
+                      <p className='w-fit font-semibold text-nowrap'>{
+                        formatRemoteAmountKobo(meal.menu.price * meal.quantity).naira}
+                        {formatRemoteAmountKobo(meal.menu.price * meal.quantity).kobo
+                        }</p>
                     </div>
                   )
                 })}
@@ -95,7 +98,10 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
                   return (
                     <div key={i} className='w-full flex flex-row justify-between items-center gap-x-5'>
                       <p className='w-fit font-semibold text-wrap'>{meal?.foodName}</p>
-                      <p className='w-fit font-semibold text-nowrap'>₦{meal.price * meal.quantity}</p>
+                      <p className='w-fit font-semibold text-nowrap'>{
+                        formatRemoteAmountKobo(meal.price * meal.quantity).naira}
+                        {formatRemoteAmountKobo(meal.price * meal.quantity).kobo
+                      }</p>
                     </div>
                   )
                 })}
@@ -106,13 +112,39 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
           
         <div className='w-full flex flex-row justify-between items-center gap-x-5'>
           <p className='w-fit font-semibold'>Subtotal</p>
-          <p className='w-fit font-semibold'>{formatPrice(totalPrice)}</p>
+          <p className='w-fit font-semibold'>
+            {formatRemoteAmountKobo(totalPrice).naira}
+            {formatRemoteAmountKobo(totalPrice).kobo}
+          </p>
         </div>
         
         { discountValue > 0 && (
           <div className='w-full flex flex-row justify-between items-center gap-x-5'>
             <p className='w-fit font-semibold'>Total discount</p>
-            <p className='w-fit font-semibold'>{formatPrice(discountValue)}</p>
+            <p className='w-fit font-semibold'>
+              {formatRemoteAmountKobo(discountValue).naira}
+              {formatRemoteAmountKobo(discountValue).kobo}
+            </p>
+          </div>
+        )}
+        
+        { receiptValues.paidBy === 'Online' && waiterScreen && (
+          <div className='w-full flex flex-row justify-between items-center gap-x-5'>
+            <p className='w-fit font-semibold'>Processing fee</p>
+            <p className='w-fit font-semibold'>
+              {formatRemoteAmountKobo(receiptValues?.totalAmount + discountValue - totalPrice).naira}
+              {formatRemoteAmountKobo(receiptValues?.totalAmount + discountValue - totalPrice).kobo}
+            </p>
+          </div>
+        )}
+        
+        { receiptValues.paidBy === 'Online' && !waiterScreen && (
+          <div className='w-full flex flex-row justify-between items-center gap-x-5'>
+            <p className='w-fit font-semibold'>Processing fee</p>
+            <p className='w-fit font-semibold'>
+              {formatRemoteAmountKobo(receiptValues?.processingFee).naira}
+              {formatRemoteAmountKobo(receiptValues?.processingFee).kobo}
+            </p>
           </div>
         )}
       </div>
@@ -121,7 +153,10 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
 
       <div className='w-full flex flex-row justify-between items-center gap-x-5'>
           <p className='text-xl font-bold'>TOTAL</p>
-          <p className='text-xl font-bold'>₦{formatPrice(receiptValues.totalAmount)}</p>
+          <p className='text-xl font-bold'>
+            {formatRemoteAmountKobo(receiptValues.totalAmount).naira}
+            {formatRemoteAmountKobo(receiptValues.totalAmount).kobo}
+          </p>
       </div>
 
       <hr className='w-3/4 mx-auto my-5' />
@@ -161,8 +196,6 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
 
 const DownloadPDFButton = ({ children, chef, waiter, receiptValues, orderId, date, waiterScreen }) => {
   const receiptRef = useRef<HTMLDivElement>(null); 
-  const [pdfHeight, setPdfHeight] = useState(200);
-  const [pdfWidth, setPdfWidth] = useState(1000);
   const discountValue = 0;
   const totalPrice = 0;
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -173,14 +206,6 @@ const DownloadPDFButton = ({ children, chef, waiter, receiptValues, orderId, dat
 
   date = date ? dateFormatter.format(new Date(date)) : dateFormatter.format(new Date());
 
-  useEffect(() => {
-    // Update pdfHeight based on the height of the receiptRef element
-    if (receiptRef.current) {
-      setPdfHeight(receiptRef.current.offsetHeight);
-      setPdfWidth(receiptRef.current.offsetWidth);
-    }
-  }, [receiptRef.current]);
-
   const generatePDF = async () => {
     try {
       if (!imagesLoaded) return;
@@ -188,14 +213,12 @@ const DownloadPDFButton = ({ children, chef, waiter, receiptValues, orderId, dat
       const canvas = await html2canvas(receiptRef.current, {useCORS: true});
       const imgData = canvas.toDataURL('image/png');
 
-      // Define PDF dimensions based on the canvas size
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
         format: [canvas.width, canvas.height],
       });
 
-      // Set the image to fit within the PDF page
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
       pdf.save(`${orderId}-dropp.pdf`);
     } catch (error) {
