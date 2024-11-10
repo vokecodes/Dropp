@@ -417,9 +417,10 @@ const RestaurantCart = ({
                       setReceiptValues({
                         customerName: values?.name,
                         order: cartOrder,
-                        totalAmount: totalAmount,
+                        totalAmount: totalAmount + processingFee,
                         cartMenu,
-                        paidBy: 'Online'
+                        paidBy: 'Online',
+                        processingFee: processingFee
                       })
 
                       handleSubmit();

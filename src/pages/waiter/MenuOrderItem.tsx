@@ -6,6 +6,8 @@ import { useState } from "react";
 import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import { SERVER } from "../../config/axios";
 import moment from "moment";
+import DownloadPDFButton from "../../components/Receipt";
+import { FaReceipt } from "react-icons/fa6";
 
 const MenuOrderItem = ({
   orderStatus,
@@ -15,7 +17,9 @@ const MenuOrderItem = ({
   orderLength,
   closeOrdersModal,
   getTableOrders,
-  selectedCategory
+  selectedCategory,
+  waiter,
+  chef
 }: any) => {
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -67,6 +71,24 @@ const MenuOrderItem = ({
       <div
         className="w-full lg:w-3/5 flex flex-col items-center justify-around gap-y-3 grow-0 shrink-0 mx-auto mb-5 cursor-pointer lg:shadow-lg bg-white p-3 lg:p-5 rounded-xl hover:bg-gray-100"
       >
+        <div className="flex flex-row justify-end items-center w-full mt-3">
+          <DownloadPDFButton 
+            chef={chef} 
+            waiter={waiter}
+            receiptValues={{
+              customerName: order?.name,
+              totalAmount: order?.totalAmount,
+              cartMenu: order?.order ? order?.order : [],
+              paidBy: order?.posPayment ? 'POS' : 'Online',
+            }} 
+            orderId={order?.id}
+            date={order?.updatedAt ? order?.updatedAt : ''}
+            waiterScreen={true}
+          >
+            <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">View bill <FaReceipt /></p>
+          </DownloadPDFButton>
+        </div>
+
         <div className="w-full flex flex-row items-center justify-between">
           <div>
             <p className="font-semibold font_medium">

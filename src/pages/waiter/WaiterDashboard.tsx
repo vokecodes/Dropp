@@ -327,6 +327,8 @@ const WaiterDashboard = () => {
                           closeOrdersModal={() => closeOrdersModal()}
                           getTableOrders={getTableOrders}
                           selectedCategory={selectedCategory?.value}
+                          chef={chef}
+                          waiter={waiter}
                         />)
                       }
                     }
