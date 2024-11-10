@@ -68,7 +68,7 @@ const RestaurantShop = () => {
 
   const [chef, setChef] = useState<any>(null);
   const [waiter, setWaiter] = useState<any>(null);
-  const [receiptValues, setReceiptValues] = useState<any>({})
+  const [receiptValues, setReceiptValues] = useState({});
   const [orderId, setOrderId] = useState<any>('')
 
   const [chefRecommendedMenu, setChefRecommendedMenu] = useState<any>(null);
