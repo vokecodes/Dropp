@@ -14,11 +14,12 @@ import KitchenButton from "../../components/KitchenButton";
 import { Link, useNavigate } from "react-router-dom";
 import { SUB_CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
-// import io from "socket.io-client";
+import io from "socket.io-client";
+import { SoundNotification } from "../../components/SoundNotification";
 
-// const socket = io(import.meta.env.VITE_BASE_API_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_API_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -63,21 +64,35 @@ const Kitchen = () => {
       .catch((err) => {});
   };
 
+  const [soundNotification, setSoundNotification] = useState(() => {
+    return JSON.parse(localStorage.getItem("playSound")) || false;
+  });
+  const [playSound, setPlaySound] = useState(false);
+
+  const receiveNotification = () => {
+    setPlaySound(true);
+
+    setTimeout(() => {
+      setPlaySound(false);
+    }, 3000);
+  };
+
   useEffect(() => {
     dispatch(subChefGetTables());
     getRestaurantOrders(page);
   }, []);
 
   // Listen for new orders from the server
-  // useState(() => {
-  //   socket.on("newRestaurantOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrders();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useState(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrders();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newKitchenOrder");
+    };
+  }, []);
 
   const [declineModal, setDeclineModal] = useState(false);
   const openDeclineModal = () => setDeclineModal(true);
@@ -157,6 +172,13 @@ const Kitchen = () => {
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
+            <SoundNotification
+              playNotif={playSound && soundNotification}
+              soundNotification={soundNotification}
+              setSoundNotification={setSoundNotification}
+              setPlaySound={setPlaySound}
+            />
+
             <OutlineButton
               title="Menu"
               onClick={() => navigate(SUB_CHEF_ROUTES.linkKitchenMenu)}

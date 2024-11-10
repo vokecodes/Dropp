@@ -20,8 +20,6 @@ const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
 });
 
-
-
 const SuperWaiterDashboard = () => {
   const { superWaiter } = useSelector(
     (state: any) => ({
@@ -58,7 +56,7 @@ const SuperWaiterDashboard = () => {
       })
       .catch((err) => {});
   };
-  
+
   const getRestaurantTables = async () => {
     SERVER.get(
       `${RESTAURANT_TABLE_URL}/super-tables/${superWaiter?.restaurant}`
@@ -68,7 +66,6 @@ const SuperWaiterDashboard = () => {
       })
       .catch((err) => {});
   };
-
 
   const [soundNotification, setSoundNotification] = useState(() => {
     return JSON.parse(localStorage.getItem("playSound")) || false;
@@ -83,22 +80,25 @@ const SuperWaiterDashboard = () => {
     }, 3000);
   };
 
-
   // Listen for new orders from the server
   useEffect(() => {
     const handleNewOrder = () => {
       getRestaurantOrders(1);
       receiveNotification();
     };
-  
+
     socket.on("newRestaurantOrder", handleNewOrder);
     socket.on("newReadyOrder", handleNewOrder);
-    socket.on("updatedOrder", () => {getRestaurantOrders(1)});
-    
+    socket.on("updatedOrder", () => {
+      getRestaurantOrders(1);
+    });
+
     return () => {
       socket.off("newRestaurantOrder", handleNewOrder);
       socket.off("newReadyOrder", handleNewOrder);
-      socket.off("updatedOrder", () => {getRestaurantOrders(1)});
+      socket.off("updatedOrder", () => {
+        getRestaurantOrders(1);
+      });
     };
   }, []);
 
@@ -110,10 +110,9 @@ const SuperWaiterDashboard = () => {
     { label: "Completed", value: "completed" },
   ];
 
-  
-  const [tablesMap, setTablesMap] = useState({})
+  const [tablesMap, setTablesMap] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-  
+
   const [selectedTable, setSelectedTable] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState();
   const [selectedReadyOrder, setSelectedReadyOrder] = useState();
@@ -143,75 +142,96 @@ const SuperWaiterDashboard = () => {
       const dateB = new Date(b.updatedAt);
       return dateB - dateA;
     });
-  }
+  };
 
   useEffect(() => {
     const tableOrderMap = {};
-    const sortedByDate = sortByUpdatedAt(restaurantOrders)
+    const sortedByDate = sortByUpdatedAt(restaurantOrders);
 
-    table && superWaiter && table?.length > 0 && table.filter(table => table.userType === 'waiter' && superWaiter.subTables.includes(table._id) ).map((item, i) => {
+    table &&
+      superWaiter &&
+      table?.length > 0 &&
+      table
+        .filter(
+          (table) =>
+            table.userType === "waiter" &&
+            superWaiter.subTables.includes(table._id)
+        )
+        .map((item, i) => {
+          tableOrderMap[item?.table] = {
+            "New order": [],
+            Kitchen: [],
+            Cooking: [],
+            Ready: [],
+            Completed: [],
+          };
+        });
 
-      tableOrderMap[item?.table] = {
-        "New order": [],
-        Kitchen: [],
-        Cooking: [],
-        Ready: [],
-        Completed: [],
-      }
-    })
-
-    table && superWaiter && sortedByDate &&
-      sortedByDate?.length > 0 && sortedByDate.forEach(order => {
+    table &&
+      superWaiter &&
+      sortedByDate &&
+      sortedByDate?.length > 0 &&
+      sortedByDate.forEach((order) => {
         const tableNumber = order?.table?.table;
         const orderArray = order?.order;
         const orderStatus = order?.status;
 
-        if(!tableNumber || !superWaiter.subTables.includes(order?.table._id)){
+        if (!tableNumber || !superWaiter.subTables.includes(order?.table._id)) {
           return;
         }
 
         if (orderStatus === "pending") {
-          tableOrderMap[tableNumber]["New order"]?.push(order)
+          tableOrderMap[tableNumber]["New order"]?.push(order);
         }
-        
+
         if (orderStatus === "kitchen") {
           order?.order?.forEach((o: any) => {
             if (o?.status === "pending") {
-              if(tableOrderMap[tableNumber]["Kitchen"].some(item => item.id === order.id)){
-                return
-              }else{
-                tableOrderMap[tableNumber]["Kitchen"]?.push(order)
+              if (
+                tableOrderMap[tableNumber]["Kitchen"].some(
+                  (item) => item.id === order.id
+                )
+              ) {
+                return;
+              } else {
+                tableOrderMap[tableNumber]["Kitchen"]?.push(order);
               }
             }
-            
+
             if (o?.status === "ready" || o?.status === "sent") {
-              if(tableOrderMap[tableNumber]["Ready"].some(item => item.id === order.id)){
-                return
-              }else{
-                tableOrderMap[tableNumber]["Ready"]?.push(order)
+              if (
+                tableOrderMap[tableNumber]["Ready"].some(
+                  (item) => item.id === order.id
+                )
+              ) {
+                return;
+              } else {
+                tableOrderMap[tableNumber]["Ready"]?.push(order);
               }
             }
-            
+
             if (o?.status === "cooking") {
-              if(tableOrderMap[tableNumber]["Cooking"].some(item => item.id === order.id)){
-                return
-              }else{
-                tableOrderMap[tableNumber]["Cooking"]?.push(order)
+              if (
+                tableOrderMap[tableNumber]["Cooking"].some(
+                  (item) => item.id === order.id
+                )
+              ) {
+                return;
+              } else {
+                tableOrderMap[tableNumber]["Cooking"]?.push(order);
               }
             }
           });
         }
-        
+
         if (orderStatus === "completed") {
-          tableOrderMap[tableNumber]["Completed"]?.push(order)
+          tableOrderMap[tableNumber]["Completed"]?.push(order);
         }
-      }
-    );
+      });
 
-    setTablesMap(tableOrderMap)
-    !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0])
-  }, [restaurantOrders, table])
-
+    setTablesMap(tableOrderMap);
+    !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0]);
+  }, [restaurantOrders, table]);
 
   return (
     <>
@@ -225,8 +245,8 @@ const SuperWaiterDashboard = () => {
           </div>
 
           <div className="flex items-center justify-end">
-            <SoundNotification 
-              playNotif={playSound && soundNotification} 
+            <SoundNotification
+              playNotif={playSound && soundNotification}
               soundNotification={soundNotification}
               setSoundNotification={setSoundNotification}
               setPlaySound={setPlaySound}
@@ -241,15 +261,20 @@ const SuperWaiterDashboard = () => {
         style={{ backgroundColor: "#F9F9F9" }}
       >
         <div className="px-2 flex justify-between items-center">
-          <h3 className="font_bold text-2xl font-semibold">{superWaiter?.table}</h3>
+          <h3 className="font_bold text-2xl font-semibold">
+            {superWaiter?.table}
+          </h3>
 
           <div className="mt-2 lg:mt-0">
-            <div className="inline-flex items-center justify-center primary_bg_color px-5 py-2 whitespace-nowrap shadow-sm cursor-pointer rounded-xl font_medium"
+            <div
+              className="inline-flex items-center justify-center primary_bg_color px-5 py-2 whitespace-nowrap shadow-sm cursor-pointer rounded-xl font_medium"
               onClick={() => {
                 setOpenTableLinks(!openTableLinks);
               }}
             >
-              <p className={`text-xs lg:text-sm font_medium text-lg text-white`}>
+              <p
+                className={`text-xs lg:text-sm font_medium text-lg text-white`}
+              >
                 Place Order
               </p>
               {openTableLinks ? (
@@ -259,15 +284,17 @@ const SuperWaiterDashboard = () => {
               )}
             </div>
             {openTableLinks && (
-              <ClickAwayListener
-                onClickAway={() => handleClickAway()}
-              >
+              <ClickAwayListener onClickAway={() => handleClickAway()}>
                 <div
                   className={`absolute z-10 bg-white mb-2 w-32 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                 >
                   {Object.keys(tablesMap)?.map((item: any, i: number) => (
-                    <Link key={i} to={`/restaurant/${superWaiter?.businessName}/${item}`} target="_blank" >
-                      <div className="flex items-center cursor-pointer mb-2 hover:bg-neutral-200" >
+                    <Link
+                      key={i}
+                      to={`/restaurant/${superWaiter?.businessName}/${item}`}
+                      target="_blank"
+                    >
+                      <div className="flex items-center cursor-pointer mb-2 hover:bg-neutral-200">
                         <p
                           className={`text-xs lg:text-sm secondary_gray_color text-black`}
                         >
@@ -307,9 +334,7 @@ const SuperWaiterDashboard = () => {
                         </p>
                         <div
                           className={`ml-2 w-6 h-6 rounded-full flex items-center justify-center ${
-                            selectedTable === cat
-                              ? "bg-[#383838]"
-                              : "bg-white"
+                            selectedTable === cat ? "bg-[#383838]" : "bg-white"
                           }`}
                         >
                           <p
@@ -329,7 +354,7 @@ const SuperWaiterDashboard = () => {
               </div>
             )}
           </div>
-          
+
           {/* CATEGORIES */}
           <div className="w-full h-fit py-1">
             {CATEGORIES.length > 0 && (
@@ -366,7 +391,9 @@ const SuperWaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            { tablesMap && tablesMap[selectedTable] && tablesMap[selectedTable][cat?.label]?.length }
+                            {tablesMap &&
+                              tablesMap[selectedTable] &&
+                              tablesMap[selectedTable][cat?.label]?.length}
                           </p>
                         </div>
                       </div>
@@ -397,36 +424,51 @@ const SuperWaiterDashboard = () => {
               <div className="flex flex-col mt-2">
                 {tablesMap ? (
                   tablesMap[selectedTable] ? (
-                    tablesMap[selectedTable][selectedCategory?.label] && tablesMap[selectedTable][selectedCategory?.label].length > 0 ? (
+                    tablesMap[selectedTable][selectedCategory?.label] &&
+                    tablesMap[selectedTable][selectedCategory?.label].length >
+                      0 ? (
                       tablesMap[selectedTable][selectedCategory?.label]?.map(
                         (tableOrder: any, i: number) => {
-                          if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
-                            return (<OrderItem
-                              key={i}
-                              order={tableOrder}
-                              selectedOrder={selectedOrder}
-                              ordersModal={ordersModal}
-                              openOrdersModal={() => openOrdersModal(tableOrder)}
-                              closeOrdersModal={closeOrdersModal}
-                              getTableOrders={getRestaurantOrders}
-                              selectedCategory={selectedCategory?.value}
-                            />)
-                          }else{
-                            return (<MenuOrderItem
-                              key={i}
-                              orderStatus={selectedCategory?.value}
-                              secondOrderStatus="sent"
-                              thirdOrderStatus="declined"
-                              order={tableOrder}
-                              orderLength={tableOrder?.order?.length}
-                              selectedOrder={selectedReadyOrder}
-                              ordersModal={ordersModal} 
-                              selectedCategory={selectedCategory?.value}
-                              openOrdersModal={() => openOrdersModal(tableOrder)}
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getRestaurantOrders}
-                              selectedCategory={selectedCategory?.value}
-                            />)
+                          if (
+                            selectedCategory?.label !== "Kitchen" &&
+                            ["pending", "completed"].includes(
+                              selectedCategory?.value
+                            )
+                          ) {
+                            return (
+                              <OrderItem
+                                key={i}
+                                order={tableOrder}
+                                selectedOrder={selectedOrder}
+                                ordersModal={ordersModal}
+                                openOrdersModal={() =>
+                                  openOrdersModal(tableOrder)
+                                }
+                                closeOrdersModal={closeOrdersModal}
+                                getTableOrders={getRestaurantOrders}
+                                selectedCategory={selectedCategory?.value}
+                              />
+                            );
+                          } else {
+                            return (
+                              <MenuOrderItem
+                                key={i}
+                                orderStatus={selectedCategory?.value}
+                                secondOrderStatus="sent"
+                                thirdOrderStatus="declined"
+                                order={tableOrder}
+                                orderLength={tableOrder?.order?.length}
+                                selectedOrder={selectedReadyOrder}
+                                ordersModal={ordersModal}
+                                selectedCategory={selectedCategory?.value}
+                                openOrdersModal={() =>
+                                  openOrdersModal(tableOrder)
+                                }
+                                closeOrdersModal={() => closeOrdersModal()}
+                                getTableOrders={getRestaurantOrders}
+                                selectedCategory={selectedCategory?.value}
+                              />
+                            );
                           }
                         }
                       )

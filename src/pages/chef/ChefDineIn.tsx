@@ -15,20 +15,45 @@ import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import { SERVER } from "../../config/axios";
 import { Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const ChefDineIn = () => {
   const dispatch = useAppDispatch();
 
-  const { table, restaurantOrders } = useSelector(
+  const { table } = useSelector(
     (state: any) => ({
       table: state.table.table,
-      restaurantOrders: state.orders.restaurantOrders,
+      // restaurantOrders: state.orders.restaurantOrders,
     }),
     shallowEqual
   );
 
+  const [restaurantOrders, setRestaurantOrders] = useState([]);
+  const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
+  const [page, setPage] = useState(1); // Page number for pagination
+
+  const getRestaurantOrders = async (currentPage = 1) => {
+    SERVER.get(`${RESTAURANT_ORDER_URL}/all-restaurant?page=${currentPage}`)
+      .then(({ data }) => {
+        if (currentPage === 1) {
+          setRestaurantOrders(data.data);
+        } else {
+          setRestaurantOrders((prevTransactions: any) => [
+            ...prevTransactions,
+            ...data.data,
+          ]);
+        }
+        setPage(currentPage + 1);
+        setHasMore(
+          data.pagination.totalPages > 0 &&
+            data.pagination.currentPage !== data.pagination.totalPages
+        );
+      })
+      .catch((err) => {});
+  };
+
   useEffect(() => {
-    dispatch(getRestaurantDineInOrders());
+    getRestaurantOrders();
   }, []);
 
   const [selectedCustomerOrders, setSelectedCustomerOrders] = useState<any>("");
@@ -74,7 +99,7 @@ const ChefDineIn = () => {
     setRefundModal(false);
   };
 
-  console.log('restaurantOrders= ', restaurantOrders)
+  console.log("restaurantOrders= ", restaurantOrders);
 
   return (
     <>
@@ -181,58 +206,69 @@ const ChefDineIn = () => {
                 <div className="w-full h-full">
                   <div className="lg:w-full bg-white rounded-3xl py-8">
                     {renderTableHeader()}
-                    {restaurantOrders && restaurantOrders?.length > 0 ? (
-                      restaurantOrders?.map((order: any, i: number) => (
-                        <div key={i}>
-                          <RestaurantOrderItem
-                            key={i}
-                            id={order?.id}
-                            cartMenu={order.cartMenu}
-                            orders={order.order}
-                            date={moment(order?.createdAt).format("ll")}
-                            time={moment(order?.createdAt).format("LT")}
-                            showCustomer={selectedCustomerOrders === order?.id}
-                            customerName={`${order?.name}`}
-                            customerEmail={`${order?.email}`}
-                            checkoutCode={order?.checkoutCode}
-                            completed={order?.status}
-                            paid={order?.paid}
-                            gift={order?.gift}
-                            onClickIconOpen={() =>
-                              setSelectedCustomerOrders(order.id)
-                            }
-                            onClickIconClose={() =>
-                              setSelectedCustomerOrders("")
-                            }
-                            paymentLoading={paymentLoading === order?.id}
-                            markAsPaid={() => {
-                              setPaymentLoading(order?.id);
-                              SERVER.patch(
-                                `${RESTAURANT_ORDER_URL}/paid/${order?.id}`
-                              )
-                                .then(({ data }) => {
-                                  dispatch(getRestaurantDineInOrders());
-                                })
-                                .finally(() => setPaymentLoading(null));
-                            }}
-                            markAsGift={() => {
-                              setPaymentLoading(order?.id);
-                              SERVER.patch(
-                                `${RESTAURANT_ORDER_URL}/gift/${order?.id}`
-                              )
-                                .then(({ data }) => {
-                                  dispatch(getRestaurantDineInOrders());
-                                })
-                                .finally(() => setPaymentLoading(null));
-                            }}
-                            event={order?.event}
-                            restaurantOrder={true}
-                          />
-                        </div>
-                      ))
-                    ) : (
-                      <EmptyState title="No new order." />
-                    )}
+                    <InfinityScroll
+                      data={restaurantOrders}
+                      getMore={getRestaurantOrders}
+                      hasMore={hasMore}
+                      page={page}
+                    >
+                      <div>
+                        {restaurantOrders && restaurantOrders?.length > 0 ? (
+                          restaurantOrders?.map((order: any, i: number) => (
+                            <div key={i}>
+                              <RestaurantOrderItem
+                                key={i}
+                                id={order?.id}
+                                cartMenu={order.cartMenu}
+                                orders={order.order}
+                                date={moment(order?.createdAt).format("ll")}
+                                time={moment(order?.createdAt).format("LT")}
+                                showCustomer={
+                                  selectedCustomerOrders === order?.id
+                                }
+                                customerName={`${order?.name}`}
+                                customerEmail={`${order?.email}`}
+                                checkoutCode={order?.checkoutCode}
+                                completed={order?.status}
+                                paid={order?.paid}
+                                gift={order?.gift}
+                                onClickIconOpen={() =>
+                                  setSelectedCustomerOrders(order.id)
+                                }
+                                onClickIconClose={() =>
+                                  setSelectedCustomerOrders("")
+                                }
+                                paymentLoading={paymentLoading === order?.id}
+                                markAsPaid={() => {
+                                  setPaymentLoading(order?.id);
+                                  SERVER.patch(
+                                    `${RESTAURANT_ORDER_URL}/paid/${order?.id}`
+                                  )
+                                    .then(({ data }) => {
+                                      dispatch(getRestaurantDineInOrders());
+                                    })
+                                    .finally(() => setPaymentLoading(null));
+                                }}
+                                markAsGift={() => {
+                                  setPaymentLoading(order?.id);
+                                  SERVER.patch(
+                                    `${RESTAURANT_ORDER_URL}/gift/${order?.id}`
+                                  )
+                                    .then(({ data }) => {
+                                      dispatch(getRestaurantDineInOrders());
+                                    })
+                                    .finally(() => setPaymentLoading(null));
+                                }}
+                                event={order?.event}
+                                restaurantOrder={true}
+                              />
+                            </div>
+                          ))
+                        ) : (
+                          <EmptyState title="No new order." />
+                        )}
+                      </div>
+                    </InfinityScroll>
                   </div>
                 </div>
               </div>
