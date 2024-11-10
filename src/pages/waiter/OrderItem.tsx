@@ -117,7 +117,7 @@ const OrderItem = ({
                     </p>
                     <p className="text-md input_text capitalize font_medium">
                       {menuOrder?.quantity} portion
-                      {Number(menuOrder?.menu?.quantity) > 1 && "s"}
+                      {Number(menuOrder?.quantity) > 1 && "s"}
                     </p>
                   </div>
                   <div className="flex shrink-0">

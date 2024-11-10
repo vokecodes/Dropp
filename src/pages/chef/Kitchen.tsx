@@ -332,8 +332,6 @@ const Kitchen = () => {
   const [openTablesOptions, setOpenTablesOptions] = useState(false);
   const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
 
-
-
   const sortByUpdatedAt = (arr) => {
     return arr.sort((a, b) => {
       const dateA = new Date(a.updatedAt);
@@ -343,8 +341,6 @@ const Kitchen = () => {
   }
 
   const todaysDate = new Date().toJSON().slice(0, 10);
-  
-  
   
   const [selectedTable, setSelectedTable] = useState("");
   const filteredTable = !selectedTable
@@ -404,6 +400,8 @@ const Kitchen = () => {
       void: 0,
     });
 
+    const suffixes = {};
+
     filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
       if(order?.parentStatus === "kitchen" &&
       order?.status === "pending"){
@@ -460,6 +458,15 @@ const Kitchen = () => {
           void: prevState.void + 1
         }));
       }
+
+      if (!suffixes[order.parent]) {
+        suffixes[order.parent] = 0;
+      }
+
+      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
+      order.displayId = `${order.parent}-${suffix}`;
+
+      suffixes[order.parent] += 1;
     })
   }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate])
 
@@ -504,8 +511,6 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
-  console.log('restaurantOrders= ', restaurantOrders)
-  console.log('filteredRestaurantOrders= ', filteredRestaurantOrders)
 
   return (
     <>

@@ -151,6 +151,8 @@ const WaiterDashboard = () => {
       Completed: [],
     };
 
+    const suffixes = {};
+
     const sortedByDate = sortByUpdatedAt(tableOrders)
 
     sortedByDate &&
@@ -174,6 +176,15 @@ const WaiterDashboard = () => {
             if (o?.status === "cooking" && !updatedColumnCount["Cooking"]?.some(s => s.id === item.id)){
               updatedColumnCount["Cooking"] = [...updatedColumnCount["Cooking"], item];
             }
+            
+            if (!suffixes[item?.id]) {
+              suffixes[item?.id] = 0;
+            }
+      
+            const suffix = String.fromCharCode(97 + suffixes[item?.id]);
+            o.displayId = `${item?.id}-${suffix}`;
+      
+            suffixes[item?.id] += 1;
           });
         }
 
