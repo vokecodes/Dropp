@@ -541,7 +541,7 @@ const DineInMenu = () => {
                       </div>
                     </div>
 
-                    {errors.images && (
+                    {errors.images && touched.images && (
                       <p className="text-sm text-center text-red-600 my-2">
                         {errors.images}
                       </p>

@@ -511,8 +511,6 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
-  console.log('restaurantOrders= ', restaurantOrders)
-  console.log('filteredRestaurantOrders= ', filteredRestaurantOrders)
 
   return (
     <>
