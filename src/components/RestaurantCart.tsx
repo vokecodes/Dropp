@@ -57,7 +57,7 @@ const RestaurantCart = ({
   handleAddToBag,
   cartModal,
   setCartModal,
-  setReceiptValues,
+  updateReceiptValues,
 }: any) => {
   const { user, auth } = useSelector(
     (state: any) => ({
@@ -212,6 +212,19 @@ const RestaurantCart = ({
       setCartModal(!cartModal);
     }
   }, [cartMenu]);
+
+  const handleUpdate = (medium: string) => {
+    console.log('medium= ', medium)
+    
+    updateReceiptValues({
+      customerName: values?.name,
+      order: cartOrder,
+      totalAmount: medium === 'Online' ? totalAmount + processingFee : totalAmount,
+      cartMenu,
+      paidBy: medium,
+      processingFee: medium === 'Online' ? processingFee : 0
+    });
+  };
 
   return (
     <div className="box-border w-screen lg:w-full h-screen bg-neutral-100 lg:bg-white py-1 lg:py-6 lg:px-2 shadow scroller">
@@ -436,13 +449,7 @@ const RestaurantCart = ({
                       cartMenu,
                     });
                     
-                    setReceiptValues({
-                      customerName: values?.name,
-                      order: cartOrder,
-                      totalAmount: totalAmount,
-                      cartMenu,
-                      paidBy: 'POS'
-                    })
+                    handleUpdate('POS')
                   }}
                 />
 
@@ -506,14 +513,7 @@ const RestaurantCart = ({
                 title="Proceed"
                 extraClasses="w-full p-3 rounded-full mt-3"
                 onClick={() => {
-                  setReceiptValues({
-                    customerName: values?.name,
-                    order: cartOrder,
-                    totalAmount: totalAmount + processingFee,
-                    cartMenu,
-                    paidBy: 'Online',
-                    processingFee: processingFee
-                  })
+                  handleUpdate('Online')
                   
                   closePayNowModal();
                   
