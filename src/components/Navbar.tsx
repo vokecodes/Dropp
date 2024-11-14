@@ -527,6 +527,22 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
     },
     {
       icon: (
+        <GiKnifeFork
+          size={24}
+          color={
+            location?.pathname === SUB_CHEF_ROUTES.linkKitchen
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Kitchen",
+      active: location?.pathname === SUB_CHEF_ROUTES.linkKitchen,
+      to: SUB_CHEF_ROUTES.linkKitchen,
+      newTab: true,
+    },
+    {
+      icon: (
         <AiFillSetting
           size={24}
           color={

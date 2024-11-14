@@ -56,7 +56,7 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
       <div className='w-full space-y-3'>
         <div className='w-full flex flex-row justify-between items-center gap-x-5'>
           <p>Customer name</p>
-          <p>{receiptValues?.customerName ? receiptValues?.customerName : '---'}</p>
+          <p>{receiptValues && receiptValues?.customerName ? receiptValues?.customerName : '---'}</p>
         </div>
         
         <div className='w-full flex flex-row justify-between items-center gap-x-5'>
@@ -72,7 +72,7 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
 
           {waiterScreen ? (
             <div className='mt-5 mb-5'>
-              {receiptValues?.cartMenu?.map((meal: any, i: any) => {
+              {receiptValues && receiptValues?.cartMenu?.map((meal: any, i: any) => {
                 if(meal.menu.discount) discountValue += ((meal.menu.price / 100) * meal.menu.discount) * meal.quantity
     
                 totalPrice += (meal.menu.price * meal.quantity)
@@ -90,7 +90,7 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
             </div>
           ) : (
             <div className='mt-5 mb-5'>
-              {receiptValues?.cartMenu?.map((meal: any, i: any) => {
+              {receiptValues && receiptValues?.cartMenu?.map((meal: any, i: any) => {
                 if(meal.discount) discountValue += ((meal.price / 100) * meal.discount) * meal.quantity
     
                 totalPrice += (meal.price * meal.quantity)
@@ -132,18 +132,18 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
           <div className='w-full flex flex-row justify-between items-center gap-x-5'>
             <p className='w-fit font-semibold'>Processing fee</p>
             <p className='w-fit font-semibold'>
-              {formatRemoteAmountKobo(receiptValues?.totalAmount + discountValue - totalPrice).naira}
-              {formatRemoteAmountKobo(receiptValues?.totalAmount + discountValue - totalPrice).kobo}
+              {formatRemoteAmountKobo(receiptValues && receiptValues?.totalAmount + discountValue - totalPrice).naira}
+              {formatRemoteAmountKobo(receiptValues && receiptValues?.totalAmount + discountValue - totalPrice).kobo}
             </p>
           </div>
         )}
         
-        { receiptValues.paidBy === 'Online' && !waiterScreen && (
+        { (receiptValues.paidBy === 'Online' && !waiterScreen) && (
           <div className='w-full flex flex-row justify-between items-center gap-x-5'>
             <p className='w-fit font-semibold'>Processing fee</p>
             <p className='w-fit font-semibold'>
-              {formatRemoteAmountKobo(receiptValues?.processingFee).naira}
-              {formatRemoteAmountKobo(receiptValues?.processingFee).kobo}
+              {formatRemoteAmountKobo(receiptValues && receiptValues?.processingFee).naira}
+              {formatRemoteAmountKobo(receiptValues && receiptValues?.processingFee).kobo}
             </p>
           </div>
         )}

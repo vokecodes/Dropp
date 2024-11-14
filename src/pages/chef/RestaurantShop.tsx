@@ -341,6 +341,7 @@ const RestaurantShop = () => {
         openModal();
       }
     } catch (err) {
+      handleClickOpen()
     } finally {
       setCheckoutLaterLoading(false);
     }
@@ -774,7 +775,7 @@ const RestaurantShop = () => {
                     cartModal={cartModal}
                     setCartModal={setCartModal}
                     totalAmount={totalAmount}
-                    setReceiptValues={setReceiptValues}
+                    updateReceiptValues={setReceiptValues}
                   />
                 </div>
               </Modal>
