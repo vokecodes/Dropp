@@ -707,6 +707,8 @@ const RestaurantShop = () => {
                         handleAddToBag={handleAddToBag}
                         cartModal={cartModal}
                         setCartModal={setCartModal}
+                        totalAmount={totalAmount}
+                        updateReceiptValues={setReceiptValues}
                       />
                     </div>
                   </div>
