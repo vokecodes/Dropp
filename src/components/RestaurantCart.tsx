@@ -214,7 +214,6 @@ const RestaurantCart = ({
   }, [cartMenu]);
 
   const handleUpdate = (medium: string) => {
-    console.log('medium= ', medium)
     
     updateReceiptValues({
       customerName: values?.name,
