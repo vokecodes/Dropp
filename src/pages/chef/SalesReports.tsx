@@ -79,12 +79,12 @@ const SalesReports = () => {
     dispatch(getTables());
   }, []);
 
-  // useEffect(() => {
-  //   Hotjar.identify(user?._id, {
-  //     first_name: user?.firstName,
-  //     last_name: user?.lastName,
-  //   });
-  // }, [user]);
+  useEffect(() => {
+    Hotjar.identify(user?._id, {
+      first_name: user?.firstName,
+      last_name: user?.lastName,
+    });
+  }, [user]);
 
   const [selectedTable, setSelectedTable] = useState("Dine-in sales");
 
