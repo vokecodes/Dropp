@@ -339,7 +339,7 @@ const Kitchen = () => {
   };
 
   const todaysDate = new Date().toJSON().slice(0, 10);
-
+  
   const [selectedTable, setSelectedTable] = useState("");
   const filteredTable = !selectedTable
     ? restaurantOrders
@@ -395,62 +395,75 @@ const Kitchen = () => {
       void: 0,
     });
 
-    filteredRestaurantOrders &&
-      filteredRestaurantOrders?.length > 0 &&
-      filteredRestaurantOrders?.map((order, i) => {
-        if (order?.parentStatus === "kitchen" && order?.status === "pending") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            new_orders: prevState.new_orders + 1,
-          }));
-        }
+    const suffixes = {};
 
-        if (order?.parentStatus === "kitchen" && order?.status === "cooking") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            cooking: prevState.cooking + 1,
-          }));
-        }
+    filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "pending"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          new_orders: prevState.new_orders + 1
+        }));
+      }
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "cooking"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          cooking: prevState.cooking + 1
+        }));
+      }
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "ready"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          pickup: prevState.pickup + 1
+        }));
+      }
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "sent"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          sent: prevState.sent + 1
+        }));
+      } 
+      
+      if(order?.parentStatus === "completed" &&
+      order?.status === "completed"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          completed: prevState.completed + 1
+        }));
+      } 
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "declined"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          decline: prevState.decline + 1
+        }));
+      } 
+      
+      if(order?.parentStatus === "kitchen" &&
+      order?.status === "archived"){
+        setColumnCount(prevState => ({
+          ...prevState,
+          void: prevState.void + 1
+        }));
+      }
 
-        if (order?.parentStatus === "kitchen" && order?.status === "ready") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            pickup: prevState.pickup + 1,
-          }));
-        }
+      if (!suffixes[order.parent]) {
+        suffixes[order.parent] = 0;
+      }
 
-        if (order?.parentStatus === "kitchen" && order?.status === "sent") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            sent: prevState.sent + 1,
-          }));
-        }
+      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
+      order.displayId = `${order.parent}-${suffix}`;
 
-        if (
-          order?.parentStatus === "completed" &&
-          order?.status === "completed"
-        ) {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            completed: prevState.completed + 1,
-          }));
-        }
-
-        if (order?.parentStatus === "kitchen" && order?.status === "declined") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            decline: prevState.decline + 1,
-          }));
-        }
-
-        if (order?.parentStatus === "kitchen" && order?.status === "archived") {
-          setColumnCount((prevState) => ({
-            ...prevState,
-            void: prevState.void + 1,
-          }));
-        }
-      });
-  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate]);
+      suffixes[order.parent] += 1;
+    })
+  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate])
 
   const handleClickAway = (flag: string) => {
     if (flag === "categories") {
@@ -494,8 +507,6 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
-  console.log("restaurantOrders= ", restaurantOrders);
-  console.log("filteredRestaurantOrders= ", filteredRestaurantOrders);
 
   return (
     <>
@@ -504,7 +515,7 @@ const Kitchen = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/">
               <span className="sr-only">Homemade</span>
-              <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">

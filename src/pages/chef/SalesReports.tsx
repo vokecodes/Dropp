@@ -191,11 +191,14 @@ const SalesReports = () => {
           ...data.data,
         ]);
       }
-      setPage(page + 1);
-      setHasMore(
-        data.pagination.totalPages > 0 &&
-          data.pagination.currentPage !== data.pagination.totalPages
-      );
+
+      if(data.pagination.totalPages > 1){
+        setPage(page + 1);
+        setHasMore(
+          data.pagination.totalPages > 0 &&
+            data.pagination.currentPage !== data.pagination.totalPages
+        );
+      }
     });
   };
 
@@ -209,10 +212,13 @@ const SalesReports = () => {
           ...data.data,
         ]);
       }
-      setOrdersPage(ordersPage + 1);
-      setOrdersHasMore(
-        data.pagination.currentPage !== data.pagination.totalPages
-      );
+
+      if(data.pagination.totalPages > 1){
+        setOrdersPage(ordersPage + 1);
+        setOrdersHasMore(
+          data.pagination.currentPage !== data.pagination.totalPages
+        );
+      }
     });
   };
 
@@ -225,18 +231,24 @@ const SalesReports = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      getRestaurantDashboardAccount(
-        startDate,
-        endDate,
-        paymentType,
-        filterSection,
-        filterTable
-      )
-    );
-    fetchRestaurantOrders();
-    fetchOrders();
+    setPage(1);
   }, [endDate, paymentType, filterSection, filterTable]);
+
+  useEffect(() => {
+    if(page === 1){
+      dispatch(
+        getRestaurantDashboardAccount(
+          startDate,
+          endDate,
+          paymentType,
+          filterSection,
+          filterTable
+        )
+      );
+      fetchRestaurantOrders();
+      fetchOrders();
+    }
+  }, [page, endDate, paymentType, filterSection, filterTable]);
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -492,6 +504,13 @@ const SalesReports = () => {
     }
   };
 
+  const todaysDate = new Date().toLocaleString("en-GB", { 
+    timeZone: "Africa/Lagos",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).split('/').reverse().join('-');
+
   return (
     <>
       <ChefDashboardLayout>
@@ -509,6 +528,7 @@ const SalesReports = () => {
                 className="h-14 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                 placeholder="Start Date:"
                 onChange={(e: any) => setStartDate(e.target.value)}
+                max={endDate ? endDate : undefined}
               />
             </div>
             <div className="w-1/5">
@@ -519,6 +539,8 @@ const SalesReports = () => {
                 id="endDate"
                 className="h-14 bg-[#F8F8F8] block w-full rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                 placeholder="End Date:"
+                max={todaysDate}
+                min={startDate ? startDate : undefined}
                 onChange={(e: any) => setEndDate(e.target.value)}
               />
             </div>
@@ -699,7 +721,7 @@ const SalesReports = () => {
                       </p>
                     </div>
                     {table?.length > 0 &&
-                      table?.map((s: any, i: number) => (
+                      table?.filter(item => item.table).map((s: any, i: number) => (
                         <div
                           className="flex items-center cursor-pointer mb-2"
                           key={i}
@@ -1570,9 +1592,7 @@ const SalesReports = () => {
                                 <tr key={transaction.id + i}>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                     #
-                                    {transaction.id.substring(
-                                      transaction?.id?.length - 5
-                                    )}
+                                    {transaction.id?.slice(-5)}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                     {moment(transaction?.createdAt).format(

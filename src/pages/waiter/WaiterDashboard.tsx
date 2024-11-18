@@ -11,6 +11,7 @@ import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
+import { getABusinessByName } from "../../_redux/business/businessCrud";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -28,6 +29,19 @@ const WaiterDashboard = () => {
   const [tableOrders, setTableOrders] = useState([]);
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
+  const [chef, setChef] = useState<any>(null);
+
+  const getChef = async () => {
+    try {
+      const { data } = await getABusinessByName(waiter?.businessName);
+
+      if (data) {
+        setChef(data.data);
+      }
+    } catch (error) {
+      console.log('chef err= ', error)
+    }
+  };
 
   const getTableOrders = async (currentPage = 1) => {
     SERVER.get(
@@ -112,6 +126,7 @@ const WaiterDashboard = () => {
 
   useEffect(() => {
     getTableOrders(page);
+    getChef();
   }, []);
 
   const sortByUpdatedAt = (arr) => {
@@ -139,7 +154,9 @@ const WaiterDashboard = () => {
       Completed: [],
     };
 
-    const sortedByDate = sortByUpdatedAt(tableOrders);
+    const suffixes = {};
+
+    const sortedByDate = sortByUpdatedAt(tableOrders)
 
     sortedByDate &&
       sortedByDate?.length > 0 &&
@@ -185,17 +202,20 @@ const WaiterDashboard = () => {
                 item,
               ];
             }
+            
+            if (!suffixes[item?.id]) {
+              suffixes[item?.id] = 0;
+            }
+      
+            const suffix = String.fromCharCode(97 + suffixes[item?.id]);
+            o.displayId = `${item?.id}-${suffix}`;
+      
+            suffixes[item?.id] += 1;
           });
         }
 
-        if (
-          item?.status === "completed" &&
-          !updatedColumnCount["Completed"]?.some((s) => s.id === item.id)
-        ) {
-          updatedColumnCount["Completed"] = [
-            ...updatedColumnCount["Completed"],
-            item,
-          ];
+        if (item?.status === "completed" && !updatedColumnCount["Completed"]?.some(s => s.id === item.id)) {
+          updatedColumnCount["Completed"] = [...updatedColumnCount["Completed"], item];
         }
       });
 
@@ -209,7 +229,7 @@ const WaiterDashboard = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <>
               <span className="sr-only">Homemade</span>
-              <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
             </>
           </div>
 
@@ -309,80 +329,72 @@ const WaiterDashboard = () => {
               } // Message when all items have been loaded
             >
               <div className="flex flex-col mt-2">
-                {tableOrders ? (
-                  columnCount[selectedCategory?.label] &&
-                  columnCount[selectedCategory?.label].length > 0 ? (
-                    columnCount[selectedCategory?.label]?.map(
-                      (tableOrder: any, i: number) => {
-                        if (
-                          selectedCategory?.label !== "Kitchen" &&
-                          ["pending", "completed"].includes(
-                            selectedCategory?.value
-                          )
-                        ) {
-                          return (
-                            <OrderItem
-                              key={i}
-                              order={tableOrder}
-                              selectedOrder={selectedOrder}
-                              ordersModal={ordersModal}
-                              openOrdersModal={() =>
-                                openOrdersModal(tableOrder)
-                              }
-                              closeOrdersModal={closeOrdersModal}
-                              getTableOrders={getTableOrders}
-                              selectedCategory={selectedCategory?.value}
-                            />
-                          );
-                        } else {
-                          return (
-                            <MenuOrderItem
-                              key={i}
-                              orderStatus={selectedCategory?.value}
-                              secondOrderStatus="sent"
-                              thirdOrderStatus="declined"
-                              order={tableOrder}
-                              orderLength={tableOrder?.order?.length}
-                              selectedOrder={selectedReadyOrder}
-                              ordersModal={ordersModal}
-                              selectedCategory={selectedCategory?.value}
-                              openOrdersModal={() =>
-                                openOrdersModal(tableOrder)
-                              }
-                              closeOrdersModal={() => closeOrdersModal()}
-                              getTableOrders={getTableOrders}
-                              selectedCategory={selectedCategory?.value}
-                            />
-                          );
-                        }
+
+              {tableOrders ? (
+                columnCount[selectedCategory?.label] && columnCount[selectedCategory?.label].length > 0 ? (
+                  columnCount[selectedCategory?.label]?.map(
+                    (tableOrder: any, i: number) => {
+                      if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
+                        return (<OrderItem
+                          key={i}
+                          order={tableOrder}
+                          selectedOrder={selectedOrder}
+                          ordersModal={ordersModal}
+                          openOrdersModal={() => openOrdersModal(tableOrder)}
+                          closeOrdersModal={closeOrdersModal}
+                          getTableOrders={getTableOrders}
+                          selectedCategory={selectedCategory?.value}
+                          chef={chef}
+                          waiter={waiter}
+                        />)
+                      }else{
+                        return (<MenuOrderItem
+                          key={i}
+                          orderStatus={selectedCategory?.value}
+                          secondOrderStatus="sent"
+                          thirdOrderStatus="declined"
+                          order={tableOrder}
+                          orderLength={tableOrder?.order?.length}
+                          selectedOrder={selectedReadyOrder}
+                          ordersModal={ordersModal} 
+                          selectedCategory={selectedCategory?.value}
+                          openOrdersModal={() => openOrdersModal(tableOrder)}
+                          closeOrdersModal={() => closeOrdersModal()}
+                          getTableOrders={getTableOrders}
+                          selectedCategory={selectedCategory?.value}
+                          chef={chef}
+                          waiter={waiter}
+                        />)
                       }
-                    )
-                  ) : (
-                    <div>No orders for the selected category.</div>
+                    }
                   )
                 ) : (
-                  <div className="h-48 w-full flex flex-row items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="#6D6D6D"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                  </div>
-                )}
+                  <div>No orders for the selected category.</div>
+                )
+              ) : (
+                <div className="h-48 w-full flex flex-row items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="#6D6D6D"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                </div>
+              )}
+                
               </div>
             </InfiniteScroll>
           </div>
