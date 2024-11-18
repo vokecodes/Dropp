@@ -65,7 +65,6 @@ const WaiterDashboard = () => {
       .catch((err) => {});
   };
 
-
   const [soundNotification, setSoundNotification] = useState(() => {
     return JSON.parse(localStorage.getItem("playSound")) || false;
   });
@@ -84,15 +83,19 @@ const WaiterDashboard = () => {
       getTableOrders(1);
       receiveNotification();
     };
-  
+
     socket.on("newRestaurantOrder", handleNewOrder);
     socket.on("newReadyOrder", handleNewOrder);
-    socket.on("updatedOrder", () => {getTableOrders(1)});
-    
+    socket.on("updatedOrder", () => {
+      getTableOrders(1);
+    });
+
     return () => {
       socket.off("newRestaurantOrder", handleNewOrder);
       socket.off("newReadyOrder", handleNewOrder);
-      socket.off("updatedOrder", () => {getTableOrders(1)});
+      socket.off("updatedOrder", () => {
+        getTableOrders(1);
+      });
     };
   }, []);
 
@@ -132,7 +135,7 @@ const WaiterDashboard = () => {
       const dateB = new Date(b.updatedAt);
       return dateB - dateA;
     });
-  }
+  };
 
   const [columnCount, setColumnCount] = useState({
     "New order": [],
@@ -152,29 +155,52 @@ const WaiterDashboard = () => {
     };
 
     const suffixes = {};
-
     const sortedByDate = sortByUpdatedAt(tableOrders)
+
 
     sortedByDate &&
       sortedByDate?.length > 0 &&
       sortedByDate?.forEach((item, i) => {
-        if (item?.status === "pending" && !updatedColumnCount["New order"]?.some(s => s.id === item.id)) {
-          updatedColumnCount["New order"] = [...updatedColumnCount["New order"], item];
+        if (
+          item?.status === "pending" &&
+          !updatedColumnCount["New order"]?.some((s) => s.id === item.id)
+        ) {
+          updatedColumnCount["New order"] = [
+            ...updatedColumnCount["New order"],
+            item,
+          ];
         }
 
         if (item?.status === "kitchen") {
           item?.order?.forEach((o: any) => {
-
-            if (o?.status === "pending" && !updatedColumnCount["Kitchen"]?.some(s => s.id === item.id)){
-              updatedColumnCount["Kitchen"] = [...updatedColumnCount["Kitchen"], item];
+            if (
+              o?.status === "pending" &&
+              !updatedColumnCount["Kitchen"]?.some((s) => s.id === item.id)
+            ) {
+              updatedColumnCount["Kitchen"] = [
+                ...updatedColumnCount["Kitchen"],
+                item,
+              ];
             }
 
-            if ((o?.status === "ready" || o?.status === "sent") && !updatedColumnCount["Ready"]?.some(s => s.id === item.id)){
-              updatedColumnCount["Ready"] = [...updatedColumnCount["Ready"], item];
+            if (
+              (o?.status === "ready" || o?.status === "sent") &&
+              !updatedColumnCount["Ready"]?.some((s) => s.id === item.id)
+            ) {
+              updatedColumnCount["Ready"] = [
+                ...updatedColumnCount["Ready"],
+                item,
+              ];
             }
 
-            if (o?.status === "cooking" && !updatedColumnCount["Cooking"]?.some(s => s.id === item.id)){
-              updatedColumnCount["Cooking"] = [...updatedColumnCount["Cooking"], item];
+            if (
+              o?.status === "cooking" &&
+              !updatedColumnCount["Cooking"]?.some((s) => s.id === item.id)
+            ) {
+              updatedColumnCount["Cooking"] = [
+                ...updatedColumnCount["Cooking"],
+                item,
+              ];
             }
             
             if (!suffixes[item?.id]) {
@@ -188,16 +214,20 @@ const WaiterDashboard = () => {
           });
         }
 
-        if (item?.status === "completed" && !updatedColumnCount["Completed"]?.some(s => s.id === item.id)) {
-          updatedColumnCount["Completed"] = [...updatedColumnCount["Completed"], item];
+        if (
+          item?.status === "completed" &&
+          !updatedColumnCount["Completed"]?.some((s) => s.id === item.id)
+        ) {
+          updatedColumnCount["Completed"] = [
+            ...updatedColumnCount["Completed"],
+            item,
+          ];
         }
       });
 
     setColumnCount(updatedColumnCount);
   }, [tableOrders]);
 
-  
-  
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -210,8 +240,8 @@ const WaiterDashboard = () => {
           </div>
 
           <div className="flex items-center justify-end">
-            <SoundNotification 
-              playNotif={playSound && soundNotification} 
+            <SoundNotification
+              playNotif={playSound && soundNotification}
               soundNotification={soundNotification}
               setSoundNotification={setSoundNotification}
               setPlaySound={setPlaySound}
@@ -303,9 +333,8 @@ const WaiterDashboard = () => {
                   Yay, you've seen it all.
                 </p>
               } // Message when all items have been loaded
-            >              
+            >
               <div className="flex flex-col mt-2">
-
               {tableOrders ? (
                 columnCount[selectedCategory?.label] && columnCount[selectedCategory?.label].length > 0 ? (
                   columnCount[selectedCategory?.label]?.map(
@@ -342,35 +371,33 @@ const WaiterDashboard = () => {
                           waiter={waiter}
                         />)
                       }
-                    }
+                    )
+                  ) : (
+                    <div>No orders for the selected category.</div>
                   )
                 ) : (
-                  <div>No orders for the selected category.</div>
-                )
-              ) : (
-                <div className="h-48 w-full flex flex-row items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="#6D6D6D"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                </div>
-              )}
-                
+                  <div className="h-48 w-full flex flex-row items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="#6D6D6D"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                  </div>
+                )}
               </div>
             </InfiniteScroll>
           </div>

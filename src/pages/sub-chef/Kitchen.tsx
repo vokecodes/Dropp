@@ -26,6 +26,7 @@ import {
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { getSubChefDineInMenuCategories } from "../../_redux/dinningMenu/dinningMenuCrud";
 
+
 const socket = io(import.meta.env.VITE_BASE_API_URL, {
   withCredentials: true,
 });
@@ -132,6 +133,7 @@ const Kitchen = () => {
     window.addEventListener("beforeunload", handleUnload);
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
+
 
   const [declineModal, setDeclineModal] = useState(false);
   const openDeclineModal = () => setDeclineModal(true);
@@ -488,6 +490,7 @@ const Kitchen = () => {
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
+
             <SoundNotification 
               playNotif={playSound && soundNotification} 
               soundNotification={soundNotification}
