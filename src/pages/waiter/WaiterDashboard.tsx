@@ -371,7 +371,7 @@ const WaiterDashboard = () => {
                           waiter={waiter}
                         />)
                       }
-                    )
+                    })
                   ) : (
                     <div>No orders for the selected category.</div>
                   )
