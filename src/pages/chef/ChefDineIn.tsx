@@ -15,7 +15,7 @@ import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import { SERVER } from "../../config/axios";
 import { Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
-import InfinityScroll from "../../components/InfinityScroll";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ChefDineIn = () => {
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const ChefDineIn = () => {
   };
 
   useEffect(() => {
-    getRestaurantOrders();
+    getRestaurantOrders(page);
   }, []);
 
   const [selectedCustomerOrders, setSelectedCustomerOrders] = useState<any>("");
@@ -98,8 +98,6 @@ const ChefDineIn = () => {
   const closeRefundModal = () => {
     setRefundModal(false);
   };
-
-  console.log("restaurantOrders= ", restaurantOrders);
 
   return (
     <>
@@ -206,11 +204,19 @@ const ChefDineIn = () => {
                 <div className="w-full h-full">
                   <div className="lg:w-full bg-white rounded-3xl py-8">
                     {renderTableHeader()}
-                    <InfinityScroll
-                      data={restaurantOrders}
-                      getMore={getRestaurantOrders}
+                    <InfiniteScroll
+                      dataLength={restaurantOrders.length}
+                      next={() => {
+                        if (hasMore) {
+                          getRestaurantOrders(page);
+                        }
+                      }}
                       hasMore={hasMore}
-                      page={page}
+                      endMessage={
+                        <p className="mt-5 text-center font_medium">
+                          Yay, you've seen it all.
+                        </p>
+                      }
                     >
                       <div>
                         {restaurantOrders && restaurantOrders?.length > 0 ? (
@@ -268,7 +274,7 @@ const ChefDineIn = () => {
                           <EmptyState title="No new order." />
                         )}
                       </div>
-                    </InfinityScroll>
+                    </InfiniteScroll>
                   </div>
                 </div>
               </div>
