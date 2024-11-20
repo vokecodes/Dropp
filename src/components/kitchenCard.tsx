@@ -44,7 +44,8 @@ const KitchenCard = ({
             {order?.name} - {order?.table?.table} #
             {order?.displayId?.slice(-6)}
         </p>
-        <div className="flex flex-row">
+
+        <div className={`flex flex-row ${order?.notes && 'mb-3'}`}>
             <img
             src={order?.menu?.images[0]}
             className="w-10 h-auto rounded-md"
@@ -58,6 +59,17 @@ const KitchenCard = ({
             </p>
             </div>
         </div>
+
+        {order?.notes && (
+          <>
+            <hr className="w-4/5 border mx-auto my-2" />
+            <div className='w-full font_medium text-sm px-2'>
+                <p className="text-[#585858] text-base font-medium font_medium">Note:</p>
+                <p className='font_medium text-sm text-wrap'>{order?.notes}</p>
+            </div>
+            <hr className="w-4/5 border mx-auto my-2" />
+          </>
+        )}
 
         {
             kitchenCardButtons && kitchenCardButtons.map((cardButton: any, i: any) => (

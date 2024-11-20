@@ -147,6 +147,16 @@ const OrderItem = ({
         </div>
         <hr className="w-4/5 h-1 mx-auto" />
 
+        {order?.notes && (
+          <>
+            <div className='w-full font_medium text-sm px-2'>
+                <p className="text-[#585858] text-lg font-medium font_medium">Note:</p>
+                <p className='font_medium text-base'>{order?.notes}</p>
+            </div>
+            <hr className="w-4/5 h-1 mx-auto" />
+          </>
+        )}
+
         {order?.status === "pending" && (
           <div className="mt-2 w-full">
             <Button

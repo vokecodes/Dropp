@@ -780,21 +780,18 @@ const Kitchen = () => {
 
       <div className="w-fit md:w-full md:px-6 py-4">
         <InfiniteScroll
-          dataLength={restaurantOrders?.length} // This is important to track the length of your data array
+          dataLength={restaurantOrders?.length}
           next={() => {
             if (hasMore) {
               getRestaurantOrders(page);
             }
-          }} // Function to call when reaching the end of the list
-          hasMore={hasMore} // Flag to indicate if there are more items to load
-          // loader={
-          //   <p className="mt-5 text-center font_medium">Loading...</p>
-          // } // Loader component while fetching more data
+          }}
+          hasMore={hasMore}
           endMessage={
             <p className="mt-5 text-center font_medium">
               Yay, you've seen it all.
             </p>
-          } // Message when all items have been loaded
+          }
         >
           <div
             ref={ref}
