@@ -206,8 +206,9 @@ const ChefDineIn = () => {
                     {renderTableHeader()}
                     <InfinityScroll
                       data={restaurantOrders}
-                      getMore={getRestaurantOrders}
+                      page={page}
                       hasMore={hasMore}
+                      getMore={getRestaurantOrders}
                     >
                       <div>
                         {restaurantOrders && restaurantOrders?.length > 0 ? (

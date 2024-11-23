@@ -150,10 +150,11 @@ export const getRestaurantDashboardCrud = (
   toDate = "",
   payment = "",
   section = "",
-  table = ""
+  table = "",
+  breakdownOption = ""
 ) => {
   return SERVER.get(
-    `${RESTAURANT_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+    `${RESTAURANT_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
   );
 };
 
@@ -187,10 +188,11 @@ export const getRestaurantOrdersPage = (
   toDate = "",
   payment = "",
   section = "",
-  table = ""
+  table = "",
+  breakdownOption = ""
 ) => {
   return SERVER.get(
-    `${RESTAURANT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+    `${RESTAURANT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
   );
 };
 
