@@ -1011,7 +1011,7 @@ const SalesReports = () => {
             </div>
             
             <div className="w-full mt-4 flow-root overflow-hidden">
-              <InfiniteScroll
+              <InfinityScroll
                 data={transactions}
                 getMore={fetchRestaurantOrders}
                 hasMore={hasMore}
@@ -1659,7 +1659,7 @@ const SalesReports = () => {
                     </div>
                   </div>
                 </div>
-              </InfiniteScroll>
+              </InfinityScroll>
             </div>
           </div>
         </div>

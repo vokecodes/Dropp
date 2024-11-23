@@ -461,7 +461,6 @@ const SuperWaiterDashboard = () => {
                               openOrdersModal={() => openOrdersModal(tableOrder)}
                               closeOrdersModal={() => closeOrdersModal()}
                               getTableOrders={getRestaurantOrders}
-                              selectedCategory={selectedCategory?.value}
                               chef={chef}
                               waiter={table.filter(item => item.table === selectedTable)[0]}
                             />)
