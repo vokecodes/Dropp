@@ -6,7 +6,6 @@ import Hotjar from "@hotjar/browser";
 import moment from "moment";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import InfiniteScroll from "react-infinite-scroll-component";
 import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import PageTitle from "../../components/PageTitle";
 import { useAppDispatch } from "../../redux/hooks";
@@ -25,6 +24,7 @@ import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
 import { getSubChefRestaurantSections } from "../../_redux/section/sectionCrud";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const PAYMENT_OPTIONS = ["All", "Online", "POS"];
 
@@ -954,22 +954,11 @@ const SalesReports = () => {
             </div>
             <div className="mt-4 flow-root overflow-hidden">
               {selectedTable === "Dine-in sales" && (
-                <InfiniteScroll
-                  dataLength={transactions.length} // This is important to track the length of your data array
-                  next={() => {
-                    if (hasMore) {
-                      fetchRestaurantOrders();
-                    }
-                  }} // Function to call when reaching the end of the list
-                  hasMore={hasMore} // Flag to indicate if there are more items to load
-                  loader={
-                    <p className="mt-5 text-center font_medium">Loading...</p>
-                  } // Loader component while fetching more data
-                  endMessage={
-                    <p className="mt-5 text-center font_medium">
-                      Yay, you've seen it all.
-                    </p>
-                  } // Message when all items have been loaded
+                <InfinityScroll
+                  data={transactions}
+                  getMore={fetchRestaurantOrders}
+                  hasMore={hasMore}
+                  page={page}
                 >
                   <div
                     ref={tableContainerRef}
@@ -1702,26 +1691,15 @@ const SalesReports = () => {
                       </div>
                     </div>
                   </div>
-                </InfiniteScroll>
+                </InfinityScroll>
               )}
 
               {selectedTable === "Online sales" && (
-                <InfiniteScroll
-                  dataLength={ordersTransactions.length} // This is important to track the length of your data array
-                  next={() => {
-                    if (ordersHasMore) {
-                      fetchOrders();
-                    }
-                  }} // Function to call when reaching the end of the list
-                  hasMore={ordersHasMore} // Flag to indicate if there are more items to load
-                  loader={
-                    <p className="mt-5 text-center font_medium">Loading...</p>
-                  } // Loader component while fetching more data
-                  endMessage={
-                    <p className="mt-5 text-center font_medium">
-                      Yay, you've seen it all.
-                    </p>
-                  } // Message when all items have been loaded
+                <InfinityScroll
+                  data={ordersTransactions}
+                  getMore={fetchOrders}
+                  hasMore={ordersHasMore}
+                  page={page}
                 >
                   <div
                     ref={tableContainerRef}
@@ -1889,7 +1867,7 @@ const SalesReports = () => {
                       </div>
                     </div>
                   </div>
-                </InfiniteScroll>
+                </InfinityScroll>
               )}
               {/* {selectedTable === "Categories" && (
                         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
