@@ -10,7 +10,6 @@ import ChefMessage from "./ChefMessage";
 import NotFound from "../../components/NotFound";
 import OnlineMenu from "./menu/OnlineMenu";
 import DineInMenu from "./menu/DineInMenu";
-import DineIn from "./DineIn";
 import Kitchen from "./Kitchen";
 import ChefDineIn from "./ChefDineIn";
 import TableManagement from "./TableManagement";
@@ -49,7 +48,6 @@ const ChefRoutes = () => {
         {auth?.user?.isRestaurant && (
           <>
             <Route path={CHEF_ROUTES.chefReports} element={<SalesReports />} />
-            <Route path={CHEF_ROUTES.restaurantDineIn} element={<DineIn />} />
             <Route path={CHEF_ROUTES.kitchen} element={<Kitchen />} />
             <Route path={CHEF_ROUTES.kitchenMenu} element={<KitchenMenu />} />
             <Route path={CHEF_ROUTES.subChefs} element={<SubChefs />} />

@@ -15,7 +15,7 @@ import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import { SERVER } from "../../config/axios";
 import { Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const ChefDineIn = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ const ChefDineIn = () => {
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
 
-  const getRestaurantOrders = async (currentPage = 1) => {
+  const getRestaurantOrders = async (currentPage = page) => {
     SERVER.get(`${RESTAURANT_ORDER_URL}/all-restaurant?page=${currentPage}`)
       .then(({ data }) => {
         if (currentPage === 1) {
@@ -53,7 +53,7 @@ const ChefDineIn = () => {
   };
 
   useEffect(() => {
-    getRestaurantOrders(page);
+    getRestaurantOrders();
   }, []);
 
   const [selectedCustomerOrders, setSelectedCustomerOrders] = useState<any>("");
@@ -204,19 +204,11 @@ const ChefDineIn = () => {
                 <div className="w-full h-full">
                   <div className="lg:w-full bg-white rounded-3xl py-8">
                     {renderTableHeader()}
-                    <InfiniteScroll
-                      dataLength={restaurantOrders.length}
-                      next={() => {
-                        if (hasMore) {
-                          getRestaurantOrders(page);
-                        }
-                      }}
+                    <InfinityScroll
+                      data={restaurantOrders}
+                      page={page}
                       hasMore={hasMore}
-                      endMessage={
-                        <p className="mt-5 text-center font_medium">
-                          Yay, you've seen it all.
-                        </p>
-                      }
+                      getMore={getRestaurantOrders}
                     >
                       <div>
                         {restaurantOrders && restaurantOrders?.length > 0 ? (
@@ -274,7 +266,7 @@ const ChefDineIn = () => {
                           <EmptyState title="No new order." />
                         )}
                       </div>
-                    </InfiniteScroll>
+                    </InfinityScroll>
                   </div>
                 </div>
               </div>
