@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, Fragment } from "react";
 import { useSelector, shallowEqual } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
 import OrderItem from "./OrderItem";
 import { SERVER } from "../../config/axios";
 import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
@@ -43,7 +42,7 @@ const WaiterDashboard = () => {
     }
   };
 
-  const getTableOrders = async (currentPage = 1) => {
+  const getTableOrders = async (currentPage = page) => {
     SERVER.get(
       `${RESTAURANT_ORDER_URL}/${waiter?.restaurant}/${waiter?.table}?page=${currentPage}`
     )
@@ -317,22 +316,11 @@ const WaiterDashboard = () => {
 
         <div className="rounded-2xl h-full w-full lg:p-5 mt-3 flex flex-col lg:flex-row justify-start items-center lg:items-start">
           <div className="w-full lg:w-8/12 h-full flex flex-col gap-x-5">
-            <InfiniteScroll
-              dataLength={tableOrders.length} // This is important to track the length of your data array
-              next={() => {
-                if (hasMore) {
-                  getTableOrders(page);
-                }
-              }} // Function to call when reaching the end of the list
-              hasMore={hasMore} // Flag to indicate if there are more items to load
-              // loader={
-              //   <p className="mt-5 text-center font_medium">Loading...</p>
-              // } // Loader component while fetching more data
-              endMessage={
-                <p className="mt-5 text-center font_medium">
-                  Yay, you've seen it all.
-                </p>
-              } // Message when all items have been loaded
+            <InfinityScroll
+              data={tableOrders}
+              getMore={getTableOrders}
+              hasMore={hasMore}
+              page={page}
             >
               <div className="flex flex-col mt-2">
               {tableOrders ? (
@@ -399,7 +387,7 @@ const WaiterDashboard = () => {
                   </div>
                 )}
               </div>
-            </InfiniteScroll>
+            </InfinityScroll>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { ClickAwayListener, Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import { useAppDispatch } from "../../redux/hooks";
@@ -29,6 +28,7 @@ import KitchenCard from "../../components/kitchenCard";
 import KitchenBoard from "../../components/KitchenBoard";
 import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -58,7 +58,7 @@ const Kitchen = () => {
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
 
-  const getRestaurantOrders = async (currentPage = 1) => {
+  const getRestaurantOrders = async (currentPage = page) => {
     SERVER.get(`${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`)
       .then(({ data }) => {
         if (currentPage === 1) {
@@ -779,19 +779,10 @@ const Kitchen = () => {
       </div>
 
       <div className="w-fit md:w-full md:px-6 py-4">
-        <InfiniteScroll
-          dataLength={restaurantOrders?.length}
-          next={() => {
-            if (hasMore) {
-              getRestaurantOrders(page);
-            }
-          }}
+        <InfinityScroll
+          data={restaurantOrders}
+          getMore={getRestaurantOrders}
           hasMore={hasMore}
-          endMessage={
-            <p className="mt-5 text-center font_medium">
-              Yay, you've seen it all.
-            </p>
-          }
         >
           <div
             ref={ref}
@@ -1063,7 +1054,7 @@ const Kitchen = () => {
             {/* </div> */}
             {/* </div> */}
           </div>
-        </InfiniteScroll>
+        </InfinityScroll>
       </div>
 
       <Modal
