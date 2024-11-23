@@ -32,7 +32,7 @@ const ChefDineIn = () => {
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
 
-  const getRestaurantOrders = async (currentPage = 1) => {
+  const getRestaurantOrders = async (currentPage = page) => {
     SERVER.get(`${RESTAURANT_ORDER_URL}/all-restaurant?page=${currentPage}`)
       .then(({ data }) => {
         if (currentPage === 1) {
@@ -98,8 +98,6 @@ const ChefDineIn = () => {
   const closeRefundModal = () => {
     setRefundModal(false);
   };
-
-  console.log("restaurantOrders= ", restaurantOrders);
 
   return (
     <>
@@ -208,9 +206,9 @@ const ChefDineIn = () => {
                     {renderTableHeader()}
                     <InfinityScroll
                       data={restaurantOrders}
-                      getMore={getRestaurantOrders}
-                      hasMore={hasMore}
                       page={page}
+                      hasMore={hasMore}
+                      getMore={getRestaurantOrders}
                     >
                       <div>
                         {restaurantOrders && restaurantOrders?.length > 0 ? (
