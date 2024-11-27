@@ -958,7 +958,7 @@ const SalesReports = () => {
                   data={transactions}
                   getMore={fetchRestaurantOrders}
                   hasMore={hasMore}
-                  page={page}
+                  
                 >
                   <div
                     ref={tableContainerRef}
@@ -1699,7 +1699,7 @@ const SalesReports = () => {
                   data={ordersTransactions}
                   getMore={fetchOrders}
                   hasMore={ordersHasMore}
-                  page={page}
+                  
                 >
                   <div
                     ref={tableContainerRef}

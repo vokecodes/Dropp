@@ -12,9 +12,9 @@ import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.VITE_BASE_URL, {
+//   withCredentials: true,
+// });
 
 const WaiterDashboard = () => {
   const { waiter } = useSelector(
@@ -77,26 +77,26 @@ const WaiterDashboard = () => {
     }, 3000);
   };
 
-  useEffect(() => {
-    const handleNewOrder = () => {
-      getTableOrders(1);
-      receiveNotification();
-    };
+  // useEffect(() => {
+  //   const handleNewOrder = () => {
+  //     getTableOrders(1);
+  //     receiveNotification();
+  //   };
 
-    socket.on("newRestaurantOrder", handleNewOrder);
-    socket.on("newReadyOrder", handleNewOrder);
-    socket.on("updatedOrder", () => {
-      getTableOrders(1);
-    });
+  //   socket.on("newRestaurantOrder", handleNewOrder);
+  //   socket.on("newReadyOrder", handleNewOrder);
+  //   socket.on("updatedOrder", () => {
+  //     getTableOrders(1);
+  //   });
 
-    return () => {
-      socket.off("newRestaurantOrder", handleNewOrder);
-      socket.off("newReadyOrder", handleNewOrder);
-      socket.off("updatedOrder", () => {
-        getTableOrders(1);
-      });
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("newRestaurantOrder", handleNewOrder);
+  //     socket.off("newReadyOrder", handleNewOrder);
+  //     socket.off("updatedOrder", () => {
+  //       getTableOrders(1);
+  //     });
+  //   };
+  // }, []);
 
   const CATEGORIES = [
     {
@@ -320,7 +320,7 @@ const WaiterDashboard = () => {
               data={tableOrders}
               getMore={getTableOrders}
               hasMore={hasMore}
-              page={page}
+              
             >
               <div className="flex flex-col mt-2">
               {tableOrders ? (
