@@ -15,6 +15,7 @@ import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
+import InfinityScroll from "../../components/InfinityScroll";
 
 // const socket = io(import.meta.env.VITE_BASE_URL, {
 //   withCredentials: true,

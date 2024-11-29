@@ -78,6 +78,7 @@ const ChefDineIn = () => {
 
   const handleApprovalOrder = () => {
     setIsSending(true)
+    console.log('approvalOrder= ', approvalOrder)
     SERVER.patch(`${RESTAURANT_ORDER_URL}/status/${approvalOrder.id}`, { order: {...approvalOrder} })
       .then(({ data }) => {
         getRestaurantOrders(1)
@@ -91,28 +92,45 @@ const ChefDineIn = () => {
   }
 
   const updateApprovalOrder = (item: string, menuId: string) => {
-    console.log('item=', item)
+    console.log('item=', item);
+  
     setApprovalOrder((prevApprovalOrder: any) => {
       return {
         ...prevApprovalOrder,
         order: prevApprovalOrder?.order?.map((menu: any) => {
+          console.log('prevStatus===', menu?.prevStatus);
+  
           if (menu.id === menuId) {
-            if (item === "void") {
-              console.log('item0=', item)
-              return { ...menu, status: "archived" };
-            } else if(item === "confirm") {
-              console.log('item1=', item)
-              return { ...menu, salesType: "pending" };
-            } else {
-              console.log('item2=', item)
-              return { ...menu, salesType: item };
+            if (item === "void" && menu.status !== "archived") {
+              return { ...menu, status: "archived", prevStatus: menu.status };
+            }
+  
+            const isArchived = menu.status === "archived";
+            const shouldRestore = isArchived && (menu?.prevStatus === "archived" || !menu?.prevStatus);
+            const restoreStatus = isArchived && menu?.prevStatus ? menu?.prevStatus : menu.status;
+  
+            if (item === "confirm") {
+              return {
+                ...menu,
+                salesType: "pending",
+                status: shouldRestore ? "pending" : restoreStatus
+              };
+            }
+  
+            if (["sales", "gift"].includes(item)) {
+              return {
+                ...menu,
+                salesType: item,
+                status: shouldRestore ? "pending" : restoreStatus
+              };
             }
           }
+  
           return menu;
         }),
       };
     });
-  };
+  };  
 
   const [selectedCustomerOrders, setSelectedCustomerOrders] = useState<any>("");
 
@@ -213,10 +231,7 @@ const ChefDineIn = () => {
       const currentTable = item?.table?.table;
 
       tableOrderMap["All orders"] += 1
-
       tableOrderMap[currentTable] += 1
-
-      
 
       const count = item?.order.reduce((num, elem) => (elem.salesType !== "sales" && elem.salesType !== "gift" && elem.status !== "archived") ? num - 1 : num + 0, item?.order.length)
       
@@ -252,9 +267,7 @@ const ChefDineIn = () => {
 
     const rows = data
       .filter((order: any) =>
-        startDate
-          ? moment(order.createdAt).isSameOrAfter(startDate, "day")
-          : order.createdAt
+        order.createdAt
       )
       ?.map((order: any) => {
         const formattedDate = moment(order.createdAt).format("DD/MM/YYYY");
@@ -402,7 +415,8 @@ const ChefDineIn = () => {
                           </div>
                         </div>
                       </div>
-                      {Object.keys(tablesMap).filter(item => item !== "All orders" && item !== undefined ).map((cat: any, i: number) => (
+                      {Object.keys(tablesMap)
+                        .filter((item) => item && item !== "All orders" && item !== "undefined" && !Number.isNaN(Number(item)) ).map((cat: any, i: number) => (
                         <div
                           key={i}
                           className={`flex flex-row justify-between items-center w-fit h-fit py-2 px-4 my-1 gap-x-1 rounded-full shrink-0 cursor-pointer ${
@@ -463,7 +477,7 @@ const ChefDineIn = () => {
                     <div className="flex gap-3">
                       <div
                         className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
-                        onClick={() => { dineExportToCSV(transactions) }}
+                        onClick={() => { dineExportToCSV(searchFiltered) }}
                       >
                         {isDownloading ? (
                           <svg
@@ -1075,7 +1089,7 @@ const ChefDineIn = () => {
                                           <>
                                             <div
                                               className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                (!menu?.salesType && item === "confirm" && menu?.status !== "archived")
+                                                ((!menu?.salesType || menu?.salesType === "pending") && item === "confirm" && menu?.status !== "archived")
                                                 || (menu?.salesType === "sales" && item === "sales" && menu?.status !== "archived") 
                                                 || (menu?.salesType === "gift" && item === "gift" && menu?.status !== "archived") 
                                                 || (menu?.status === "archived" && item === "void") 
