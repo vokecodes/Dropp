@@ -7,10 +7,16 @@ import Button from "../../components/Button";
 import Modal from "@mui/material/Modal";
 import { IoMdClose } from "react-icons/io";
 import Input from "../../components/CustomInput";
-import { SuperWaiterTableValues, WaiterTableValues } from "../../utils/FormInitialValue";
+import {
+  SuperWaiterTableValues,
+  WaiterTableValues,
+} from "../../utils/FormInitialValue";
 import { useFormik } from "formik";
 import { useAppDispatch } from "../../redux/hooks";
-import { SuperWaiterTableInputsSchema, WaiterTableInputsSchema } from "../../utils/ValidationSchema";
+import {
+  SuperWaiterTableInputsSchema,
+  WaiterTableInputsSchema,
+} from "../../utils/ValidationSchema";
 import { Chip, ListItemText } from "@mui/material";
 import EmptyState from "../../components/EmptyState";
 import { FaAngleLeft } from "react-icons/fa";
@@ -28,13 +34,12 @@ import { CHEF_ROUTES } from "../../routes/routes";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { getSections } from "../../_redux/section/sectionAction";
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
 
 const TableManagement = () => {
   const dispatch = useAppDispatch();
@@ -71,9 +76,11 @@ const TableManagement = () => {
     touched,
   } = useFormik({
     initialValues: superWaiter ? SuperWaiterTableValues : WaiterTableValues,
-    validationSchema: superWaiter ? SuperWaiterTableInputsSchema : WaiterTableInputsSchema,
+    validationSchema: superWaiter
+      ? SuperWaiterTableInputsSchema
+      : WaiterTableInputsSchema,
     onSubmit: async () => {
-      if(!superWaiter){
+      if (!superWaiter) {
         if (editTable) {
           await dispatch(
             updateTables(values, editTable?._id, closeOrdersModal, resetForm)
@@ -82,14 +89,21 @@ const TableManagement = () => {
           await dispatch(addTables(values, closeOrdersModal, resetForm));
         }
         setEditTable(null);
-      }else{
-        console.log('values= ', values);
+      } else {
+        console.log("values= ", values);
         if (editSuperWaiter) {
           await dispatch(
-            updateSuperWaiter(values, editSuperWaiter?._id, closeSuperWaiterModal, resetForm)
+            updateSuperWaiter(
+              values,
+              editSuperWaiter?._id,
+              closeSuperWaiterModal,
+              resetForm
+            )
           );
         } else {
-          await dispatch(addSuperWaiter(values, closeSuperWaiterModal, resetForm));
+          await dispatch(
+            addSuperWaiter(values, closeSuperWaiterModal, resetForm)
+          );
         }
 
         setEditSuperWaiter(null);
@@ -106,7 +120,7 @@ const TableManagement = () => {
       setSelectedLoading();
     }, 1200);
   };
-  
+
   const deleteSuper = async (tableId) => {
     setSelectedLoading(tableId);
     await dispatch(deleteSuperWaiter(tableId));
@@ -118,14 +132,14 @@ const TableManagement = () => {
   const [ordersModal, setOrdersModal] = useState(false);
   const openOrdersModal = () => setOrdersModal(true);
   const closeOrdersModal = () => setOrdersModal(false);
-  
+
   const [superWaiterModal, setSuperWaiterModal] = useState(false);
   const openSuperWaiterModal = () => setSuperWaiterModal(true);
   const closeSuperWaiterModal = () => {
     setSuperWaiterModal(false);
-    resetForm()
-    setPersonName()
-  }
+    resetForm();
+    setPersonName();
+  };
 
   const [personName, setPersonName] = useState<string[]>([]);
 
@@ -133,26 +147,29 @@ const TableManagement = () => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      typeof value === 'string' ? value.split(',') : value,
+    setPersonName(typeof value === "string" ? value.split(",") : value);
+    setFieldValue(
+      "subTables",
+      typeof value === "string" ? value.split(",") : value
     );
-    setFieldValue('subTables', typeof value === 'string' ? value.split(',') : value)
   };
-  
+
   const [selectedSection, setSelectedSection] = useState<string[]>([]);
 
-  const handleChangeSections = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChangeSections = (
+    event: SelectChangeEvent<typeof personName>
+  ) => {
     const {
       target: { value },
     } = event;
-    setSelectedSection(
-      typeof value === 'string' ? value.split(',') : value,
+    setSelectedSection(typeof value === "string" ? value.split(",") : value);
+    setFieldValue(
+      "section",
+      typeof value === "string" ? value.split(",") : value
     );
-    setFieldValue('section', typeof value === 'string' ? value.split(',') : value)
   };
 
-  console.log('section= ', section)
-
+  console.log("section= ", section);
 
   return (
     <>
@@ -176,10 +193,10 @@ const TableManagement = () => {
                     setSuperWaiter(true);
                     openSuperWaiterModal();
                     setEditSuperWaiter(null);
-                    setValues(SuperWaiterTableValues)
+                    setValues(SuperWaiterTableValues);
                   }}
                 />
-                
+
                 <Button
                   title="Create a new table"
                   extraClasses="w-fit p-3 rounded-full"
@@ -198,93 +215,126 @@ const TableManagement = () => {
                 <div className="w-full h-full">
                   <div className="lg:w-4/5 bg-white rounded-3xl py-8">
                     <div className="w-full flex flex-row items-center justify-start gap-x-3 my-2">
-                      <span className={`rounded-full px-3 py-1 cursor-pointer font_medium ${superWaiter ? 'bg-[#EDECEC]' : 'primary_bg_color text-white'}`} onClick={() => setSuperWaiter(false)}>Tables</span>
+                      <span
+                        className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
+                          superWaiter
+                            ? "bg-[#EDECEC]"
+                            : "primary_bg_color text-white"
+                        }`}
+                        onClick={() => setSuperWaiter(false)}
+                      >
+                        Tables
+                      </span>
 
-                      <span className={`rounded-full px-3 py-1 cursor-pointer font_medium ${superWaiter ? 'primary_bg_color text-white' : 'bg-[#EDECEC]'}`} onClick={() => setSuperWaiter(true)}>Super waiter</span>
+                      <span
+                        className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
+                          superWaiter
+                            ? "primary_bg_color text-white"
+                            : "bg-[#EDECEC]"
+                        }`}
+                        onClick={() => setSuperWaiter(true)}
+                      >
+                        Super waiter
+                      </span>
                     </div>
                     {superWaiter ? (
                       <>
-                        {table?.length > 0 ? (
+                        {table?.filter(
+                          (item, i) => item?.userType === "superWaiter"
+                        )?.length > 0 ? (
                           <div className="grid grid-cols-1 lg:grid-cols-4 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
-                            {table?.filter((item, i) => item?.userType === 'superWaiter').map((table: any, i: number) => (
-                              <div key={i} className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
-                                <div className="flex flex-row items-center justify-between">
-                                  <div className="flex-1 ">
-                                    <p className="text-xl text-black font_medium">
-                                      {table?.employeeAssigned}
-                                    </p>
-                                    <p className="text-md primary_txt_color font_medium ">
-                                      {table?.employeeID}
-                                    </p>
+                            {table
+                              ?.filter(
+                                (item, i) => item?.userType === "superWaiter"
+                              )
+                              .map((table: any, i: number) => (
+                                <div
+                                  key={i}
+                                  className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1"
+                                >
+                                  <div className="flex flex-row items-center justify-between">
+                                    <div className="flex-1 ">
+                                      <p className="text-xl text-black font_medium">
+                                        {table?.employeeAssigned}
+                                      </p>
+                                      <p className="text-md primary_txt_color font_medium ">
+                                        {table?.employeeID}
+                                      </p>
+                                    </div>
+                                    <Chip label="Details" size="small" />
                                   </div>
-                                  <Chip label="Details" size="small" />
+                                  <div className="mt-3">
+                                    <Button
+                                      title="Edit"
+                                      extraClasses="w-full rounded-full"
+                                      onClick={() => {
+                                        openSuperWaiterModal();
+                                        setEditSuperWaiter(table);
+                                        setValues(table);
+                                        setPersonName(table.subTables);
+                                        setSelectedSection(table.section);
+                                      }}
+                                    />
+                                    <OutlineButton
+                                      title="Delete"
+                                      extraClasses="w-full my-2 rounded-full"
+                                      loading={selectedLoading === table?._id}
+                                      onClick={() => {
+                                        deleteSuper(table?._id);
+                                      }}
+                                    />
+                                  </div>
                                 </div>
-                                <div className="mt-3">
-                                  <Button
-                                    title="Edit"
-                                    extraClasses="w-full rounded-full"
-                                    onClick={() => {
-                                      openSuperWaiterModal();
-                                      setEditSuperWaiter(table);
-                                      setValues(table);
-                                      setPersonName(table.subTables)
-                                      setSelectedSection(table.section)
-                                    }}
-                                  />
-                                  <OutlineButton
-                                    title="Delete"
-                                    extraClasses="w-full my-2 rounded-full"
-                                    loading={selectedLoading === table?._id}
-                                    onClick={() => {
-                                      deleteSuper(table?._id);
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            ))}
+                              ))}
                           </div>
                         ) : (
                           <EmptyState title="No Super waiters yet..." />
                         )}
                       </>
-                    ): (
+                    ) : (
                       <>
-                        {table?.length > 0 ? (
+                        {table?.filter((item, i) => item?.userType === "waiter")
+                          ?.length > 0 ? (
                           <div className="grid grid-cols-1 lg:grid-cols-4 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
-                            {table?.filter((item, i) => item?.userType === 'waiter').map((table: any, i: number) => (
-                              <div key={i} className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1">
-                                <div className="flex flex-row items-center justify-between">
-                                  <div className="flex-1 ">
-                                    <p className="text-xl text-black font_medium">
-                                      {table?.table}
-                                    </p>
-                                    <p className="text-md primary_txt_color font_medium ">
-                                      {table?.employeeAssigned}
-                                    </p>
+                            {table
+                              ?.filter((item, i) => item?.userType === "waiter")
+                              .map((table: any, i: number) => (
+                                <div
+                                  key={i}
+                                  className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1"
+                                >
+                                  <div className="flex flex-row items-center justify-between">
+                                    <div className="flex-1 ">
+                                      <p className="text-xl text-black font_medium">
+                                        {table?.table}
+                                      </p>
+                                      <p className="text-md primary_txt_color font_medium ">
+                                        {table?.employeeAssigned}
+                                      </p>
+                                    </div>
+                                    <Chip label="Details" size="small" />
                                   </div>
-                                  <Chip label="Details" size="small" />
+                                  <div className="mt-3">
+                                    <Button
+                                      title="Edit"
+                                      extraClasses="w-full rounded-full"
+                                      onClick={() => {
+                                        openOrdersModal();
+                                        setEditTable(table);
+                                        setValues(table);
+                                      }}
+                                    />
+                                    <OutlineButton
+                                      title="Delete"
+                                      extraClasses="w-full my-2 rounded-full"
+                                      loading={selectedLoading === table?._id}
+                                      onClick={() => {
+                                        deleteTable(table?._id);
+                                      }}
+                                    />
+                                  </div>
                                 </div>
-                                <div className="mt-3">
-                                  <Button
-                                    title="Edit"
-                                    extraClasses="w-full rounded-full"
-                                    onClick={() => {
-                                      openOrdersModal();
-                                      setEditTable(table);
-                                      setValues(table);
-                                    }}
-                                  />
-                                  <OutlineButton
-                                    title="Delete"
-                                    extraClasses="w-full my-2 rounded-full"
-                                    loading={selectedLoading === table?._id}
-                                    onClick={() => {
-                                      deleteTable(table?._id);
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            ))}
+                              ))}
                           </div>
                         ) : (
                           <EmptyState title="No Tables yet..." />
@@ -436,7 +486,7 @@ const TableManagement = () => {
               </div>
             </div>
           </Modal>
-          
+
           {/* ADD SUPER WAITER TABLE */}
           <Modal
             open={superWaiterModal}
@@ -487,8 +537,10 @@ const TableManagement = () => {
                       }
                     /> */}
 
-                    <FormControl sx={{ m: 1, width: '100%' }}>
-                      <InputLabel id="demo-multiple-name-label">Section</InputLabel>
+                    <FormControl sx={{ m: 1, width: "100%" }}>
+                      <InputLabel id="demo-multiple-name-label">
+                        Section
+                      </InputLabel>
                       <Select
                         labelId="demo-multiple-name-label"
                         id="demo-multiple-name"
@@ -497,27 +549,31 @@ const TableManagement = () => {
                         onChange={handleChangeSections}
                         input={<OutlinedInput label="Section" />}
                         renderValue={(selected) => {
-                          const newSelected = section?.filter(item => selected.includes(item?._id)).map(item =>  item?.name)
-                          
-                          return newSelected.join(', ')
+                          const newSelected = section
+                            ?.filter((item) => selected.includes(item?._id))
+                            .map((item) => item?.name);
+
+                          return newSelected.join(", ");
                         }}
                         name="section"
                       >
                         {section?.length > 0
                           ? section?.map((name) => (
-                          <MenuItem
-                            key={name._id}
-                            value={name._id}
-                          >
-                            <Checkbox checked={selectedSection?.includes(name._id)} />
-                            <ListItemText primary={name.name} />
-                          </MenuItem>
-                        )) : [] }
+                              <MenuItem key={name._id} value={name._id}>
+                                <Checkbox
+                                  checked={selectedSection?.includes(name._id)}
+                                />
+                                <ListItemText primary={name.name} />
+                              </MenuItem>
+                            ))
+                          : []}
                       </Select>
                     </FormControl>
-                    
-                    <FormControl sx={{ m: 1, width: '100%' }}>
-                      <InputLabel id="demo-multiple-name-label">Tables</InputLabel>
+
+                    <FormControl sx={{ m: 1, width: "100%" }}>
+                      <InputLabel id="demo-multiple-name-label">
+                        Tables
+                      </InputLabel>
                       <Select
                         labelId="demo-multiple-name-label"
                         id="demo-multiple-name"
@@ -526,25 +582,29 @@ const TableManagement = () => {
                         onChange={handleChangeTables}
                         input={<OutlinedInput label="Tables" />}
                         renderValue={(selected) => {
-                          const newSelected = table?.filter(item => selected.includes(item?._id)).map(item =>  item?.table)
-                          
-                          return newSelected.join(', ')
+                          const newSelected = table
+                            ?.filter((item) => selected.includes(item?._id))
+                            .map((item) => item?.table);
+
+                          return newSelected.join(", ");
                         }}
                         name="subTables"
                       >
                         {table?.length > 0
-                          ? table?.filter((table) => !!table?.table).map((name) => (
-                          <MenuItem
-                            key={name._id}
-                            value={name._id}
-                          >
-                            <Checkbox checked={personName?.includes(name._id)} />
-                            <ListItemText primary={name.table} />
-                          </MenuItem>
-                        )) : [] }
+                          ? table
+                              ?.filter((table) => !!table?.table)
+                              .map((name) => (
+                                <MenuItem key={name._id} value={name._id}>
+                                  <Checkbox
+                                    checked={personName?.includes(name._id)}
+                                  />
+                                  <ListItemText primary={name.table} />
+                                </MenuItem>
+                              ))
+                          : []}
                       </Select>
                     </FormControl>
-                    
+
                     <Input
                       type="text"
                       placeholder="Employee assigned"
