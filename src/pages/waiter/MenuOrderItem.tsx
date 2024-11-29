@@ -176,6 +176,7 @@ const MenuOrderItem = ({
         )?.length === order?.order?.length && (
           <div className="my-2 w-full">
             <Button
+              disabled={!order?.paid}
               title="Mark as complete"
               extraClasses="w-full p-3 rounded-full"
               loading={loading}

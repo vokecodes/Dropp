@@ -1,7 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component";
-import LoadingSpinner from "./LoadingSpinner";
 
-const InfinityScroll = ({ children, data, getMore, hasMore, page }) => {
+const InfinityScroll = ({ children, data, getMore, hasMore }) => {
   return (
     <InfiniteScroll
       dataLength={data?.length} // This is important to track the length of your data array

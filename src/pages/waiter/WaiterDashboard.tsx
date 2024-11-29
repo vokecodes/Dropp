@@ -227,6 +227,8 @@ const WaiterDashboard = () => {
     setColumnCount(updatedColumnCount);
   }, [tableOrders]);
 
+  console.log('column= ', columnCount["New order"])
+
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -324,7 +326,7 @@ const WaiterDashboard = () => {
               data={tableOrders}
               getMore={getTableOrders}
               hasMore={hasMore}
-              page={page}
+              
             >
               <div className="flex flex-col mt-2">
                 {tableOrders ? (

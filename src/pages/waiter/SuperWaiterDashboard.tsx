@@ -15,6 +15,7 @@ import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -424,7 +425,7 @@ const SuperWaiterDashboard = () => {
               data={restaurantOrders}
               getMore={getRestaurantOrders}
               hasMore={hasMore}
-              page={page}
+              
             >
               <div className="flex flex-col mt-2">
                 {tablesMap ? (
