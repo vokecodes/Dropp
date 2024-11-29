@@ -92,7 +92,7 @@ const MenuOrderItem = ({
         <div className="w-full flex flex-row items-center justify-between">
           <div>
             <p className="font-semibold font_medium">
-              {order.name}
+              {order.name} #{order?.id?.substring(order?.id?.length - 5)}
             </p>
             <p className="flex-1 text-sm text-start font_regular black2 font-semibold">
               {order?.email}
@@ -134,12 +134,11 @@ const MenuOrderItem = ({
                   <div className="flex flex-col items-end shrink-0">
                     <p className="text-xl pt-1 font-bold">
                       ₦
-                      {menuOrder?.menu?.discount
+                      {formatPrice(menuOrder?.menu?.discount
                         ? menuOrder?.amount -
                           (menuOrder?.amount / 100) * menuOrder?.menu.discount
-                        : menuOrder?.amount}
+                        : menuOrder?.amount)}
                     </p>
-                    <p className="font-bold mt-1">#{menuOrder?.displayId?.slice(-6)}</p>
                   </div>
                 </div>
               ))}
@@ -165,7 +164,7 @@ const MenuOrderItem = ({
           <div className="w-full flex flex-row items-center justify-end gap-x-3">
             <PaymentStatus order={order} />
             <p className="primary_txt_color font-semibold font_medium text-lg">
-              N{formatPrice(order?.totalAmount)}
+              ₦{formatPrice(order?.order?.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0))}
             </p>
           </div>
         </div>

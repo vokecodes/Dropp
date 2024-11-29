@@ -815,7 +815,7 @@ const ChefDineIn = () => {
                                         {transaction?.order?.map((menu: any, i) => (
                                           <div
                                             key={i}
-                                            className="flex items-center"
+                                            className={`flex items-center ${menu?.status === "archived" && 'opacity-25'}`}
                                           >
                                             <div className="h-10 w-10 flex-shrink-0">
                                               <img
@@ -854,12 +854,12 @@ const ChefDineIn = () => {
                                       <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
                                         {
                                           formatRemoteAmountKobo(
-                                            transaction?.totalAmount
+                                            transaction?.order.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0)
                                           ).naira
                                         }
                                         {
                                           formatRemoteAmountKobo(
-                                            transaction?.totalAmount
+                                            transaction?.order.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0)
                                           ).kobo
                                         }
                                       </td>

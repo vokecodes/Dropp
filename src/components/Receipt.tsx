@@ -13,13 +13,14 @@ type ReceiptProps = {
   orderId: any,
   handleImageLoad: any,
   date: any,
-  waiterScreen: any
+  waiterScreen: any,
+  voidedSales: any
 }
 
 
 
 // Receipt component (not exported)
-const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, receiptValues, discountValue, totalPrice, orderId, handleImageLoad, date, waiterScreen }, receiptRef) => (
+const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, receiptValues, discountValue, totalPrice, orderId, handleImageLoad, date, waiterScreen, voidedSales }, receiptRef) => (
 
   <div ref={receiptRef} style={{ position: 'absolute', top: '-10000px', left: '-10000px', maxWidth: '450px' }}>
     <div className='m-10'>
@@ -72,10 +73,12 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
 
           {waiterScreen ? (
             <div className='mt-5 mb-5'>
-              {receiptValues && receiptValues?.cartMenu?.map((meal: any, i: any) => {
+              {receiptValues && receiptValues?.cartMenu?.filter(item => item.status !== "archived").map((meal: any, i: any) => {
                 if(meal.menu.discount) discountValue += ((meal.menu.price / 100) * meal.menu.discount) * meal.quantity
     
                 totalPrice += (meal.menu.price * meal.quantity)
+
+                // if item.status === archived && totalPrice - item.price
     
                   return (
                     <div key={i} className='w-full flex flex-row justify-between items-center gap-x-5'>
@@ -154,8 +157,9 @@ const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ chef, waiter, 
       <div className='w-full flex flex-row justify-between items-center gap-x-5'>
           <p className='text-xl font-bold'>TOTAL</p>
           <p className='text-xl font-bold'>
-            {formatRemoteAmountKobo(receiptValues.totalAmount).naira}
-            {formatRemoteAmountKobo(receiptValues.totalAmount).kobo}
+            {formatRemoteAmountKobo(receiptValues.totalAmount - voidedSales).naira}
+
+            {formatRemoteAmountKobo(receiptValues.totalAmount - voidedSales).kobo}
           </p>
       </div>
 
@@ -198,6 +202,7 @@ const DownloadPDFButton = ({ children, chef, waiter, receiptValues, orderId, dat
   const receiptRef = useRef<HTMLDivElement>(null); 
   const discountValue = 0;
   const totalPrice = 0;
+  const voidedSales = receiptValues?.cartMenu?.filter(item => item.status === "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0) || 0;
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const handleImageLoad = () => {
@@ -228,7 +233,7 @@ const DownloadPDFButton = ({ children, chef, waiter, receiptValues, orderId, dat
 
   return (
     <>
-      <Receipt ref={receiptRef} chef={chef} waiter={waiter} receiptValues={receiptValues} discountValue={discountValue} totalPrice={totalPrice} orderId={orderId} handleImageLoad={handleImageLoad} date={date} waiterScreen={waiterScreen} />
+      <Receipt ref={receiptRef} chef={chef} waiter={waiter} receiptValues={receiptValues} discountValue={discountValue} totalPrice={totalPrice} orderId={orderId} handleImageLoad={handleImageLoad} date={date} waiterScreen={waiterScreen} voidedSales={voidedSales} />
 
       <span onClick={generatePDF}>
         {children}
