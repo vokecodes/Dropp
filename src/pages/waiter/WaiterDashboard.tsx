@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -38,7 +39,7 @@ const WaiterDashboard = () => {
         setChef(data.data);
       }
     } catch (error) {
-      console.log('chef err= ', error)
+      console.log("chef err= ", error);
     }
   };
 
@@ -154,8 +155,7 @@ const WaiterDashboard = () => {
     };
 
     const suffixes = {};
-    const sortedByDate = sortByUpdatedAt(tableOrders)
-
+    const sortedByDate = sortByUpdatedAt(tableOrders);
 
     sortedByDate &&
       sortedByDate?.length > 0 &&
@@ -201,14 +201,14 @@ const WaiterDashboard = () => {
                 item,
               ];
             }
-            
+
             if (!suffixes[item?.id]) {
               suffixes[item?.id] = 0;
             }
-      
+
             const suffix = String.fromCharCode(97 + suffixes[item?.id]);
             o.displayId = `${item?.id}-${suffix}`;
-      
+
             suffixes[item?.id] += 1;
           });
         }
@@ -234,7 +234,11 @@ const WaiterDashboard = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <>
               <span className="sr-only">Homemade</span>
-              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img
+                className="h-5 lg:h-6 w-auto"
+                src="/images/logo.svg"
+                alt=""
+              />
             </>
           </div>
 
@@ -323,42 +327,57 @@ const WaiterDashboard = () => {
               page={page}
             >
               <div className="flex flex-col mt-2">
-              {tableOrders ? (
-                columnCount[selectedCategory?.label] && columnCount[selectedCategory?.label].length > 0 ? (
-                  columnCount[selectedCategory?.label]?.map(
-                    (tableOrder: any, i: number) => {
-                      if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
-                        return (<OrderItem
-                          key={i}
-                          order={tableOrder}
-                          selectedOrder={selectedOrder}
-                          ordersModal={ordersModal}
-                          openOrdersModal={() => openOrdersModal(tableOrder)}
-                          closeOrdersModal={closeOrdersModal}
-                          getTableOrders={getTableOrders}
-                          selectedCategory={selectedCategory?.value}
-                          chef={chef}
-                          waiter={waiter}
-                        />)
-                      }else{
-                        return (<MenuOrderItem
-                          key={i}
-                          orderStatus={selectedCategory?.value}
-                          secondOrderStatus="sent"
-                          thirdOrderStatus="declined"
-                          order={tableOrder}
-                          orderLength={tableOrder?.order?.length}
-                          selectedOrder={selectedReadyOrder}
-                          ordersModal={ordersModal} 
-                          selectedCategory={selectedCategory?.value}
-                          openOrdersModal={() => openOrdersModal(tableOrder)}
-                          closeOrdersModal={() => closeOrdersModal()}
-                          getTableOrders={getTableOrders}
-                          chef={chef}
-                          waiter={waiter}
-                        />)
+                {tableOrders ? (
+                  columnCount[selectedCategory?.label] &&
+                  columnCount[selectedCategory?.label].length > 0 ? (
+                    columnCount[selectedCategory?.label]?.map(
+                      (tableOrder: any, i: number) => {
+                        if (
+                          selectedCategory?.label !== "Kitchen" &&
+                          ["pending", "completed"].includes(
+                            selectedCategory?.value
+                          )
+                        ) {
+                          return (
+                            <OrderItem
+                              key={i}
+                              order={tableOrder}
+                              selectedOrder={selectedOrder}
+                              ordersModal={ordersModal}
+                              openOrdersModal={() =>
+                                openOrdersModal(tableOrder)
+                              }
+                              closeOrdersModal={closeOrdersModal}
+                              getTableOrders={getTableOrders}
+                              selectedCategory={selectedCategory?.value}
+                              chef={chef}
+                              waiter={waiter}
+                            />
+                          );
+                        } else {
+                          return (
+                            <MenuOrderItem
+                              key={i}
+                              orderStatus={selectedCategory?.value}
+                              secondOrderStatus="sent"
+                              thirdOrderStatus="declined"
+                              order={tableOrder}
+                              orderLength={tableOrder?.order?.length}
+                              selectedOrder={selectedReadyOrder}
+                              ordersModal={ordersModal}
+                              selectedCategory={selectedCategory?.value}
+                              openOrdersModal={() =>
+                                openOrdersModal(tableOrder)
+                              }
+                              closeOrdersModal={() => closeOrdersModal()}
+                              getTableOrders={getTableOrders}
+                              chef={chef}
+                              waiter={waiter}
+                            />
+                          );
+                        }
                       }
-                    })
+                    )
                   ) : (
                     <div>No orders for the selected category.</div>
                   )
