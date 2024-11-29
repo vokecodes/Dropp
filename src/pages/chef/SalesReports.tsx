@@ -102,13 +102,13 @@ const SalesReports = () => {
   const dashboardItems = [
     {
       title: "Tickets",
-      value: dashboard?.tickets,
+      value: dashboard?.tickets || 0,
       toolTipId: "tickets",
       toolTipContent: "Total number of checkouts",
     },
     {
       title: "Orders",
-      value: dashboard?.orders,
+      value: dashboard?.orders || 0,
       toolTipId: "orders",
       toolTipContent: "Total number of meals placed/checkout",
     },
@@ -120,13 +120,13 @@ const SalesReports = () => {
         ).naira +
         formatRemoteAmountKobo(
           safeDivide(dashboard?.totalNetSales, dashboard?.orders)
-        ).kobo,
+        ).kobo || 0,
       toolTipId: "avg-orders-size",
       toolTipContent: "Net sales divided by total orders",
     },
     {
       title: "Avg. Order",
-      value: Math.round(safeDivide(dashboard?.orders, dashboard?.tickets)),
+      value: Math.round(safeDivide(dashboard?.orders, dashboard?.tickets)) || 0,
       toolTipId: "avg-order",
       toolTipContent: "Total orders divided by total tickets",
     },
@@ -138,13 +138,13 @@ const SalesReports = () => {
         ).naira +
         formatRemoteAmountKobo(
           safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
-        ).kobo,
+        ).kobo || 0,
       toolTipId: "avg-tickets-size",
       toolTipContent: "Total net sales divided by the total tickets",
     },
     {
       title: "Unique Customers",
-      value: dashboard?.customers,
+      value: dashboard?.customers || 0,
       toolTipId: "unique-customers",
       toolTipContent: "Customer counts",
     },
@@ -169,9 +169,6 @@ const SalesReports = () => {
     _id: "",
     table: "All",
   });
-  const [ordersTransactions, setOrdersTransactions] = useState<any>([]); // Assuming transactions is your data array
-  const [ordersHasMore, setOrdersHasMore] = useState(true); // Flag to track if there are more items to load
-  const [ordersPage, setOrdersPage] = useState(1); // Page number for pagination
 
   const [transactions, setTransactions] = useState<any>([]); // Assuming transactions is your data array
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
@@ -210,41 +207,19 @@ const SalesReports = () => {
     });
   };
 
-  const fetchOrders = async () => {
-    await getOrdersPage(ordersPage, startDate, endDate).then(({ data }) => {
-      if (page === 1) {
-        setOrdersTransactions(data.data);
-      } else {
-        setOrdersTransactions((prevTransactions: any) => [
-          ...prevTransactions,
-          ...data.data,
-        ]);
-      }
-
-      if(data.pagination.totalPages > 1){
-        setOrdersPage(ordersPage + 1);
-        setOrdersHasMore(
-          data.pagination.currentPage !== data.pagination.totalPages
-        );
-      }
-    });
-  };
-
   // Reset page and data when filters change
   const resetFilters = () => {
     setPage(1);
     setHasMore(true);
-    setOrdersPage(1);
-    setOrdersHasMore(true);
   };
 
   const handleSelectedStatus = () => {
     if(selectedStatus === 'Declined'){
-      setBreakdownOptions("Declined sales")
+      setBreakdownOptions(ORDER_OPTIONS[1])
     }else if(selectedStatus === 'Void'){
-      setBreakdownOptions("Voided sales")
+      setBreakdownOptions(ORDER_OPTIONS[2])
     }else if(selectedStatus === 'Gift'){
-      setBreakdownOptions("Gifted sales")
+      setBreakdownOptions(ORDER_OPTIONS[3])
     }else if(selectedStatus === 'All'){
       setBreakdownOptions("")
     }
@@ -269,7 +244,6 @@ const SalesReports = () => {
         )
       );
       fetchRestaurantOrders();
-      fetchOrders();
     }
   }, [page, breakdownOption, endDate, paymentType, filterSection, filterTable]);
 
@@ -358,84 +332,6 @@ const SalesReports = () => {
     }
   };
 
-  const orderConvertToCSV = (data: any, startDate: any) => {
-    const header = [
-      "Ticket No.",
-      "Date",
-      "Time",
-      "Name",
-      "Email",
-      "Phone No.",
-      "Food",
-      "Total Orders",
-      "Amount",
-      "Status",
-    ].join(",");
-
-    const rows = data
-      .filter((order: any) =>
-        startDate
-          ? moment(order.createdAt).isSameOrAfter(startDate, "day")
-          : order.createdAt
-      )
-      ?.map((order: any) => {
-        const formattedDate = moment(order.createdAt).format("DD/MM/YYYY");
-        const formattedTime = moment(order.createdAt).format("hh:mm A");
-
-        const foodDetails = order.cartMenu
-          ?.map(
-            (menu: any) => `${menu.foodName} X ${menu.quantity}- ₦${menu.price}`
-          )
-          .join("; ");
-
-        const totalMeal = order?.cartMenu?.reduce(
-          (total: any, item: any) => total + item.quantity,
-          0
-        );
-
-        return [
-          `#${order.id.substring(order?.id?.length - 5)}`,
-          formattedDate,
-          formattedTime,
-          order.name || "-",
-          order.email || "-",
-          order.phoneNumber || "-",
-          foodDetails,
-          totalMeal,
-          `₦${order.totalAmount}`,
-          order.status,
-        ].join(",");
-      });
-
-    return [header, ...rows].join("\n");
-  };
-
-  const orderExportToCSV = async (data: any) => {
-    setIsDownloading(true);
-
-    try {
-      const csv = await orderConvertToCSV(data, startDate);
-
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "online-orders.csv");
-        link.style.visibility = "hidden";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (err) {
-      console.error("CSV Export Error:", err);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
   const tableContainerRef = useRef<any>(null);
 
   const scrollLeft = () => {
@@ -452,9 +348,7 @@ const SalesReports = () => {
 
 
 
-  const ordersListUnsorted = breakdownOption === ORDER_OPTIONS[0] ? ordersTransactions.concat(transactions) : transactions;
-
-  const ordersList = ordersListUnsorted.sort((a: any, b: any) =>
+  const ordersList = transactions.sort((a: any, b: any) =>
     moment(b.createdAt).diff(moment(a.createdAt))
   );
 
@@ -908,8 +802,9 @@ const SalesReports = () => {
                       ? "text-white primary_bg_color"
                       : "text-black bg-[#EDECEC]"
                   } `}
+                  onClick={() => setBreakdownOptions(ORDER_OPTIONS[0])}
                 >
-                  <p>Sale</p>
+                  <p>Sales</p>
                 </div>
                 
                 <div
@@ -918,6 +813,7 @@ const SalesReports = () => {
                       ? "text-white primary_bg_color"
                       : "text-black bg-[#EDECEC]"
                   } `}
+                  onClick={() => setBreakdownOptions("")}
                 >
                   <p>Others</p>
                 </div>
@@ -1572,24 +1468,24 @@ const SalesReports = () => {
                                       <div className="h-10 w-10 flex-shrink-0">
                                         <img
                                           className="h-10 w-10 rounded-full object-cover"
-                                          src={menu?.menu.images[0]}
+                                          src={menu?.menuDetails.images[0]}
                                           alt=""
                                         />
                                       </div>
                                       <div className="ml-4">
                                         <div className="font-medium text-wrap">
-                                          {menu?.menu.foodName} X {menu?.quantity}
+                                          {menu?.menuDetails.foodName} X {menu?.quantity}
                                         </div>
                                         <div className="">
                                           ₦
                                           {parseInt(
                                             menu?.menu.eventAmount
                                               ? menu?.menu.eventAmount
-                                              : menu?.menu.discount
-                                              ? menu.menu.price -
-                                                (menu.menu.price / 100) *
-                                                  menu.menu.discount
-                                              : menu.menu.price
+                                              : menu?.menuDetails.discount
+                                              ? menu.menuDetails.price -
+                                                (menu.menuDetails.price / 100) *
+                                                  menu.menuDetails.discount
+                                              : menu.menuDetails.price
                                           ).toLocaleString()}
                                         </div>
                                       </div>
@@ -1630,7 +1526,7 @@ const SalesReports = () => {
                                 {breakdownOption !== ORDER_OPTIONS[0] && (
                                   <>
                                     <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
-                                      {transaction?.restaurant &&
+                                      {!!transaction?.order && (transaction?.restaurant &&
                                       transaction?.order[0]?.status === "archived"
                                         ? (
                                           <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">Void</p>
@@ -1642,10 +1538,10 @@ const SalesReports = () => {
                                           transaction?.gift === true || transaction?.order[0]?.paymentStatus === "gift"
                                             ? (
                                               <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">Gift</p>
-                                          ) : <p>{transaction?.order[0]?.status}</p>}
+                                          ) : <p>{transaction?.order[0]?.status}</p>)}
                                     </td>
 
-                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px] max-w-[250px]">
+                                    <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px] max-w-[200px] text-wrap">
                                       {transaction?.notes ? transaction?.notes : 'N/A'}
                                     </td>
                                   </>
