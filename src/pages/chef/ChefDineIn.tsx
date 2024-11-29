@@ -78,7 +78,6 @@ const ChefDineIn = () => {
 
   const handleApprovalOrder = () => {
     setIsSending(true)
-    console.log('approvalOrder= ', approvalOrder)
     SERVER.patch(`${RESTAURANT_ORDER_URL}/status/${approvalOrder.id}`, { order: {...approvalOrder} })
       .then(({ data }) => {
         getRestaurantOrders(1)
@@ -92,13 +91,11 @@ const ChefDineIn = () => {
   }
 
   const updateApprovalOrder = (item: string, menuId: string) => {
-    console.log('item=', item);
   
     setApprovalOrder((prevApprovalOrder: any) => {
       return {
         ...prevApprovalOrder,
         order: prevApprovalOrder?.order?.map((menu: any) => {
-          console.log('prevStatus===', menu?.prevStatus);
   
           if (menu.id === menuId) {
             if (item === "void" && menu.status !== "archived") {

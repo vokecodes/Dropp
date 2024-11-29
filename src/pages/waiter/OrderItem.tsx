@@ -55,8 +55,6 @@ const OrderItem = ({
     </div>
   );
 
-  console.log('order?.order== ', order?.id?.substring(order?.id?.length - 5),order?.order[0]?.menu?.images[0])
-
   return (
     <>
       <div
