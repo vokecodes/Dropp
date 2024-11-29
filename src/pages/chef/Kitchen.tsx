@@ -30,9 +30,9 @@ import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
 import InfinityScroll from "../../components/InfinityScroll";
 
-// const socket = io(import.meta.env.VITE_BASE_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -114,16 +114,16 @@ const Kitchen = () => {
   };
 
   // Listen for new orders from the server
-  // useState(() => {
-  //   socket.on("newKitchenOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrders();
-  //     receiveNotification();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useState(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrders();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
 
   useEffect(() => {
     const handleUnload = () => {
