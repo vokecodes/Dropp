@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ReactGA from "react-ga4";
 import { Modal } from "@mui/material";
 import { useSelector, shallowEqual } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { GiCook, GiHotMeal, GiKnifeFork, GiMeat } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import Hotjar from "@hotjar/browser";
@@ -16,7 +16,7 @@ import { MdFastfood } from "react-icons/md";
 import ChefShopMenuCard from "../../components/ChefShopMenuCard";
 import ChefsReviews from "../../components/ChefsReviews";
 import Cart from "../../components/Cart";
-import { createARestaurantOrder } from "../../_redux/order/orderCrud";
+import { createARestaurantOrder, editARestaurantOrder } from "../../_redux/order/orderCrud";
 import {
   getABusinessRestaurantByName,
   getABusinessRestaurantOrderByName,
@@ -33,7 +33,7 @@ import Preloader from "../../components/Preloader";
 import { useAppDispatch } from "../../redux/hooks";
 import ColoredSpinner from "../../components/ColoredSpinner";
 import moment from "moment";
-import { formatPrice } from "../../utils/formatMethods";
+import { v4 as uuidv4 } from "uuid";
 import NotFound from "../../components/NotFound";
 import { addToCart, clearCart } from "../../_redux/cart/cartAction";
 import CartFloat from "../../components/CartFloat";
@@ -52,6 +52,7 @@ import DownloadPDFButton from "../../components/Receipt";
 
 const RestaurantShop = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -121,7 +122,7 @@ const RestaurantShop = () => {
 
   useEffect(() => {
     getChef();
-    getWaiter();
+    !location.pathname.includes("edit") && getWaiter();
   }, []);
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -244,16 +245,13 @@ const RestaurantShop = () => {
   //   Hotjar.event("CHEF_SHOP_ADD_MEAL_TO_BAG");
   // };
 
-  const verifyTransaction = async (referenceId: any) => {
+  const verifyTransaction = async (referenceId: any, updatedRefId) => {
     try {
       const { data } = await axios.get(
-        `${TRANSACTION_URL}/verify/${referenceId}`
+        `${TRANSACTION_URL}/verify/${referenceId}?updatedRefId=${updatedRefId}`
       );
       const result = data?.data;
       
-      console.log('data= ', data)
-      console.log('result= ', result)
-
       if (result?.status) {
         closeVerifyPaymentModal();
         openModal();
@@ -270,81 +268,92 @@ const RestaurantShop = () => {
         : orderItem.totalAmount;
 
     try {
-      const { data } = await createARestaurantOrder({ ...orderItem, table });
-
-      if (data.success) {
-        let handler = window.PaystackPop.setup({
-          key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY, // Replace with your public key
+      const createOrEditOrder = async () => {
+        if (location.pathname.includes("edit")) {
+          return await editARestaurantOrder(table, { ...orderItem });
+        }
+        return await createARestaurantOrder({ ...orderItem, table });
+      };
+    
+      const handlePayment = (orderId: string, updatedRefId: string) => {
+        const handler = window.PaystackPop.setup({
+          key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
           email: orderItem.email,
           amount: amount * 100,
-          ref: data.data.orderId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-          // label: "Optional string that replaces customer email"
+          ref: updatedRefId ? updatedRefId : orderId, // Use the generated order ID as a reference
           metadata: {
             transactionType: "RESTAURANT_ORDER",
           },
-          onClose: function () {
-            alert("Transaction was not completed, window closed.");
-          },
-          callback: function (response: any) {
-            console.log('response= ', response)
-            // let message = "Payment complete! Reference: " + response.reference;
-            // alert(message);
-            // TrackGoogleAnalyticsEvent(
-            //   "RESTAURANT_ORDER",
-            //   "Create a restaurant Order",
-            //   window.location.pathname + window.location.search,
-            //   { orderId: data.data.orderId, amount: amount, userId: user._id }
-            // );
-            // TrackGoogleAnalyticsEvent(
-            //   "purchase",
-            //   "Purchase",
-            //   window.location.pathname + window.location.search,
-            //   { orderId: data.data.orderId, amount: amount, userId: user._id }
-            // );
-            // Hotjar.event("RESTAURANT_ORDER");
-
+          onClose: () => alert("Transaction was not completed, window closed."),
+          callback: (response: any) => {
             resetCartView();
             dispatch(clearCart());
             setCartMenu([]);
-            setOrderId(data.data.orderId);
+            setOrderId(updatedRefId ? updatedRefId : orderId);
             openVerifyPaymentModal();
-            verifyTransaction(data.data.orderId);
+            verifyTransaction(orderId, updatedRefId ? updatedRefId : '');
           },
         });
-
+    
         handler.openIframe();
+      };
+    
+      const { data } = await createOrEditOrder();
+    
+      if (data.success) {
+        if(location.pathname.includes("edit")){
+          const updatedRefId = `${data.data.orderId}-${uuidv4()}`;
+
+          handlePayment(data.data.orderId, updatedRefId);
+        }else{
+          handlePayment(data.data.orderId);
+        }
       }
     } catch (err) {
-      handleClickOpen()
+      handleClickOpen();
     } finally {
       setCheckoutLoading(false);
     }
+        
   };
 
   const handlePayLaterCheckout = async (orderItem: any) => {
-    console.log("orderItem", orderItem);
-
     setCheckoutLaterLoading(true);
 
     try {
-      const { data } = await createARestaurantOrder({
-        ...orderItem,
-        table,
-        posPayment: true,
-      });
-
-      if (data.success) {
+      const createOrEditOrder = async () => {
+        if (location.pathname.includes("edit")) {
+          return await editARestaurantOrder(table, {
+            ...orderItem,
+            posPayment: true,
+          });
+        }
+        return await createARestaurantOrder({
+          ...orderItem,
+          table,
+          posPayment: true,
+        });
+      };
+    
+      const handleSuccess = (orderId: string) => {
         resetCartView();
         dispatch(clearCart());
         setCartMenu([]);
-        setOrderId(data.data.orderId);
+        setOrderId(orderId);
         openModal();
+      };
+    
+      const { data } = await createOrEditOrder();
+    
+      if (data.success) {
+        handleSuccess(data.data.orderId);
       }
     } catch (err) {
-      handleClickOpen()
+      handleClickOpen();
     } finally {
       setCheckoutLaterLoading(false);
     }
+    
   };
 
   const handleIncrement = (meal: any) => {

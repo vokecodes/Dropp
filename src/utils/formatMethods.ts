@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const formatBusinessNameLink = (name: string) => {
   // const splitName = name.split(" ");
   // let empArr = [];
@@ -120,3 +122,17 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 };
 
 export const dateFormatter = new Intl.DateTimeFormat('en-GB', dateOptions);
+
+
+
+export const generateUUIDBasedOnStringLength =(referenceString: string): string => {
+  const uuid = uuidv4(); // Generate a standard UUID
+  const desiredLength = referenceString.length; // Get the reference string's length
+
+  // Trim or pad the UUID to match the desired length
+  if (desiredLength <= uuid.length) {
+    return uuid.slice(0, desiredLength); // Trim to desired length
+  } else {
+    return uuid.padEnd(desiredLength, "0"); // Pad with zeros if needed
+  }
+}

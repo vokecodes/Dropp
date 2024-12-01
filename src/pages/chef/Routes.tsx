@@ -17,6 +17,7 @@ import KitchenMenu from "./KitchenMenu";
 import SubChefs from "./SubChefs";
 import SalesReports from "./SalesReports";
 import SectionManagement from "./SectionManagement";
+import IdleTimerLayout from "../../utils/idleTimerLayout";
 
 const ChefRoutes = () => {
   const { auth } = useSelector(
@@ -26,37 +27,39 @@ const ChefRoutes = () => {
     shallowEqual
   );
   return (
-    <Routes>
-      <Route>
-        <Route index element={<ChefDashboard />} />
-        <Route path={CHEF_ROUTES.chefMenu} element={<ChefMenu />} />
-        <Route path={CHEF_ROUTES.chefOrders} element={<ChefOrders />} />
-        <Route path={CHEF_ROUTES.chefDineIn} element={<ChefDineIn />} />
-        <Route
-          path={CHEF_ROUTES.chefTableManagement}
-          element={<TableManagement />}
-        />
-        <Route
-          path={CHEF_ROUTES.chefSectionManagement}
-          element={<SectionManagement />}
-        />
-        <Route path={CHEF_ROUTES.chefSettings} element={<ChefSettings />} />
-        <Route path={CHEF_ROUTES.chefWallet} element={<ChefWallet />} />
-        <Route path={CHEF_ROUTES.chefChat} element={<ChefMessage />} />
-        <Route path={CHEF_ROUTES.chefMenuOnline} element={<OnlineMenu />} />
+    <IdleTimerLayout>
+      <Routes>
+        <Route>
+          <Route index element={<ChefDashboard />} />
+          <Route path={CHEF_ROUTES.chefMenu} element={<ChefMenu />} />
+          <Route path={CHEF_ROUTES.chefOrders} element={<ChefOrders />} />
+          <Route path={CHEF_ROUTES.chefDineIn} element={<ChefDineIn />} />
+          <Route
+            path={CHEF_ROUTES.chefTableManagement}
+            element={<TableManagement />}
+          />
+          <Route
+            path={CHEF_ROUTES.chefSectionManagement}
+            element={<SectionManagement />}
+          />
+          <Route path={CHEF_ROUTES.chefSettings} element={<ChefSettings />} />
+          <Route path={CHEF_ROUTES.chefWallet} element={<ChefWallet />} />
+          <Route path={CHEF_ROUTES.chefChat} element={<ChefMessage />} />
+          <Route path={CHEF_ROUTES.chefMenuOnline} element={<OnlineMenu />} />
 
-        {auth?.user?.isRestaurant && (
-          <>
-            <Route path={CHEF_ROUTES.chefReports} element={<SalesReports />} />
-            <Route path={CHEF_ROUTES.kitchen} element={<Kitchen />} />
-            <Route path={CHEF_ROUTES.kitchenMenu} element={<KitchenMenu />} />
-            <Route path={CHEF_ROUTES.subChefs} element={<SubChefs />} />
-            <Route path={CHEF_ROUTES.chefMenuDineIn} element={<DineInMenu />} />
-          </>
-        )}
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+          {auth?.user?.isRestaurant && (
+            <>
+              <Route path={CHEF_ROUTES.chefReports} element={<SalesReports />} />
+              <Route path={CHEF_ROUTES.kitchen} element={<Kitchen />} />
+              <Route path={CHEF_ROUTES.kitchenMenu} element={<KitchenMenu />} />
+              <Route path={CHEF_ROUTES.subChefs} element={<SubChefs />} />
+              <Route path={CHEF_ROUTES.chefMenuDineIn} element={<DineInMenu />} />
+            </>
+          )}
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </IdleTimerLayout>
   );
 };
 

@@ -102,6 +102,7 @@ const SuperWaiterDashboard = () => {
 
     socket.on("newRestaurantOrder", handleNewOrder);
     socket.on("newReadyOrder", handleNewOrder);
+    socket.on("updatedRestaurantOrder", handleNewOrder);
     socket.on("updatedOrder", () => {
       getRestaurantOrders(1);
     });
@@ -109,6 +110,7 @@ const SuperWaiterDashboard = () => {
     return () => {
       socket.off("newRestaurantOrder", handleNewOrder);
       socket.off("newReadyOrder", handleNewOrder);
+      socket.off("updatedRestaurantOrder", handleNewOrder);
       socket.off("updatedOrder", () => {
         getRestaurantOrders(1);
       });
