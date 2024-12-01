@@ -122,7 +122,7 @@ const RestaurantShop = () => {
 
   useEffect(() => {
     getChef();
-    !location.pathname.includes("edit") && getWaiter();
+    !location.pathname.includes("add") && getWaiter();
   }, []);
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -269,7 +269,7 @@ const RestaurantShop = () => {
 
     try {
       const createOrEditOrder = async () => {
-        if (location.pathname.includes("edit")) {
+        if (location.pathname.includes("add")) {
           return await editARestaurantOrder(table, { ...orderItem });
         }
         return await createARestaurantOrder({ ...orderItem, table });
@@ -301,7 +301,7 @@ const RestaurantShop = () => {
       const { data } = await createOrEditOrder();
     
       if (data.success) {
-        if(location.pathname.includes("edit")){
+        if(location.pathname.includes("add")){
           const updatedRefId = `${data.data.orderId}-${uuidv4()}`;
 
           handlePayment(data.data.orderId, updatedRefId);
@@ -322,7 +322,7 @@ const RestaurantShop = () => {
 
     try {
       const createOrEditOrder = async () => {
-        if (location.pathname.includes("edit")) {
+        if (location.pathname.includes("add")) {
           return await editARestaurantOrder(table, {
             ...orderItem,
             posPayment: true,

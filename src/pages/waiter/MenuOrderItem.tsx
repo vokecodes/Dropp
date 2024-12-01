@@ -74,7 +74,7 @@ const MenuOrderItem = ({
       >
         <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
           <Link
-            to={`/restaurant/${chef?.business?.businessName}/edit/${order?.id}`}
+            to={`/restaurant/${chef?.business?.businessName}/add/${order?.id}`}
             target="_blank"
           >
             <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">Add order <FaPlus /></p>
