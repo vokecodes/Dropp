@@ -245,10 +245,10 @@ const RestaurantShop = () => {
   //   Hotjar.event("CHEF_SHOP_ADD_MEAL_TO_BAG");
   // };
 
-  const verifyTransaction = async (referenceId: any) => {
+  const verifyTransaction = async (referenceId: any, updatedRefId) => {
     try {
       const { data } = await axios.get(
-        `${TRANSACTION_URL}/verify/${referenceId}`
+        `${TRANSACTION_URL}/verify/${referenceId}?updatedRefId=${updatedRefId}`
       );
       const result = data?.data;
       
@@ -291,7 +291,7 @@ const RestaurantShop = () => {
             setCartMenu([]);
             setOrderId(updatedRefId ? updatedRefId : orderId);
             openVerifyPaymentModal();
-            verifyTransaction(updatedRefId ? updatedRefId : orderId);
+            verifyTransaction(orderId, updatedRefId ? updatedRefId : '');
           },
         });
     
