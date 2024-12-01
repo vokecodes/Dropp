@@ -7,19 +7,22 @@ import { COMPANY_ROUTES } from "../../routes/routes";
 import CompanyWallet from "./Wallet";
 // import CompanyMessage from "./CompanyMessage";
 import NotFound from "../../components/NotFound";
+import IdleTimerLayout from "../../utils/idleTimerLayout";
 
 const CompanyRoutes = () => (
-  <Routes>
-    <Route>
-      <Route index element={<CompanyDashboard />} />
-      <Route path={COMPANY_ROUTES.companyEmployees} element={<EmployeeDashboard />} />
-      {/* <Route path={CHEF_ROUTES.chefOrders} element={<CompanyOrders />} /> */}
-      <Route path={COMPANY_ROUTES.companySettings} element={<CompanySettings />} />
-      <Route path={COMPANY_ROUTES.companyWallet} element={<CompanyWallet />} />
-      {/* <Route path={CHEF_ROUTES.chefChat} element={<CompanyMessage />} /> */}
-      <Route path="*" element={<NotFound />} />
-    </Route>
-  </Routes>
+  <IdleTimerLayout>
+    <Routes>
+      <Route>
+        <Route index element={<CompanyDashboard />} />
+        <Route path={COMPANY_ROUTES.companyEmployees} element={<EmployeeDashboard />} />
+        {/* <Route path={CHEF_ROUTES.chefOrders} element={<CompanyOrders />} /> */}
+        <Route path={COMPANY_ROUTES.companySettings} element={<CompanySettings />} />
+        <Route path={COMPANY_ROUTES.companyWallet} element={<CompanyWallet />} />
+        {/* <Route path={CHEF_ROUTES.chefChat} element={<CompanyMessage />} /> */}
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  </IdleTimerLayout>
 );
 
 export default CompanyRoutes;

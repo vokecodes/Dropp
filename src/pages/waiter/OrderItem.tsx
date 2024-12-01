@@ -7,7 +7,8 @@ import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import { SERVER } from "../../config/axios";
 import moment from "moment";
 import DownloadPDFButton from "../../components/Receipt";
-import { FaReceipt } from "react-icons/fa6";
+import { FaPlus, FaReceipt } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const OrderItem = ({
   order,
@@ -61,7 +62,16 @@ const OrderItem = ({
         className="w-full lg:w-3/5 flex flex-col items-center justify-around gap-y-3 grow-0 shrink-0 mb-5 lg:shadow-lg bg-white p-3 lg:p-5 rounded-xl hover:bg-gray-100"
         // onClick={openOrdersModal}
       >
-        <div className="flex flex-row justify-end items-center w-full mt-3">
+        <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
+          {!["completed"].includes(selectedCategory) && (
+            <Link
+              to={`/restaurant/${chef?.business?.businessName}/edit/${order?.id}`}
+              target="_blank"
+            >
+              <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">Add order <FaPlus /></p>
+            </Link>
+          )}
+
           <DownloadPDFButton 
             chef={chef} 
             waiter={waiter}
