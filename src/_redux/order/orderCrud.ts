@@ -44,7 +44,7 @@ export const createARestaurantOrder = (data: any) => {
 };
 
 export const editARestaurantOrder = (table: string, data: any) => {
-  return SERVER.patch(`${RESTAURANT_ORDER_URL}/edit/${table}`, { ...data });
+  return SERVER.patch(`${RESTAURANT_ORDER_URL}/add/${table}`, { ...data });
 };
 
 export const getRestaurantOrdersCrud = () => {
