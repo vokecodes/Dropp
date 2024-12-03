@@ -23,8 +23,16 @@ import { formatRemoteAmountKobo } from "../../utils/formatMethods";
 import { IoSearchSharp } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-
-const statusOptions = ["declined", "void", "gift", "completed",  "pending", "kitchen", "cooking", "ready" ];
+const statusOptions = [
+  "declined",
+  "void",
+  "gift",
+  "completed",
+  "pending",
+  "kitchen",
+  "cooking",
+  "ready",
+];
 
 const ChefDineIn = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +48,7 @@ const ChefDineIn = () => {
   const [restaurantOrders, setRestaurantOrders] = useState([]);
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
-  const [dashboardLoading, setDashboardLoading] = useState(false)
+  const [dashboardLoading, setDashboardLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("All");
 
@@ -68,66 +76,68 @@ const ChefDineIn = () => {
     getRestaurantOrders();
   }, []);
 
-
   const [openApprovalModal, setOpenApprovalModal] = useState(false);
   const closeApprovalModal = () => {
     setOpenApprovalModal(false);
   };
   const [approvalOrder, setApprovalOrder] = useState({});
-  const [isSending, setIsSending] = useState(false)
+  const [isSending, setIsSending] = useState(false);
 
   const handleApprovalOrder = () => {
-    setIsSending(true)
-    SERVER.patch(`${RESTAURANT_ORDER_URL}/status/${approvalOrder.id}`, { order: {...approvalOrder} })
+    setIsSending(true);
+    SERVER.patch(`${RESTAURANT_ORDER_URL}/status/${approvalOrder.id}`, {
+      order: { ...approvalOrder },
+    })
       .then(({ data }) => {
-        getRestaurantOrders(1)
-        closeApprovalModal()
-        setApprovalOrder({})
+        getRestaurantOrders(1);
+        closeApprovalModal();
+        setApprovalOrder({});
       })
       .catch((error) => {})
       .finally(() => {
-        setIsSending(false)
+        setIsSending(false);
       });
-  }
+  };
 
   const updateApprovalOrder = (item: string, menuId: string) => {
-  
     setApprovalOrder((prevApprovalOrder: any) => {
       return {
         ...prevApprovalOrder,
         order: prevApprovalOrder?.order?.map((menu: any) => {
-  
           if (menu.id === menuId) {
             if (item === "void" && menu.status !== "archived") {
               return { ...menu, status: "archived", prevStatus: menu.status };
             }
-  
+
             const isArchived = menu.status === "archived";
-            const shouldRestore = isArchived && (menu?.prevStatus === "archived" || !menu?.prevStatus);
-            const restoreStatus = isArchived && menu?.prevStatus ? menu?.prevStatus : menu.status;
-  
+            const shouldRestore =
+              isArchived &&
+              (menu?.prevStatus === "archived" || !menu?.prevStatus);
+            const restoreStatus =
+              isArchived && menu?.prevStatus ? menu?.prevStatus : menu.status;
+
             if (item === "confirm") {
               return {
                 ...menu,
                 salesType: "pending",
-                status: shouldRestore ? "pending" : restoreStatus
+                status: shouldRestore ? "pending" : restoreStatus,
               };
             }
-  
+
             if (["sales", "gift"].includes(item)) {
               return {
                 ...menu,
                 salesType: item,
-                status: shouldRestore ? "pending" : restoreStatus
+                status: shouldRestore ? "pending" : restoreStatus,
               };
             }
           }
-  
+
           return menu;
         }),
       };
     });
-  };  
+  };
 
   const [selectedCustomerOrders, setSelectedCustomerOrders] = useState<any>("");
 
@@ -181,69 +191,83 @@ const ChefDineIn = () => {
   };
 
   const [selectedTable, setSelectedTable] = useState("All orders");
-  const [tablesMap, setTablesMap] = useState({})
+  const [tablesMap, setTablesMap] = useState({});
   const [q, setQ] = useState("");
 
-  const sortedByDate = restaurantOrders && sortByUpdatedAt(restaurantOrders)
+  const sortedByDate = restaurantOrders && sortByUpdatedAt(restaurantOrders);
 
-  const statusFiltered = selectedStatus === "All" ? sortedByDate : sortedByDate.filter(item => {
-    return selectedStatus === "void" ? item?.status === "archived" : item?.status === selectedStatus
-  })
+  const statusFiltered =
+    selectedStatus === "All"
+      ? sortedByDate
+      : sortedByDate.filter((item) => {
+          return selectedStatus === "void"
+            ? item?.status === "archived"
+            : item?.status === selectedStatus;
+        });
 
-  const tableFiltered = selectedTable === "All orders" ? statusFiltered : statusFiltered.filter(item => item?.table?.table === selectedTable)
+  const tableFiltered =
+    selectedTable === "All orders"
+      ? statusFiltered
+      : statusFiltered.filter((item) => item?.table?.table === selectedTable);
 
-  const searchFiltered = q === "" ? tableFiltered : tableFiltered.filter(
-    (item: any) =>
-      item?.id
-        ?.toString()
-        .toLowerCase()
-        .indexOf(q.toLowerCase()) > -1 ||
-      item?.name
-        ?.toString()
-        .toLowerCase()
-        .indexOf(q.toLowerCase()) > -1 ||
-      item?.email
-        ?.toString()
-        .toLowerCase()
-        .indexOf(q.toLowerCase()) > -1 ||
-      item?.phoneNumber
-        ?.toString()
-        .toLowerCase()
-        .indexOf(q.toLowerCase()) > -1 ||
-      item?.table
-        ?.toString()
-        .toLowerCase()
-        .indexOf(q.toLowerCase()) > -1
-  ) 
+  const searchFiltered =
+    q === ""
+      ? tableFiltered
+      : tableFiltered.filter(
+          (item: any) =>
+            item?.id?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+            item?.name?.toString().toLowerCase().indexOf(q.toLowerCase()) >
+              -1 ||
+            item?.email?.toString().toLowerCase().indexOf(q.toLowerCase()) >
+              -1 ||
+            item?.phoneNumber
+              ?.toString()
+              .toLowerCase()
+              .indexOf(q.toLowerCase()) > -1 ||
+            item?.table?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+        );
 
   useEffect(() => {
     const tableOrderMap = {};
     tableOrderMap["All orders"] = 0;
 
-    table && table?.length > 0 && table.filter(table => table?.table && table.userType === 'waiter' ).map((item, i) => {
-      tableOrderMap[item?.table] = 0
-    })
+    table &&
+      table?.length > 0 &&
+      table
+        .filter((table) => table?.table && table.userType === "waiter")
+        .map((item, i) => {
+          tableOrderMap[item?.table] = 0;
+        });
 
-    table && restaurantOrders && restaurantOrders.map((item, i) => {
-      const currentTable = item?.table?.table;
+    table &&
+      restaurantOrders &&
+      restaurantOrders.map((item, i) => {
+        const currentTable = item?.table?.table;
 
-      tableOrderMap["All orders"] += 1
-      tableOrderMap[currentTable] += 1
+        tableOrderMap["All orders"] += 1;
+        tableOrderMap[currentTable] += 1;
 
-      const count = item?.order.reduce((num, elem) => (elem.salesType !== "sales" && elem.salesType !== "gift" && elem.status !== "archived") ? num - 1 : num + 0, item?.order.length)
-      
-      if(item?.paid === true || count === item?.order.length){
-        item.approvalStatus = "Confirmed"
-      }else if(count < item?.order.length && count > 0){
-        item.approvalStatus = "Unresolved"
-      }else if(count === 0){
-        item.approvalStatus = "Pending"
-      }
-    })
+        const count = item?.order.reduce(
+          (num, elem) =>
+            elem.salesType !== "sales" &&
+            elem.salesType !== "gift" &&
+            elem.status !== "archived"
+              ? num - 1
+              : num + 0,
+          item?.order.length
+        );
+
+        if (item?.paid === true || count === item?.order.length) {
+          item.approvalStatus = "Confirmed";
+        } else if (count < item?.order.length && count > 0) {
+          item.approvalStatus = "Unresolved";
+        } else if (count === 0) {
+          item.approvalStatus = "Pending";
+        }
+      });
 
     setTablesMap(tableOrderMap);
-  }, [table, restaurantOrders])
-
+  }, [table, restaurantOrders]);
 
   const dineInConvertToCSV = (data: any) => {
     const header = [
@@ -263,9 +287,7 @@ const ChefDineIn = () => {
     ].join(",");
 
     const rows = data
-      .filter((order: any) =>
-        order.createdAt
-      )
+      .filter((order: any) => order.createdAt)
       ?.map((order: any) => {
         const formattedDate = moment(order.createdAt).format("DD/MM/YYYY");
         const formattedTime = moment(order.createdAt).format("hh:mm A");
@@ -294,7 +316,11 @@ const ChefDineIn = () => {
           order?.table?.employeeAssigned || "-",
           `₦${order?.totalAmount}`,
           order?.posPayment ? "POS" : "Online",
-          order?.gift === true ? 'gift' : order?.order[0].status === "archived" ? 'void' : order?.order[0].status,
+          order?.gift === true
+            ? "gift"
+            : order?.order[0].status === "archived"
+            ? "void"
+            : order?.order[0].status,
         ].join(",");
       });
 
@@ -396,7 +422,9 @@ const ChefDineIn = () => {
                             </p>
                             <div
                               className={`ml-2 w-6 h-6 rounded-full flex items-center justify-center ${
-                                selectedTable === "All orders" ? "bg-[#0E311B]" : "bg-white"
+                                selectedTable === "All orders"
+                                  ? "bg-[#0E311B]"
+                                  : "bg-white"
                               }`}
                             >
                               <p
@@ -413,40 +441,49 @@ const ChefDineIn = () => {
                         </div>
                       </div>
                       {Object.keys(tablesMap)
-                        .filter((item) => item && item !== "All orders" && item !== "undefined" && !Number.isNaN(Number(item)) ).map((cat: any, i: number) => (
-                        <div
-                          key={i}
-                          className={`flex flex-row justify-between items-center w-fit h-fit py-2 px-4 my-1 gap-x-1 rounded-full shrink-0 cursor-pointer ${
-                            selectedTable === cat
-                              ? "primary_bg_color text-white"
-                              : "bg_sec_gray_color text-gray-600"
-                          }`}
-                          onClick={() => setSelectedTable(cat)}
-                        >
-                          <div className="flex flex-row justify-between items-center">
-                            <div className="ml-1 flex flex-row justify-between items-center">
-                              <p className="text-xs font-bold font_regular">
-                                {`${cat}`}
-                              </p>
-                              <div
-                                className={`ml-2 w-6 h-6 rounded-full flex items-center justify-center ${
-                                  selectedTable === cat ? "bg-[#0E311B]" : "bg-white"
-                                }`}
-                              >
-                                <p
-                                  className={`text-xs font_medium ${
+                        .filter(
+                          (item) =>
+                            item &&
+                            item !== "All orders" &&
+                            item !== "undefined" &&
+                            !Number.isNaN(Number(item))
+                        )
+                        .map((cat: any, i: number) => (
+                          <div
+                            key={i}
+                            className={`flex flex-row justify-between items-center w-fit h-fit py-2 px-4 my-1 gap-x-1 rounded-full shrink-0 cursor-pointer ${
+                              selectedTable === cat
+                                ? "primary_bg_color text-white"
+                                : "bg_sec_gray_color text-gray-600"
+                            }`}
+                            onClick={() => setSelectedTable(cat)}
+                          >
+                            <div className="flex flex-row justify-between items-center">
+                              <div className="ml-1 flex flex-row justify-between items-center">
+                                <p className="text-xs font-bold font_regular">
+                                  {`${cat}`}
+                                </p>
+                                <div
+                                  className={`ml-2 w-6 h-6 rounded-full flex items-center justify-center ${
                                     selectedTable === cat
-                                      ? "text-white"
-                                      : "primary_txt_color"
+                                      ? "bg-[#0E311B]"
+                                      : "bg-white"
                                   }`}
                                 >
-                                  {tablesMap && tablesMap[cat]}
-                                </p>
+                                  <p
+                                    className={`text-xs font_medium ${
+                                      selectedTable === cat
+                                        ? "text-white"
+                                        : "primary_txt_color"
+                                    }`}
+                                  >
+                                    {tablesMap && tablesMap[cat]}
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   )}
                 </div>
@@ -474,7 +511,9 @@ const ChefDineIn = () => {
                     <div className="flex gap-3">
                       <div
                         className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
-                        onClick={() => { dineExportToCSV(searchFiltered) }}
+                        onClick={() => {
+                          dineExportToCSV(searchFiltered);
+                        }}
                       >
                         {isDownloading ? (
                           <svg
@@ -557,7 +596,7 @@ const ChefDineIn = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="w-full mt-4 flow-root overflow-hidden">
                     <InfinityScroll
                       data={restaurantOrders}
@@ -570,332 +609,406 @@ const ChefDineIn = () => {
                       >
                         <div className="inline-block min-w-full py-2 align-middle">
                           <div className="overflow-x-auto">
-                          {dashboardLoading ? (
-                            <div className="my-4 grid grid-cols-2 gap-3">
-                              {[...Array(4)]?.map((_, i) => (
-                                <DashboardItemSkeletonLoader key={i} />
-                              ))}
-                            </div>
-                          ) : (
-                            <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
-                              {/* Table headers */}
-                              <thead>
-                                <tr>
-                                  <th
-                                    scope="col"
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font_medium text-black font-normal sm:pl-0 min-w-[100px]"
-                                  >
-                                    Ticket No.
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                  >
-                                    Date
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                  >
-                                    Time
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px] max-w-[250px]"
-                                  >
-                                    Name
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
-                                  >
-                                    Email
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                  >
-                                    Phone No.
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                  >
-                                    Table
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                  >
-                                    Approval
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
-                                  >
-                                    Food
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                  >
-                                    Total Orders
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                  >
-                                    Amount
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
-                                  >
-                                    Payment
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
-                                  >
-                                    Platform
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                  >
-                                    <Popover className="relative">
-                                      {({ open }) => (
-                                        <>
-                                          <Popover.Button
-                                            className={`flex flex-row items-center space-between gap-x-1`}
-                                          >
-                                            <span className="text-nowrap">
-                                              Status
-                                            </span>
-                                            {open ? (
-                                              <BiSolidUpArrow />
-                                            ) : (
-                                              <BiSolidDownArrow />
-                                            )}
-                                          </Popover.Button>
+                            {dashboardLoading ? (
+                              <div className="my-4 grid grid-cols-2 gap-3">
+                                {[...Array(4)]?.map((_, i) => (
+                                  <DashboardItemSkeletonLoader key={i} />
+                                ))}
+                              </div>
+                            ) : (
+                              <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
+                                {/* Table headers */}
+                                <thead>
+                                  <tr>
+                                    <th
+                                      scope="col"
+                                      className="py-3.5 pl-4 pr-3 text-left text-sm font_medium text-black font-normal sm:pl-0 min-w-[100px]"
+                                    >
+                                      Ticket No.
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                    >
+                                      Date
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                    >
+                                      Time
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px] max-w-[250px]"
+                                    >
+                                      Name
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                                    >
+                                      Email
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                    >
+                                      Phone No.
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                    >
+                                      Table
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                    >
+                                      Approval
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                                    >
+                                      Food
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                    >
+                                      Total Orders
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                    >
+                                      Amount
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                                    >
+                                      Payment
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                                    >
+                                      Platform
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                    >
+                                      <Popover className="relative">
+                                        {({ open }) => (
+                                          <>
+                                            <Popover.Button
+                                              className={`flex flex-row items-center space-between gap-x-1`}
+                                            >
+                                              <span className="text-nowrap">
+                                                Status
+                                              </span>
+                                              {open ? (
+                                                <BiSolidUpArrow />
+                                              ) : (
+                                                <BiSolidDownArrow />
+                                              )}
+                                            </Popover.Button>
 
-                                          <Transition
-                                            as={Fragment}
-                                            enter="transition ease-out duration-200"
-                                            enterFrom="opacity-0 translate-y-1"
-                                            enterTo="opacity-100 translate-y-0"
-                                            leave="transition ease-in duration-150"
-                                            leaveFrom="opacity-100 translate-y-0"
-                                            leaveTo="opacity-0 translate-y-1"
-                                          >
-                                            <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                              <div className="w-full">
-                                                <RadioGroup
-                                                  value={selectedStatus}
-                                                  onChange={setSelectedStatus}
-                                                >
-                                                  <div className="space-y-3">
-                                                    <RadioGroup.Option
-                                                      value={"All"}
-                                                      className={
-                                                        "flex items-center cursor-pointer mb-2"
-                                                      }
-                                                      onClick={() =>
-                                                        setSelectedStatus("All")
-                                                      }
-                                                    >
-                                                      {({ active, checked }) => (
-                                                        <>
-                                                          <div
-                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                              checked
-                                                                ? "primary_bg_color"
-                                                                : "bg_gray_color"
-                                                            }`}
-                                                          />
+                                            <Transition
+                                              as={Fragment}
+                                              enter="transition ease-out duration-200"
+                                              enterFrom="opacity-0 translate-y-1"
+                                              enterTo="opacity-100 translate-y-0"
+                                              leave="transition ease-in duration-150"
+                                              leaveFrom="opacity-100 translate-y-0"
+                                              leaveTo="opacity-0 translate-y-1"
+                                            >
+                                              <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                                <div className="w-full">
+                                                  <RadioGroup
+                                                    value={selectedStatus}
+                                                    onChange={setSelectedStatus}
+                                                  >
+                                                    <div className="space-y-3">
+                                                      <RadioGroup.Option
+                                                        value={"All"}
+                                                        className={
+                                                          "flex items-center cursor-pointer mb-2"
+                                                        }
+                                                        onClick={() =>
+                                                          setSelectedStatus(
+                                                            "All"
+                                                          )
+                                                        }
+                                                      >
+                                                        {({
+                                                          active,
+                                                          checked,
+                                                        }) => (
+                                                          <>
+                                                            <div
+                                                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                                checked
+                                                                  ? "primary_bg_color"
+                                                                  : "bg_gray_color"
+                                                              }`}
+                                                            />
 
-                                                          <div className="text-sm">
-                                                            <RadioGroup.Label
-                                                              as="p"
-                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                            >
-                                                              All
-                                                            </RadioGroup.Label>
-                                                          </div>
-                                                        </>
+                                                            <div className="text-sm">
+                                                              <RadioGroup.Label
+                                                                as="p"
+                                                                className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                              >
+                                                                All
+                                                              </RadioGroup.Label>
+                                                            </div>
+                                                          </>
+                                                        )}
+                                                      </RadioGroup.Option>
+                                                      {statusOptions?.map(
+                                                        (item: any, i) => (
+                                                          <RadioGroup.Option
+                                                            key={item}
+                                                            value={item}
+                                                            className={
+                                                              "flex items-center cursor-pointer mb-2"
+                                                            }
+                                                            onClick={() =>
+                                                              setSelectedStatus(
+                                                                item
+                                                              )
+                                                            }
+                                                          >
+                                                            {({
+                                                              active,
+                                                              checked,
+                                                            }) => (
+                                                              <>
+                                                                <div
+                                                                  className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                                    checked
+                                                                      ? "primary_bg_color"
+                                                                      : "bg_gray_color"
+                                                                  }`}
+                                                                />
+
+                                                                <div className="text-sm">
+                                                                  <RadioGroup.Label
+                                                                    as="p"
+                                                                    className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                                  >
+                                                                    {item}
+                                                                  </RadioGroup.Label>
+                                                                </div>
+                                                              </>
+                                                            )}
+                                                          </RadioGroup.Option>
+                                                        )
                                                       )}
-                                                    </RadioGroup.Option>
-                                                    {statusOptions?.map(
-                                                      (item: any, i) => (
-                                                        <RadioGroup.Option
-                                                          key={item}
-                                                          value={item}
-                                                          className={
-                                                            "flex items-center cursor-pointer mb-2"
-                                                          }
-                                                          onClick={() =>
-                                                            setSelectedStatus(item)
-                                                          }
-                                                        >
-                                                          {({
-                                                            active,
-                                                            checked,
-                                                          }) => (
-                                                            <>
-                                                              <div
-                                                                className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                                  checked
-                                                                    ? "primary_bg_color"
-                                                                    : "bg_gray_color"
-                                                                }`}
-                                                              />
-
-                                                              <div className="text-sm">
-                                                                <RadioGroup.Label
-                                                                  as="p"
-                                                                  className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                                >
-                                                                  {item}
-                                                                </RadioGroup.Label>
-                                                              </div>
-                                                            </>
-                                                          )}
-                                                        </RadioGroup.Option>
-                                                      )
-                                                    )}
-                                                  </div>
-                                                </RadioGroup>
-                                              </div>
-                                            </Popover.Panel>
-                                          </Transition>
-                                        </>
-                                      )}
-                                    </Popover>
-                                  </th>
-                                </tr>
-                              </thead>
-                              {/* Table body */}
-                              <tbody className="divide-y divide-gray-200">
-                                {searchFiltered?.map(
-                                  (transaction: any, i: number) => (
-                                    <tr key={transaction.id + i}>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                        #
-                                        {transaction.id?.slice(-5)}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                        {moment(transaction?.createdAt).format(
-                                          "DD/MM/YYYY"
+                                                    </div>
+                                                  </RadioGroup>
+                                                </div>
+                                              </Popover.Panel>
+                                            </Transition>
+                                          </>
                                         )}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                        {moment(transaction?.createdAt).format(
-                                          "hh:mm A"
-                                        )}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
-                                        {transaction?.name}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
-                                        {transaction?.email}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                        {transaction?.phoneNumber}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                        {transaction?.table?.table}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px] cursor-pointer" onClick={() => {
-                                        setApprovalOrder(transaction)
-                                        setOpenApprovalModal(true);
-                                      }}>
-                                        <p className={`w-fit text-xs text-medium bg-[#ffffff] border border-solid px-3 py-1 text-center rounded-3xl flex flex-row items-center justify-center gap-x-1 ${transaction?.approvalStatus === "Confirmed" ? 'text-[#06C167] border-[#06C167]' : transaction?.approvalStatus === "Unresolved" ? 'text-[#DB4E12] border-[#DB4E12]' : 'text-[#000000] border-[#D8D8D8]'}`}>{transaction?.approvalStatus} <MdKeyboardArrowRight size={20} /></p>
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                        {transaction?.order?.map((menu: any, i) => (
-                                          <div
-                                            key={i}
-                                            className={`flex items-center ${menu?.status === "archived" && 'opacity-25'}`}
+                                      </Popover>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                {/* Table body */}
+                                <tbody className="divide-y divide-gray-200">
+                                  {searchFiltered?.map(
+                                    (transaction: any, i: number) => (
+                                      <tr key={transaction.id + i}>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                          #{transaction.id?.slice(-5)}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                          {moment(
+                                            transaction?.createdAt
+                                          ).format("DD/MM/YYYY")}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                          {moment(
+                                            transaction?.createdAt
+                                          ).format("hh:mm A")}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
+                                          {transaction?.name}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
+                                          {transaction?.email}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                          {transaction?.phoneNumber}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                          {transaction?.table?.table}
+                                        </td>
+                                        <td
+                                          className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px] cursor-pointer"
+                                          onClick={() => {
+                                            setApprovalOrder(transaction);
+                                            setOpenApprovalModal(true);
+                                          }}
+                                        >
+                                          <p
+                                            className={`w-fit text-xs text-medium bg-[#ffffff] border border-solid px-3 py-1 text-center rounded-3xl flex flex-row items-center justify-center gap-x-1 ${
+                                              transaction?.approvalStatus ===
+                                              "Confirmed"
+                                                ? "text-[#06C167] border-[#06C167]"
+                                                : transaction?.approvalStatus ===
+                                                  "Unresolved"
+                                                ? "text-[#DB4E12] border-[#DB4E12]"
+                                                : "text-[#000000] border-[#D8D8D8]"
+                                            }`}
                                           >
-                                            <div className="h-10 w-10 flex-shrink-0">
-                                              <img
-                                                className="h-10 w-10 rounded-full object-cover"
-                                                src={menu?.menu.images[0]}
-                                                alt=""
-                                              />
-                                            </div>
-                                            <div className="ml-4">
-                                              <div className="font-medium text-wrap">
-                                                {menu?.menu.foodName} X {menu?.quantity}
+                                            {transaction?.approvalStatus}{" "}
+                                            <MdKeyboardArrowRight size={20} />
+                                          </p>
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
+                                          {transaction?.order?.map(
+                                            (menu: any, i) => (
+                                              <div
+                                                key={i}
+                                                className={`flex items-center ${
+                                                  menu?.status === "archived" &&
+                                                  "opacity-25"
+                                                }`}
+                                              >
+                                                <div className="h-10 w-10 flex-shrink-0">
+                                                  <img
+                                                    className="h-10 w-10 rounded-full object-cover"
+                                                    src={menu?.menu.images[0]}
+                                                    alt=""
+                                                  />
+                                                </div>
+                                                <div className="ml-4">
+                                                  <div className="font-medium text-wrap">
+                                                    {menu?.menu.foodName} X{" "}
+                                                    {menu?.quantity}
+                                                  </div>
+                                                  <div className="">
+                                                    ₦
+                                                    {parseInt(
+                                                      menu?.menu.eventAmount
+                                                        ? menu?.menu.eventAmount
+                                                        : menu?.menu.discount
+                                                        ? menu.menu.price -
+                                                          (menu.menu.price /
+                                                            100) *
+                                                            menu.menu.discount
+                                                        : menu.menu.price
+                                                    ).toLocaleString()}
+                                                  </div>
+                                                </div>
                                               </div>
-                                              <div className="">
-                                                ₦
-                                                {parseInt(
-                                                  menu?.menu.eventAmount
-                                                    ? menu?.menu.eventAmount
-                                                    : menu?.menu.discount
-                                                    ? menu.menu.price -
-                                                      (menu.menu.price / 100) *
-                                                        menu.menu.discount
-                                                    : menu.menu.price
-                                                ).toLocaleString()}
-                                              </div>
-                                            </div>
-                                          </div>
-                                        ))}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                        {transaction?.order?.reduce(
-                                          (total: any, item: any) =>
-                                            total + item.quantity,
-                                          0
-                                        )}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                        {
-                                          formatRemoteAmountKobo(
-                                            transaction?.order.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0)
-                                          ).naira
-                                        }
-                                        {
-                                          formatRemoteAmountKobo(
-                                            transaction?.order.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0)
-                                          ).kobo
-                                        }
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                        {transaction?.posPayment ? "POS" : "Online"}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                        {transaction?.restaurant
-                                          ? "Dine-in"
-                                          : "Online"}
-                                      </td>
-                                      <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
-                                        {transaction?.restaurant && transaction?.order[0] &&
-                                        transaction?.status === "archived"
-                                          ? (
-                                            <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">Void</p>
+                                            )
+                                          )}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                          {transaction?.order?.reduce(
+                                            (total: any, item: any) =>
+                                              total + item.quantity,
+                                            0
+                                          )}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                          {
+                                            formatRemoteAmountKobo(
+                                              transaction?.order
+                                                .filter(
+                                                  (item) =>
+                                                    item.status !== "archived"
+                                                )
+                                                .reduce(
+                                                  (acc, curr) =>
+                                                    curr.menu?.discount
+                                                      ? acc +
+                                                        curr.amount -
+                                                        curr.amount *
+                                                          (curr.menu?.discount /
+                                                            100)
+                                                      : acc + curr.amount,
+                                                  0
+                                                )
+                                            ).naira
+                                          }
+                                          {
+                                            formatRemoteAmountKobo(
+                                              transaction?.order
+                                                .filter(
+                                                  (item) =>
+                                                    item.status !== "archived"
+                                                )
+                                                .reduce(
+                                                  (acc, curr) =>
+                                                    curr.menu?.discount
+                                                      ? acc +
+                                                        curr.amount -
+                                                        curr.amount *
+                                                          (curr.menu?.discount /
+                                                            100)
+                                                      : acc + curr.amount,
+                                                  0
+                                                )
+                                            ).kobo
+                                          }
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                          {transaction?.posPayment
+                                            ? "POS"
+                                            : "Online"}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                          {transaction?.restaurant
+                                            ? "Dine-in"
+                                            : "Online"}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
+                                          {transaction?.restaurant &&
+                                          transaction?.order[0] &&
+                                          transaction?.status === "archived" ? (
+                                            <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">
+                                              Void
+                                            </p>
                                           ) : transaction?.restaurant &&
-                                          transaction?.status === "declined"
-                                            ? (
-                                              <p className="w-fit text-xs text-medium text-[#C10606] border border-solid border-[#C10606] bg-[#E9A9A9] px-3 py-1 text-center rounded-3xl">Declined</p>
-                                            ) : transaction?.restaurant &&
-                                            transaction?.gift === true || transaction?.order[0]?.salesType === "gift"
-                                              ? (
-                                                <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">Gift</p>
-                                            ) : transaction?.restaurant &&
-                                            transaction?.status === "completed"
-                                              ? (
-                                                <p className="w-fit text-xs text-medium text-[#ffffff] primary_bg_color px-3 py-1 text-center rounded-3xl">Completed</p>
-                                            ) : <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">{transaction?.status}</p>}
-                                      </td>
-                                    </tr>
-                                  )
-                                )}
-                              </tbody>
-                            </table>
-                          )}
+                                            transaction?.status ===
+                                              "declined" ? (
+                                            <p className="w-fit text-xs text-medium text-[#C10606] border border-solid border-[#C10606] bg-[#E9A9A9] px-3 py-1 text-center rounded-3xl">
+                                              Declined
+                                            </p>
+                                          ) : (transaction?.restaurant &&
+                                              transaction?.gift === true) ||
+                                            transaction?.order[0]?.salesType ===
+                                              "gift" ? (
+                                            <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">
+                                              Gift
+                                            </p>
+                                          ) : transaction?.restaurant &&
+                                            transaction?.status ===
+                                              "completed" ? (
+                                            <p className="w-fit text-xs text-medium text-[#ffffff] primary_bg_color px-3 py-1 text-center rounded-3xl">
+                                              Completed
+                                            </p>
+                                          ) : (
+                                            <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
+                                              {transaction?.status}
+                                            </p>
+                                          )}
+                                        </td>
+                                      </tr>
+                                    )
+                                  )}
+                                </tbody>
+                              </table>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -988,7 +1101,7 @@ const ChefDineIn = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-y-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-start font_bold black2">
-                  Payment approval
+                  Payment Approval
                 </p>
                 <IoMdClose
                   size={24}
@@ -1000,130 +1113,153 @@ const ChefDineIn = () => {
 
               <div className="flex flex-col justify-between items-stretch mt-3 w-full h-5/6 relative">
                 <div className="w-full flex flex-col items-stretch justify-between gap-y-2">
-                {approvalOrder?.order?.map((menu: any, i) => (
-                  <div
-                    key={i}
-                    className="w-full flex flex-row justify-between items-center"
-                  >
-                    <div className="w-2/3 flex flex-row items-center justify-start">
-                      <div className="h-10 w-10 flex-shrink-0">
-                        <img
-                          className="h-10 w-10 rounded-lg object-cover"
-                          src={menu?.menu.images[0]}
-                          alt=""
-                        />
-                      </div>
-                      <div className="ml-4">
-                        <div className="font-bold text-wrap text-sm">
-                          {menu?.menu.foodName} X {menu?.quantity}
+                  {approvalOrder?.order?.map((menu: any, i) => (
+                    <div
+                      key={i}
+                      className="w-full flex flex-row justify-between items-center"
+                    >
+                      <div className="w-2/3 flex flex-row items-center justify-start">
+                        <div className="h-10 w-10 flex-shrink-0">
+                          <img
+                            className="h-10 w-10 rounded-lg object-cover"
+                            src={menu?.menu.images[0]}
+                            alt=""
+                          />
                         </div>
-                        <div className="text-sm">
-                          ₦
-                          {parseInt(
-                            menu?.menu.eventAmount
-                              ? menu?.menu.eventAmount
-                              : menu?.menu.discount
-                              ? menu.menu.price -
-                                (menu.menu.price / 100) *
-                                  menu.menu.discount
-                              : menu.menu.price
-                          ).toLocaleString()}
+                        <div className="ml-4">
+                          <div className="font-bold text-wrap text-sm">
+                            {menu?.menu.foodName} X {menu?.quantity}
+                          </div>
+                          <div className="text-sm">
+                            ₦
+                            {parseInt(
+                              menu?.menu.eventAmount
+                                ? menu?.menu.eventAmount
+                                : menu?.menu.discount
+                                ? menu.menu.price -
+                                  (menu.menu.price / 100) * menu.menu.discount
+                                : menu.menu.price
+                            ).toLocaleString()}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="w-1/3 h-full flex flex-col items-end justify-center">
-                      <Popover className="relative">
-                        <Popover.Button
-                          className={`w-fit text-xs text-medium border border-solid px-3 py-2 text-center rounded-xl flex flex-row items-center justify-center gap-x-1 
-                            ${menu?.salesType === "sales" && menu?.status !== "archived" 
-                              ? 'text-[#ffffff] primary_bg_color' 
-                              : (menu?.salesType === "gift" || approvalOrder.gift === true) && menu?.status !== "archived" 
-                              ? 'text-[#EAAC29] bg-[#FFFAED] border-[#EAAC29]' 
-                              : menu?.status === "archived" 
-                              ? 'text-[#C10606] bg-[#FFF5F5] border-[#C10606]' 
-                              : 'text-[#000000] bg-[#ffffff] border-[#D8D8D8]'}
+                      <div className="w-1/3 h-full flex flex-col items-end justify-center">
+                        <Popover className="relative">
+                          <Popover.Button
+                            className={`w-fit text-xs text-medium border border-solid px-3 py-2 text-center rounded-xl flex flex-row items-center justify-center gap-x-1 
+                            ${
+                              menu?.salesType === "sales" &&
+                              menu?.status !== "archived"
+                                ? "text-[#ffffff] primary_bg_color"
+                                : (menu?.salesType === "gift" ||
+                                    approvalOrder.gift === true) &&
+                                  menu?.status !== "archived"
+                                ? "text-[#EAAC29] bg-[#FFFAED] border-[#EAAC29]"
+                                : menu?.status === "archived"
+                                ? "text-[#C10606] bg-[#FFF5F5] border-[#C10606]"
+                                : "text-[#000000] bg-[#ffffff] border-[#D8D8D8]"
+                            }
                             `}
-                        >
-                          {menu?.salesType === "sales" && menu?.status !== "archived" ? 'Sales' 
-                          : (menu?.salesType === "gift" || approvalOrder.gift === true) && menu?.status !== "archived" ? 'Gift' 
-                          : menu?.status === "archived" || approvalOrder.status === "archived" ? 'Void' 
-                          : 'Confirm'} <IoIosArrowDown size={10} />
-                        </Popover.Button>
+                          >
+                            {menu?.salesType === "sales" &&
+                            menu?.status !== "archived"
+                              ? "Sales"
+                              : (menu?.salesType === "gift" ||
+                                  approvalOrder.gift === true) &&
+                                menu?.status !== "archived"
+                              ? "Gift"
+                              : menu?.status === "archived" ||
+                                approvalOrder.status === "archived"
+                              ? "Void"
+                              : "Confirm"}{" "}
+                            <IoIosArrowDown size={10} />
+                          </Popover.Button>
 
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-200"
-                          enterFrom="opacity-0 translate-y-1"
-                          enterTo="opacity-100 translate-y-0"
-                          leave="transition ease-in duration-150"
-                          leaveFrom="opacity-100 translate-y-0"
-                          leaveTo="opacity-0 translate-y-1"
-                        >
-                          <Popover.Panel className="box-border absolute -left-16 z-10 bg-white mb-2 w-24 lg:w-32 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                            <div className="w-full">
-                              <RadioGroup
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                          >
+                            <Popover.Panel className="box-border absolute -left-16 z-10 bg-white mb-2 w-24 lg:w-32 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                              <div className="w-full">
+                                <RadioGroup
                                 // value={menu?.salesType}
                                 // onChange={setSelectedStatus}
-                              >
-                                <div className="space-y-3">
-                                  {["confirm", "sales", "gift", "void"]?.map(
-                                    (item: any, i) => (
-                                      <RadioGroup.Option
-                                        key={i+82}
-                                        value={item}
-                                        className={
-                                          "flex items-center cursor-pointer mb-2"
-                                        }
-                                        onClick={() => {
-                                          updateApprovalOrder(item, menu.id);
-                                        }}
-                                      >
-                                        {({
-                                          active,
-                                          checked,
-                                        }) => (
-                                          <>
-                                            <div
-                                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                ((!menu?.salesType || menu?.salesType === "pending") && item === "confirm" && menu?.status !== "archived")
-                                                || (menu?.salesType === "sales" && item === "sales" && menu?.status !== "archived") 
-                                                || (menu?.salesType === "gift" && item === "gift" && menu?.status !== "archived") 
-                                                || (menu?.status === "archived" && item === "void") 
-                                                  ? "primary_bg_color"
-                                                  : "bg_gray_color"
-                                              }`}
-                                            />
+                                >
+                                  <div className="space-y-3">
+                                    {["confirm", "sales", "gift", "void"]?.map(
+                                      (item: any, i) => (
+                                        <RadioGroup.Option
+                                          key={i + 82}
+                                          value={item}
+                                          className={
+                                            "flex items-center cursor-pointer mb-2"
+                                          }
+                                          onClick={() => {
+                                            updateApprovalOrder(item, menu.id);
+                                          }}
+                                        >
+                                          {({ active, checked }) => (
+                                            <>
+                                              <div
+                                                className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                  ((!menu?.salesType ||
+                                                    menu?.salesType ===
+                                                      "pending") &&
+                                                    item === "confirm" &&
+                                                    menu?.status !==
+                                                      "archived") ||
+                                                  (menu?.salesType ===
+                                                    "sales" &&
+                                                    item === "sales" &&
+                                                    menu?.status !==
+                                                      "archived") ||
+                                                  (menu?.salesType === "gift" &&
+                                                    item === "gift" &&
+                                                    menu?.status !==
+                                                      "archived") ||
+                                                  (menu?.status ===
+                                                    "archived" &&
+                                                    item === "void")
+                                                    ? "primary_bg_color"
+                                                    : "bg_gray_color"
+                                                }`}
+                                              />
 
-                                            <div className="text-sm">
-                                              <RadioGroup.Label
-                                                as="p"
-                                                className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                              >
-                                                {item}
-                                              </RadioGroup.Label>
-                                            </div>
-                                          </>
-                                        )}
-                                      </RadioGroup.Option>
-                                    )
-                                  )}
-                                </div>
-                              </RadioGroup>
-                            </div>
-                          </Popover.Panel>
-                        </Transition>
-                      </Popover>
+                                              <div className="text-sm">
+                                                <RadioGroup.Label
+                                                  as="p"
+                                                  className={`text-xs lg:text-sm secondary_gray_color text-black capitalize`}
+                                                >
+                                                  {item}
+                                                </RadioGroup.Label>
+                                              </div>
+                                            </>
+                                          )}
+                                        </RadioGroup.Option>
+                                      )
+                                    )}
+                                  </div>
+                                </RadioGroup>
+                              </div>
+                            </Popover.Panel>
+                          </Transition>
+                        </Popover>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 </div>
 
                 <div className="w-full">
-                  <button 
+                  <button
                     className="primary_bg_color text-white rounded-full w-full py-2 text-semibold flex flex-row justify-center"
                     onClick={() => {
-                      handleApprovalOrder()
+                      handleApprovalOrder();
                     }}
                   >
                     {isSending ? (
@@ -1146,13 +1282,15 @@ const ChefDineIn = () => {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
-                    ) : ("Save")}
+                    ) : (
+                      "Save"
+                    )}
                   </button>
                 </div>
               </div>
             </div>
           </Modal>
-          
+
           {/* REFUND */}
           <Modal
             open={refundModal}
