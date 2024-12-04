@@ -1,4 +1,4 @@
-import { IoIosArrowDropdown, IoMdClose } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowDropdown, IoIosArrowUp, IoMdClose } from "react-icons/io";
 import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
@@ -24,6 +24,7 @@ const MenuOrderItem = ({
 }: any) => {
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [openNotes, setOpenNotes] = useState(false)
 
   const completeOrder = async (selectedOrder: any) => {
     setLoading(true);
@@ -70,7 +71,7 @@ const MenuOrderItem = ({
   return (
     <>
       <div
-        className="w-full lg:w-3/5 flex flex-col items-center justify-around gap-y-3 grow-0 shrink-0 mx-auto mb-5 cursor-pointer lg:shadow-lg bg-white p-3 lg:p-5 rounded-xl hover:bg-gray-100"
+        className="w-full lg:w-3/5 flex flex-col items-center justify-around gap-y-3 grow-0 shrink-0 mx-auto mb-5 lg:shadow-lg bg-white p-3 lg:p-5 rounded-xl hover:bg-gray-100"
       >
         <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
           <Link
@@ -157,8 +158,18 @@ const MenuOrderItem = ({
         {order?.notes && (
           <>
             <div className='w-full font_medium text-sm px-2'>
+              <div className='w-full flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-neutral-200/80 hover:rounded-xl duration-500' onClick={() => setOpenNotes(!openNotes)}>
                 <p className="text-[#585858] text-lg font-medium font_medium">Note:</p>
-                <p className='font_medium text-base'>{order?.notes}</p>
+
+                {openNotes ? (
+                    <IoIosArrowUp size={20} />
+                ) : (
+                    <IoIosArrowDown size={20} />
+                )}
+              </div>
+              {openNotes && (
+                <p className='font_medium text-base text-wrap'>{order?.notes}</p>
+              )}
             </div>
             <hr className="w-4/5 h-1 mx-auto" />
           </>
