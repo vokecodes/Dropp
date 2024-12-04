@@ -1,4 +1,4 @@
-import { IoIosArrowDropdown, IoMdClose } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowDropdown, IoIosArrowUp, IoMdClose } from "react-icons/io";
 import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
@@ -21,6 +21,7 @@ const OrderItem = ({
   waiter,
   chef
 }: any) => {
+  const [openNotes, setOpenNotes] = useState(false)
   const [sendToKitchenLoading, setSendToKitchen] = useState(false);
 
   const sendToKitchen = async (selectedOrder: any) => {
@@ -160,8 +161,17 @@ const OrderItem = ({
         {order?.notes && (
           <>
             <div className='w-full font_medium text-sm px-2'>
+              <div className='w-full flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-neutral-200/80 hover:rounded-xl duration-500' onClick={() => setOpenNotes(!openNotes)}>
                 <p className="text-[#585858] text-lg font-medium font_medium">Note:</p>
-                <p className='font_medium text-base'>{order?.notes}</p>
+                {openNotes ? (
+                    <IoIosArrowUp size={20} />
+                ) : (
+                    <IoIosArrowDown size={20} />
+                )}
+              </div>
+                {openNotes && (
+                    <p className='font_medium text-base text-wrap'>{order?.notes}</p>
+                )}
             </div>
             <hr className="w-4/5 h-1 mx-auto" />
           </>

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import invariant from 'tiny-invariant';
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { dateFormatter } from '../utils/formatMethods';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 const KitchenCard = ({
     order,
@@ -11,7 +12,7 @@ const KitchenCard = ({
     kitchenCardButtons,
     title
 }) => {
-
+    const [openNotes, setOpenNotes] = useState(false)
     const dragRef = useRef(null)
     const [dragging, setDragging] = useState(false)
 
@@ -64,8 +65,18 @@ const KitchenCard = ({
           <>
             <hr className="w-4/5 border mx-auto my-2" />
             <div className='w-full font_medium text-sm px-2'>
-                <p className="text-[#585858] text-base font-medium font_medium">Note:</p>
-                <p className='font_medium text-sm text-wrap'>{order?.notes}</p>
+                <div className='w-full flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-neutral-200/80 hover:rounded-xl duration-500' onClick={() => setOpenNotes(!openNotes)}>
+                    <p className="text-[#585858] text-base font-medium font_medium">Note:</p>
+
+                    {openNotes ? (
+                        <IoIosArrowUp size={20} />
+                    ) : (
+                        <IoIosArrowDown size={20} />
+                    )}
+                </div>
+                {openNotes && (
+                    <p className='font_medium text-sm text-wrap'>{order?.notes}</p>
+                )}
             </div>
             <hr className="w-4/5 border mx-auto my-2" />
           </>
