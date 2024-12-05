@@ -10,34 +10,37 @@ import TableManagement from "./TableManagement";
 import Kitchen from "./Kitchen";
 import KitchenMenu from "./KitchenMenu";
 import SalesReports from "./SalesReports";
+import IdleTimerLayout from "../../utils/idleTimerLayout";
 
 const SubChefRoutes = () => (
-  <Routes>
-    <Route>
-      <Route index element={<ChefMenu />} />
-      <Route path={SUB_CHEF_ROUTES.subChefDineIn} element={<ChefDineIn />} />
-      <Route
-        path={SUB_CHEF_ROUTES.subChefTableManagement}
-        element={<TableManagement />}
-      />
-      <Route
-        path={SUB_CHEF_ROUTES.subChefSettings}
-        element={<ChefSettings />}
-      />
-      <Route
-        path={SUB_CHEF_ROUTES.subChefMenuOnline}
-        element={<OnlineMenu />}
-      />
-      <Route
-        path={SUB_CHEF_ROUTES.subChefMenuDineIn}
-        element={<DineInMenu />}
-      />
-      <Route path={SUB_CHEF_ROUTES.kitchen} element={<Kitchen />} />
-      <Route path={SUB_CHEF_ROUTES.kitchenMenu} element={<KitchenMenu />} />
-      <Route path={SUB_CHEF_ROUTES.subChefReports} element={<SalesReports />} />
-      <Route path="*" element={<NotFound />} />
-    </Route>
-  </Routes>
+  <IdleTimerLayout>
+    <Routes>
+      <Route>
+        <Route index element={<ChefMenu />} />
+        <Route path={SUB_CHEF_ROUTES.subChefDineIn} element={<ChefDineIn />} />
+        <Route
+          path={SUB_CHEF_ROUTES.subChefTableManagement}
+          element={<TableManagement />}
+        />
+        <Route
+          path={SUB_CHEF_ROUTES.subChefSettings}
+          element={<ChefSettings />}
+        />
+        <Route
+          path={SUB_CHEF_ROUTES.subChefMenuOnline}
+          element={<OnlineMenu />}
+        />
+        <Route
+          path={SUB_CHEF_ROUTES.subChefMenuDineIn}
+          element={<DineInMenu />}
+        />
+        <Route path={SUB_CHEF_ROUTES.kitchen} element={<Kitchen />} />
+        <Route path={SUB_CHEF_ROUTES.kitchenMenu} element={<KitchenMenu />} />
+        <Route path={SUB_CHEF_ROUTES.subChefReports} element={<SalesReports />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  </IdleTimerLayout>
 );
 
 export default SubChefRoutes;

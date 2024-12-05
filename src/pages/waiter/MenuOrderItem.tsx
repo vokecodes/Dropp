@@ -1,4 +1,4 @@
-import { IoIosArrowDropdown, IoMdClose } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowDropdown, IoIosArrowUp, IoMdClose } from "react-icons/io";
 import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
@@ -7,7 +7,8 @@ import { RESTAURANT_ORDER_URL } from "../../_redux/urls";
 import { SERVER } from "../../config/axios";
 import moment from "moment";
 import DownloadPDFButton from "../../components/Receipt";
-import { FaReceipt } from "react-icons/fa6";
+import { FaPlus, FaReceipt } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const MenuOrderItem = ({
   orderStatus,
@@ -23,6 +24,7 @@ const MenuOrderItem = ({
 }: any) => {
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [openNotes, setOpenNotes] = useState(false)
 
   const completeOrder = async (selectedOrder: any) => {
     setLoading(true);
@@ -69,9 +71,16 @@ const MenuOrderItem = ({
   return (
     <>
       <div
-        className="w-full lg:w-3/5 flex flex-col items-center justify-around gap-y-3 grow-0 shrink-0 mx-auto mb-5 cursor-pointer lg:shadow-lg bg-white p-3 lg:p-5 rounded-xl hover:bg-gray-100"
+        className="w-full lg:w-3/5 flex flex-col items-center justify-around gap-y-3 grow-0 shrink-0 mx-auto mb-5 lg:shadow-lg bg-white p-3 lg:p-5 rounded-xl hover:bg-gray-100"
       >
-        <div className="flex flex-row justify-end items-center w-full mt-3">
+        <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
+          <Link
+            to={`/restaurant/${chef?.business?.businessName}/add/${order?.id}`}
+            target="_blank"
+          >
+            <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">Add order <FaPlus /></p>
+          </Link>
+
           <DownloadPDFButton 
             chef={chef} 
             waiter={waiter}
@@ -92,7 +101,7 @@ const MenuOrderItem = ({
         <div className="w-full flex flex-row items-center justify-between">
           <div>
             <p className="font-semibold font_medium">
-              {order.name}
+              {order.name} #{order?.id?.substring(order?.id?.length - 5)}
             </p>
             <p className="flex-1 text-sm text-start font_regular black2 font-semibold">
               {order?.email}
@@ -134,18 +143,37 @@ const MenuOrderItem = ({
                   <div className="flex flex-col items-end shrink-0">
                     <p className="text-xl pt-1 font-bold">
                       ₦
-                      {menuOrder?.menu?.discount
+                      {formatPrice(menuOrder?.menu?.discount
                         ? menuOrder?.amount -
                           (menuOrder?.amount / 100) * menuOrder?.menu.discount
-                        : menuOrder?.amount}
+                        : menuOrder?.amount)}
                     </p>
-                    <p className="font-bold mt-1">#{menuOrder?.displayId?.slice(-6)}</p>
                   </div>
                 </div>
               ))}
         </div>
 
         <hr className="w-4/5 h-1 mx-auto" />
+
+        {order?.notes && (
+          <>
+            <div className='w-full font_medium text-sm px-2'>
+              <div className='w-full flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-neutral-200/80 hover:rounded-xl duration-500' onClick={() => setOpenNotes(!openNotes)}>
+                <p className="text-[#585858] text-lg font-medium font_medium">Note:</p>
+
+                {openNotes ? (
+                    <IoIosArrowUp size={20} />
+                ) : (
+                    <IoIosArrowDown size={20} />
+                )}
+              </div>
+              {openNotes && (
+                <p className='font_medium text-base text-wrap'>{order?.notes}</p>
+              )}
+            </div>
+            <hr className="w-4/5 h-1 mx-auto" />
+          </>
+        )}
 
         <div className="w-full flex flex-row items-center justify-between">
           <p className="whitespace-nowrap font-semibold font_medium text-gray-500">
@@ -155,7 +183,7 @@ const MenuOrderItem = ({
           <div className="w-full flex flex-row items-center justify-end gap-x-3">
             <PaymentStatus order={order} />
             <p className="primary_txt_color font-semibold font_medium text-lg">
-              N{formatPrice(order?.totalAmount)}
+              ₦{formatPrice(order?.order?.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0))}
             </p>
           </div>
         </div>
@@ -166,6 +194,7 @@ const MenuOrderItem = ({
         )?.length === order?.order?.length && (
           <div className="my-2 w-full">
             <Button
+              disabled={!order?.paid}
               title="Mark as complete"
               extraClasses="w-full p-3 rounded-full"
               loading={loading}

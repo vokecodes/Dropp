@@ -330,10 +330,10 @@ export const changePasswordCompanyAccount =
   };
 
 export const getRestaurantDashboardAccount =
-  (fromDate = "", toDate = "", payment = "", section = "", table = "") =>
+  (fromDate = "", toDate = "", payment = "", section = "", table = "", breakdownOption) =>
   (dispatch: any) => {
     dispatch(startDashboardCall());
-    return getRestaurantDashboardCrud(fromDate, toDate, payment, section, table)
+    return getRestaurantDashboardCrud(fromDate, toDate, payment, section, table, breakdownOption)
       .then(({ data }) => {
         dispatch(getRestaurantDashboard({ ...data?.data }));
       })

@@ -46,6 +46,8 @@ export const HOME_ROUTES = {
   linkExploreChef: "/explore/:businessName/:foodName?",
   exploreRestaurant: "restaurant/:businessName/:table",
   linkExploreRestaurant: "/restaurant/:businessName/:table",
+  exploreRestaurantEdit: "restaurant/:businessName/add/:table",
+  linkExploreRestaurantEdit: "/restaurant/:businessName/add/:table",
   previewChef: "preview/:businessName",
   linkPreviewChef: "/preview/:businessName",
   previewRestaurant: "preview/restaurant/:businessName",

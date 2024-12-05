@@ -10,6 +10,9 @@ import {
   addRestaurantSuperWaiter,
   updateRestaurantSuperWaiter,
   deleteRestaurantSuperWaiter,
+  addSubChefSuperWaiter,
+  updateSubChefSuperWaiter,
+  deleteSubChefSuperWaiter,
 } from "./tableCrud";
 import {
   startCall,
@@ -78,7 +81,8 @@ export const deleteTables = (menuId: string) => (dispatch: any) => {
 };
 
 export const addSuperWaiter =
-  (data: any, closeSuperWaiterModal: any, resetForm?: any) => (dispatch: any) => {
+  (data: any, closeSuperWaiterModal: any, resetForm?: any) =>
+  (dispatch: any) => {
     dispatch(startCall());
     return addRestaurantSuperWaiter(data)
       .then(({ data }) => {
@@ -172,6 +176,52 @@ export const subChefUpdateTables =
 export const subChefDeleteTables = (menuId: string) => (dispatch: any) => {
   dispatch(startCall());
   return deleteSubChefRestaurantTable(menuId)
+    .then(({ data }) => {
+      dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
+      dispatch(subChefGetTables());
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+      dispatch(catchError({ error: error?.message }));
+    });
+};
+
+export const subChefAddSuperTables =
+  (data: any, closeOrdersModal: any, resetForm?: any) => (dispatch: any) => {
+    dispatch(startCall());
+    return addSubChefSuperWaiter(data)
+      .then(({ data }) => {
+        dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
+        resetForm();
+        closeOrdersModal();
+        dispatch(subChefGetTables());
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
+export const subChefUpdateSuperTables =
+  (data: any, menuId: string, closeOrdersModal: any, resetForm?: any) =>
+  (dispatch: any) => {
+    dispatch(startCall());
+    return updateSubChefSuperWaiter(data, menuId)
+      .then(({ data }) => {
+        dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
+        resetForm();
+        closeOrdersModal();
+        dispatch(subChefGetTables());
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
+export const subChefDeleteSuperTables = (menuId: string) => (dispatch: any) => {
+  dispatch(startCall());
+  return deleteSubChefSuperWaiter(menuId)
     .then(({ data }) => {
       dispatch(getAddUpdateRestaurantTable(data?.restaurantTable));
       dispatch(subChefGetTables());

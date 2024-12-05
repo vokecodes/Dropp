@@ -53,37 +53,41 @@ const AppRoutes = () => {
 
   return (
     <BrowserRouter>
-      <IdleTimerLayout>
-        <Routes>
-          <Route index element={<Home />} />
+      <Routes>
+        <Route index element={<Home />} />
 
-          <Route path={HOME_ROUTES.explore} element={<Explore />} />
-          <Route path={HOME_ROUTES.exploreChef} element={<ChefShop />} />
-          <Route
-            path={HOME_ROUTES.exploreRestaurant}
-            element={<RestaurantShop />}
+        <Route path={HOME_ROUTES.explore} element={<Explore />} />
+        <Route path={HOME_ROUTES.exploreChef} element={<ChefShop />} />
+        <Route
+          path={HOME_ROUTES.exploreRestaurant}
+          element={<RestaurantShop />}
           />
-          <Route
-            path={HOME_ROUTES.chefLandingPage}
-            element={<ChefLandingPage />}
+        <Route
+          path={HOME_ROUTES.exploreRestaurantEdit}
+          element={<RestaurantShop />}
           />
-          <Route
-            path={HOME_ROUTES.companies}
-            element={<CompaniesLandingPage />}
+        <Route
+          path={HOME_ROUTES.chefLandingPage}
+          element={<ChefLandingPage />}
           />
-          <Route path={HOME_ROUTES.previewChef} element={<PreviewChefShop />} />
-          <Route
-            path={HOME_ROUTES.previewRestaurant}
-            element={<PreviewRestaurantShop />}
+        <Route
+          path={HOME_ROUTES.companies}
+          element={<CompaniesLandingPage />}
           />
-          <Route path={HOME_ROUTES.events} element={<Events />} />
-          <Route path={HOME_ROUTES.foodSafety} element={<FoodSafety />} />
-          <Route path={HOME_ROUTES.privacyPolicy} element={<PrivacyPolicy />} />
-          <Route path={HOME_ROUTES.termsService} element={<TermsService />} />
-          <Route path={HOME_ROUTES.subscription} element={<Subscription />} />
+        <Route path={HOME_ROUTES.previewChef} element={<PreviewChefShop />} />
+        <Route
+          path={HOME_ROUTES.previewRestaurant}
+          element={<PreviewRestaurantShop />}
+          />
+        <Route path={HOME_ROUTES.events} element={<Events />} />
+        <Route path={HOME_ROUTES.foodSafety} element={<FoodSafety />} />
+        <Route path={HOME_ROUTES.privacyPolicy} element={<PrivacyPolicy />} />
+        <Route path={HOME_ROUTES.termsService} element={<TermsService />} />
+        <Route path={HOME_ROUTES.subscription} element={<Subscription />} />
 
-          <Route path={WAITER_ROUTES.waiter} element={<WaiterRoutes />} />
+        <Route path={WAITER_ROUTES.waiter} element={<WaiterRoutes />} />
 
+        
           {user?.user ? (
             <>
               {user?.user?.userType === CHEF_USER ? (
@@ -122,9 +126,8 @@ const AppRoutes = () => {
             </>
           )}
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </IdleTimerLayout>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   );
 };

@@ -51,3 +51,17 @@ export const updateSubChefRestaurantTable = (data: any, tableId: string) => {
 export const deleteSubChefRestaurantTable = (tableId: string) => {
   return SERVER.delete(`${SUB_CHEF_URL}/restaurant-table/${tableId}`);
 };
+
+export const addSubChefSuperWaiter = (data: any) => {
+  return SERVER.post(`${SUB_CHEF_URL}/super`, { ...data });
+};
+
+export const updateSubChefSuperWaiter = (data: any, tableId: string) => {
+  return SERVER.patch(`${SUB_CHEF_URL}/super/${tableId}`, {
+    ...data,
+  });
+};
+
+export const deleteSubChefSuperWaiter = (tableId: string) => {
+  return SERVER.delete(`${SUB_CHEF_URL}/super/${tableId}`);
+};

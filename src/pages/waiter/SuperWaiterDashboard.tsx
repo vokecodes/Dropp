@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, Fragment } from "react";
 import { useSelector, shallowEqual } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
 import OrderItem from "./OrderItem";
 import { SERVER } from "../../config/axios";
 import { RESTAURANT_ORDER_URL, RESTAURANT_TABLE_URL } from "../../_redux/urls";
@@ -16,6 +15,7 @@ import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import io from "socket.io-client";
 import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
+import InfinityScroll from "../../components/InfinityScroll";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -48,7 +48,7 @@ const SuperWaiterDashboard = () => {
     }
   };
 
-  const getRestaurantOrders = async (currentPage = 1) => {
+  const getRestaurantOrders = async (currentPage = page) => {
     SERVER.get(
       `${RESTAURANT_ORDER_URL}/all-restaurant-orders/${superWaiter?.restaurant}?page=${currentPage}`
     )
@@ -102,6 +102,7 @@ const SuperWaiterDashboard = () => {
 
     socket.on("newRestaurantOrder", handleNewOrder);
     socket.on("newReadyOrder", handleNewOrder);
+    socket.on("updatedRestaurantOrder", handleNewOrder);
     socket.on("updatedOrder", () => {
       getRestaurantOrders(1);
     });
@@ -109,6 +110,7 @@ const SuperWaiterDashboard = () => {
     return () => {
       socket.off("newRestaurantOrder", handleNewOrder);
       socket.off("newReadyOrder", handleNewOrder);
+      socket.off("updatedRestaurantOrder", handleNewOrder);
       socket.off("updatedOrder", () => {
         getRestaurantOrders(1);
       });
@@ -421,19 +423,11 @@ const SuperWaiterDashboard = () => {
 
         <div className="rounded-2xl h-full w-full lg:p-5 mt-3 flex flex-col lg:flex-row justify-start items-center lg:items-start">
           <div className="w-full lg:w-8/12 h-full flex flex-col gap-x-5">
-            <InfiniteScroll
-              dataLength={restaurantOrders.length}
-              next={() => {
-                if (hasMore) {
-                  getRestaurantOrders(page);
-                }
-              }}
+            <InfinityScroll
+              data={restaurantOrders}
+              getMore={getRestaurantOrders}
               hasMore={hasMore}
-              endMessage={
-                <p className="mt-5 text-center font_medium">
-                  Yay, you've seen it all.
-                </p>
-              }
+              
             >
               <div className="flex flex-col mt-2">
                 {tablesMap ? (
@@ -470,7 +464,6 @@ const SuperWaiterDashboard = () => {
                               openOrdersModal={() => openOrdersModal(tableOrder)}
                               closeOrdersModal={() => closeOrdersModal()}
                               getTableOrders={getRestaurantOrders}
-                              selectedCategory={selectedCategory?.value}
                               chef={chef}
                               waiter={table.filter(item => item.table === selectedTable)[0]}
                             />)
@@ -487,7 +480,7 @@ const SuperWaiterDashboard = () => {
                   <div>No tables available.</div>
                 )}
               </div>
-            </InfiniteScroll>
+            </InfinityScroll>
           </div>
         </div>
       </div>

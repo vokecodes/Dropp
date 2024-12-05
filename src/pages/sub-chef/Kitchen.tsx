@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { ClickAwayListener, Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import { useAppDispatch } from "../../redux/hooks";
@@ -25,6 +24,7 @@ import {
   monitorForElements,
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { getSubChefDineInMenuCategories } from "../../_redux/dinningMenu/dinningMenuCrud";
+import InfinityScroll from "../../components/InfinityScroll";
 
 
 const socket = io(import.meta.env.VITE_BASE_API_URL, {
@@ -54,7 +54,7 @@ const Kitchen = () => {
   const [hasMore, setHasMore] = useState(true); 
   const [page, setPage] = useState(1); 
 
-  const getRestaurantOrders = async (currentPage = 1) => {
+  const getRestaurantOrders = async (currentPage = page) => {
     SERVER.get(`${SUB_CHEF_URL}/restaurant?page=${currentPage}`)
       .then(({ data }) => {
         if (currentPage === 1) {
@@ -746,22 +746,11 @@ const Kitchen = () => {
       </div>
 
       <div className="w-fit md:w-full md:px-6 py-4">
-        <InfiniteScroll
-          dataLength={restaurantOrders?.length} // This is important to track the length of your data array
-          next={() => {
-            if (hasMore) {
-              getRestaurantOrders(page);
-            }
-          }} // Function to call when reaching the end of the list
-          hasMore={hasMore} // Flag to indicate if there are more items to load
-          // loader={
-          //   <p className="mt-5 text-center font_medium">Loading...</p>
-          // } // Loader component while fetching more data
-          endMessage={
-            <p className="mt-5 text-center font_medium">
-              Yay, you've seen it all.
-            </p>
-          } // Message when all items have been loaded
+        <InfinityScroll
+          data={restaurantOrders}
+          getMore={getRestaurantOrders}
+          hasMore={hasMore}
+          
         >
           <div
             ref={ref}
@@ -1020,7 +1009,7 @@ const Kitchen = () => {
             {/* </div> */}
             {/* </div> */}
           </div>
-        </InfiniteScroll>
+        </InfinityScroll>
       </div>
 
       <Modal

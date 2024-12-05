@@ -7,35 +7,38 @@ import CustomerMessage from "./CustomerMessage";
 import NotFound from "../../components/NotFound";
 import CustomerSubscription from "./Subscription";
 import CustomerWallet from "./Wallet";
+import IdleTimerLayout from "../../utils/idleTimerLayout";
 
 const CustomerRoutes = () => (
-  <Routes>
-    <Route>
-      <Route index element={<CustomerOrders />} />
+  <IdleTimerLayout>
+    <Routes>
+      <Route>
+        <Route index element={<CustomerOrders />} />
+        <Route
+          path={CUSTOMER_ROUTES.customerOrders}
+          element={<CustomerOrders />}
+        />
+        <Route
+          path={CUSTOMER_ROUTES.customerWallet}
+          element={<CustomerWallet />}
+        />{" "}
+        <Route
+          path={CUSTOMER_ROUTES.customerSettings}
+          element={<CustomerSettings />}
+        />
+        <Route
+          path={CUSTOMER_ROUTES.customerFavourites}
+          element={<Favourite />}
+        />
+      </Route>
+      <Route path={CUSTOMER_ROUTES.customerChat} element={<CustomerMessage />} />
       <Route
-        path={CUSTOMER_ROUTES.customerOrders}
-        element={<CustomerOrders />}
+        path={CUSTOMER_ROUTES.customerSubscription}
+        element={<CustomerSubscription />}
       />
-      <Route
-        path={CUSTOMER_ROUTES.customerWallet}
-        element={<CustomerWallet />}
-      />{" "}
-      <Route
-        path={CUSTOMER_ROUTES.customerSettings}
-        element={<CustomerSettings />}
-      />
-      <Route
-        path={CUSTOMER_ROUTES.customerFavourites}
-        element={<Favourite />}
-      />
-    </Route>
-    <Route path={CUSTOMER_ROUTES.customerChat} element={<CustomerMessage />} />
-    <Route
-      path={CUSTOMER_ROUTES.customerSubscription}
-      element={<CustomerSubscription />}
-    />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </IdleTimerLayout>
 );
 
 export default CustomerRoutes;
