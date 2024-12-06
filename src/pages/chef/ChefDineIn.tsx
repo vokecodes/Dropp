@@ -111,7 +111,7 @@ const ChefDineIn = () => {
             const restoreStatus =
               isArchived && menu?.prevStatus ? menu?.prevStatus : menu.status;
 
-            if (item === "confirm") {
+            if (item === "pending") {
               return {
                 ...menu,
                 salesType: "pending",
@@ -833,7 +833,7 @@ const ChefDineIn = () => {
                                                                     as="p"
                                                                     className={`text-xs lg:text-sm secondary_gray_color text-black`}
                                                                   >
-                                                                    {item}
+                                                                    {toTitleCase(item)}
                                                                   </RadioGroup.Label>
                                                                 </div>
                                                               </>
@@ -1120,7 +1120,7 @@ const ChefDineIn = () => {
                               : menu?.status === "archived" ||
                                 approvalOrder.status === "archived"
                               ? "Void"
-                              : "Confirm"}{" "}
+                              : "Pending"}{" "}
                             <IoIosArrowDown size={10} className={(menu.parentPaid || (approvalOrder.approvalStatus === "Confirmed" && menu.parentStatus === "completed")) && 'hidden'} />
                           </Popover.Button>
 
@@ -1140,7 +1140,7 @@ const ChefDineIn = () => {
                                 // onChange={setSelectedStatus}
                                 >
                                   <div className="space-y-3">
-                                    {["confirm", "sales", "gift", "void"]?.map(
+                                    {["pending", "sales", "gift", "void"]?.map(
                                       (item: any, i) => (
                                         <RadioGroup.Option
                                           key={i + 82}
@@ -1159,7 +1159,7 @@ const ChefDineIn = () => {
                                                   ((!menu?.salesType ||
                                                     menu?.salesType ===
                                                       "pending") &&
-                                                    item === "confirm" &&
+                                                    item === "pending" &&
                                                     menu?.status !==
                                                       "archived") ||
                                                   (menu?.salesType ===
