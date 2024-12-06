@@ -159,14 +159,23 @@ const WaiterDashboard = () => {
 
     sortedByDate &&
       sortedByDate?.length > 0 &&
-      sortedByDate?.forEach((item, i) => {
+      sortedByDate?.filter(item => !item.parentOrder).forEach((item, i) => {
+        const orderArray = item?.children?.length
+          ? [...item.order, ...item.children.reduce((acc, curr) => [...acc, ...curr.order], [])]
+          : item.order;
+
+        const newOrder = {
+          ...item,
+          order: orderArray
+        }
+
         if (
           item?.status === "pending" &&
           !updatedColumnCount["New order"]?.some((s) => s.id === item.id)
         ) {
           updatedColumnCount["New order"] = [
             ...updatedColumnCount["New order"],
-            item,
+            newOrder,
           ];
         }
 
@@ -178,7 +187,7 @@ const WaiterDashboard = () => {
             ) {
               updatedColumnCount["Kitchen"] = [
                 ...updatedColumnCount["Kitchen"],
-                item,
+                newOrder,
               ];
             }
 
@@ -188,7 +197,7 @@ const WaiterDashboard = () => {
             ) {
               updatedColumnCount["Ready"] = [
                 ...updatedColumnCount["Ready"],
-                item,
+                newOrder,
               ];
             }
 
@@ -198,18 +207,18 @@ const WaiterDashboard = () => {
             ) {
               updatedColumnCount["Cooking"] = [
                 ...updatedColumnCount["Cooking"],
-                item,
+                newOrder,
               ];
             }
 
-            if (!suffixes[item?.id]) {
-              suffixes[item?.id] = 0;
+            if (!suffixes[newOrder?.id]) {
+              suffixes[newOrder?.id] = 0;
             }
 
-            const suffix = String.fromCharCode(97 + suffixes[item?.id]);
-            o.displayId = `${item?.id}-${suffix}`;
+            const suffix = String.fromCharCode(97 + suffixes[newOrder?.id]);
+            o.displayId = `${newOrder?.id}-${suffix}`;
 
-            suffixes[item?.id] += 1;
+            suffixes[newOrder?.id] += 1;
           });
         }
 
@@ -219,7 +228,7 @@ const WaiterDashboard = () => {
         ) {
           updatedColumnCount["Completed"] = [
             ...updatedColumnCount["Completed"],
-            item,
+            newOrder,
           ];
         }
       });
