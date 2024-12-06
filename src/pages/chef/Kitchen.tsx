@@ -69,11 +69,16 @@ const Kitchen = () => {
             ...data.data,
           ]);
         }
-        setPage(currentPage + 1);
-        setHasMore(
-          data.pagination.totalPages > 0 &&
-            data.pagination.currentPage !== data.pagination.totalPages
-        );
+        
+        if(Number(data.pagination.totalPages) > 1){
+          setPage(page + 1);
+          setHasMore(
+            Number(data.pagination.totalPages) > 1 &&
+            Number(data.pagination.currentPage) <= Number(data.pagination.totalPages)
+          );
+        }else{
+          setHasMore(false)
+        }
       })
       .catch((err) => {});
   };
@@ -114,7 +119,7 @@ const Kitchen = () => {
   };
 
   // Listen for new orders from the server
-  useState(() => {
+  useEffect(() => {
     socket.on("newKitchenOrder", (newOrder) => {
       // Call getRestaurantOrders to update the orders
       getRestaurantOrders();
@@ -150,13 +155,21 @@ const Kitchen = () => {
   const [declineReason, setDeclineReason] = useState();
   const [declineLoading, setDeclineLoading] = useState(false);
 
+  const updateOrders = (item: any, menuId: any) => {
+    const elem = item?.data.order.find(m => m.id === menuId)
+
+    setRestaurantOrders((prevOrders: any) =>
+      prevOrders.map((order: any) => order._id === menuId ? { ...order, ...elem } : order)
+    );
+  }
+
   const handleStartCooking = async (orderId, menuId: any) => {
     setStartCooking(menuId);
-    SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
+    SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, { 
       status: "cooking",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId);
       })
       .catch((err) => {})
       .finally(() => setStartCooking());
@@ -168,7 +181,7 @@ const Kitchen = () => {
       status: "ready",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId);
       })
       .catch((err) => {})
       .finally(() => setReadyForPickup());
@@ -180,7 +193,7 @@ const Kitchen = () => {
       status: "sent",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId);
       })
       .catch((err) => {})
       .finally(() => setSent());
@@ -192,7 +205,7 @@ const Kitchen = () => {
       status: "archived",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId);
       })
       .catch((err) => {})
       .finally(() => setVoided());
@@ -208,7 +221,7 @@ const Kitchen = () => {
         setDeclineOrder();
         setDeclineOrderMenu();
         setDeclineReason();
-        getRestaurantOrders();
+        updateOrders(data, menuId);
         closeDeclineModal();
       })
       .catch((err) => {})
@@ -332,8 +345,8 @@ const Kitchen = () => {
 
   const sortByUpdatedAt = (arr) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.updatedAt);
-      const dateB = new Date(b.updatedAt);
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
       return dateB - dateA;
     });
   };
@@ -487,7 +500,6 @@ const Kitchen = () => {
         const order = source.data.order;
 
         if (destinationLocation === "Cooking") {
-          console.log("cooking");
           handleStartCooking(order?.parent, order?._id);
         } else if (destinationLocation === "Ready for pickup") {
           handleReadyForPickup(order?.parent, order?._id);

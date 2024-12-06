@@ -136,3 +136,12 @@ export const generateUUIDBasedOnStringLength =(referenceString: string): string 
     return uuid.padEnd(desiredLength, "0"); // Pad with zeros if needed
   }
 }
+
+
+export const toTitleCase = (str) => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
