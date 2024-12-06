@@ -24,14 +24,9 @@ import { IoSearchSharp } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 const statusOptions = [
-  "declined",
-  "void",
-  "gift",
-  "completed",
   "pending",
   "kitchen",
-  "cooking",
-  "ready",
+  "completed",
 ];
 
 const ChefDineIn = () => {
