@@ -65,7 +65,7 @@ const RestaurantShop = () => {
     shallowEqual
   );
 
-  const { businessName, table } = useParams();
+  const { businessName, table, menuId } = useParams();
 
   const [chef, setChef] = useState<any>(null);
   const [waiter, setWaiter] = useState<any>(null);
@@ -245,10 +245,10 @@ const RestaurantShop = () => {
   //   Hotjar.event("CHEF_SHOP_ADD_MEAL_TO_BAG");
   // };
 
-  const verifyTransaction = async (referenceId: any, updatedRefId) => {
+  const verifyTransaction = async (referenceId: any) => {
     try {
       const { data } = await axios.get(
-        `${TRANSACTION_URL}/verify/${referenceId}?updatedRefId=${updatedRefId}`
+        `${TRANSACTION_URL}/verify/${referenceId}`
       );
       const result = data?.data;
       
@@ -270,17 +270,20 @@ const RestaurantShop = () => {
     try {
       const createOrEditOrder = async () => {
         if (location.pathname.includes("add")) {
-          return await editARestaurantOrder(table, { ...orderItem });
+          return await editARestaurantOrder(menuId, {
+            ...orderItem,
+            table,
+          });
         }
         return await createARestaurantOrder({ ...orderItem, table });
       };
     
-      const handlePayment = (orderId: string, updatedRefId: string) => {
+      const handlePayment = (orderId: string) => {
         const handler = window.PaystackPop.setup({
           key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
           email: orderItem.email,
           amount: amount * 100,
-          ref: updatedRefId ? updatedRefId : orderId, // Use the generated order ID as a reference
+          ref: orderId, // Use the generated order ID as a reference
           metadata: {
             transactionType: "RESTAURANT_ORDER",
           },
@@ -289,9 +292,9 @@ const RestaurantShop = () => {
             resetCartView();
             dispatch(clearCart());
             setCartMenu([]);
-            setOrderId(updatedRefId ? updatedRefId : orderId);
+            setOrderId(orderId);
             openVerifyPaymentModal();
-            verifyTransaction(orderId, updatedRefId ? updatedRefId : '');
+            verifyTransaction(orderId);
           },
         });
     
@@ -301,16 +304,11 @@ const RestaurantShop = () => {
       const { data } = await createOrEditOrder();
     
       if (data.success) {
-        if(location.pathname.includes("add")){
-          const updatedRefId = `${data.data.orderId}-${uuidv4()}`;
-
-          handlePayment(data.data.orderId, updatedRefId);
-        }else{
-          handlePayment(data.data.orderId);
-        }
+        handlePayment(data.data.orderId);
       }
     } catch (err) {
       handleClickOpen();
+      console.log('err= ', err)
     } finally {
       setCheckoutLoading(false);
     }
@@ -323,8 +321,9 @@ const RestaurantShop = () => {
     try {
       const createOrEditOrder = async () => {
         if (location.pathname.includes("add")) {
-          return await editARestaurantOrder(table, {
+          return await editARestaurantOrder(menuId, {
             ...orderItem,
+            table,
             posPayment: true,
           });
         }

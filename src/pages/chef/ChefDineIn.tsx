@@ -19,19 +19,14 @@ import InfinityScroll from "../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../components/DashboardItemSkeletonLoader";
 import { Popover, Transition, RadioGroup } from "@headlessui/react";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
-import { formatRemoteAmountKobo } from "../../utils/formatMethods";
+import { formatRemoteAmountKobo, toTitleCase } from "../../utils/formatMethods";
 import { IoSearchSharp } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 const statusOptions = [
-  "declined",
-  "void",
-  "gift",
-  "completed",
   "pending",
   "kitchen",
-  "cooking",
-  "ready",
+  "completed",
 ];
 
 const ChefDineIn = () => {
@@ -116,7 +111,7 @@ const ChefDineIn = () => {
             const restoreStatus =
               isArchived && menu?.prevStatus ? menu?.prevStatus : menu.status;
 
-            if (item === "confirm") {
+            if (item === "pending") {
               return {
                 ...menu,
                 salesType: "pending",
@@ -247,6 +242,33 @@ const ChefDineIn = () => {
         tableOrderMap["All orders"] += 1;
         tableOrderMap[currentTable] += 1;
 
+        item.order = item.order.map(obj => ({
+          ...obj,
+          parentPaid: (item?.paid && !item?.posPayment) ?? null,
+          parentId: item?.id ?? null,
+          parentStatus: item?.status ?? null
+        }));
+        
+        const orderArray = item?.children?.length
+          ? [
+              ...item.order,
+              ...item.children.reduce(
+                (acc, curr) => [
+                  ...acc,
+                  ...(curr?.order?.map(obj => ({
+                    ...obj,
+                    parentPaid: (curr?.paid && !curr?.posPayment) ?? null,
+                    parentId: curr?.id ?? null,
+                    parentStatus: curr?.status ?? null
+                  })) || [])
+                ],
+                []
+              )
+            ]
+          : item.order;        
+
+        item.order = orderArray
+
         const count = item?.order.reduce(
           (num, elem) =>
             elem.salesType !== "sales" &&
@@ -257,12 +279,22 @@ const ChefDineIn = () => {
           item?.order.length
         );
 
-        if (item?.paid === true || count === item?.order.length) {
-          item.approvalStatus = "Confirmed";
-        } else if (count < item?.order.length && count > 0) {
-          item.approvalStatus = "Unresolved";
-        } else if (count === 0) {
-          item.approvalStatus = "Pending";
+        if(item?.children?.length){
+          if (count === item?.order.length) {
+            item.approvalStatus = "Confirmed";
+          } else if (count < item?.order.length && count > 0) {
+            item.approvalStatus = "Unresolved";
+          } else if (count === 0) {
+            item.approvalStatus = "Pending";
+          }
+        }else{
+          if (item?.paid === true || count === item?.order.length) {
+            item.approvalStatus = "Confirmed";
+          } else if (count < item?.order.length && count > 0) {
+            item.approvalStatus = "Unresolved";
+          } else if (count === 0) {
+            item.approvalStatus = "Pending";
+          }
         }
       });
 
@@ -801,7 +833,7 @@ const ChefDineIn = () => {
                                                                     as="p"
                                                                     className={`text-xs lg:text-sm secondary_gray_color text-black`}
                                                                   >
-                                                                    {item}
+                                                                    {toTitleCase(item)}
                                                                   </RadioGroup.Label>
                                                                 </div>
                                                               </>
@@ -822,7 +854,7 @@ const ChefDineIn = () => {
                                 </thead>
                                 {/* Table body */}
                                 <tbody className="divide-y divide-gray-200">
-                                  {searchFiltered?.map(
+                                  {searchFiltered?.filter(item => !item.parentOrder).map(
                                     (transaction: any, i: number) => (
                                       <tr key={transaction.id + i}>
                                         <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
@@ -972,34 +1004,19 @@ const ChefDineIn = () => {
                                             : "Online"}
                                         </td>
                                         <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
-                                          {transaction?.restaurant &&
-                                          transaction?.order[0] &&
-                                          transaction?.status === "archived" ? (
-                                            <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">
-                                              Void
-                                            </p>
-                                          ) : transaction?.restaurant &&
-                                            transaction?.status ===
-                                              "declined" ? (
-                                            <p className="w-fit text-xs text-medium text-[#C10606] border border-solid border-[#C10606] bg-[#E9A9A9] px-3 py-1 text-center rounded-3xl">
-                                              Declined
-                                            </p>
-                                          ) : (transaction?.restaurant &&
-                                              transaction?.gift === true) ||
-                                            transaction?.order[0]?.salesType ===
-                                              "gift" ? (
-                                            <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">
-                                              Gift
+                                          {transaction?.status === "pending" ? (
+                                            <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
+                                              Pending
                                             </p>
                                           ) : transaction?.restaurant &&
                                             transaction?.status ===
                                               "completed" ? (
-                                            <p className="w-fit text-xs text-medium text-[#ffffff] primary_bg_color px-3 py-1 text-center rounded-3xl">
+                                            <p className="w-fit text-xs text-medium text-[#ffffff] border border-solid border_credit_color primary_bg_color px-3 py-1 text-center rounded-3xl">
                                               Completed
                                             </p>
                                           ) : (
                                             <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
-                                              {transaction?.status}
+                                              Kitchen
                                             </p>
                                           )}
                                         </td>
@@ -1014,77 +1031,6 @@ const ChefDineIn = () => {
                       </div>
                     </InfinityScroll>
                   </div>
-                </div>
-
-                <div className="hidden">
-                  {/* <div className="w-full h-full">
-                    <div className="lg:w-full bg-white rounded-3xl py-8">
-                      {renderTableHeader()}
-                      <InfinityScroll
-                        data={restaurantOrders}
-                        
-                        hasMore={hasMore}
-                        getMore={getRestaurantOrders}
-                      >
-                        <div>
-                          {restaurantOrders && restaurantOrders?.length > 0 ? (
-                            restaurantOrders?.map((order: any, i: number) => (
-                              <div key={i}>
-                                <RestaurantOrderItem
-                                  key={i}
-                                  id={order?.id}
-                                  cartMenu={order.cartMenu}
-                                  orders={order.order}
-                                  date={moment(order?.createdAt).format("ll")}
-                                  time={moment(order?.createdAt).format("LT")}
-                                  showCustomer={
-                                    selectedCustomerOrders === order?.id
-                                  }
-                                  customerName={`${order?.name}`}
-                                  customerEmail={`${order?.email}`}
-                                  checkoutCode={order?.checkoutCode}
-                                  completed={order?.status}
-                                  paid={order?.paid}
-                                  gift={order?.gift}
-                                  onClickIconOpen={() =>
-                                    setSelectedCustomerOrders(order.id)
-                                  }
-                                  onClickIconClose={() =>
-                                    setSelectedCustomerOrders("")
-                                  }
-                                  paymentLoading={paymentLoading === order?.id}
-                                  markAsPaid={() => {
-                                    setPaymentLoading(order?.id);
-                                    SERVER.patch(
-                                      `${RESTAURANT_ORDER_URL}/paid/${order?.id}`
-                                    )
-                                      .then(({ data }) => {
-                                        dispatch(getRestaurantDineInOrders());
-                                      })
-                                      .finally(() => setPaymentLoading(null));
-                                  }}
-                                  markAsGift={() => {
-                                    setPaymentLoading(order?.id);
-                                    SERVER.patch(
-                                      `${RESTAURANT_ORDER_URL}/gift/${order?.id}`
-                                    )
-                                      .then(({ data }) => {
-                                        dispatch(getRestaurantDineInOrders());
-                                      })
-                                      .finally(() => setPaymentLoading(null));
-                                  }}
-                                  event={order?.event}
-                                  restaurantOrder={true}
-                                />
-                              </div>
-                            ))
-                          ) : (
-                            <EmptyState title="No new order." />
-                          )}
-                        </div>
-                      </InfinityScroll>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -1161,6 +1107,8 @@ const ChefDineIn = () => {
                                 : "text-[#000000] bg-[#ffffff] border-[#D8D8D8]"
                             }
                             `}
+
+                            disabled={menu.parentPaid || (approvalOrder.approvalStatus === "Confirmed" && menu.parentStatus === "completed")}
                           >
                             {menu?.salesType === "sales" &&
                             menu?.status !== "archived"
@@ -1172,8 +1120,8 @@ const ChefDineIn = () => {
                               : menu?.status === "archived" ||
                                 approvalOrder.status === "archived"
                               ? "Void"
-                              : "Confirm"}{" "}
-                            <IoIosArrowDown size={10} />
+                              : "Pending"}{" "}
+                            <IoIosArrowDown size={10} className={(menu.parentPaid || (approvalOrder.approvalStatus === "Confirmed" && menu.parentStatus === "completed")) && 'hidden'} />
                           </Popover.Button>
 
                           <Transition
@@ -1192,7 +1140,7 @@ const ChefDineIn = () => {
                                 // onChange={setSelectedStatus}
                                 >
                                   <div className="space-y-3">
-                                    {["confirm", "sales", "gift", "void"]?.map(
+                                    {["pending", "sales", "gift", "void"]?.map(
                                       (item: any, i) => (
                                         <RadioGroup.Option
                                           key={i + 82}
@@ -1211,7 +1159,7 @@ const ChefDineIn = () => {
                                                   ((!menu?.salesType ||
                                                     menu?.salesType ===
                                                       "pending") &&
-                                                    item === "confirm" &&
+                                                    item === "pending" &&
                                                     menu?.status !==
                                                       "archived") ||
                                                   (menu?.salesType ===
@@ -1236,7 +1184,7 @@ const ChefDineIn = () => {
                                                   as="p"
                                                   className={`text-xs lg:text-sm secondary_gray_color text-black capitalize`}
                                                 >
-                                                  {item}
+                                                  {toTitleCase(item)}
                                                 </RadioGroup.Label>
                                               </div>
                                             </>

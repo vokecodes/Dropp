@@ -178,70 +178,77 @@ const SuperWaiterDashboard = () => {
     const suffixes = {};
 
     table && superWaiter && sortedByDate &&
-      sortedByDate?.length > 0 && sortedByDate.forEach(order => {
+      sortedByDate?.length > 0 && sortedByDate.filter(item => !item.parentOrder).forEach(order => {
         const tableNumber = order?.table?.table;
-        const orderArray = order?.order;
+        const orderArray = order?.children?.length
+          ? [...order.order, ...order.children.reduce((acc, curr) => [...acc, ...curr.order], [])]
+          : order.order;
+        
         const orderStatus = order?.status;
+        const newOrder = {
+          ...order,
+          order: orderArray
+        }
 
         if (!tableNumber || !superWaiter.subTables.includes(order?.table._id)) {
           return;
         }
 
         if (orderStatus === "pending") {
-          tableOrderMap[tableNumber]["New order"]?.push(order);
+          tableOrderMap[tableNumber]["New order"]?.push(newOrder);
         }
 
         if (orderStatus === "kitchen") {
-          order?.order?.forEach((o: any) => {
+          newOrder?.order?.forEach((o: any) => {
             if (o?.status === "pending") {
               if (
                 tableOrderMap[tableNumber]["Kitchen"].some(
-                  (item) => item.id === order.id
+                  (item) => item.id === newOrder.id
                 )
               ) {
                 return;
               } else {
-                tableOrderMap[tableNumber]["Kitchen"]?.push(order);
+                tableOrderMap[tableNumber]["Kitchen"]?.push(newOrder);
               }
             }
 
             if (o?.status === "ready" || o?.status === "sent") {
               if (
                 tableOrderMap[tableNumber]["Ready"].some(
-                  (item) => item.id === order.id
+                  (item) => item.id === newOrder.id
                 )
               ) {
                 return;
               } else {
-                tableOrderMap[tableNumber]["Ready"]?.push(order);
+                tableOrderMap[tableNumber]["Ready"]?.push(newOrder);
               }
             }
 
             if (o?.status === "cooking") {
               if (
                 tableOrderMap[tableNumber]["Cooking"].some(
-                  (item) => item.id === order.id
+                  (item) => item.id === newOrder.id
                 )
               ) {
                 return;
               } else {
-                tableOrderMap[tableNumber]["Cooking"]?.push(order);
+                tableOrderMap[tableNumber]["Cooking"]?.push(newOrder);
               }
             }
 
-            if (!suffixes[order?.id]) {
-              suffixes[order?.id] = 0;
+            if (!suffixes[newOrder?.id]) {
+              suffixes[newOrder?.id] = 0;
             }
       
-            const suffix = String.fromCharCode(97 + suffixes[order?.id]);
-            o.displayId = `${order?.id}-${suffix}`;
+            const suffix = String.fromCharCode(97 + suffixes[newOrder?.id]);
+            o.displayId = `${newOrder?.id}-${suffix}`;
       
-            suffixes[order?.id] += 1;
+            suffixes[newOrder?.id] += 1;
           });
         }
 
         if (orderStatus === "completed") {
-          tableOrderMap[tableNumber]["Completed"]?.push(order);
+          tableOrderMap[tableNumber]["Completed"]?.push(newOrder);
         }
       });
 
