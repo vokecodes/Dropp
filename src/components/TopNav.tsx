@@ -546,7 +546,7 @@ const TopNav = ({ page, event }: any) => {
   return (
     <Popover className="sticky top-0 w-full bg-white z-50">
       <div className="lg:mx-5 px-4 sm:px-6">
-        <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
+        <div className="flex items-center justify-between py-6 md:justify-between md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             {person?.userType === USER_TYPE.CHEF ||
             person?.userType === USER_TYPE.COMPANY ? (
@@ -629,28 +629,11 @@ const TopNav = ({ page, event }: any) => {
       >
         <Popover.Panel
           focus
-          className="absolute z-10 top-5 lg:-top-5 transform transition w-full lg:w-96 lg:right-10"
+          className="fixed z-10 top-2 h-svh lg:-top-5 transform transition w-full lg:w-96 lg:right-10"
         >
-          <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-            {/* <div className="px-5 pt-5 pb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <img
-                      className="h-8 w-auto"
-                      src="/images/logo.svg"
-                      alt="Homemade"
-                    />
-                  </div>
-                  <div className="-mr-2">
-                    <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                      <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                    </Popover.Button>
-                  </div>
-                </div>
-              </div> */}
+          <div className="w-11/12 lg:w-auto mx-auto h-svh lg:h-auto divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             {user ? (
-              <div>
+              <div className="w-full h-full">
                 <div className="flex flex-col gallery_bg py-3 rounded-t-xl">
                   <div className="flex self-end mr-5">
                     <Popover.Button className="inline-flex items-center justify-center rounded-md p-2 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -670,7 +653,7 @@ const TopNav = ({ page, event }: any) => {
                         <CiUser size={52} color="#fff" />
                       )}
                       <div className="text-center text-white">
-                        <p className="font_medium text-3xl">
+                        <p className="font_medium text-xl lg:text-3xl">
                           {person?.firstName} {person?.lastName}
                         </p>
                         <p className="font_regular">{person?.email}</p>

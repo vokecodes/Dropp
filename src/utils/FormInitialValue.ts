@@ -91,13 +91,21 @@ export const DineInNewMenuValues = {
   images: "",
 };
 
+export const cashierValues = {
+  employeeName: "",
+  employeeID: "",
+  password: "",
+  whatsappNumber: "",
+  isSubAdmin: false,
+};
+
 export const WaiterTableValues = {
   section: "",
   employeeAssigned: "",
   employeeID: "",
   table: "",
   password: "",
-  whatasappNumber: "",
+  whatsappNumber: "",
 };
 
 export const SuperWaiterTableValues = {

@@ -130,12 +130,20 @@ export const DineInNewMenuInputsSchema = Yup.object().shape({
   note: Yup.string(),
 });
 
+export const CashierInputsSchema = Yup.object().shape({
+  isSubAdmin: Yup.boolean().optional(),
+  employeeName: Yup.string().required("Employee name is required."),
+  employeeID: Yup.string().required("Employee ID is required."),
+  whatsappNumber: Yup.string().optional(),
+  password: Yup.string().required("Password is required."),
+});
+
 export const WaiterTableInputsSchema = Yup.object().shape({
   section: Yup.string().required("Section is required."),
   employeeAssigned: Yup.string().required("Employee name is required."),
   employeeID: Yup.string().required("Employee ID is required."),
   table: Yup.string().required("Table is required."),
-  whatasappNumber: Yup.string().optional(),
+  whatsappNumber: Yup.string().optional(),
   password: Yup.string().required("Password is required."),
 });
 

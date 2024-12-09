@@ -26,10 +26,9 @@ const deliveryFormInputs = [
   { type: "text", placeholder: "Name", name: "name" },
   { type: "email", placeholder: "Email", name: "email" },
   { type: "text", placeholder: "WhatsApp No.", name: "phoneNumber" },
-  { type: "textarea", placeholder: "Notes", name: "notes" },
 ];
 
-const RestaurantCart = ({
+const QsrCart = ({
   cartMenu,
   handleCheckout,
   handlePayLaterCheckout,
@@ -38,25 +37,17 @@ const RestaurantCart = ({
   chef,
   handleIncrement,
   handleDecrement,
-  selectedDate,
-  setSelectedDate,
   cartView,
   setCartView,
   deliveryView,
   setDeliveryView,
-  reviewView,
   setReviewView,
-  errorLogin,
-  handleDelete,
   selectedMealQuantityReached,
   showMinimumQuantityReached,
   addMenuError,
-  setAddMenuError,
-  chefRecommendedMenu,
-  handleAddToBag,
   cartModal,
   setCartModal,
-  updateReceiptValues,
+  closeCartModal,
 }: any) => {
   const { user, auth } = useSelector(
     (state: any) => ({
@@ -204,200 +195,151 @@ const RestaurantCart = ({
     },
   });
 
-  const [showPayment, setShowPayment] = useState(false);
-
-  useEffect(() => {
-    if (cartMenu.length < 1) {
-      setCartModal(!cartModal);
-    }
-  }, [cartMenu]);
-
-  const handleUpdate = (medium: string) => {
-    
-    updateReceiptValues({
-      customerName: values?.name,
-      order: cartOrder,
-      totalAmount: medium === 'Online' ? totalAmount + processingFee : totalAmount,
-      cartMenu,
-      paidBy: medium,
-      processingFee: medium === 'Online' ? processingFee : 0
-    });
-  };
+//   useEffect(() => {
+//     if (cartMenu.length < 1) {
+//       setCartModal(false);
+//     }
+//   }, [cartMenu]);
 
   return (
-    <div className="box-border w-screen lg:w-full h-screen bg-neutral-100 lg:bg-white py-1 lg:py-6 lg:px-2 shadow scroller">
-      <div className="w-full lg:block flex justify-between items-center my-3 px-2 lg:px-1">
+    <div className="box-border w-full h-full bg-neutral-100 lg:bg-white py-1 lg:py-6 lg:px-2 shadow scroller flex flex-col items-stretch justify-start">
+      <div className="w-full flex justify-between items-center my-3 px-1">
         <h1 className="text-3xl font_regular font-semibold text-black">
           Your bag
         </h1>
         <div
-          className="lg:hidden rounded-full bg-neutral-300 flex items-center justify-center w-10 h-10 cursor-pointer"
-          onClick={() => setCartModal(!cartModal)}
+          className="flex items-center justify-center w-10 h-10 cursor-pointer"
+          onClick={closeCartModal}
         >
           <XMarkIcon className="h-6 w-6" />
         </div>
       </div>
 
-      <div className="h-full w-full">
+      <div className="grow w-full flex flex-col justify-start items-stretch">
+        <div className="w-full flex flex-row items-center justify-between py-3 bg-white px-2">
+            <p className="text-xl font-semibold font_regular">
+                {cartMenu?.length} Item{cartMenu?.length > 1 && "s"}
+            </p>
+
+            <p className="text-xl font-bold font_bold">
+                ₦{formatPrice(totalAmount)}
+            </p>
+        </div>
         {cartView && (
-          <>
-            <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2 px-2 lg:px-1">
-              {cartMenu &&
-                cartMenu?.length > 0 &&
-                cartMenu?.map((meal: any, index: number) => {
-                  return (
-                    <div key={index} className="w-full bg-white p-1">
-                      <div
-                        className="h-28 w-full flex flex-row justify-between gap-x-2"
-                        key={index}
-                      >
-                        <div className="w-1/3">
-                          <img
-                            src={meal.images[0]}
-                            alt="meal"
-                            className="h-full w-full rounded object-center object-cover"
-                          />
-                        </div>
-
-                        <div className="w-2/3 h-full flex flex-row items-center justify-between gap-x-2">
-                          {/* NAME & PRICE */}
-                          <div className="h-full w-1/2 text-start flex flex-col items-start justify-around">
-                            <p className="text-md input_text capitalize font-medium ">
-                              {truncateText(meal?.foodName, 25, 23)}
-                            </p>
-                            <p className="text-xl pt-1 font-bold">
-                              ₦
-                              {meal?.discount
-                                ? (meal.price -
-                                    (meal.price / 100) * meal.discount) *
-                                  meal.quantity
-                                : meal.price * meal.quantity}
-                            </p>
-                          </div>
-
-                          {/* BUTTON */}
-                          <div className="h-full w-1/2 flex items-center">
-                            <div className="mr-3 flex flex-row w-28 justify-between items-center gap-x-3 rounded-full solid_border h-10 p-3">
-                              <p
-                                className="primary_txt_color font-bold cursor-pointer"
-                                onClick={() =>
-                                  handleDecrement(meal, meal?.minimumQuantity)
-                                }
-                              >
-                                -
-                              </p>
-                              <p className="font-bold">{meal?.quantity}</p>
-                              <p
-                                className="primary_txt_color font-bold cursor-pointer"
-                                onClick={() => handleIncrement(meal)}
-                              >
-                                +
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {showMinimumQuantityReached &&
-                        selectedMealQuantityReached === meal && (
-                          <p className="mt-2 text-sm text-center text-red-600">
-                            Minimum quantity is {meal?.minimumQuantity}
-                          </p>
-                        )}
-                    </div>
-                  );
-                })}
-            </div>
-
-            <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2">
-              {cartMenu?.length > 0 && (
+          <div className="w-full h-full grow flex flex-col items-stretch justify-between">
+            {cartMenu.length > 0 ? (
                 <>
-                  <div className="w-full flex flex-row items-center justify-between py-3 bg-white px-2">
-                    <p className="text-xl font-semibold font_regular">
-                      {cartMenu?.length} Item{cartMenu?.length > 1 && "s"}
-                    </p>
-
-                    <p className="text-xl font-bold font_bold">
-                      ₦{formatPrice(totalAmount)}
-                    </p>
-                  </div>
-
-                  <div className="py-6 w-full px-2">
-                    {errorLogin && (
-                      <p className="text-sm text-center text-red-600">
-                        {errorLogin}
-                      </p>
-                    )}
-
-                    {addMenuError && (
-                      <p className="mt-2 text-sm text-center text-red-600">
-                        {addMenuError}
-                      </p>
-                    )}
-
-                    <Button
-                      title="Checkout"
-                      extraClasses="w-full mb-2"
-                      onClick={() => {
-                        setCartView(false);
-                        setDeliveryView(true);
-                      }}
-                    />
-                  </div>
-
-                  {chefRecommendedMenu && chefRecommendedMenu?.length > 0 && (
-                    <div className="w-full my-4 px-2 lg:px-1">
-                      <p className="text-lg font_medium text-[#787878]">
-                        You may also like
-                      </p>
-                      <div className="flex items-start justify-start gap-y-1 gap-x-2 overflow-x-scroll h-fit w-full py-3">
-                        {chefRecommendedMenu
-                          ?.filter(
-                            (item: any) =>
-                              !cartMenu?.find((m: any) => m._id === item._id)
-                          )
-                          .map((recommendedMenu: any) => (
+                    <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2 px-2 lg:px-1">
+                    {cartMenu &&
+                        cartMenu?.length > 0 &&
+                        cartMenu?.map((meal: any, index: number) => {
+                        return (
+                            <div key={index} className="w-full bg-white p-1">
                             <div
-                              key={recommendedMenu._id}
-                              className="w-64 h-36 shrink-0"
+                                className="h-16 w-full flex flex-row justify-between gap-x-2"
+                                key={index}
                             >
-                              <RestaurantShopCartMenuCard
-                                chefName={chef?.business?.businessName}
-                                menu={recommendedMenu}
-                                onClickAddToBag={() =>
-                                  handleAddToBag(recommendedMenu)
-                                }
-                                inCart={cartMenu?.find(
-                                  (m: any) => m._id === recommendedMenu._id
-                                )}
-                                cartMenu={cartMenu}
-                                handleIncrement={handleIncrement}
-                                handleDecrement={handleDecrement}
-                                selectedMealQuantityReached={
-                                  selectedMealQuantityReached
-                                }
-                                showMinimumQuantityReached={
-                                  showMinimumQuantityReached
-                                }
-                                addMenuError={addMenuError}
-                              />
+                                <div className="w-1/5">
+                                <img
+                                    src={meal.images[0]}
+                                    alt="meal"
+                                    className="h-full w-full rounded object-center object-cover"
+                                />
+                                </div>
+
+                                <div className="w-4/5 h-full flex flex-row items-center justify-between gap-x-2">
+                                {/* NAME & PRICE */}
+                                <div className="h-full w-1/2 text-start flex flex-col items-start justify-around">
+                                    <p className="text-xs lg:text-sm input_text capitalize font-medium ">
+                                    {truncateText(meal?.foodName, 25, 23)}
+                                    </p>
+                                    <p className="text-sm lg:text-base pt-1 font-bold">
+                                    ₦
+                                    {meal?.discount
+                                        ? (meal.price -
+                                            (meal.price / 100) * meal.discount) *
+                                        meal.quantity
+                                        : meal.price * meal.quantity}
+                                    </p>
+                                </div>
+
+                                {/* BUTTON */}
+                                <div className="h-full w-1/2 flex items-center justify-end">
+                                    <div className="mr-3 flex flex-row w-28 justify-between items-center gap-x-3 rounded-full solid_border h-10 p-3">
+                                    <p
+                                        className="primary_txt_color font-bold cursor-pointer"
+                                        onClick={() =>
+                                        handleDecrement(meal, meal?.minimumQuantity)
+                                        }
+                                    >
+                                        -
+                                    </p>
+                                    <p className="font-bold">{meal?.quantity}</p>
+                                    <p
+                                        className="primary_txt_color font-bold cursor-pointer"
+                                        onClick={() => handleIncrement(meal)}
+                                    >
+                                        +
+                                    </p>
+                                    </div>
+                                </div>
+                                </div>
                             </div>
-                          ))}
-                      </div>
+
+                            {showMinimumQuantityReached &&
+                                selectedMealQuantityReached === meal && (
+                                <p className="mt-2 text-sm text-center text-red-600">
+                                    Minimum quantity is {meal?.minimumQuantity}
+                                </p>
+                                )}
+                            </div>
+                        );
+                        })}
                     </div>
-                  )}
+
+                    <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2">
+                    {cartMenu?.length > 0 && (
+                        <>
+                        <div className="py-6 w-full px-2">
+                            {addMenuError && (
+                            <p className="mt-2 text-sm text-center text-red-600">
+                                {addMenuError}
+                            </p>
+                            )}
+
+                            <Button
+                            title="Checkout"
+                            extraClasses="w-full mb-2"
+                            onClick={() => {
+                                setCartView(false);
+                                setDeliveryView(true);
+                            }}
+                            />
+
+                            <OutlineButton
+                                title="Keep buying"
+                                extraClasses="w-full p-3 px-8 py-2"
+                                onClick={closeCartModal}
+                            />
+                        </div>
+                        </>
+                    )}
+                    </div>
                 </>
-              )}
-            </div>
-          </>
+            ): (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                    <p className="text-xl">Nothing to see here...</p>
+                </div>
+            )}
+          </div>
         )}
 
         {deliveryView && (
           <div className="w-full h-fit mx-auto px-2 lg:px-1">
             <div>
-              <h5 className="font_medium font-semibold">Enter your details</h5>
+              <h5 className="font_medium font-semibold">Customer details</h5>
               <p className="font_regular text-sm">
-                Track your order in realtime with your email & WhatsApp number.
+                Enter the customer details below.
               </p>
             </div>
             <div className="">
@@ -425,8 +367,6 @@ const RestaurantCart = ({
                   extraClasses="w-full p-3 rounded-full"
                   onClick={() => {
                     if (values.email && values.phoneNumber) {
-                      
-
                       handleSubmit();
                     } else {
                       handleClickOpen();
@@ -446,8 +386,6 @@ const RestaurantCart = ({
                       restaurant: chef?.profile?._id,
                       cartMenu,
                     });
-                    
-                    handleUpdate('POS')
                   }}
                 />
 
@@ -511,8 +449,6 @@ const RestaurantCart = ({
                 title="Proceed"
                 extraClasses="w-full p-3 rounded-full mt-3"
                 onClick={() => {
-                  handleUpdate('Online')
-                  
                   closePayNowModal();
                   
                   handleCheckout({
@@ -539,4 +475,4 @@ const RestaurantCart = ({
   );
 };
 
-export default RestaurantCart;
+export default QsrCart;

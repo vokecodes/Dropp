@@ -8,7 +8,7 @@ import { AUTH_DATA } from "../../../reducers/type";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL, CHEF_LOGIN_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
-import { SUB_CHEF_USER } from "../../../config/UserType";
+import { QUICK_SERVICE_USER, SUB_CHEF_USER } from "../../../config/UserType";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -34,6 +34,8 @@ const LoginPage = () => {
 
         if (user?.userType === SUB_CHEF_USER) {
           navigate("/sub-chef");
+        } else if (user?.chefType === QUICK_SERVICE_USER) {
+          navigate("/qsr");
         } else {
           navigate(`/${user?.userType}`);
         }

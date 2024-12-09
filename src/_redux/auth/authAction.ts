@@ -22,7 +22,7 @@ import { logoutCard } from "../card/cardSLice";
 import { logoutSubscriptionMenu } from "../subscriptionMenu/subscriptionMenuSlice";
 import { logoutSubscription } from "../subscription/subscriptionSlice";
 import { logoutWaiter } from "../waiter/waiterSlice";
-import { SUB_CHEF_USER } from "../../config/UserType";
+import { QUICK_SERVICE_USER, SUB_CHEF_USER } from "../../config/UserType";
 import { logoutDiningMenu } from "../dinningMenu/dinningMenuSlice";
 
 export const registerLoginUserAccount =
@@ -57,6 +57,8 @@ export const registerLoginUserAccount =
             } else {
               if (user?.userType === SUB_CHEF_USER) {
                 navigate("/sub-chef");
+              } else if (user?.chefType === QUICK_SERVICE_USER) {
+                navigate("/qsr");
               } else {
                 navigate(`/${user?.userType}`);
               }

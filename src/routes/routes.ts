@@ -126,6 +126,23 @@ export const CHEF_ROUTES = {
   linkChefReports: "/chef/reports",
 };
 
+export const QSR_ROUTES = {
+  qsr: "/qsr/*",
+  linkQsr: "/qsr",
+  qsrOrders: "orders",
+  linkQsrOrders: "/qsr/orders",
+  qsrMenu: "menu",
+  linkQsrMenu: "/qsr/menu",
+  qsrCashier: "cashier-management",
+  linkQsrCashier: "/qsr/cashier-management",
+  qsrAudit: "audit",
+  linkQsrAudit: "/qsr/audit",
+  qsrSettings: "settings",
+  linkQsrSettings: "/qsr/settings",
+  qsrReports: "reports",
+  linkQsrReports: "/qsr/reports",
+};
+
 export const SUB_CHEF_ROUTES = {
   subChef: "/sub-chef/*",
   linkSubChef: "/sub-chef",

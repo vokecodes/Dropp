@@ -1,13 +1,11 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   BrowserRouter,
 } from "react-router-dom";
 import { connect, shallowEqual, useSelector } from "react-redux";
 import Home from "../pages/dropp-main/Home";
-import Dashboard from "../pages/dropp-main/Dashboard";
 import AuthRoutes from "./authRoutes";
 import {
   ADMIN_ROUTES,
@@ -16,6 +14,7 @@ import {
   COMPANY_ROUTES,
   CUSTOMER_ROUTES,
   HOME_ROUTES,
+  QSR_ROUTES,
   SUB_CHEF_ROUTES,
   WAITER_ROUTES,
 } from "./routes";
@@ -39,9 +38,8 @@ import CompanyRoutes from "../pages/company/Routes";
 import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";
 import CustomerEventSignUp from "../pages/events/SignUp";
-import DashRoutes from "../pages/dashboard/Routes";
 import AdminRoutes from "../pages/dashboard/Routes";
-import IdleTimerLayout from "../utils/idleTimerLayout";
+import QsrRoutes from "../pages/qsr/Routes";
 
 const AppRoutes = () => {
   const { user } = useSelector(
@@ -91,7 +89,13 @@ const AppRoutes = () => {
           {user?.user ? (
             <>
               {user?.user?.userType === CHEF_USER ? (
-                <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
+                <>
+                  {user?.user?.chefType === 'quick_service' ? (
+                    <Route path={QSR_ROUTES.qsr} element={<QsrRoutes />} />
+                  ) : (
+                    <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
+                  )}
+                </>
               ) : user?.user?.userType === SUB_CHEF_USER ? (
                 <Route
                   path={SUB_CHEF_ROUTES.subChef}
