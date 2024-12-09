@@ -9,9 +9,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import PageTitle from "../../components/PageTitle";
 import { useAppDispatch } from "../../redux/hooks";
-import {
-  getRestaurantSubChefDashboardAccount,
-} from "../../_redux/user/userAction";
+import { getRestaurantSubChefDashboardAccount } from "../../_redux/user/userAction";
 import { formatRemoteAmountKobo } from "../../utils/formatMethods";
 import {
   getSubChefOrdersPage,
@@ -25,6 +23,7 @@ import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
 import { getSubChefRestaurantSections } from "../../_redux/section/sectionCrud";
 import InfinityScroll from "../../components/InfinityScroll";
+import EmptyState from "../../components/EmptyState";
 
 const PAYMENT_OPTIONS = ["All", "Online", "POS"];
 
@@ -67,22 +66,22 @@ const SalesReports = () => {
     shallowEqual
   );
 
-
-  const [section, setSection] = useState([])
+  const [section, setSection] = useState([]);
 
   const fetchSections = async () => {
-    await getSubChefRestaurantSections().then(({ data }) => {
+    await getSubChefRestaurantSections()
+      .then(({ data }) => {
         setSection(data.data);
-    }).catch((err) => {
+      })
+      .catch((err) => {
         const error = err?.response?.data;
         console.log(error);
-      });;
+      });
   };
-
 
   useEffect(() => {
     dispatch(subChefGetTables());
-    fetchSections()
+    fetchSections();
   }, []);
 
   useEffect(() => {
@@ -152,7 +151,6 @@ const SalesReports = () => {
     },
   ];
 
-  
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -207,23 +205,23 @@ const SalesReports = () => {
   };
 
   const fetchOrders = async () => {
-    await getSubChefOrdersPage(ordersPage, startDate, endDate).then(({ data }) => {
-      if (page === 1) {
-        setOrdersTransactions(data.data);
-      } else {
-        setOrdersTransactions((prevTransactions: any) => [
-          ...prevTransactions,
-          ...data.data,
-        ]);
+    await getSubChefOrdersPage(ordersPage, startDate, endDate).then(
+      ({ data }) => {
+        if (page === 1) {
+          setOrdersTransactions(data.data);
+        } else {
+          setOrdersTransactions((prevTransactions: any) => [
+            ...prevTransactions,
+            ...data.data,
+          ]);
+        }
+        setOrdersPage(ordersPage + 1);
+        setOrdersHasMore(
+          data.pagination.currentPage !== data.pagination.totalPages
+        );
       }
-      setOrdersPage(ordersPage + 1);
-      setOrdersHasMore(
-        data.pagination.currentPage !== data.pagination.totalPages
-      );
-    });
+    );
   };
-  
-  
 
   // Reset page and data when filters change
   const resetFilters = () => {
@@ -235,7 +233,7 @@ const SalesReports = () => {
 
   useEffect(() => {
     dispatch(
-        getRestaurantSubChefDashboardAccount(
+      getRestaurantSubChefDashboardAccount(
         startDate,
         endDate,
         paymentType,
@@ -246,8 +244,6 @@ const SalesReports = () => {
     fetchRestaurantOrders();
     fetchOrders();
   }, [endDate, paymentType, filterSection, filterTable]);
-
-  
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -508,7 +504,8 @@ const SalesReports = () => {
       <ChefDashboardLayout>
         <div className="w-full px-6 py-4 bg-white" style={{}}>
           <PageTitle title={moment().format("MMMM Do, YYYY")} />
-          <div className="w-4/5 my-10 flex flex-wrap gap-3">
+          <EmptyState title="Page under maintenance. It will be up shortly!" />
+          {/* <div className="w-4/5 my-10 flex flex-wrap gap-3">
             <div className="w-1/5">
               <label className="text-sm font_medium text-black">
                 Start Date
@@ -739,8 +736,8 @@ const SalesReports = () => {
                 </ClickAwayListener>
               )}
             </div>
-          </div>
-          <div className="my-4 bg-[#FDEEF0] rounded-xl flex justify-between">
+          </div> */}
+          {/* <div className="my-4 bg-[#FDEEF0] rounded-xl flex justify-between">
             {dashboardLoading ? (
               <BannerSkeletonLoader />
             ) : (
@@ -781,8 +778,8 @@ const SalesReports = () => {
             <div>
               <img src="/images/net-sales.svg" alt="net-sales" />
             </div>
-          </div>
-          {dashboardLoading ? (
+          </div> */}
+          {/* {dashboardLoading ? (
             <div className="my-4 grid grid-cols-2 gap-3">
               {[...Array(6)]?.map((_, i) => (
                 <DashboardItemSkeletonLoader key={i} />
@@ -824,8 +821,8 @@ const SalesReports = () => {
                 </div>
               ))}
             </div>
-          )}
-          <div className="bg-white border border-[#E1E1E1] rounded-xl p-6">
+          )} */}
+          {/* <div className="bg-white border border-[#E1E1E1] rounded-xl p-6">
             <div className="flex justify-between">
               <div className="flex gap-3">
                 <div
@@ -838,16 +835,6 @@ const SalesReports = () => {
                 >
                   <p>Sales</p>
                 </div>
-                {/* <div
-                  className={`text-center font_medium py-2 w-36 h-10 rounded-full cursor-pointer ${
-                    selectedTable === "Online sales"
-                      ? "text-white primary_bg_color"
-                      : "text-black bg-[#EDECEC]"
-                  } `}
-                  onClick={() => setSelectedTable("Online sales")}
-                >
-                  <p>Online sales</p>
-                </div> */}
                 <div
                   className={`text-center font_medium py-2 w-28 h-10 rounded-full cursor-pointer ${
                     selectedTable === "Categories"
@@ -958,7 +945,6 @@ const SalesReports = () => {
                   data={transactions}
                   getMore={fetchRestaurantOrders}
                   hasMore={hasMore}
-                  
                 >
                   <div
                     ref={tableContainerRef}
@@ -967,7 +953,6 @@ const SalesReports = () => {
                     <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                       <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
-                          {/* Table headers */}
                           <thead>
                             <tr>
                               <th
@@ -1563,7 +1548,7 @@ const SalesReports = () => {
                               </th>
                             </tr>
                           </thead>
-                          {/* Table body */}
+
                           <tbody className="divide-y divide-gray-200">
                             {filteredOrders?.map(
                               (transaction: any, i: number) => (
@@ -1699,7 +1684,6 @@ const SalesReports = () => {
                   data={ordersTransactions}
                   getMore={fetchOrders}
                   hasMore={ordersHasMore}
-                  
                 >
                   <div
                     ref={tableContainerRef}
@@ -1708,7 +1692,6 @@ const SalesReports = () => {
                     <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                       <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-300">
-                          {/* Table headers */}
                           <thead>
                             <tr>
                               <th
@@ -1773,7 +1756,7 @@ const SalesReports = () => {
                               </th>
                             </tr>
                           </thead>
-                          {/* Table body */}
+
                           <tbody className="divide-y divide-gray-200">
                             {ordersTransactions?.map(
                               (transaction: any, i: number) => (
@@ -1869,92 +1852,8 @@ const SalesReports = () => {
                   </div>
                 </InfinityScroll>
               )}
-              {/* {selectedTable === "Categories" && (
-                        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                            <table className="min-w-full divide-y divide-gray-300">
-                              <thead>
-                                <tr>
-                                  <th
-                                    scope="col"
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#7E7E7E] sm:pl-0"
-                                  >
-                                    ITEM
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E]"
-                                  >
-                                    NUMBER
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E]"
-                                  >
-                                    PERCENTAGE
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E]"
-                                  >
-                                    AMOUNT
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-gray-200">
-                                {transactions.map((transaction, i) => (
-                                  <tr key={transaction.email}>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                      {transaction.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.title}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                      {transaction.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.title}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                      {transaction.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.title}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      )} */}
             </div>
-          </div>
+          </div> */}
         </div>
       </ChefDashboardLayout>
     </>
