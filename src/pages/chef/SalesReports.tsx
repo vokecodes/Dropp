@@ -29,7 +29,6 @@ import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
 import InfinityScroll from "../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../components/DashboardItemSkeletonLoader";
-import EmptyState from "../../components/EmptyState";
 
 const PAYMENT_OPTIONS = ["All", "Online", "POS"];
 
@@ -415,9 +414,7 @@ const SalesReports = () => {
       <ChefDashboardLayout>
         <div className="w-full p-2 lg:px-6 py-4 bg-white" style={{}}>
           <PageTitle title={moment().format("MMMM Do, YYYY")} />
-          <EmptyState title="Page under maintenance. It will be up shortly!" />
-
-          {/* <div className="w-full lg:w-4/5 my-10 flex flex-col lg:flex-row flex-wrap items-center gap-3">
+          <div className="w-full lg:w-4/5 my-10 flex flex-col lg:flex-row flex-wrap items-center gap-3">
             <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">
                 Start Date
@@ -452,7 +449,8 @@ const SalesReports = () => {
                 Payment Type
               </label>
               <div className="mt-2 lg:mt-0">
-                <div className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                <div
+                  className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                   onClick={() => {
                     setOpenPaymentOptions(!openPaymentOptions);
                   }}
@@ -626,38 +624,42 @@ const SalesReports = () => {
                       </p>
                     </div>
                     {table?.length > 0 &&
-                      table?.filter(item => item.table).map((s: any, i: number) => (
-                        <div
-                          className="flex items-center cursor-pointer mb-2"
-                          key={i}
-                          onClick={() => {
-                            resetFilters();
-                            setSelectedFilterTable(s);
-                            setFilterTable(s._id);
-                            setOpenTableOptions(false);
-                          }}
-                        >
+                      table
+                        ?.filter((item) => item.table)
+                        .map((s: any, i: number) => (
                           <div
-                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                              selectedFilterTable?._id === s._id
-                                ? "primary_bg_color"
-                                : "bg_gray_color"
-                            }`}
-                          />
-                          <p
-                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                            className="flex items-center cursor-pointer mb-2"
+                            key={i}
+                            onClick={() => {
+                              resetFilters();
+                              setSelectedFilterTable(s);
+                              setFilterTable(s._id);
+                              setOpenTableOptions(false);
+                            }}
                           >
-                            {s.table}
-                          </p>
-                        </div>
-                      ))}
+                            <div
+                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                selectedFilterTable?._id === s._id
+                                  ? "primary_bg_color"
+                                  : "bg_gray_color"
+                              }`}
+                            />
+                            <p
+                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                            >
+                              {s.table}
+                            </p>
+                          </div>
+                        ))}
                   </div>
                 </ClickAwayListener>
               )}
             </div>
-            
+
             <div className="w-full lg:w-1/5">
-              <label className="text-sm font_medium text-black">Breakdown</label>
+              <label className="text-sm font_medium text-black">
+                Breakdown
+              </label>
               <div
                 className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                 onClick={() => setOpenBreakdownOptions(!openBreakdownOptions)}
@@ -672,7 +674,9 @@ const SalesReports = () => {
                 )}
               </div>
               {openBreakdownOptions && (
-                <ClickAwayListener onClickAway={() => handleClickAway("breakdownOption")}>
+                <ClickAwayListener
+                  onClickAway={() => handleClickAway("breakdownOption")}
+                >
                   <div
                     className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                   >
@@ -705,25 +709,23 @@ const SalesReports = () => {
                 </ClickAwayListener>
               )}
             </div>
-          </div> */}
-          {/* <div className="my-4 bg-[#FDEEF0] rounded-xl flex flex-col lg:flex-row justify-start lg:justify-between items-center">
+          </div>
+          <div className="my-4 bg-[#FDEEF0] rounded-xl flex flex-col lg:flex-row justify-start lg:justify-between items-center">
             {dashboardLoading ? (
               <BannerSkeletonLoader />
             ) : (
               <div className="p-6">
                 <div className="flex gap-3 items-center">
                   <p className="text-base text-black font_medium">
-                    {
-                      breakdownOption === ORDER_OPTIONS[0] 
-                      ? 'Net Sales' 
-                      : breakdownOption === ORDER_OPTIONS[1] 
-                      ? 'Net Declined Sales' 
-                      : breakdownOption === ORDER_OPTIONS[2] 
-                      ? 'Net Voided Sales' 
-                      : breakdownOption === ORDER_OPTIONS[3] 
-                      ? 'Net Gifted Sales' 
-                      : 'Net Sales'
-                    }  
+                    {breakdownOption === ORDER_OPTIONS[0]
+                      ? "Net Sales"
+                      : breakdownOption === ORDER_OPTIONS[1]
+                      ? "Net Declined Sales"
+                      : breakdownOption === ORDER_OPTIONS[2]
+                      ? "Net Voided Sales"
+                      : breakdownOption === ORDER_OPTIONS[3]
+                      ? "Net Gifted Sales"
+                      : "Net Sales"}
                   </p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -759,8 +761,8 @@ const SalesReports = () => {
             <div className="hidden lg:block">
               <img src="/images/net-sales.svg" alt="net-sales" />
             </div>
-          </div> */}
-          {/* {dashboardLoading ? (
+          </div>
+          {dashboardLoading ? (
             <div className="my-4 grid grid-cols-2 gap-3">
               {[...Array(6)]?.map((_, i) => (
                 <DashboardItemSkeletonLoader key={i} />
@@ -802,8 +804,8 @@ const SalesReports = () => {
                 </div>
               ))}
             </div>
-          )} */}
-          {/* <div className="w-full bg-white border border-[#E1E1E1] rounded-xl p-2 lg:p-6">
+          )}
+          <div className="w-full bg-white border border-[#E1E1E1] rounded-xl p-2 lg:p-6">
             <div className="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-center gap-y-3">
               <div className="flex gap-3">
                 <div
@@ -816,7 +818,7 @@ const SalesReports = () => {
                 >
                   <p>Sales</p>
                 </div>
-                
+
                 <div
                   className={`text-center font_medium py-2 w-28 h-10 rounded-full cursor-pointer ${
                     breakdownOption !== "Completed sales"
@@ -832,7 +834,9 @@ const SalesReports = () => {
               <div className="flex gap-3">
                 <div
                   className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
-                  onClick={() => { dineExportToCSV(transactions) }}
+                  onClick={() => {
+                    dineExportToCSV(transactions);
+                  }}
                 >
                   {isDownloading ? (
                     <svg
@@ -915,130 +919,101 @@ const SalesReports = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="w-full mt-4 flow-root overflow-hidden">
               <InfinityScroll
                 data={transactions}
                 getMore={fetchRestaurantOrders}
                 hasMore={hasMore}
               >
-                <div
-                  ref={tableContainerRef}
-                  className="-my-2 overflow-x-auto"
-                >
+                <div ref={tableContainerRef} className="-my-2 overflow-x-auto">
                   <div className="inline-block min-w-full py-2 align-middle">
                     <div className="overflow-x-auto">
-                    {dashboardLoading ? (
-                      <div className="my-4 grid grid-cols-2 gap-3">
-                        {[...Array(4)]?.map((_, i) => (
-                          <DashboardItemSkeletonLoader key={i} />
-                        ))}
-                      </div>
-                    ) : (
-                      <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
-                        <thead>
-                          <tr>
-                            <th
-                              scope="col"
-                              className="py-3.5 pl-4 pr-3 text-left text-sm font_medium text-black font-normal sm:pl-0 min-w-[100px]"
-                            >
-                              Ticket No.
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                            >
-                              Date
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                            >
-                              Time
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px] max-w-[250px]"
-                            >
-                              Name
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
-                            >
-                              Email
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                            >
-                              Phone No.
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                            >
-                              <Popover className="relative">
-                                {({ open }) => (
-                                  <>
-                                    <Popover.Button
-                                      className={`flex flex-row items-center space-between gap-x-2`}
-                                    >
-                                      <span className="text-nowrap">
-                                        Table
-                                      </span>
-                                      {open ? (
-                                        <BiSolidUpArrow />
-                                      ) : (
-                                        <BiSolidDownArrow />
-                                      )}
-                                    </Popover.Button>
+                      {dashboardLoading ? (
+                        <div className="my-4 grid grid-cols-2 gap-3">
+                          {[...Array(4)]?.map((_, i) => (
+                            <DashboardItemSkeletonLoader key={i} />
+                          ))}
+                        </div>
+                      ) : (
+                        <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
+                          {/* Table headers */}
+                          <thead>
+                            <tr>
+                              <th
+                                scope="col"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm font_medium text-black font-normal sm:pl-0 min-w-[100px]"
+                              >
+                                Ticket No.
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                              >
+                                Date
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                              >
+                                Time
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px] max-w-[250px]"
+                              >
+                                Name
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                              >
+                                Email
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                              >
+                                Phone No.
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                              >
+                                <Popover className="relative">
+                                  {({ open }) => (
+                                    <>
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-2`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Table
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
+                                      </Popover.Button>
 
-                                    <Transition
-                                      as={Fragment}
-                                      enter="transition ease-out duration-200"
-                                      enterFrom="opacity-0 translate-y-1"
-                                      enterTo="opacity-100 translate-y-0"
-                                      leave="transition ease-in duration-150"
-                                      leaveFrom="opacity-100 translate-y-0"
-                                      leaveTo="opacity-0 translate-y-1"
-                                    >
-                                      <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup
-                                            value={selectedTableItem}
-                                            onChange={setSelectedTableItem}
-                                          >
-                                            <div className="space-y-3">
-                                              <RadioGroup.Option
-                                                value={""}
-                                                className={
-                                                  "flex items-center cursor-pointer mb-2"
-                                                }
-                                              >
-                                                {({ active, checked }) => (
-                                                  <>
-                                                    <div
-                                                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                        checked
-                                                          ? "primary_bg_color"
-                                                          : "bg_gray_color"
-                                                      }`}
-                                                    />
-
-                                                    <RadioGroup.Label
-                                                      as="p"
-                                                      className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                    >
-                                                      All
-                                                    </RadioGroup.Label>
-                                                  </>
-                                                )}
-                                              </RadioGroup.Option>
-                                              {table?.filter(item => item.table).map((item: any) => (
+                                      <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-150"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1"
+                                      >
+                                        <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedTableItem}
+                                              onChange={setSelectedTableItem}
+                                            >
+                                              <div className="space-y-3">
                                                 <RadioGroup.Option
-                                                  key={item.table}
-                                                  value={item.table}
+                                                  value={""}
                                                   className={
                                                     "flex items-center cursor-pointer mb-2"
                                                   }
@@ -1053,519 +1028,569 @@ const SalesReports = () => {
                                                         }`}
                                                       />
 
-                                                      <div className="">
+                                                      <RadioGroup.Label
+                                                        as="p"
+                                                        className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                      >
+                                                        All
+                                                      </RadioGroup.Label>
+                                                    </>
+                                                  )}
+                                                </RadioGroup.Option>
+                                                {table
+                                                  ?.filter((item) => item.table)
+                                                  .map((item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item.table}
+                                                      value={item.table}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
+
+                                                          <div className="">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item.table}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  ))}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
+                                        </Popover.Panel>
+                                      </Transition>
+                                    </>
+                                  )}
+                                </Popover>
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                              >
+                                Food
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                              >
+                                Total Orders
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                              >
+                                Waiter
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                              >
+                                Amount
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                              >
+                                <Popover className="relative">
+                                  {({ open }) => (
+                                    <>
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-1`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Payment
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
+                                      </Popover.Button>
+
+                                      <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-150"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1"
+                                      >
+                                        <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedPayment}
+                                              onChange={setSelectedPayment}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
+                                                >
+                                                  {({ active, checked }) => (
+                                                    <>
+                                                      <div
+                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                          checked
+                                                            ? "primary_bg_color"
+                                                            : "bg_gray_color"
+                                                        }`}
+                                                      />
+
+                                                      <div className="text-sm">
                                                         <RadioGroup.Label
                                                           as="p"
                                                           className={`text-xs lg:text-sm secondary_gray_color text-black`}
                                                         >
-                                                          {item.table}
+                                                          All
                                                         </RadioGroup.Label>
                                                       </div>
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                              ))}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
-                                      </Popover.Panel>
-                                    </Transition>
-                                  </>
-                                )}
-                              </Popover>
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
-                            >
-                              Food
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                            >
-                              Total Orders
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                            >
-                              Waiter
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                            >
-                              Amount
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
-                            >
-                              <Popover className="relative">
-                                {({ open }) => (
-                                  <>
-                                    <Popover.Button
-                                      className={`flex flex-row items-center space-between gap-x-1`}
-                                    >
-                                      <span className="text-nowrap">
-                                        Payment
-                                      </span>
-                                      {open ? (
-                                        <BiSolidUpArrow />
-                                      ) : (
-                                        <BiSolidDownArrow />
-                                      )}
-                                    </Popover.Button>
+                                                {paymentOptions?.map(
+                                                  (item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item}
+                                                      value={item}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
 
-                                    <Transition
-                                      as={Fragment}
-                                      enter="transition ease-out duration-200"
-                                      enterFrom="opacity-0 translate-y-1"
-                                      enterTo="opacity-100 translate-y-0"
-                                      leave="transition ease-in duration-150"
-                                      leaveFrom="opacity-100 translate-y-0"
-                                      leaveTo="opacity-0 translate-y-1"
-                                    >
-                                      <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup
-                                            value={selectedPayment}
-                                            onChange={setSelectedPayment}
-                                          >
-                                            <div className="space-y-3">
-                                              <RadioGroup.Option
-                                                value={""}
-                                                className={
-                                                  "flex items-center cursor-pointer mb-2"
-                                                }
-                                              >
-                                                {({ active, checked }) => (
-                                                  <>
-                                                    <div
-                                                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                        checked
-                                                          ? "primary_bg_color"
-                                                          : "bg_gray_color"
-                                                      }`}
-                                                    />
-
-                                                    <div className="text-sm">
-                                                      <RadioGroup.Label
-                                                        as="p"
-                                                        className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                      >
-                                                        All
-                                                      </RadioGroup.Label>
-                                                    </div>
-                                                  </>
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  )
                                                 )}
-                                              </RadioGroup.Option>
-                                              {paymentOptions?.map(
-                                                (item: any) => (
-                                                  <RadioGroup.Option
-                                                    key={item}
-                                                    value={item}
-                                                    className={
-                                                      "flex items-center cursor-pointer mb-2"
-                                                    }
-                                                  >
-                                                    {({
-                                                      active,
-                                                      checked,
-                                                    }) => (
-                                                      <>
-                                                        <div
-                                                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                            checked
-                                                              ? "primary_bg_color"
-                                                              : "bg_gray_color"
-                                                          }`}
-                                                        />
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
+                                        </Popover.Panel>
+                                      </Transition>
+                                    </>
+                                  )}
+                                </Popover>
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                              >
+                                <Popover className="relative">
+                                  {({ open }) => (
+                                    <>
+                                      <Popover.Button
+                                        className={`flex flex-row items-center space-between gap-x-1`}
+                                      >
+                                        <span className="text-nowrap">
+                                          Platform
+                                        </span>
+                                        {open ? (
+                                          <BiSolidUpArrow />
+                                        ) : (
+                                          <BiSolidDownArrow />
+                                        )}
+                                      </Popover.Button>
 
-                                                        <div className="text-sm">
-                                                          <RadioGroup.Label
-                                                            as="p"
-                                                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                          >
-                                                            {item}
-                                                          </RadioGroup.Label>
-                                                        </div>
-                                                      </>
-                                                    )}
-                                                  </RadioGroup.Option>
-                                                )
-                                              )}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
-                                      </Popover.Panel>
-                                    </Transition>
-                                  </>
-                                )}
-                              </Popover>
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
-                            >
-                              <Popover className="relative">
-                                {({ open }) => (
-                                  <>
-                                    <Popover.Button
-                                      className={`flex flex-row items-center space-between gap-x-1`}
-                                    >
-                                      <span className="text-nowrap">
-                                        Platform
-                                      </span>
-                                      {open ? (
-                                        <BiSolidUpArrow />
-                                      ) : (
-                                        <BiSolidDownArrow />
-                                      )}
-                                    </Popover.Button>
+                                      <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-150"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1"
+                                      >
+                                        <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                          <div className="w-full">
+                                            <RadioGroup
+                                              value={selectedPlatform}
+                                              onChange={setSelectedPlatform}
+                                            >
+                                              <div className="space-y-3">
+                                                <RadioGroup.Option
+                                                  value={""}
+                                                  className={
+                                                    "flex items-center cursor-pointer mb-2"
+                                                  }
+                                                >
+                                                  {({ active, checked }) => (
+                                                    <>
+                                                      <div
+                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                          checked
+                                                            ? "primary_bg_color"
+                                                            : "bg_gray_color"
+                                                        }`}
+                                                      />
 
-                                    <Transition
-                                      as={Fragment}
-                                      enter="transition ease-out duration-200"
-                                      enterFrom="opacity-0 translate-y-1"
-                                      enterTo="opacity-100 translate-y-0"
-                                      leave="transition ease-in duration-150"
-                                      leaveFrom="opacity-100 translate-y-0"
-                                      leaveTo="opacity-0 translate-y-1"
-                                    >
-                                      <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                        <div className="w-full">
-                                          <RadioGroup
-                                            value={selectedPlatform}
-                                            onChange={setSelectedPlatform}
-                                          >
-                                            <div className="space-y-3">
-                                              <RadioGroup.Option
-                                                value={""}
-                                                className={
-                                                  "flex items-center cursor-pointer mb-2"
-                                                }
-                                              >
-                                                {({ active, checked }) => (
-                                                  <>
-                                                    <div
-                                                      className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                        checked
-                                                          ? "primary_bg_color"
-                                                          : "bg_gray_color"
-                                                      }`}
-                                                    />
-
-                                                    <div className="text-sm">
-                                                      <RadioGroup.Label
-                                                        as="p"
-                                                        className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                      >
-                                                        All
-                                                      </RadioGroup.Label>
-                                                    </div>
-                                                  </>
-                                                )}
-                                              </RadioGroup.Option>
-                                              {platformOptions?.map(
-                                                (item: any) => (
-                                                  <RadioGroup.Option
-                                                    key={item}
-                                                    value={item}
-                                                    className={
-                                                      "flex items-center cursor-pointer mb-2"
-                                                    }
-                                                  >
-                                                    {({
-                                                      active,
-                                                      checked,
-                                                    }) => (
-                                                      <>
-                                                        <div
-                                                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                            checked
-                                                              ? "primary_bg_color"
-                                                              : "bg_gray_color"
-                                                          }`}
-                                                        />
-
-                                                        <div className="text-sm">
-                                                          <RadioGroup.Label
-                                                            as="p"
-                                                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                          >
-                                                            {item}
-                                                          </RadioGroup.Label>
-                                                        </div>
-                                                      </>
-                                                    )}
-                                                  </RadioGroup.Option>
-                                                )
-                                              )}
-                                            </div>
-                                          </RadioGroup>
-                                        </div>
-                                      </Popover.Panel>
-                                    </Transition>
-                                  </>
-                                )}
-                              </Popover>
-                            </th>
-
-                            {breakdownOption !== ORDER_OPTIONS[0] && (
-                              <>
-                                <th
-                                  scope="col"
-                                  className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                >
-                                  <Popover className="relative">
-                                    {({ open }) => (
-                                      <>
-                                        <Popover.Button
-                                          className={`flex flex-row items-center space-between gap-x-1`}
-                                        >
-                                          <span className="text-nowrap">
-                                            Status
-                                          </span>
-                                          {open ? (
-                                            <BiSolidUpArrow />
-                                          ) : (
-                                            <BiSolidDownArrow />
-                                          )}
-                                        </Popover.Button>
-
-                                        <Transition
-                                          as={Fragment}
-                                          enter="transition ease-out duration-200"
-                                          enterFrom="opacity-0 translate-y-1"
-                                          enterTo="opacity-100 translate-y-0"
-                                          leave="transition ease-in duration-150"
-                                          leaveFrom="opacity-100 translate-y-0"
-                                          leaveTo="opacity-0 translate-y-1"
-                                        >
-                                          <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                            <div className="w-full">
-                                              <RadioGroup
-                                                value={selectedStatus}
-                                                onChange={setSelectedStatus}
-                                              >
-                                                <div className="space-y-3">
-                                                  <RadioGroup.Option
-                                                    value={"All"}
-                                                    className={
-                                                      "flex items-center cursor-pointer mb-2"
-                                                    }
-                                                    onClick={() =>
-                                                      setSelectedStatus("All")
-                                                    }
-                                                  >
-                                                    {({ active, checked }) => (
-                                                      <>
-                                                        <div
-                                                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                            checked
-                                                              ? "primary_bg_color"
-                                                              : "bg_gray_color"
-                                                          }`}
-                                                        />
-
-                                                        <div className="text-sm">
-                                                          <RadioGroup.Label
-                                                            as="p"
-                                                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                          >
-                                                            All
-                                                          </RadioGroup.Label>
-                                                        </div>
-                                                      </>
-                                                    )}
-                                                  </RadioGroup.Option>
-                                                  {statusOptions?.map(
-                                                    (item: any) => (
-                                                      <RadioGroup.Option
-                                                        key={item}
-                                                        value={item}
-                                                        className={
-                                                          "flex items-center cursor-pointer mb-2"
-                                                        }
-                                                      >
-                                                        {({
-                                                          active,
-                                                          checked,
-                                                        }) => (
-                                                          <>
-                                                            <div
-                                                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                                checked
-                                                                  ? "primary_bg_color"
-                                                                  : "bg_gray_color"
-                                                              }`}
-                                                            />
-
-                                                            <div className="text-sm">
-                                                              <RadioGroup.Label
-                                                                as="p"
-                                                                className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                              >
-                                                                {item}
-                                                              </RadioGroup.Label>
-                                                            </div>
-                                                          </>
-                                                        )}
-                                                      </RadioGroup.Option>
-                                                    )
+                                                      <div className="text-sm">
+                                                        <RadioGroup.Label
+                                                          as="p"
+                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                        >
+                                                          All
+                                                        </RadioGroup.Label>
+                                                      </div>
+                                                    </>
                                                   )}
-                                                </div>
-                                              </RadioGroup>
-                                            </div>
-                                          </Popover.Panel>
-                                        </Transition>
-                                      </>
+                                                </RadioGroup.Option>
+                                                {platformOptions?.map(
+                                                  (item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item}
+                                                      value={item}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
+
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  )
+                                                )}
+                                              </div>
+                                            </RadioGroup>
+                                          </div>
+                                        </Popover.Panel>
+                                      </Transition>
+                                    </>
+                                  )}
+                                </Popover>
+                              </th>
+
+                              {breakdownOption !== ORDER_OPTIONS[0] && (
+                                <>
+                                  <th
+                                    scope="col"
+                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                  >
+                                    <Popover className="relative">
+                                      {({ open }) => (
+                                        <>
+                                          <Popover.Button
+                                            className={`flex flex-row items-center space-between gap-x-1`}
+                                          >
+                                            <span className="text-nowrap">
+                                              Status
+                                            </span>
+                                            {open ? (
+                                              <BiSolidUpArrow />
+                                            ) : (
+                                              <BiSolidDownArrow />
+                                            )}
+                                          </Popover.Button>
+
+                                          <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-200"
+                                            enterFrom="opacity-0 translate-y-1"
+                                            enterTo="opacity-100 translate-y-0"
+                                            leave="transition ease-in duration-150"
+                                            leaveFrom="opacity-100 translate-y-0"
+                                            leaveTo="opacity-0 translate-y-1"
+                                          >
+                                            <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                              <div className="w-full">
+                                                <RadioGroup
+                                                  value={selectedStatus}
+                                                  onChange={setSelectedStatus}
+                                                >
+                                                  <div className="space-y-3">
+                                                    <RadioGroup.Option
+                                                      value={"All"}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                      onClick={() =>
+                                                        setSelectedStatus("All")
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
+
+                                                          <div className="text-sm">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              All
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                    {statusOptions?.map(
+                                                      (item: any) => (
+                                                        <RadioGroup.Option
+                                                          key={item}
+                                                          value={item}
+                                                          className={
+                                                            "flex items-center cursor-pointer mb-2"
+                                                          }
+                                                        >
+                                                          {({
+                                                            active,
+                                                            checked,
+                                                          }) => (
+                                                            <>
+                                                              <div
+                                                                className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                                  checked
+                                                                    ? "primary_bg_color"
+                                                                    : "bg_gray_color"
+                                                                }`}
+                                                              />
+
+                                                              <div className="text-sm">
+                                                                <RadioGroup.Label
+                                                                  as="p"
+                                                                  className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                                >
+                                                                  {item}
+                                                                </RadioGroup.Label>
+                                                              </div>
+                                                            </>
+                                                          )}
+                                                        </RadioGroup.Option>
+                                                      )
+                                                    )}
+                                                  </div>
+                                                </RadioGroup>
+                                              </div>
+                                            </Popover.Panel>
+                                          </Transition>
+                                        </>
+                                      )}
+                                    </Popover>
+                                  </th>
+
+                                  <th
+                                    scope="col"
+                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px] max-w-[250px]"
+                                  >
+                                    Note
+                                  </th>
+                                </>
+                              )}
+                            </tr>
+                          </thead>
+                          {/* Table body */}
+                          <tbody className="divide-y divide-gray-200">
+                            {filteredOrders?.map(
+                              (transaction: any, i: number) => (
+                                <tr key={transaction.id + i}>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    #{transaction.id?.slice(-5)}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {moment(transaction?.createdAt).format(
+                                      "DD/MM/YYYY"
                                     )}
-                                  </Popover>
-                                </th>
-
-                                <th
-                                  scope="col"
-                                  className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px] max-w-[250px]"
-                                >
-                                  Note
-                                </th>
-                              </>
-                            )}
-                          </tr>
-                        </thead>
-                        
-                        <tbody className="divide-y divide-gray-200">
-                          {filteredOrders?.map(
-                            (transaction: any, i: number) => (
-                              <tr key={transaction.id + i}>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  #
-                                  {transaction.id?.slice(-5)}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {moment(transaction?.createdAt).format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {moment(transaction?.createdAt).format(
-                                    "hh:mm A"
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
-                                  {transaction?.name}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
-                                  {transaction?.email}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                  {transaction?.phoneNumber}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.table?.table}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                  {transaction?.order?.map((menu: any) => (
-                                    <div
-                                      key={menu?._id}
-                                      className="flex items-center"
-                                    >
-                                      <div className="h-10 w-10 flex-shrink-0">
-                                        <img
-                                          className="h-10 w-10 rounded-full object-cover"
-                                          src={menu?.menuDetails.images[0]}
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div className="ml-4">
-                                        <div className="font-medium text-wrap">
-                                          {menu?.menuDetails.foodName} X {menu?.quantity}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {moment(transaction?.createdAt).format(
+                                      "hh:mm A"
+                                    )}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
+                                    {transaction?.name}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
+                                    {transaction?.email}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                    {transaction?.phoneNumber}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.table?.table}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
+                                    {transaction?.order?.map((menu: any) => (
+                                      <div
+                                        key={menu?._id}
+                                        className="flex items-center"
+                                      >
+                                        <div className="h-10 w-10 flex-shrink-0">
+                                          <img
+                                            className="h-10 w-10 rounded-full object-cover"
+                                            src={menu?.menuDetails.images[0]}
+                                            alt=""
+                                          />
                                         </div>
-                                        <div className="">
-                                          ₦
-                                          {parseInt(
-                                            menu?.menu.eventAmount
-                                              ? menu?.menu.eventAmount
-                                              : menu?.menuDetails.discount
-                                              ? menu.menuDetails.price -
-                                                (menu.menuDetails.price / 100) *
-                                                  menu.menuDetails.discount
-                                              : menu.menuDetails.price
-                                          ).toLocaleString()}
+                                        <div className="ml-4">
+                                          <div className="font-medium text-wrap">
+                                            {menu?.menuDetails.foodName} X{" "}
+                                            {menu?.quantity}
+                                          </div>
+                                          <div className="">
+                                            ₦
+                                            {parseInt(
+                                              menu?.menu.eventAmount
+                                                ? menu?.menu.eventAmount
+                                                : menu?.menuDetails.discount
+                                                ? menu.menuDetails.price -
+                                                  (menu.menuDetails.price /
+                                                    100) *
+                                                    menu.menuDetails.discount
+                                                : menu.menuDetails.price
+                                            ).toLocaleString()}
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  ))}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.order?.reduce(
-                                    (total: any, item: any) =>
-                                      total + item.quantity,
-                                    0
-                                  )}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                  {transaction?.table?.employeeAssigned ||
-                                    "-"}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                  {
-                                    formatRemoteAmountKobo(
-                                      transaction?.totalAmount
-                                    ).naira
-                                  }
-                                  {
-                                    formatRemoteAmountKobo(
-                                      transaction?.totalAmount
-                                    ).kobo
-                                  }
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                  {transaction?.posPayment ? "POS" : "Online"}
-                                </td>
-                                <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                  {transaction?.restaurant
-                                    ? "Dine-in"
-                                    : "Online"}
-                                </td>
-                                {breakdownOption !== ORDER_OPTIONS[0] && (
-                                  <>
-                                    <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
-                                      {!!transaction?.order && (transaction?.restaurant &&
-                                      transaction?.order[0]?.status === "archived"
-                                        ? (
-                                          <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">Void</p>
-                                        ) : transaction?.restaurant &&
-                                        transaction?.order[0]?.status === "declined"
-                                          ? (
-                                            <p className="w-fit text-xs text-medium text-[#C10606] border border-solid border-[#C10606] bg-[#E9A9A9] px-3 py-1 text-center rounded-3xl">Declined</p>
+                                    ))}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.order?.reduce(
+                                      (total: any, item: any) =>
+                                        total + item.quantity,
+                                      0
+                                    )}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                    {transaction?.table?.employeeAssigned ||
+                                      "-"}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                    {
+                                      formatRemoteAmountKobo(
+                                        transaction?.totalAmount
+                                      ).naira
+                                    }
+                                    {
+                                      formatRemoteAmountKobo(
+                                        transaction?.totalAmount
+                                      ).kobo
+                                    }
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                    {transaction?.posPayment ? "POS" : "Online"}
+                                  </td>
+                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                    {transaction?.restaurant
+                                      ? "Dine-in"
+                                      : "Online"}
+                                  </td>
+                                  {breakdownOption !== ORDER_OPTIONS[0] && (
+                                    <>
+                                      <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
+                                        {!!transaction?.order &&
+                                          (transaction?.restaurant &&
+                                          transaction?.order[0]?.status ===
+                                            "archived" ? (
+                                            <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">
+                                              Void
+                                            </p>
                                           ) : transaction?.restaurant &&
-                                          transaction?.gift === true || transaction?.order[0]?.paymentStatus === "gift"
-                                            ? (
-                                              <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">Gift</p>
-                                          ) : <p>{transaction?.order[0]?.status}</p>)}
-                                    </td>
+                                            transaction?.order[0]?.status ===
+                                              "declined" ? (
+                                            <p className="w-fit text-xs text-medium text-[#C10606] border border-solid border-[#C10606] bg-[#E9A9A9] px-3 py-1 text-center rounded-3xl">
+                                              Declined
+                                            </p>
+                                          ) : (transaction?.restaurant &&
+                                              transaction?.gift === true) ||
+                                            transaction?.order[0]
+                                              ?.paymentStatus === "gift" ? (
+                                            <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">
+                                              Gift
+                                            </p>
+                                          ) : (
+                                            <p>
+                                              {transaction?.order[0]?.status}
+                                            </p>
+                                          ))}
+                                      </td>
 
-                                    <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px] max-w-[200px] text-wrap">
-                                      {transaction?.notes ? transaction?.notes : 'N/A'}
-                                    </td>
-                                  </>
-                                )}
-                              </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
-                    )}
+                                      <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px] max-w-[200px] text-wrap">
+                                        {transaction?.notes
+                                          ? transaction?.notes
+                                          : "N/A"}
+                                      </td>
+                                    </>
+                                  )}
+                                </tr>
+                              )
+                            )}
+                          </tbody>
+                        </table>
+                      )}
                     </div>
                   </div>
                 </div>
               </InfinityScroll>
             </div>
-          </div> */}
+          </div>
         </div>
       </ChefDashboardLayout>
     </>
