@@ -29,10 +29,16 @@ import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
 import InfinityScroll from "../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../components/DashboardItemSkeletonLoader";
+import EmptyState from "../../components/EmptyState";
 
 const PAYMENT_OPTIONS = ["All", "Online", "POS"];
 
-const ORDER_OPTIONS = ["Completed sales", "Declined sales", "Voided sales", "Gifted sales"];
+const ORDER_OPTIONS = [
+  "Completed sales",
+  "Declined sales",
+  "Voided sales",
+  "Gifted sales",
+];
 
 const BannerSkeletonLoader = () => (
   <div className="p-6">
@@ -44,7 +50,6 @@ const BannerSkeletonLoader = () => (
     <Skeleton width={150} height={20} style={{ marginTop: "10px" }} />
   </div>
 );
-
 
 const platformOptions = ["Online", "Dine-in"];
 const paymentOptions = ["POS", "Online"];
@@ -78,17 +83,15 @@ const SalesReports = () => {
     });
   }, [user]);
 
-
   const safeDivide = (a: any, b: any) => {
     if (b === 0) {
       return 0;
     }
     return a / b;
   };
-  
+
   const [breakdownOption, setBreakdownOptions] = useState(ORDER_OPTIONS[0]);
   const [openBreakdownOptions, setOpenBreakdownOptions] = useState(false);
-
 
   const dashboardItems = [
     {
@@ -109,9 +112,9 @@ const SalesReports = () => {
         formatRemoteAmountKobo(
           safeDivide(dashboard?.totalNetSales, dashboard?.orders)
         ).naira +
-        formatRemoteAmountKobo(
-          safeDivide(dashboard?.totalNetSales, dashboard?.orders)
-        ).kobo || 0,
+          formatRemoteAmountKobo(
+            safeDivide(dashboard?.totalNetSales, dashboard?.orders)
+          ).kobo || 0,
       toolTipId: "avg-orders-size",
       toolTipContent: "Net sales divided by total orders",
     },
@@ -127,9 +130,9 @@ const SalesReports = () => {
         formatRemoteAmountKobo(
           safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
         ).naira +
-        formatRemoteAmountKobo(
-          safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
-        ).kobo || 0,
+          formatRemoteAmountKobo(
+            safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
+          ).kobo || 0,
       toolTipId: "avg-tickets-size",
       toolTipContent: "Total net sales divided by the total tickets",
     },
@@ -186,14 +189,15 @@ const SalesReports = () => {
         ]);
       }
 
-      if(Number(data.pagination.totalPages) > 1){
+      if (Number(data.pagination.totalPages) > 1) {
         setPage(page + 1);
         setHasMore(
           Number(data.pagination.totalPages) > 1 &&
-          Number(data.pagination.currentPage) !== Number(data.pagination.totalPages)
+            Number(data.pagination.currentPage) !==
+              Number(data.pagination.totalPages)
         );
-      }else{
-        setHasMore(false)
+      } else {
+        setHasMore(false);
       }
     });
   };
@@ -205,25 +209,32 @@ const SalesReports = () => {
   };
 
   const handleSelectedStatus = () => {
-    if(selectedStatus === 'Declined'){
-      setBreakdownOptions(ORDER_OPTIONS[1])
-    }else if(selectedStatus === 'Void'){
-      setBreakdownOptions(ORDER_OPTIONS[2])
-    }else if(selectedStatus === 'Gift'){
-      setBreakdownOptions(ORDER_OPTIONS[3])
-    }else if(selectedStatus === 'All'){
-      setBreakdownOptions("")
+    if (selectedStatus === "Declined") {
+      setBreakdownOptions(ORDER_OPTIONS[1]);
+    } else if (selectedStatus === "Void") {
+      setBreakdownOptions(ORDER_OPTIONS[2]);
+    } else if (selectedStatus === "Gift") {
+      setBreakdownOptions(ORDER_OPTIONS[3]);
+    } else if (selectedStatus === "All") {
+      setBreakdownOptions("");
     }
-    setSelectedStatus('')
-  }
+    setSelectedStatus("");
+  };
 
   useEffect(() => {
     setPage(1);
-    handleSelectedStatus()
-  }, [selectedStatus, breakdownOption, endDate, paymentType, filterSection, filterTable]);
+    handleSelectedStatus();
+  }, [
+    selectedStatus,
+    breakdownOption,
+    endDate,
+    paymentType,
+    filterSection,
+    filterTable,
+  ]);
 
   useEffect(() => {
-    if(page === 1){
+    if (page === 1) {
       dispatch(
         getRestaurantDashboardAccount(
           startDate,
@@ -291,7 +302,11 @@ const SalesReports = () => {
           order?.table?.employeeAssigned || "-",
           `₦${order?.totalAmount}`,
           order?.posPayment ? "POS" : "Online",
-          order?.gift === true ? 'gift' : order?.order[0].status === "archived" ? 'void' : order?.order[0].status,
+          order?.gift === true
+            ? "gift"
+            : order?.order[0].status === "archived"
+            ? "void"
+            : order?.order[0].status,
         ].join(",");
       });
 
@@ -336,8 +351,6 @@ const SalesReports = () => {
       tableContainerRef.current.scrollLeft += 500;
     }
   };
-
-
 
   const ordersList = transactions.sort((a: any, b: any) =>
     moment(b.createdAt).diff(moment(a.createdAt))
@@ -386,19 +399,25 @@ const SalesReports = () => {
     }
   };
 
-  const todaysDate = new Date().toLocaleString("en-GB", { 
-    timeZone: "Africa/Lagos",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  }).split('/').reverse().join('-');
+  const todaysDate = new Date()
+    .toLocaleString("en-GB", {
+      timeZone: "Africa/Lagos",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .split("/")
+    .reverse()
+    .join("-");
 
   return (
     <>
       <ChefDashboardLayout>
         <div className="w-full p-2 lg:px-6 py-4 bg-white" style={{}}>
           <PageTitle title={moment().format("MMMM Do, YYYY")} />
-          <div className="w-full lg:w-4/5 my-10 flex flex-col lg:flex-row flex-wrap items-center gap-3">
+          <EmptyState title="Page under maintenance. It will be up shortly!" />
+
+          {/* <div className="w-full lg:w-4/5 my-10 flex flex-col lg:flex-row flex-wrap items-center gap-3">
             <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">
                 Start Date
@@ -686,8 +705,8 @@ const SalesReports = () => {
                 </ClickAwayListener>
               )}
             </div>
-          </div>
-          <div className="my-4 bg-[#FDEEF0] rounded-xl flex flex-col lg:flex-row justify-start lg:justify-between items-center">
+          </div> */}
+          {/* <div className="my-4 bg-[#FDEEF0] rounded-xl flex flex-col lg:flex-row justify-start lg:justify-between items-center">
             {dashboardLoading ? (
               <BannerSkeletonLoader />
             ) : (
@@ -740,8 +759,8 @@ const SalesReports = () => {
             <div className="hidden lg:block">
               <img src="/images/net-sales.svg" alt="net-sales" />
             </div>
-          </div>
-          {dashboardLoading ? (
+          </div> */}
+          {/* {dashboardLoading ? (
             <div className="my-4 grid grid-cols-2 gap-3">
               {[...Array(6)]?.map((_, i) => (
                 <DashboardItemSkeletonLoader key={i} />
@@ -783,8 +802,8 @@ const SalesReports = () => {
                 </div>
               ))}
             </div>
-          )}
-          <div className="w-full bg-white border border-[#E1E1E1] rounded-xl p-2 lg:p-6">
+          )} */}
+          {/* <div className="w-full bg-white border border-[#E1E1E1] rounded-xl p-2 lg:p-6">
             <div className="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-center gap-y-3">
               <div className="flex gap-3">
                 <div
@@ -917,7 +936,6 @@ const SalesReports = () => {
                       </div>
                     ) : (
                       <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
-                        {/* Table headers */}
                         <thead>
                           <tr>
                             <th
@@ -1418,7 +1436,7 @@ const SalesReports = () => {
                             )}
                           </tr>
                         </thead>
-                        {/* Table body */}
+                        
                         <tbody className="divide-y divide-gray-200">
                           {filteredOrders?.map(
                             (transaction: any, i: number) => (
@@ -1547,7 +1565,7 @@ const SalesReports = () => {
                 </div>
               </InfinityScroll>
             </div>
-          </div>
+          </div> */}
         </div>
       </ChefDashboardLayout>
     </>
