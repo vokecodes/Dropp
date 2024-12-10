@@ -15,7 +15,7 @@ import {
   getProfileChefAccount,
   getRestaurantDashboardAccount,
 } from "../../_redux/user/userAction";
-import { formatRemoteAmountKobo } from "../../utils/formatMethods";
+import { formatRemoteAmountKobo, generateUUIDBasedOnStringLength } from "../../utils/formatMethods";
 import {
   getOrdersPage,
   getRestaurantOrdersPage,
@@ -1450,9 +1450,9 @@ const SalesReports = () => {
                           <tbody className="divide-y divide-gray-200">
                             {filteredOrders?.map(
                               (transaction: any, i: number) => (
-                                <tr key={transaction.id + i}>
+                                <tr key={generateUUIDBasedOnStringLength('ttru')}>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    #{transaction.id?.slice(-5)}
+                                    #{transaction._id?.slice(-5)}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                     {moment(transaction?.createdAt).format(
@@ -1477,21 +1477,21 @@ const SalesReports = () => {
                                     {transaction?.table?.table}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                    {transaction?.order?.map((menu: any) => (
+                                    {transaction?.order?.map((menu: any, n) => (
                                       <div
-                                        key={menu?._id}
+                                        key={generateUUIDBasedOnStringLength('fgtr')}
                                         className="flex items-center"
                                       >
                                         <div className="h-10 w-10 flex-shrink-0">
                                           <img
                                             className="h-10 w-10 rounded-full object-cover"
-                                            src={menu?.menuDetails.images[0]}
+                                            src={menu?.menu.images[0]}
                                             alt=""
                                           />
                                         </div>
                                         <div className="ml-4">
                                           <div className="font-medium text-wrap">
-                                            {menu?.menuDetails.foodName} X{" "}
+                                            {menu?.menu.foodName} X{" "}
                                             {menu?.quantity}
                                           </div>
                                           <div className="">
@@ -1499,12 +1499,12 @@ const SalesReports = () => {
                                             {parseInt(
                                               menu?.menu.eventAmount
                                                 ? menu?.menu.eventAmount
-                                                : menu?.menuDetails.discount
-                                                ? menu.menuDetails.price -
-                                                  (menu.menuDetails.price /
+                                                : menu?.menu.discount
+                                                ? menu.menu.price -
+                                                  (menu.menu.price /
                                                     100) *
-                                                    menu.menuDetails.discount
-                                                : menu.menuDetails.price
+                                                    menu.menu.discount
+                                                : menu.menu.price
                                             ).toLocaleString()}
                                           </div>
                                         </div>
