@@ -196,6 +196,19 @@ export const getRestaurantOrdersPage = (
   );
 };
 
+export const downloadRestaurantReport = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = "",
+  breakdownOption = ""
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
 export const getSubChefRestaurantOrdersPage = (
   page = 1,
   fromDate = "",
