@@ -37,6 +37,7 @@ const ORDER_OPTIONS = [
   "Declined sales",
   "Voided sales",
   "Gifted sales",
+  "Incomplete sales",
 ];
 
 const BannerSkeletonLoader = () => (
@@ -52,7 +53,7 @@ const BannerSkeletonLoader = () => (
 
 const platformOptions = ["Online", "Dine-in"];
 const paymentOptions = ["POS", "Online"];
-const statusOptions = ["Declined", "Void", "Gift"];
+const statusOptions = ["Declined", "Void", "Gift", "Incomplete"];
 
 const SalesReports = () => {
   const dispatch = useAppDispatch();
@@ -214,6 +215,8 @@ const SalesReports = () => {
       setBreakdownOptions(ORDER_OPTIONS[2]);
     } else if (selectedStatus === "Gift") {
       setBreakdownOptions(ORDER_OPTIONS[3]);
+    }else if (selectedStatus === "Incomplete") {
+      setBreakdownOptions(ORDER_OPTIONS[4]);
     } else if (selectedStatus === "All") {
       setBreakdownOptions("");
     }
@@ -725,6 +728,8 @@ const SalesReports = () => {
                       ? "Net Voided Sales"
                       : breakdownOption === ORDER_OPTIONS[3]
                       ? "Net Gifted Sales"
+                      : breakdownOption === ORDER_OPTIONS[4]
+                      ? "Net Incomplete Sales"
                       : "Net Sales"}
                   </p>
                   <svg
