@@ -15,7 +15,10 @@ import {
   getProfileChefAccount,
   getRestaurantDashboardAccount,
 } from "../../_redux/user/userAction";
-import { formatRemoteAmountKobo, generateUUIDBasedOnStringLength } from "../../utils/formatMethods";
+import {
+  formatRemoteAmountKobo,
+  generateUUIDBasedOnStringLength,
+} from "../../utils/formatMethods";
 import {
   getOrdersPage,
   getRestaurantOrdersPage,
@@ -215,7 +218,7 @@ const SalesReports = () => {
       setBreakdownOptions(ORDER_OPTIONS[2]);
     } else if (selectedStatus === "Gift") {
       setBreakdownOptions(ORDER_OPTIONS[3]);
-    }else if (selectedStatus === "Incomplete") {
+    } else if (selectedStatus === "Incomplete") {
       setBreakdownOptions(ORDER_OPTIONS[4]);
     } else if (selectedStatus === "All") {
       setBreakdownOptions("");
@@ -738,7 +741,7 @@ const SalesReports = () => {
                     fill="#F78F9B"
                     className="size-5"
                     data-tooltip-id="net-sales"
-                    data-tooltip-content="Gross sales minus platform fees."
+                    data-tooltip-content="Gross sales including platform fees."
                     data-tooltip-place="right-end"
                     data-tooltip-class="bg-white"
                   >
@@ -1455,7 +1458,9 @@ const SalesReports = () => {
                           <tbody className="divide-y divide-gray-200">
                             {filteredOrders?.map(
                               (transaction: any, i: number) => (
-                                <tr key={generateUUIDBasedOnStringLength('ttru')}>
+                                <tr
+                                  key={generateUUIDBasedOnStringLength("ttru")}
+                                >
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                     #{transaction._id?.slice(-5)}
                                   </td>
@@ -1484,7 +1489,9 @@ const SalesReports = () => {
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
                                     {transaction?.order?.map((menu: any, n) => (
                                       <div
-                                        key={generateUUIDBasedOnStringLength('fgtr')}
+                                        key={generateUUIDBasedOnStringLength(
+                                          "fgtr"
+                                        )}
                                         className="flex items-center"
                                       >
                                         <div className="h-10 w-10 flex-shrink-0">
@@ -1506,8 +1513,7 @@ const SalesReports = () => {
                                                 ? menu?.menu.eventAmount
                                                 : menu?.menu.discount
                                                 ? menu.menu.price -
-                                                  (menu.menu.price /
-                                                    100) *
+                                                  (menu.menu.price / 100) *
                                                     menu.menu.discount
                                                 : menu.menu.price
                                             ).toLocaleString()}
