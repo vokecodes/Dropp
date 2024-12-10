@@ -20,6 +20,7 @@ import {
   generateUUIDBasedOnStringLength,
 } from "../../utils/formatMethods";
 import {
+  downloadRestaurantReport,
   getOrdersPage,
   getRestaurantOrdersPage,
 } from "../../_redux/user/userCrud";
@@ -283,19 +284,19 @@ const SalesReports = () => {
         const formattedDate = moment(order.createdAt).format("DD/MM/YYYY");
         const formattedTime = moment(order.createdAt).format("hh:mm A");
 
-        const foodDetails = order.cartMenu
+        const foodDetails = order.order
           ?.map(
-            (menu: any) => `${menu.foodName} X ${menu.quantity}- ₦${menu.price}`
+            (menu: any) => `${menu.menu.foodName} X ${menu.quantity}- ₦${menu.amount}`
           )
           .join("; ");
 
-        const totalMeal = order?.cartMenu?.reduce(
+        const totalMeal = order?.order?.reduce(
           (total: any, item: any) => total + item.quantity,
           0
         );
 
         return [
-          `#${order.id.substring(order?.id?.length - 5)}`,
+          `#${order._id.substring(order?._id?.length - 5)}`,
           formattedDate,
           formattedTime,
           order?.name || "-",
@@ -318,24 +319,34 @@ const SalesReports = () => {
     return [header, ...rows].join("\n");
   };
 
-  const dineExportToCSV = async (data: any) => {
+  const dineExportToCSV = async () => {
     setIsDownloading(true);
     try {
-      const csv = await dineInConvertToCSV(data);
+      await downloadRestaurantReport(
+        startDate,
+        endDate,
+        paymentType,
+        filterSection,
+        filterTable,
+        breakdownOption
+      ).then(({ data }) => {
+        const csv = dineInConvertToCSV(data?.data);
+        
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+  
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", "dine-in-orders.csv");
+          link.style.visibility = "hidden";
+  
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      });
 
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "dine-in-orders.csv");
-        link.style.visibility = "hidden";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
     } catch (err) {
       console.error("CSV Export Error:", err);
     } finally {
@@ -843,7 +854,7 @@ const SalesReports = () => {
                 <div
                   className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
                   onClick={() => {
-                    dineExportToCSV(transactions);
+                    dineExportToCSV();
                   }}
                 >
                   {isDownloading ? (
