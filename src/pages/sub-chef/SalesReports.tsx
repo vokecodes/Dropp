@@ -749,7 +749,7 @@ const SalesReports = () => {
                     fill="#F78F9B"
                     className="size-5"
                     data-tooltip-id="net-sales"
-                    data-tooltip-content="Gross sales minus platform fees."
+                    data-tooltip-content="Gross sales including platform fees."
                     data-tooltip-place="right-end"
                     data-tooltip-class="bg-white"
                   >
