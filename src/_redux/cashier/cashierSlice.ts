@@ -45,6 +45,7 @@ export const cashierSLice = createSlice({
     // cashier logout
     logoutCashier: (state) => {
       state.cashier = null;
+      state.cashiers = null;
     },
   },
 });

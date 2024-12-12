@@ -8,6 +8,8 @@ import {
   RESTAURANT_ORDER_URL,
   ADMIN_DROPP_DASHBOARD_URL,
   ADMIN_ALL_RESTAURANTS,
+  QSR_ORDER_URL,
+  QSR_CASHIER_URL,
 } from "../urls";
 import { SERVER } from "../../config/axios";
 
@@ -145,6 +147,32 @@ export const changeSubChefPassword = (data: any) => {
   });
 };
 
+export const registerAQsrSubAdmin = (data: any) => {
+  return SERVER.post(`${QSR_CASHIER_URL}/sub-admin/register`, { ...data });
+};
+
+export const getChefQsrSubAdmins = () => {
+  return SERVER.get(`${CHEF_URL}/sub-chef`);
+};
+
+export const deleteAQsrSubAdmin = (subChefId: string) => {
+  return SERVER.delete(`${CHEF_URL}/sub-chef/${subChefId}`);
+};
+
+export const getQsrSubAdminProfile = () => {
+  return SERVER.get(`${SUB_CHEF_URL}`);
+};
+
+export const updateQsrSubAdminProfile = (data: any) => {
+  return SERVER.patch(SUB_CHEF_URL, { ...data });
+};
+
+export const changeQsrSubAdminPassword = (data: any) => {
+  return SERVER.patch(`${SUB_CHEF_URL}/change-password`, {
+    ...data,
+  });
+};
+
 export const getRestaurantDashboardCrud = (
   fromDate = "",
   toDate = "",
@@ -155,6 +183,17 @@ export const getRestaurantDashboardCrud = (
 ) => {
   return SERVER.get(
     `${RESTAURANT_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const getQsrDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
   );
 };
 
@@ -193,6 +232,18 @@ export const getRestaurantOrdersPage = (
 ) => {
   return SERVER.get(
     `${RESTAURANT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const getQsrOrdersPage = (
+  page = 1,
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_ORDER_URL}/qsr-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
   );
 };
 

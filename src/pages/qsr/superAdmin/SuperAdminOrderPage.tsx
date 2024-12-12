@@ -23,6 +23,7 @@ import TrackGoogleAnalyticsEvent from "../../../components/TrackGoogleAnalyticsE
 import Hotjar from "@hotjar/browser";
 import QsrCart from "../../../components/QsrCart";
 import { createAQsrOrder } from "../../../_redux/order/orderCrud";
+import { TRANSACTION_URL } from "../../../_redux/urls";
 
 
 const SuperAdminOrderPage = () => {
@@ -44,6 +45,7 @@ const SuperAdminOrderPage = () => {
     );
 
   const [chef, setChef] = useState<any>(null);
+  const [orderId, setOrderId] = useState<any>('')
   const [selectedCategory, setSelectedCategory] = useState<any>("All");
 
 
@@ -145,15 +147,19 @@ const SuperAdminOrderPage = () => {
   const verifyTransaction = async (referenceId: any) => {
     try {
       const { data } = await axios.get(
-        `${TRANSACTION_URL}/verify/${referenceId}`
+        `${TRANSACTION_URL}/verify/${referenceId}?restaurantId=${business._id}`
       );
       const result = data?.data;
+      console.log('data= ', data)
       
       if (result?.status) {
         closeVerifyPaymentModal();
         closeCartModal()
+        openModal();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleCheckout = async (orderItem: any) => {
@@ -166,7 +172,7 @@ const SuperAdminOrderPage = () => {
 
     try {
       const createOrEditOrder = async () => {
-        return await createAQsrOrder({ ...orderItem, table: '42' });
+        return await createAQsrOrder({ ...orderItem, salesType: "online" });
       };
     
       const handlePayment = (orderId: string) => {
@@ -176,7 +182,7 @@ const SuperAdminOrderPage = () => {
           amount: amount * 100,
           ref: orderId, // Use the generated order ID as a reference
           metadata: {
-            transactionType: "RESTAURANT_ORDER",
+            transactionType: "QSR_ORDER",
           },
           onClose: () => alert("Transaction was not completed, window closed."),
           callback: (response: any) => {
@@ -215,8 +221,7 @@ const SuperAdminOrderPage = () => {
       const createOrEditOrder = async () => {
         return await createAQsrOrder({
           ...orderItem,
-          table: '42',
-          posPayment: true,
+          salesType: "pos"
         });
       };
     
@@ -240,7 +245,6 @@ const SuperAdminOrderPage = () => {
       setCheckoutLaterLoading(false);
       closeCartModal();
     }
-    
   };
 
   const handleIncrement = (meal: any) => {
@@ -503,15 +507,6 @@ const SuperAdminOrderPage = () => {
             aria-describedby="parent-modal-description"
         >
             <div className="fixed right-0 z-10 h-full w-full lg:w-1/3 bg-neutral-100 lg:bg-white overflow-auto outline-none">
-                {/* <div className="flex pt-5 pr-5">
-                <div className="flex-1"></div>
-                <IoMdClose
-                    size={24}
-                    color="#8E8E8E"
-                    className="cursor-pointer"
-                    onClick={closeCartModal}
-                />
-                </div> */}
                 <QsrCart
                     handleCheckout={(orderItem: any) =>
                         handleCheckout(orderItem)
@@ -621,16 +616,16 @@ const SuperAdminOrderPage = () => {
 
                     <div className="my-3 lg:my-10 w-full">
                         <Button
-                            title="Download receipt"
+                            title="Done"
                             extraClasses="w-full p-3 rounded-full"
-                            // onClick={() => closeModal()}
+                            onClick={() => closeModal()}
                         />
                     </div>
                 </div>
             </div>
         </Modal>
 
-        <AlertDialog message='An error has occured, ensure you have the correct Table number and an internet connection.' handleClose={handleClose} open={openAlertModal} />
+        <AlertDialog message='An error has occured, ensure you have an internet connection.' handleClose={handleClose} open={openAlertModal} />
     </>
   );
 };

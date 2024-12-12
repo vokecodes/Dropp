@@ -186,6 +186,17 @@ export const RestaurantCheckoutSchema = Yup.object().shape({
   notes: Yup.string().optional(),
 });
 
+export const QsrCheckoutSchema = Yup.object().shape({
+  name: Yup.string().optional(),
+  email: Yup.string().email().optional(),
+  phoneNumber: Yup.string().required("Phone Number is required."),
+});
+
+export const CashierLoginSchema = Yup.object().shape({
+  employeeID: Yup.string().required("Employee ID is required."),
+  password: Yup.string().required("Password is required."),
+});
+
 export const WaiterLoginSchema = Yup.object().shape({
   employeeID: Yup.string().required("Employee ID is required."),
   table: Yup.string().required("Table is required."),

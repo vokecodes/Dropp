@@ -6,8 +6,8 @@ import { AiFillDelete } from "react-icons/ai";
 import Button from "./Button";
 import OutlineButton from "./OutlineButton";
 import Input from "./CustomInput";
-import { RestaurantCheckoutValues } from "../utils/FormInitialValue";
-import { RestaurantCheckoutSchema } from "../utils/ValidationSchema";
+import { QsrCheckoutValues, RestaurantCheckoutValues } from "../utils/FormInitialValue";
+import { QsrCheckoutSchema, RestaurantCheckoutSchema } from "../utils/ValidationSchema";
 import axios from "axios";
 import { CHECKOUT_CODE_URL } from "../_redux/urls";
 import {
@@ -188,8 +188,8 @@ const QsrCart = ({
     resetForm,
     isValid,
   } = useFormik({
-    initialValues: RestaurantCheckoutValues,
-    validationSchema: RestaurantCheckoutSchema,
+    initialValues: QsrCheckoutValues,
+    validationSchema: QsrCheckoutSchema,
     onSubmit: (values) => {
       openPayNowModal();
     },
@@ -383,7 +383,7 @@ const QsrCart = ({
                       totalAmount,
                       discountAmount,
                       ...values,
-                      restaurant: chef?.profile?._id,
+                      quick_service: chef?.profile?._id,
                       cartMenu,
                     });
                   }}
@@ -456,7 +456,7 @@ const QsrCart = ({
                     totalAmount: totalAmount + processingFee,
                     discountAmount,
                     ...values,
-                    restaurant: chef?.profile?._id,
+                    quick_service: chef?.profile?._id,
                     cartMenu,
                   });
                 }}

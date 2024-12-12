@@ -145,6 +145,17 @@ export const RestaurantCheckoutValues = {
   notes: "",
 };
 
+export const QsrCheckoutValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+};
+
+export const CashierLoginValues = {
+  employeeID: "",
+  password: "",
+};
+
 export const WaiterLoginValues = {
   employeeID: "",
   table: "",

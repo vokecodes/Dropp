@@ -171,6 +171,23 @@ export const WAITER_ROUTES = {
   linkWaiter: "/waiter",
 };
 
+export const CASHIER_ROUTES = {
+  cashier: "/cashier/*",
+  linkCashier: "/cashier",
+  cashierLogin: "/cashier/*",
+  linkCashierLogin: "/cashier",
+  cashierOrders: "orders",
+  linkCashierOrders: "/cashier/orders",
+  cashierMyOrders: "my-orders",
+  linkCashierMyOrders: "/cashier/my-orders",
+  cashierMenu: "menu",
+  linkCashierMenu: "/cashier/menu",
+  cashierCashier: "cashier-management",
+  linkCashierCashier: "/cashier/cashier-management",
+  cashierReports: "reports",
+  linkCashierReports: "/cashier/reports",
+};
+
 export const ADMIN_ROUTES = {
   admin: "/admin/*",
   linkAdmin: "/admin",

@@ -49,24 +49,24 @@ const BannerSkeletonLoader = () => (
 const platformOptions = ["Online", "Dine-in"];
 const paymentOptions = ["Online", "POS"];
 
-const SuperAdminReport = () => {
+const SubAdminReport = () => {
   const dispatch = useAppDispatch();
-  const { user, dashboardLoading, dashboard, section, cashiers } = useSelector(
+  const { user, dashboardLoading, dashboard, section, cashier, cashiers } = useSelector(
     (state: any) => ({
-      user: state.user.user,
       dashboardLoading: state.user.dashboardLoading,
       dashboard: state.user.dashboard,
       section: state.section.section,
+      cashier: state.cashier.cashier,
       cashiers: state.cashier.cashiers,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    dispatch(getProfileChefAccount());
-    dispatch(getChefWalletAccount());
+    // dispatch(getProfileChefAccount());
+    // dispatch(getChefWalletAccount());
     dispatch(getChefRestaurantWalletAccount());
-    dispatch(getSections());
+    // dispatch(getSections());
     dispatch(getCashier());
   }, []);
 
@@ -1377,4 +1377,4 @@ const SuperAdminReport = () => {
   );
 };
 
-export default SuperAdminReport;
+export default SubAdminReport;

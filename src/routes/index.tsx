@@ -10,6 +10,7 @@ import AuthRoutes from "./authRoutes";
 import {
   ADMIN_ROUTES,
   AUTH_ROUTES,
+  CASHIER_ROUTES,
   CHEF_ROUTES,
   COMPANY_ROUTES,
   CUSTOMER_ROUTES,
@@ -39,7 +40,7 @@ import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";
 import CustomerEventSignUp from "../pages/events/SignUp";
 import AdminRoutes from "../pages/dashboard/Routes";
-import QsrRoutes from "../pages/qsr/Routes";
+import { QsrRoutes, CashierRoutes } from "../pages/qsr/Routes";
 
 const AppRoutes = () => {
   const { user } = useSelector(
@@ -85,6 +86,7 @@ const AppRoutes = () => {
 
         <Route path={WAITER_ROUTES.waiter} element={<WaiterRoutes />} />
 
+        <Route path={CASHIER_ROUTES.cashier} element={<CashierRoutes />} />
         
           {user?.user ? (
             <>

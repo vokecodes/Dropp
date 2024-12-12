@@ -12,7 +12,7 @@ import MenuItem from "./MenuItem";
 import TopNav from "./TopNav";
 import Button from "./Button";
 import { DashboardLayoutProps } from "../utils/Interfaces";
-import { CHEF_ROUTES, QSR_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
+import { CASHIER_ROUTES, CHEF_ROUTES, QSR_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { SUB_CHEF_USER } from "../config/UserType";
@@ -64,7 +64,7 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdOutlineFoodBank
           size={28}
           color={
-            location?.pathname === QSR_ROUTES.linkQsrOrders
+            location?.pathname === QSR_ROUTES.linkQsrMenu
               ? "#06c167"
               : "#787878"
           }
@@ -72,8 +72,8 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
       ),
       title: "Menu",
       active:
-        location?.pathname === QSR_ROUTES.linkQsrOrders,
-      to: QSR_ROUTES.linkQsrOrders,
+        location?.pathname === QSR_ROUTES.linkQsrMenu,
+      to: QSR_ROUTES.linkQsrMenu,
     },
     {
       icon: (
@@ -126,31 +126,18 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
   const subAdminMenuItems = [
     {
       icon: (
-        <MdHomeFilled
-          size={24}
-          color={
-            location?.pathname === QSR_ROUTES.linkQsr ? "#06c167" : "#787878"
-          }
-        />
-      ),
-      title: "Home",
-      active: location?.pathname === QSR_ROUTES.linkQsr,
-      to: QSR_ROUTES.linkQsr,
-    },
-    {
-      icon: (
         <FaSquarePollVertical
           size={24}
           color={
-            location?.pathname === QSR_ROUTES.linkQsrReports
+            location?.pathname === CASHIER_ROUTES.linkCashier
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Report",
-      active: location?.pathname === QSR_ROUTES.linkQsrReports,
-      to: QSR_ROUTES.linkQsrReports,
+      active: location?.pathname === CASHIER_ROUTES.linkCashier,
+      to: CASHIER_ROUTES.linkCashier,
       beta: true,
     },
     {
@@ -158,7 +145,7 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdOutlineFoodBank
           size={28}
           color={
-            location?.pathname === QSR_ROUTES.linkQsrOrders
+            location?.pathname === CASHIER_ROUTES.linkCashierMenu
               ? "#06c167"
               : "#787878"
           }
@@ -166,55 +153,24 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
       ),
       title: "Menu",
       active:
-        location?.pathname === QSR_ROUTES.linkQsrOrders,
-      to: QSR_ROUTES.linkQsrOrders,
+        location?.pathname === CASHIER_ROUTES.linkCashierMenu,
+      to: CASHIER_ROUTES.linkCashierMenu,
     },
     {
       icon: (
         <LuUsers
           size={24}
           color={
-            location?.pathname === QSR_ROUTES.linkQsrCashier
+            location?.pathname === CASHIER_ROUTES.linkCashierCashier
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Cashier",
-      active: location?.pathname === QSR_ROUTES.linkQsrCashier,
-      to: QSR_ROUTES.linkQsrCashier,
-    },
-    {
-        icon: (
-            <BsChatDots
-            size={24}
-            color={
-                location?.pathname === QSR_ROUTES.linkQsrAudit
-                ? "#06c167"
-                : "#787878"
-            }
-            />
-        ),
-        title: "Audit log",
-        coming: true,
-        active: location?.pathname === QSR_ROUTES.linkQsrAudit,
-        to: "#",
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === QSR_ROUTES.linkQsrSettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === QSR_ROUTES.linkQsrSettings,
-      to: QSR_ROUTES.linkQsrSettings,
-    },
+      active: location?.pathname === CASHIER_ROUTES.linkCashierCashier,
+      to: CASHIER_ROUTES.linkCashierCashier,
+    }
   ];
   
   const cashierMenuItems = [
@@ -223,36 +179,20 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === QSR_ROUTES.linkQsr ? "#06c167" : "#787878"
+            location?.pathname === CASHIER_ROUTES.linkCashier ? "#06c167" : "#787878"
           }
         />
       ),
       title: "Home",
-      active: location?.pathname === QSR_ROUTES.linkQsr,
-      to: QSR_ROUTES.linkQsr,
-    },
-    {
-      icon: (
-        <FaSquarePollVertical
-          size={24}
-          color={
-            location?.pathname === QSR_ROUTES.linkQsrReports
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Report",
-      active: location?.pathname === QSR_ROUTES.linkQsrReports,
-      to: QSR_ROUTES.linkQsrReports,
-      beta: true,
+      active: location?.pathname === CASHIER_ROUTES.linkCashier,
+      to: CASHIER_ROUTES.linkCashier,
     },
     {
       icon: (
         <MdOutlineFoodBank
           size={28}
           color={
-            location?.pathname === QSR_ROUTES.linkQsrOrders
+            location?.pathname === CASHIER_ROUTES.linkCashierMyOrders
               ? "#06c167"
               : "#787878"
           }
@@ -260,55 +200,9 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
       ),
       title: "Menu",
       active:
-        location?.pathname === QSR_ROUTES.linkQsrOrders,
-      to: QSR_ROUTES.linkQsrOrders,
-    },
-    {
-      icon: (
-        <LuUsers
-          size={24}
-          color={
-            location?.pathname === QSR_ROUTES.linkQsrCashier
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Cashier",
-      active: location?.pathname === QSR_ROUTES.linkQsrCashier,
-      to: QSR_ROUTES.linkQsrCashier,
-    },
-    {
-        icon: (
-            <BsChatDots
-            size={24}
-            color={
-                location?.pathname === QSR_ROUTES.linkQsrAudit
-                ? "#06c167"
-                : "#787878"
-            }
-            />
-        ),
-        title: "Audit log",
-        coming: true,
-        active: location?.pathname === QSR_ROUTES.linkQsrAudit,
-        to: "#",
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === QSR_ROUTES.linkQsrSettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === QSR_ROUTES.linkQsrSettings,
-      to: QSR_ROUTES.linkQsrSettings,
-    },
+        location?.pathname === CASHIER_ROUTES.linkCashierMyOrders,
+      to: CASHIER_ROUTES.linkCashierMyOrders,
+    }
   ];
 
   return (
@@ -376,7 +270,7 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
                   )}
                 </>
 
-                <LogoutButton />
+                <LogoutButton cashier={cashier} />
               </div>
               <div className="ml-8">
                 <Button

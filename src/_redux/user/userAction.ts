@@ -25,6 +25,7 @@ import {
   getAdminChartCrud,
   getAdminDashboardSingleCrud,
   getRestaurantSubChefDashboardCrud,
+  getQsrDashboardCrud,
 } from "./userCrud";
 import {
   startCall,
@@ -261,6 +262,31 @@ export const changePasswordSubChefAccount =
       });
   };
 
+export const getQsrSubAdminAccount = () => (dispatch: any) => {
+  dispatch(startCall());
+  return getChefSubChefs()
+    .then(({ data }) => {
+      dispatch(getSubChefs(data?.data));
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+      dispatch(catchError({ error: error?.message }));
+    });
+};
+
+export const changePasswordQsrSubAdminAccount =
+  (data: any, closePasswordModal?: any) => (dispatch: any) => {
+    dispatch(startCall());
+    return changeSubChefPassword(data)
+      .then(({ data }) => {
+        closePasswordModal();
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
 // Company Actions
 
 export const getProfileCompanyAccount = () => (dispatch: any) => {
@@ -334,6 +360,17 @@ export const getRestaurantDashboardAccount =
   (dispatch: any) => {
     dispatch(startDashboardCall());
     return getRestaurantDashboardCrud(fromDate, toDate, payment, section, table, breakdownOption)
+      .then(({ data }) => {
+        dispatch(getRestaurantDashboard({ ...data?.data }));
+      })
+      .finally(() => dispatch(stopDashboardCall()));
+  };
+
+export const getQsrDashboardAccount =
+  (fromDate = "", toDate = "", payment = "", cashier = "") =>
+  (dispatch: any) => {
+    dispatch(startDashboardCall());
+    return getQsrDashboardCrud(fromDate, toDate, payment, cashier)
       .then(({ data }) => {
         dispatch(getRestaurantDashboard({ ...data?.data }));
       })
