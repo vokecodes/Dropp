@@ -29,6 +29,7 @@ import KitchenBoard from "../../components/KitchenBoard";
 import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
 import InfinityScroll from "../../components/InfinityScroll";
+import { getOrderCount } from "../../_redux/user/userCrud";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -44,10 +45,11 @@ const Kitchen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { table, auth } = useSelector(
+  const { user, table, auth } = useSelector(
     (state: any) => ({
       auth: state.auth.user,
       table: state.table.table,
+      user: state.user.user,
     }),
     shallowEqual
   );
@@ -55,33 +57,153 @@ const Kitchen = () => {
   const ref = useRef(null);
 
   const [restaurantOrders, setRestaurantOrders] = useState([]);
-  const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
-  const [page, setPage] = useState(1); // Page number for pagination
+  const [hasMore, setHasMore] = useState({
+    "pending": true,
+    "cooking": true,
+    "ready": true,
+    "sent": true,
+    "completed": true,
+    "declined": true,
+    "archived": true,
+  });
+  const [page, setPage] = useState(1);
 
-  const getRestaurantOrders = async (currentPage = page) => {
-    SERVER.get(`${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`)
-      .then(({ data }) => {
-        if (currentPage === 1) {
-          setRestaurantOrders(data.data);
-        } else {
-          setRestaurantOrders((prevTransactions: any) => [
-            ...prevTransactions,
-            ...data.data,
-          ]);
-        }
+  const [selectedTable, setSelectedTable] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  // const getRestaurantOrders = async (currentPage = page) => {
+  //   SERVER.get(`${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`)
+  //     .then(({ data }) => {
+  //       if (currentPage === 1) {
+  //         setRestaurantOrders(data.data);
+  //       } else {
+  //         setRestaurantOrders((prevTransactions: any) => [
+  //           ...prevTransactions,
+  //           ...data.data,
+  //         ]);
+  //       }
         
-        if(Number(data.pagination.totalPages) > 1){
-          setPage(page + 1);
-          setHasMore(
-            Number(data.pagination.totalPages) > 1 &&
-            Number(data.pagination.currentPage) <= Number(data.pagination.totalPages)
-          );
-        }else{
-          setHasMore(false)
-        }
-      })
-      .catch((err) => {});
+  //       if(Number(data.pagination.totalPages) > 1){
+  //         setPage(page + 1);
+  //         setHasMore(
+  //           Number(data.pagination.totalPages) > 1 &&
+  //           Number(data.pagination.currentPage) <= Number(data.pagination.totalPages)
+  //         );
+  //       }else{
+  //         setHasMore(false)
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // };
+  
+  // const getRestaurantOrdersColumn = async (currentPage = page) => {
+  //   SERVER.get(`${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}`)
+  //     .then(({ data }) => {
+  //       console.log('columnData= ', data)
+  //     })
+  //     .catch((err) => {});
+  //   };
+    
+    const [columns, setColumns] = useState<any>({});
+    const [columnCount, setColumnCount] = useState({
+      "pending": 0,
+      "cooking": 0,
+      "ready": 0,
+      "sent": 0,
+      "completed": 0,
+      "declined": 0,
+      "archived": 0,
+    });
+    const [columnPages, setColumnPages] = useState({
+      "pending": 1,
+      "cooking": 1,
+      "ready": 1,
+      "sent": 1,
+      "completed": 1,
+      "declined": 1,
+      "archived": 1,
+    })
+    const [getMoreOrders, setGetMoreOrders] = useState(true)
+
+    const getRestaurantOrdersColumn = async (currentPage = page) => {
+      try {
+      SERVER.get(`${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}`)
+        .then(({ data }) => {
+          let localCount = {}
+          
+          setColumns((prevColumns) => {
+            const updatedColumns = { ...prevColumns };
+          
+            Object.keys(data?.data).forEach((status) => {
+              if (!updatedColumns[status]) {
+                updatedColumns[status] = [];
+              }
+          
+              const existingIds = new Set(updatedColumns[status].map((item) => item.id));
+          
+              const newItems = data?.data[status].filter((item) => !existingIds.has(item.id));
+          
+              updatedColumns[status] = [...updatedColumns[status], ...newItems];
+
+              setColumnCount((prev) => {
+                const newCount = { ...prev }
+
+                newCount[status] = data?.columnCount[status].totalCount
+
+                return newCount
+              })
+              
+              setHasMore((prev) => {
+                const newHas = { ...prev }
+
+                console.log(
+                  'hasmore= ', 
+                  status, 
+                  updatedColumns[status].length, 
+                  data?.columnCount[status].totalCount, 
+                  !(updatedColumns[status].length === data?.columnCount[status].totalCount)
+                )
+
+                newHas[status] = !(updatedColumns[status].length === data?.columnCount[status].totalCount)
+
+                return newHas
+              })
+
+            });
+          
+            return updatedColumns;
+          });
+    
+          setGetMoreOrders(false)
+        })
+        .catch((err) => {});
+
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
   };
+
+  
+  // const getRestaurantOrderCount = async () => {
+  //   await getOrderCount(
+  //     startDate,
+  //     endDate,
+  //     selectedTable,
+  //     selectedCategory,
+  //     "status",
+  //     user._id
+  //   ).then(({ data }) => {
+  //       console.log('data= ', data)
+  //       setColumnCount({
+  //         ...data?.data,
+  //       })
+  //     })
+  //     .catch((err) => {
+  //       console.log('err= ', err)
+  //     });
+  // };
 
   const [dinningMenuCategories, setDinningMenuCategories] = useState<any>([]);
   const getDinningMenuCategories = () => {
@@ -102,8 +224,19 @@ const Kitchen = () => {
   useEffect(() => {
     dispatch(getTables());
     getDinningMenuCategories();
-    getRestaurantOrders(page);
   }, []);
+
+  useEffect(() => {
+    if(getMoreOrders === true){
+      setPage((prevPage) => prevPage + 1);
+      getRestaurantOrdersColumn();
+    }
+  }, [getMoreOrders]);
+
+  // Load more data when user scrolls
+  const loadMore = () => {
+    setGetMoreOrders(true)
+  };
 
   const [soundNotification, setSoundNotification] = useState(() => {
     return JSON.parse(localStorage.getItem("playSound")) || false;
@@ -353,21 +486,18 @@ const Kitchen = () => {
 
   const todaysDate = new Date().toJSON().slice(0, 10);
 
-  const [selectedTable, setSelectedTable] = useState("");
   const filteredTable = !selectedTable
     ? restaurantOrders
     : restaurantOrders.filter((item: any, i: any) => {
         return item.table?.table == selectedTable?.table;
       });
 
-  const [selectedCategory, setSelectedCategory] = useState("");
   const filteredCategory = !selectedCategory
     ? filteredTable
     : filteredTable.filter((item: any, i: any) => {
         return item.menu?.category == selectedCategory?.value;
       });
 
-  const [startDate, setStartDate] = useState("");
   const filteredStartDate = !startDate
     ? filteredCategory
     : filteredCategory.filter((item: any, i: any) => {
@@ -376,7 +506,6 @@ const Kitchen = () => {
         return createdAt >= date;
       });
 
-  const [endDate, setEndDate] = useState("");
   const filteredEndDate = !endDate
     ? filteredStartDate
     : filteredStartDate.filter((item: any, i: any) => {
@@ -387,85 +516,12 @@ const Kitchen = () => {
 
   const filteredRestaurantOrders = sortByUpdatedAt(filteredEndDate);
 
-  const [columnCount, setColumnCount] = useState({
-    new_orders: 0,
-    cooking: 0,
-    pickup: 0,
-    sent: 0,
-    completed: 0,
-    decline: 0,
-    void: 0,
-  });
 
   useEffect(() => {
-    setColumnCount({
-      new_orders: 0,
-      cooking: 0,
-      pickup: 0,
-      sent: 0,
-      completed: 0,
-      decline: 0,
-      void: 0,
-    });
 
     const suffixes = {};
 
     filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "pending"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          new_orders: prevState.new_orders + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "cooking"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          cooking: prevState.cooking + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "ready"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          pickup: prevState.pickup + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "sent"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          sent: prevState.sent + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "completed" &&
-      order?.status === "completed"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          completed: prevState.completed + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "declined"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          decline: prevState.decline + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "archived"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          void: prevState.void + 1
-        }));
-      }
 
       if (!suffixes[order.parent]) {
         suffixes[order.parent] = 0;
@@ -519,7 +575,8 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
-
+  // console.log('column= ', columns['pending']?.length, columns['completed']?.length)
+  // console.log('count= ', columnCount)
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -791,282 +848,294 @@ const Kitchen = () => {
       </div>
 
       <div className="w-fit md:w-full md:px-6 py-4">
-        <InfinityScroll
-          data={restaurantOrders}
-          getMore={getRestaurantOrders}
-          hasMore={hasMore}
+        
+        <div
+          ref={ref}
+          className="kitchen-div bg-white rounded-2xl w-fit md:w-full p-0 md:p-5 mt-3 h-screen overflow-x-scroll"
         >
-          <div
-            ref={ref}
-            className="kitchen-div bg-white rounded-2xl w-fit md:w-full p-0 md:p-5 mt-3 h-screen overflow-x-scroll"
-          >
-            {/* <div className="flex flex-col items-center justify-start gap-y-4"> */}
-            {/* <div className="w-full h-full"> */}
+          {/* <div className="flex flex-col items-center justify-start gap-y-4"> */}
+          {/* <div className="w-full h-full"> */}
 
-            <div className="snap-x md:snap-none snap-mandatory flex flex-row w-screen overflow-x-scroll md:w-fit h-full px-5 md:px-0 gap-x-5 no-scroll-bar">
-              {/* NEW ORDERS */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="New orders"
-                headerBg="primary_bg_color"
-                bodyBg="bg_pink"
-                columnCount={columnCount.new_orders}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "pending"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"New orders"}
-                        kitchenCardButtons={[
-                          <KitchenButton
-                            title="Start Cooking"
-                            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                            loading={startCooking === order?._id}
-                            onClick={() =>
-                              handleStartCooking(order?.parent, order?._id)
-                            }
-                          />,
-                          <KitchenButton
-                            title="Decline"
-                            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                            onClick={() => {
-                              setDeclineOrder(order?.parent);
-                              setDeclineOrderMenu(order?._id);
-                              openDeclineModal();
-                            }}
-                          />,
-                        ]}
-                      />
-                    ))
-                }
-              />
+          <div className="snap-x md:snap-none snap-mandatory flex flex-row w-screen overflow-x-scroll md:w-fit h-full px-5 md:px-0 gap-x-5 no-scroll-bar">
+            {/* NEW ORDERS */}
+            <KitchenBoard
+              restaurantOrders={columns['pending'] || []}
+              title="New orders"
+              headerBg="primary_bg_color"
+              bodyBg="bg_pink"
+              status="pending"
+              getMore={loadMore}
+              hasMore={hasMore?.pending}
+              columnCount={columnCount.pending}
+              orders={
+                columns['pending'] &&
+                columns['pending']?.length > 0 &&
+                columns['pending']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "pending"
+                  )
+                  ?.map((order: any) => (
+                    <KitchenCard
+                      key={order?._id}
+                      order={order}
+                      restaurantOrders={columns['pending']}
+                      filteredRestaurantOrders={columns['pending']}
+                      title={"New orders"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Start Cooking"
+                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                          loading={startCooking === order?._id}
+                          onClick={() =>
+                            handleStartCooking(order?.parent, order?._id)
+                          }
+                        />,
+                        <KitchenButton
+                          title="Decline"
+                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                          onClick={() => {
+                            setDeclineOrder(order?.parent);
+                            setDeclineOrderMenu(order?._id);
+                            openDeclineModal();
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* COOKING */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Cooking"
-                headerBg="bg-zinc-500"
-                bodyBg="bg-zinc-200"
-                columnCount={columnCount.cooking}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "cooking"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Cooking"}
-                        kitchenCardButtons={[
-                          <KitchenButton
-                            title="Ready For Pickup"
-                            extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                            loading={readyForPickup === order?._id}
-                            onClick={() =>
-                              handleReadyForPickup(order?.parent, order?._id)
-                            }
-                          />,
-                          <KitchenButton
-                            title="Void"
-                            extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                            loading={voided === order?._id}
-                            onClick={() => {
-                              handleVoided(order?.parent, order?._id);
-                            }}
-                          />,
-                        ]}
-                      />
-                    ))
-                }
-              />
+            {/* COOKING */}
+            <KitchenBoard
+              restaurantOrders={columns['cooking'] || []}
+              title="Cooking"
+              headerBg="bg-zinc-500"
+              bodyBg="bg-zinc-200"
+              status="cooking"
+              getMore={loadMore}
+              hasMore={hasMore?.cooking}
+              columnCount={columnCount.cooking}
+              orders={
+                columns['cooking'] &&
+                columns['cooking']?.length > 0 &&
+                columns['cooking']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "cooking"
+                  )
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={restaurantOrders}
+                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      title={"Cooking"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Ready For Pickup"
+                          extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
+                          loading={readyForPickup === order?._id}
+                          onClick={() =>
+                            handleReadyForPickup(order?.parent, order?._id)
+                          }
+                        />,
+                        <KitchenButton
+                          title="Void"
+                          extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
+                          loading={voided === order?._id}
+                          onClick={() => {
+                            handleVoided(order?.parent, order?._id);
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* READY */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Ready for pickup"
-                headerBg="bg-green-600"
-                bodyBg="bg-green-100"
-                columnCount={columnCount.pickup}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" && ro?.status === "ready"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Ready for pickup"}
-                        kitchenCardButtons={[
-                          <KitchenButton
-                            title="Sent"
-                            extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                            loading={sent === order?._id}
-                            onClick={() =>
-                              handleSent(order?.parent, order?._id)
-                            }
-                          />,
-                          <KitchenButton
-                            title="Void"
-                            extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                            loading={voided === order?._id}
-                            onClick={() => {
-                              handleVoided(order?.parent, order?._id);
-                            }}
-                          />,
-                        ]}
-                      />
-                    ))
-                }
-              />
+            {/* READY */}
+            <KitchenBoard
+              restaurantOrders={columns['ready'] || []}
+              title="Ready for pickup"
+              headerBg="bg-green-600"
+              bodyBg="bg-green-100"
+              getMore={loadMore}
+              hasMore={hasMore?.ready}
+              columnCount={columnCount.ready}
+              orders={
+                columns['ready'] &&
+                columns['ready']?.length > 0 &&
+                columns['ready']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" && ro?.status === "ready"
+                  )
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={restaurantOrders}
+                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      title={"Ready for pickup"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Sent"
+                          extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                          loading={sent === order?._id}
+                          onClick={() =>
+                            handleSent(order?.parent, order?._id)
+                          }
+                        />,
+                        <KitchenButton
+                          title="Void"
+                          extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                          loading={voided === order?._id}
+                          onClick={() => {
+                            handleVoided(order?.parent, order?._id);
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* SENT */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Sent"
-                headerBg="bg-yellow-500"
-                bodyBg="bg-yellow-100"
-                columnCount={columnCount.sent}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" && ro?.status === "sent"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Sent"}
-                        kitchenCardButtons={[
-                          <KitchenButton
-                            title="Void"
-                            extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
-                            loading={voided === order?._id}
-                            onClick={() => {
-                              handleVoided(order?.parent, order?._id);
-                            }}
-                          />,
-                        ]}
-                      />
-                    ))
-                }
-              />
+            {/* SENT */}
+            <KitchenBoard
+              restaurantOrders={columns['sent'] || []}
+              title="Sent"
+              headerBg="bg-yellow-500"
+              bodyBg="bg-yellow-100"
+              getMore={loadMore}
+              hasMore={hasMore?.sent}
+              columnCount={columnCount.sent}
+              orders={
+                columns['sent'] &&
+                columns['sent']?.length > 0 &&
+                columns['sent']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" && ro?.status === "sent"
+                  )
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={restaurantOrders}
+                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      title={"Sent"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Void"
+                          extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
+                          loading={voided === order?._id}
+                          onClick={() => {
+                            handleVoided(order?.parent, order?._id);
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* COMPLETED */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Completed"
-                headerBg="bg-green-900"
-                bodyBg="bg-gray-100"
-                columnCount={columnCount.sent}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "completed" &&
-                        ro?.status === "completed"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Completed"}
-                      />
-                    ))
-                }
-              />
+            {/* COMPLETED */}
+            <KitchenBoard
+              restaurantOrders={columns['completed'] || []}
+              title="Completed"
+              headerBg="bg-green-900"
+              bodyBg="bg-gray-100"
+              getMore={loadMore}
+              hasMore={hasMore?.completed}
+              columnCount={columnCount.completed}
+              orders={
+                columns['completed'] &&
+                columns['completed']?.length > 0 &&
+                columns['completed']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "completed" &&
+                      ro?.status === "completed"
+                  )
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={restaurantOrders}
+                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      title={"Completed"}
+                    />
+                  ))
+              }
+            />
 
-              {/* DECLINE */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Decline"
-                headerBg="bg-red-900"
-                bodyBg="bg-red-100"
-                columnCount={columnCount.decline}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "declined"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Decline"}
-                      />
-                    ))
-                }
-              />
+            {/* DECLINE */}
+            <KitchenBoard
+              restaurantOrders={columns['declined'] || []}
+              title="Decline"
+              headerBg="bg-red-900"
+              bodyBg="bg-red-100"
+              getMore={loadMore}
+              hasMore={hasMore?.declined}
+              columnCount={columnCount.declined}
+              orders={
+                columns['declined'] &&
+                columns['declined']?.length > 0 &&
+                columns['declined']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "declined"
+                  )
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={restaurantOrders}
+                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      title={"Decline"}
+                    />
+                  ))
+              }
+            />
 
-              {/* VOIDED */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Void"
-                headerBg="bg-black"
-                bodyBg="bg-neutral-100"
-                columnCount={columnCount.void}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "archived"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Void"}
-                      />
-                    ))
-                }
-              />
-            </div>
-            {/* </div> */}
-            {/* </div> */}
+            {/* VOIDED */}
+            <KitchenBoard
+              restaurantOrders={columns['archived'] || []}
+              title="Void"
+              headerBg="bg-black"
+              bodyBg="bg-neutral-100"
+              getMore={loadMore}
+              hasMore={hasMore?.archived}
+              columnCount={columnCount.archived}
+              orders={
+                columns['archived'] &&
+                columns['archived']?.length > 0 &&
+                columns['archived']
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" &&
+                      ro?.status === "archived"
+                  )
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={restaurantOrders}
+                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      title={"Void"}
+                    />
+                  ))
+              }
+            />
           </div>
-        </InfinityScroll>
+          {/* </div> */}
+          {/* </div> */}
+        </div>
+        
       </div>
 
       <Modal

@@ -310,9 +310,9 @@ const SalesReports = () => {
           order?.posPayment ? "POS" : "Online",
           order?.gift === true
             ? "gift"
-            : order?.order[0].status === "archived"
+            : order?.order[0]?.status === "archived"
             ? "void"
-            : order?.order[0].status,
+            : order?.order[0]?.status,
         ].join(",");
       });
 
