@@ -17,8 +17,11 @@ import Dropdown from "../../../components/Dropdown";
 import { useAppDispatch } from "../../../redux/hooks";
 import {
   addDineInMenu,
+  addQsrSubAdminDineInMenu,
   getDineInMenus,
+  getQsrSubAdminDineInMenus,
   updateDineInMenu,
+  updateQsrSubAdminDineInMenu,
 } from "../../../_redux/dinningMenu/dinningMenuAction";
 import MenuCard from "../../../components/MenuCard";
 import ColoredSpinner from "../../../components/ColoredSpinner";
@@ -41,6 +44,7 @@ import axios from "axios";
 import {
   DINNING_MENU_CATEGORY_URL,
   DINNING_MENU_TAG_URL,
+  QSR_CASHIER_URL,
 } from "../../../_redux/urls";
 import { SERVER } from "../../../config/axios";
 import ChefDashboardLayout from "../../../components/ChefDashboardLayout";
@@ -83,7 +87,7 @@ const discountOptions = [
   { value: "20", label: "20% Discount" },
 ];
 
-const SuperAdminMenuPage = () => {
+const SubAdminMenuPage = () => {
   const dispatch = useAppDispatch();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -107,7 +111,9 @@ const SuperAdminMenuPage = () => {
   const [copyMenu, setCopyMenu] = useState<any>();
 
   const [menuModal, setMenuModal] = useState(false);
-  const openMenuModal = () => setMenuModal(true);
+  const openMenuModal = () => {
+    setMenuModal(true);
+  }
   const closeMenuModal = () => {
     setEditMenu("");
     setMenuModal(false);
@@ -148,7 +154,7 @@ const SuperAdminMenuPage = () => {
     validationSchema: DineInNewMenuInputsSchema,
     onSubmit: async () => {
       if (editMenu) {
-        await dispatch(updateDineInMenu(values, editMenu?._id, closeMenuModal));
+        await dispatch(updateQsrSubAdminDineInMenu(values, editMenu?._id, closeMenuModal));
       } else if (copyMenu) {
         const copiedValues = (({
           foodName,
@@ -159,6 +165,7 @@ const SuperAdminMenuPage = () => {
           description,
           note,
           images,
+          ingredients,
         }) => ({
           foodName,
           price,
@@ -168,11 +175,13 @@ const SuperAdminMenuPage = () => {
           description,
           note,
           images,
+          ingredients,
         }))(values);
-        await dispatch(addDineInMenu(copiedValues, closeCopyMenuModal));
+        console.log('copy= ', copiedValues)
+        await dispatch(addQsrSubAdminDineInMenu(copiedValues, closeCopyMenuModal));
       } else {
         console.log("values= ", values);
-        await dispatch(addDineInMenu(values, closeMenuModal));
+        await dispatch(addQsrSubAdminDineInMenu(values, closeMenuModal));
       }
       setEditMenu("");
       setCopyMenu("");
@@ -224,7 +233,7 @@ const SuperAdminMenuPage = () => {
   };
 
   const getDinningMenuCategories = () => {
-    SERVER.get(DINNING_MENU_CATEGORY_URL)
+    SERVER.get(`${QSR_CASHIER_URL}/sub-admin/dinning-menu-categories`)
       .then(({ data }) => {
         if (
           data?.dinningMenuCategory?.categories &&
@@ -240,7 +249,7 @@ const SuperAdminMenuPage = () => {
 
   const handleSaveCategory = () => {
     setIsLoadingCategories(true);
-    SERVER.patch(DINNING_MENU_CATEGORY_URL, {
+    SERVER.patch(`${QSR_CASHIER_URL}/sub-admin/dinning-menu-categories`, {
       categories: dinningMenuCategories,
     })
       .then(({ data }) => {
@@ -255,7 +264,7 @@ const SuperAdminMenuPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getDineInMenus());
+    dispatch(getQsrSubAdminDineInMenus());
     getDinningMenuCategories();
   }, []);
 
@@ -337,9 +346,6 @@ const SuperAdminMenuPage = () => {
                     <div className="inline-flex flex-row">
                         <div className="flex flex-col lg:flex-row justify-between items-center gap-y-3 lg:gap-y-0 lg:gap-x-5">
                             <div className="w-full lg:w-fit flex flex-row justify-between items-center lg:justify-start lg:gap-x-5">
-                                <Link className="flex flex-row justify-center items-center w-12 h-12 rounded-full bg_gray_color shrink-0" to={QSR_ROUTES.linkQsrOrders}>
-                                    <MdOutlineArrowBackIosNew size={25} className="color-[#8E8E8E]" />
-                                </Link>
 
                                 <h1 className="text-xl text-black font_medium mt-1.5 text-center lg:text-start w-full lg:w-fit">
                                     Menu board
@@ -390,7 +396,7 @@ const SuperAdminMenuPage = () => {
                       <div key={menu?._id} className="lg:w-[31%] mt-7 lg:mr-5">
                         <MenuCard
                           menu={menu}
-                          mode={"dineIn"}
+                          mode={"qsrSubAdmin"}
                           onClickEdit={() => {
                             setEditMenu(menu);
                             openMenuModal();
@@ -977,4 +983,4 @@ const SuperAdminMenuPage = () => {
   );
 };
 
-export default SuperAdminMenuPage;
+export default SubAdminMenuPage;

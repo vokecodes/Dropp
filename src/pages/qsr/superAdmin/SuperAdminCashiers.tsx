@@ -8,11 +8,13 @@ import { IoMdClose } from "react-icons/io";
 import Input from "../../../components/CustomInput";
 import {
   cashierValues,
+  QsrSubAdminValues,
 } from "../../../utils/FormInitialValue";
 import { useFormik } from "formik";
 import { useAppDispatch } from "../../../redux/hooks";
 import {
   CashierInputsSchema,
+  CreateQsrSubAdminSchema,
 } from "../../../utils/ValidationSchema";
 import { Chip, FormControlLabel, ListItemText } from "@mui/material";
 import EmptyState from "../../../components/EmptyState";
@@ -30,6 +32,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
 import { addCashier, deleteCashier, getCashier, updateCashier } from "../../../_redux/cashier/cashierAction";
+import { getQsrSubAdminAccount } from "../../../_redux/user/userAction";
+import { deleteAQsrSubAdmin, registerAQsrSubAdmin } from "../../../_redux/user/userCrud";
 
 const SuperAdminCashiers = () => {
   const dispatch = useAppDispatch();
@@ -45,13 +49,48 @@ const SuperAdminCashiers = () => {
 
   useEffect(() => {
     dispatch(getCashier());
-    dispatch(getChefSubAdminsAccount());
+    dispatch(getQsrSubAdminAccount());
   }, []);
 
   const [togglePassword, setTogglePassword] = useState("password");
-  const [editCashier, setEditCashier] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [addErrorMessage, setAddErrorMessage] = useState();
+  const [selectedLoading, setSelectedLoading] = useState();
 
+  // CASHIER
+  const [openEditCashier, setOpenEditCashier] = useState<any>(null);
+  const [editCashier, setEditCashier] = useState<any>(null);
+  const [ordersModal, setOrdersModal] = useState(false);
+  const openOrdersModal = () => setOrdersModal(true);
+  const closeOrdersModal = () => setOrdersModal(false);
+  const [selectedCashier, setSelectedCashier] = useState();
+  const [openDetails, setOpenDetails] = useState(false);
+  const closeOpenDetails = () => {
+    setOpenDetails(false)
+  }
+
+
+  // SUBADMIN
+  const [editSubAdmin, setEditSubAdmin] = useState<any>(null);
   const [showSubAdmin, setShowSubAdmin] = useState(false)
+  const [subAdminModal, setSubAdminModal] = useState(false);
+  const openSubAdminModal = () => setSubAdminModal(true);
+  const closeSubAdminModal = () => setSubAdminModal(false);
+  const [selectSubAdmin, setSelectSubAdmin] = useState();
+  const [selectedSubAdmin, setSelectedSubAdmin] = useState<any>(null);
+  const [seeSubAdminModal, setSeeSubAdminModal] = useState(false);
+  const openSeeSubAdminModal = (subAdmin: any) => {
+    setSeeSubAdminModal(true);
+    setSelectedSubAdmin(subAdmin);
+  };
+  const closeSeeSubAdminModal = () => {
+    setSeeSubAdminModal(false);
+    setSelectedSubAdmin();
+  };
+
+
+
+
 
   const {
     handleChange,
@@ -63,27 +102,25 @@ const SuperAdminCashiers = () => {
     errors,
     touched,
   } = useFormik({
-    initialValues: cashierValues,
-    validationSchema: CashierInputsSchema,
+    initialValues: subAdminModal ? QsrSubAdminValues : cashierValues,
+    validationSchema: subAdminModal ? CreateQsrSubAdminSchema : CashierInputsSchema,
     onSubmit: async () => {
-      if (editCashier) {
-        await dispatch(
-          updateCashier(values, editCashier?._id, closeOrdersModal, resetForm)
-        );
+      if (subAdminModal) {
+        handleAddSubAdmin();
       } else {
-        await dispatch(addCashier(values, closeOrdersModal, resetForm));
+        if (openEditCashier) {
+          await dispatch(
+            updateCashier(values, editCashier?._id, closeOrdersModal, resetForm)
+          );
+        } else {
+          await dispatch(addCashier(values, closeOrdersModal, resetForm));
+        }
       }
+      setOpenEditCashier(false);
       setEditCashier(null);
     },
   });
 
-  const [selectedLoading, setSelectedLoading] = useState();
-  const [selectedCashier, setSelectedCashier] = useState();
-  const [openDetails, setOpenDetails] = useState(false);
-
-  const closeOpenDetails = () => {
-    setOpenDetails(false)
-  }
 
   const deleteACashier = async (tableId) => {
     setSelectedLoading(tableId);
@@ -97,12 +134,12 @@ const SuperAdminCashiers = () => {
     setAddErrorMessage();
     setIsLoading(true);
     try {
-      const { data } = await registerASubAdmin(values);
+      const { data } = await registerAQsrSubAdmin(values);
 
       if (data?.success) {
         closeSubAdminModal();
         resetForm();
-        dispatch(getChefSubAdminsAccount());
+        dispatch(getQsrSubAdminAccount());
       }
     } catch (error) {
       setAddErrorMessage(error?.response?.data?.message);
@@ -115,10 +152,10 @@ const SuperAdminCashiers = () => {
     setSelectSubAdmin(subAdminId);
 
     try {
-      const { data } = await deleteASubAdmin(subAdminId);
+      const { data } = await deleteAQsrSubAdmin(subAdminId);
 
       if (data?.success) {
-        dispatch(getChefSubAdminsAccount());
+        dispatch(getQsrSubAdminAccount());
       }
     } catch (error) {
     } finally {
@@ -128,9 +165,7 @@ const SuperAdminCashiers = () => {
 
   
 
-  const [ordersModal, setOrdersModal] = useState(false);
-  const openOrdersModal = () => setOrdersModal(true);
-  const closeOrdersModal = () => setOrdersModal(false);
+  
   
   return (
     <>
@@ -151,8 +186,8 @@ const SuperAdminCashiers = () => {
                   onClick={() => {
                     setShowSubAdmin(true);
                     openSubAdminModal();
-                    setEditSuperWaiter(null);
-                    setValues(SuperWaiterTableValues);
+                    setEditSubAdmin(null);
+                    setValues(QsrSubAdminValues);
                   }}
                 />
 
@@ -175,7 +210,7 @@ const SuperAdminCashiers = () => {
                   <div className="w-full flex flex-row items-center justify-start gap-x-3 my-2">
                       <span
                         className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
-                          superWaiter
+                          showSubAdmin
                             ? "bg-[#EDECEC]"
                             : "primary_bg_color text-white"
                         }`}
@@ -186,7 +221,7 @@ const SuperAdminCashiers = () => {
 
                       <span
                         className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
-                          superWaiter
+                          showSubAdmin
                             ? "primary_bg_color text-white"
                             : "bg-[#EDECEC]"
                         }`}
@@ -199,7 +234,7 @@ const SuperAdminCashiers = () => {
                     {showSubAdmin ? (
                       <>
                         {subAdmins?.length > 0 ? (
-                          <div className="grid grid-cols-1 lg:grid-cols-4 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
+                          <div className="grid grid-cols-1 lg:grid-cols-3 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
                             {subAdmins?.map((subAdmin: any, i: number) => (
                               <div
                                 key={i}
@@ -275,6 +310,7 @@ const SuperAdminCashiers = () => {
                                       onClick={() => {
                                         openOrdersModal();
                                         setEditCashier(cashier);
+                                        setOpenEditCashier(true);
                                         setValues(cashier);
                                       }}
                                     />
@@ -316,7 +352,7 @@ const SuperAdminCashiers = () => {
                 >
                   <div className="flex flex-row w-full py-1 ">
                     <p className="w-10/12 text-center font_medium font-bold text-xl">
-                      {editCashier ? "Edit Cashier" : "Add Cashier"}
+                      {openEditCashier ? "Edit Cashier" : "Add Cashier"}
                     </p>
                     <div className="w-2/12 flex flex-row items-center justify-center">
                       <IoMdClose
@@ -374,20 +410,6 @@ const SuperAdminCashiers = () => {
                         errors.whatsappNumber
                       }
                     />
-
-                    <div className="w-full my-2">
-                      <FormControlLabel 
-                        control={
-                          <Checkbox 
-                            onChange={handleChange} 
-                            value={values.isSubAdmin} 
-                            name="isSubAdmin"
-                            checked={values.isSubAdmin}
-                          />
-                        } 
-                        label="Sub admin" labelPlacement="start" 
-                      />
-                    </div>
 
                     <Input
                       placeholder="Password"
@@ -459,11 +481,6 @@ const SuperAdminCashiers = () => {
                     {selectedCashier?.whatsappNumber && (
                         <p className="text-lg text-black font_medium ">
                         Whatsapp Number: {selectedCashier?.whatsappNumber}
-                        </p>
-                    )}
-                    {selectedCashier?.isSubAdmin && (
-                        <p className="text-lg text-black font_medium ">
-                          Sub Admin
                         </p>
                     )}
                     <p className="text-lg text-black font_medium ">

@@ -13,11 +13,13 @@ import {
   getChefWalletAccount,
   getProfileChefAccount,
   getQsrDashboardAccount,
+  getQsrSubAdminDashboardAccount,
   getRestaurantDashboardAccount,
 } from "../../../_redux/user/userAction";
 import { formatRemoteAmountKobo } from "../../../utils/formatMethods";
 import {
   getQsrOrdersPage,
+  getQsrSubAdminOrdersPage,
   getRestaurantOrdersPage,
 } from "../../../_redux/user/userCrud";
 import { getSections } from "../../../_redux/section/sectionAction";
@@ -28,7 +30,7 @@ import { ClickAwayListener } from "@mui/material";
 import InfinityScroll from "../../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../../components/DashboardItemSkeletonLoader";
 import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
-import { getCashier } from "../../../_redux/cashier/cashierAction";
+import { getCashier, getQsrSubAdminCashier } from "../../../_redux/cashier/cashierAction";
 
 const PAYMENT_OPTIONS = ["All", "online", "pos"];
 
@@ -51,12 +53,11 @@ const paymentOptions = ["Online", "POS"];
 
 const SubAdminReport = () => {
   const dispatch = useAppDispatch();
-  const { user, dashboardLoading, dashboard, section, cashier, cashiers } = useSelector(
+  const { user, dashboardLoading, dashboard, section, cashiers } = useSelector(
     (state: any) => ({
       dashboardLoading: state.user.dashboardLoading,
       dashboard: state.user.dashboard,
       section: state.section.section,
-      cashier: state.cashier.cashier,
       cashiers: state.cashier.cashiers,
     }),
     shallowEqual
@@ -65,9 +66,8 @@ const SubAdminReport = () => {
   useEffect(() => {
     // dispatch(getProfileChefAccount());
     // dispatch(getChefWalletAccount());
-    dispatch(getChefRestaurantWalletAccount());
     // dispatch(getSections());
-    dispatch(getCashier());
+    dispatch(getQsrSubAdminCashier());
   }, []);
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const SubAdminReport = () => {
 
   // Function to fetch more data when scrolling
   const fetchRestaurantOrders = async () => {
-    await getQsrOrdersPage(
+    await getQsrSubAdminOrdersPage(
       page,
       startDate,
       endDate,
@@ -208,7 +208,7 @@ const SubAdminReport = () => {
   useEffect(() => {
     if(page === 1){
       dispatch(
-        getQsrDashboardAccount(
+        getQsrSubAdminDashboardAccount(
           startDate,
           endDate,
           paymentType,

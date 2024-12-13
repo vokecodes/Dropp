@@ -12,10 +12,11 @@ import MenuItem from "./MenuItem";
 import TopNav from "./TopNav";
 import Button from "./Button";
 import { DashboardLayoutProps } from "../utils/Interfaces";
-import { CASHIER_ROUTES, CHEF_ROUTES, QSR_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
+import { CASHIER_ROUTES, CHEF_ROUTES, QSR_ROUTES, QSR_SUBADMIN_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
-import { SUB_CHEF_USER } from "../config/UserType";
+import { QSR_SUB_ADMIN_USER, SUB_CHEF_USER } from "../config/UserType";
+import QsrTopNav from "./QsrTopNav";
 
 const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
@@ -129,15 +130,15 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <FaSquarePollVertical
           size={24}
           color={
-            location?.pathname === CASHIER_ROUTES.linkCashier
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdmin
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Report",
-      active: location?.pathname === CASHIER_ROUTES.linkCashier,
-      to: CASHIER_ROUTES.linkCashier,
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdmin,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdmin,
       beta: true,
     },
     {
@@ -145,7 +146,7 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdOutlineFoodBank
           size={28}
           color={
-            location?.pathname === CASHIER_ROUTES.linkCashierMenu
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu
               ? "#06c167"
               : "#787878"
           }
@@ -153,24 +154,39 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
       ),
       title: "Menu",
       active:
-        location?.pathname === CASHIER_ROUTES.linkCashierMenu,
-      to: CASHIER_ROUTES.linkCashierMenu,
+        location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
     },
     {
       icon: (
         <LuUsers
           size={24}
           color={
-            location?.pathname === CASHIER_ROUTES.linkCashierCashier
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Cashier",
-      active: location?.pathname === CASHIER_ROUTES.linkCashierCashier,
-      to: CASHIER_ROUTES.linkCashierCashier,
-    }
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier,
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+    },
   ];
   
   const cashierMenuItems = [
@@ -192,28 +208,28 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdOutlineFoodBank
           size={28}
           color={
-            location?.pathname === CASHIER_ROUTES.linkCashierMyOrders
+            location?.pathname === CASHIER_ROUTES.linkCashierOrders
               ? "#06c167"
               : "#787878"
           }
         />
       ),
-      title: "Menu",
+      title: "Orders",
       active:
-        location?.pathname === CASHIER_ROUTES.linkCashierMyOrders,
-      to: CASHIER_ROUTES.linkCashierMyOrders,
+        location?.pathname === CASHIER_ROUTES.linkCashierOrders,
+      to: CASHIER_ROUTES.linkCashierOrders,
     }
   ];
 
   return (
     <div className="dashboard_bg">
-      <TopNav />
+      <QsrTopNav />
       <div className="py-5 w-full h-screen lg:flex">
         <div className="hidden lg:block lg:w-1/5 h-svh">
           <div className="fixed h-screen" style={{ width: "17.12rem" }}>
             <div className="h-5/6 w-full bg-white py-4 pr-3 flex flex-col">
               <p className="pl-10 text-lg text-black font_medium">
-                Hi {user?.firstName},
+                Hi {auth?.user.firstName || cashier?.employeeName},
               </p>
               <p className="pl-10 text-sm gray_color font_medium">
                 {user?.email}
@@ -236,7 +252,7 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
                         />
                       ))}
                     </>
-                  ) : cashier?.isSubAdmin ? (
+                  ) : auth?.user?.userType === QSR_SUB_ADMIN_USER ? (
                     <>
                       {subAdminMenuItems?.map((item: any, i) => (
                         <MenuItem

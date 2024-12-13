@@ -64,7 +64,6 @@ const SuperAdminReport = () => {
 
   useEffect(() => {
     dispatch(getProfileChefAccount());
-    dispatch(getChefWalletAccount());
     dispatch(getChefRestaurantWalletAccount());
     dispatch(getSections());
     dispatch(getCashier());

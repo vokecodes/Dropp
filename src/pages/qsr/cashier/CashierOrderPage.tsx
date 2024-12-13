@@ -26,19 +26,14 @@ import { createAQsrOrder } from "../../../_redux/order/orderCrud";
 import { TRANSACTION_URL } from "../../../_redux/urls";
 
 
-const SuperAdminOrderPage = () => {
+const CashierOrderPage = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { error, loading, dinningMenu, business, businessLoading, user, cart } =
+  const { cashier, cart } =
     useSelector(
       (state: any) => ({
-        business: state.business.business,
-        businessLoading: state.business.loading,
-        dinningMenu: state.dinningMenu.dinningMenu,
-        loading: state.dinningMenu.loading,
-        error: state.dinningMenu.error,
-        user: state.user.user,
+        cashier: state.cashier.cashier,
         cart: state.cart.cart,
       }),
       shallowEqual
@@ -53,14 +48,14 @@ const SuperAdminOrderPage = () => {
     setIsLoading(true);
     try {
       const businessRestaurant = await getABusinessRestaurantByName(
-        business.businessName
+        cashier.businessName
       );
       
       if (businessRestaurant.data) {
         setChef(businessRestaurant.data.data);
       }
     } catch (error) {
-      // Handle errors here
+      console.log('error= ', error)
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +142,7 @@ const SuperAdminOrderPage = () => {
   const verifyTransaction = async (referenceId: any) => {
     try {
       const { data } = await axios.get(
-        `${TRANSACTION_URL}/verify/${referenceId}?restaurantId=${business._id}`
+        `${TRANSACTION_URL}/verify/${referenceId}?restaurantId=${cashier.quick_service}`
       );
       const result = data?.data;
       console.log('data= ', data)
@@ -172,14 +167,14 @@ const SuperAdminOrderPage = () => {
 
     try {
       const createOrEditOrder = async () => {
-        return await createAQsrOrder({ ...orderItem, salesType: "online" });
+        return await createAQsrOrder({ ...orderItem, salesType: "online", qsrCashier: cashier?._id });
       };
     
       const handlePayment = (orderId: string) => {
         const handler = window.PaystackPop.setup({
           key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
           email: orderItem.email,
-          amount: amount * 100,
+          amount: Number(amount) * 100,
           ref: orderId, // Use the generated order ID as a reference
           metadata: {
             transactionType: "QSR_ORDER",
@@ -221,7 +216,8 @@ const SuperAdminOrderPage = () => {
       const createOrEditOrder = async () => {
         return await createAQsrOrder({
           ...orderItem,
-          salesType: "pos"
+          salesType: "pos",
+          qsrCashier: cashier?._id
         });
       };
     
@@ -342,12 +338,12 @@ const SuperAdminOrderPage = () => {
                 </h1>
                 
                 <div className={`w-full lg:w-fit flex flex-row justify-between gap-y-2 lg:gap-y-0 ${cartMenu && cartMenu?.length && 'pr-12'}`}>
-                    <Link className="flex items-center" to={QSR_ROUTES.linkQsrMenu}>
+                    {/* <Link className="flex items-center" to={QSR_ROUTES.linkQsrMenu}>
                         <OutlineButton
                         title="Menu Board"
                         extraClasses="px-8 py-2 mr-3"
                         />
-                    </Link>
+                    </Link> */}
 
                     <div className={`w-fit h-fit rounded-2xl  border border-[#06C167] p-3 cursor-pointer ${cartMenu && cartMenu?.length ? 'bg-[#EDFFF6] fixed top-[9.7rem] lg:top-[6.6rem] right-2 z-50' : 'bg-[#F3F3F3]'}`} onClick={() => setCartModal(true)}>
                         <span className="relative w-fit h-fit">
@@ -508,37 +504,37 @@ const SuperAdminOrderPage = () => {
         >
             <div className="fixed right-0 z-10 h-full w-full lg:w-1/3 bg-neutral-100 lg:bg-white overflow-auto outline-none">
                 <QsrCart
-                    handleCheckout={(orderItem: any) =>
-                        handleCheckout(orderItem)
-                    }
-                    handlePayLaterCheckout={(orderItem: any) =>
-                        handlePayLaterCheckout(orderItem)
-                    }
-                    checkoutLoading={checkoutLoading}
-                    checkoutLaterLoading={checkoutLaterLoading}
-                    cartMenu={cartMenu}
-                    chef={chef}
-                    handleIncrement={handleIncrement}
-                    handleDecrement={handleDecrement}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    cartView={cartView}
-                    setCartView={setCartView}
-                    deliveryView={deliveryView}
-                    setDeliveryView={setDeliveryView}
-                    reviewView={reviewView}
-                    setReviewView={setReviewView}
-                    handleDelete={handleDelete}
-                    selectedMealQuantityReached={selectedMealQuantityReached}
-                    showMinimumQuantityReached={showMinimumQuantityReached}
-                    addMenuError={addMenuError}
-                    setAddMenuError={setAddMenuError}
-                    openModal={openModal}
-                    handleAddToBag={handleAddToBag}
-                    cartModal={cartModal}
-                    setCartModal={setCartModal}
-                    totalAmount={totalAmount}
-                    closeCartModal={closeCartModal}
+                  handleCheckout={(orderItem: any) =>
+                      handleCheckout(orderItem)
+                  }
+                  handlePayLaterCheckout={(orderItem: any) =>
+                      handlePayLaterCheckout(orderItem)
+                  }
+                  checkoutLoading={checkoutLoading}
+                  checkoutLaterLoading={checkoutLaterLoading}
+                  cartMenu={cartMenu}
+                  chef={chef}
+                  handleIncrement={handleIncrement}
+                  handleDecrement={handleDecrement}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  cartView={cartView}
+                  setCartView={setCartView}
+                  deliveryView={deliveryView}
+                  setDeliveryView={setDeliveryView}
+                  reviewView={reviewView}
+                  setReviewView={setReviewView}
+                  handleDelete={handleDelete}
+                  selectedMealQuantityReached={selectedMealQuantityReached}
+                  showMinimumQuantityReached={showMinimumQuantityReached}
+                  addMenuError={addMenuError}
+                  setAddMenuError={setAddMenuError}
+                  openModal={openModal}
+                  handleAddToBag={handleAddToBag}
+                  cartModal={cartModal}
+                  setCartModal={setCartModal}
+                  totalAmount={totalAmount}
+                  closeCartModal={closeCartModal}
                 />
             </div>
         </Modal>
@@ -630,4 +626,4 @@ const SuperAdminOrderPage = () => {
   );
 };
 
-export default SuperAdminOrderPage;
+export default CashierOrderPage;

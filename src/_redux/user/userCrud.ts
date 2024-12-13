@@ -152,23 +152,23 @@ export const registerAQsrSubAdmin = (data: any) => {
 };
 
 export const getChefQsrSubAdmins = () => {
-  return SERVER.get(`${CHEF_URL}/sub-chef`);
+  return SERVER.get(`${QSR_CASHIER_URL}/sub-admin`);
 };
 
 export const deleteAQsrSubAdmin = (subChefId: string) => {
-  return SERVER.delete(`${CHEF_URL}/sub-chef/${subChefId}`);
+  return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/${subChefId}`);
 };
 
 export const getQsrSubAdminProfile = () => {
-  return SERVER.get(`${SUB_CHEF_URL}`);
+  return SERVER.get(`${QSR_CASHIER_URL}/sub-admin`);
 };
 
 export const updateQsrSubAdminProfile = (data: any) => {
-  return SERVER.patch(SUB_CHEF_URL, { ...data });
+  return SERVER.patch(`${QSR_CASHIER_URL}/sub-admin`, { ...data });
 };
 
 export const changeQsrSubAdminPassword = (data: any) => {
-  return SERVER.patch(`${SUB_CHEF_URL}/change-password`, {
+  return SERVER.patch(`${QSR_CASHIER_URL}/sub-admin/change-password`, {
     ...data,
   });
 };
@@ -194,6 +194,17 @@ export const getQsrDashboardCrud = (
 ) => {
   return SERVER.get(
     `${QSR_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+  );
+};
+
+export const getQsrSubAdminDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_CASHIER_URL}/sub-admin/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
   );
 };
 
@@ -244,6 +255,18 @@ export const getQsrOrdersPage = (
 ) => {
   return SERVER.get(
     `${QSR_ORDER_URL}/qsr-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+  );
+};
+
+export const getQsrSubAdminOrdersPage = (
+  page = 1,
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_CASHIER_URL}/sub-admin/qsr-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
   );
 };
 

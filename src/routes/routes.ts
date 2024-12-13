@@ -44,6 +44,8 @@ export const HOME_ROUTES = {
   linkExplore: "/explore",
   exploreChef: "explore/:businessName/:foodName?",
   linkExploreChef: "/explore/:businessName/:foodName?",
+  exploreQsr: "qsr/:businessName",
+  linkExploreQsr: "/qsr/:businessName",
   exploreRestaurant: "restaurant/:businessName/:table",
   linkExploreRestaurant: "/restaurant/:businessName/:table",
   exploreRestaurantEdit: "restaurant/:businessName/:table/add/:menuId",
@@ -171,6 +173,19 @@ export const WAITER_ROUTES = {
   linkWaiter: "/waiter",
 };
 
+export const QSR_SUBADMIN_ROUTES = {
+  qsrSubAdmin: "/qsr-sub-admin/*",
+  linkQsrSubAdmin: "/qsr-sub-admin",
+  qsrSubAdminMenu: "menu",
+  linkQsrSubAdminMenu: "/qsr-sub-admin/menu",
+  qsrSubAdminCashier: "cashier-management",
+  linkQsrSubAdminCashier: "/qsr-sub-admin/cashier-management",
+  qsrSubAdminSettings: "settings",
+  linkQsrSubAdminSettings: "/qsr-sub-admin/settings",
+  // qsrSubAdminReports: "reports",
+  // linkQsrSubAdminReports: "/qsr-sub-admin/reports",
+};
+
 export const CASHIER_ROUTES = {
   cashier: "/cashier/*",
   linkCashier: "/cashier",
@@ -178,14 +193,6 @@ export const CASHIER_ROUTES = {
   linkCashierLogin: "/cashier",
   cashierOrders: "orders",
   linkCashierOrders: "/cashier/orders",
-  cashierMyOrders: "my-orders",
-  linkCashierMyOrders: "/cashier/my-orders",
-  cashierMenu: "menu",
-  linkCashierMenu: "/cashier/menu",
-  cashierCashier: "cashier-management",
-  linkCashierCashier: "/cashier/cashier-management",
-  cashierReports: "reports",
-  linkCashierReports: "/cashier/reports",
 };
 
 export const ADMIN_ROUTES = {

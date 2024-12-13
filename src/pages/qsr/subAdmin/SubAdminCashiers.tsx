@@ -29,9 +29,9 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
-import { addCashier, deleteCashier, getCashier, updateCashier } from "../../../_redux/cashier/cashierAction";
+import { addCashier, addQsrSubAdminCashier, deleteCashier, deleteQsrSubAdminCashier, getCashier, getQsrSubAdminCashier, updateCashier, updateQsrSubAdminCashier } from "../../../_redux/cashier/cashierAction";
 
-const SuperAdminCashiers = () => {
+const SubAdminCashiers = () => {
   const dispatch = useAppDispatch();
 
   const { loading, cashiers, section } = useSelector(
@@ -43,7 +43,7 @@ const SuperAdminCashiers = () => {
   );
 
   useEffect(() => {
-    dispatch(getCashier());
+    dispatch(getQsrSubAdminCashier());
   }, []);
 
   const [togglePassword, setTogglePassword] = useState("password");
@@ -64,10 +64,10 @@ const SuperAdminCashiers = () => {
     onSubmit: async () => {
       if (editCashier) {
         await dispatch(
-          updateCashier(values, editCashier?._id, closeOrdersModal, resetForm)
+          updateQsrSubAdminCashier(values, editCashier?._id, closeOrdersModal, resetForm)
         );
       } else {
-        await dispatch(addCashier(values, closeOrdersModal, resetForm));
+        await dispatch(addQsrSubAdminCashier(values, closeOrdersModal, resetForm));
       }
       setEditCashier(null);
     },
@@ -83,7 +83,7 @@ const SuperAdminCashiers = () => {
 
   const deleteACashier = async (tableId) => {
     setSelectedLoading(tableId);
-    await dispatch(deleteCashier(tableId));
+    await dispatch(deleteQsrSubAdminCashier(tableId));
     setTimeout(() => {
       setSelectedLoading();
     }, 1200);
@@ -250,20 +250,6 @@ const SuperAdminCashiers = () => {
                       }
                     />
 
-                    <div className="w-full my-2">
-                      <FormControlLabel 
-                        control={
-                          <Checkbox 
-                            onChange={handleChange} 
-                            value={values.isSubAdmin} 
-                            name="isSubAdmin"
-                            checked={values.isSubAdmin}
-                          />
-                        } 
-                        label="Sub admin" labelPlacement="start" 
-                      />
-                    </div>
-
                     <Input
                       placeholder="Password"
                       name="password"
@@ -336,11 +322,6 @@ const SuperAdminCashiers = () => {
                         Whatsapp Number: {selectedCashier?.whatsappNumber}
                         </p>
                     )}
-                    {selectedCashier?.isSubAdmin && (
-                        <p className="text-lg text-black font_medium ">
-                          Sub Admin
-                        </p>
-                    )}
                     <p className="text-lg text-black font_medium ">
                         Password: {selectedCashier?.password}
                     </p>
@@ -356,4 +337,4 @@ const SuperAdminCashiers = () => {
   );
 };
 
-export default SuperAdminCashiers;
+export default SubAdminCashiers;

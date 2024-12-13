@@ -131,7 +131,6 @@ export const DineInNewMenuInputsSchema = Yup.object().shape({
 });
 
 export const CashierInputsSchema = Yup.object().shape({
-  isSubAdmin: Yup.boolean().optional(),
   employeeName: Yup.string().required("Employee name is required."),
   employeeID: Yup.string().required("Employee ID is required."),
   whatsappNumber: Yup.string().optional(),
@@ -209,6 +208,22 @@ export const SuperWaiterLoginSchema = Yup.object().shape({
 });
 
 export const CreateSubChefSchema = Yup.object().shape({
+  firstName: Yup.string().required("First name is required."),
+  lastName: Yup.string().required("Last name is required."),
+  email: Yup.string().email().required("Email is required."),
+  password: Yup.string()
+    .required("Password is required.")
+    .matches(/\w*[a-z]\w*/, "Password must have a small letter")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+    .matches(/\d/, "Password must have a number")
+    .matches(
+      /[!+@#$%^&*()\-_"=+{}; :,<.>]/,
+      "Password must have a special character"
+    )
+    .min(8, ({ min }) => `Password must be at least ${min} characters`),
+});
+
+export const CreateQsrSubAdminSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required."),
   lastName: Yup.string().required("Last name is required."),
   email: Yup.string().email().required("Email is required."),

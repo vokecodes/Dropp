@@ -96,7 +96,6 @@ export const cashierValues = {
   employeeID: "",
   password: "",
   whatsappNumber: "",
-  isSubAdmin: false,
 };
 
 export const WaiterTableValues = {
@@ -168,6 +167,13 @@ export const SuperWaiterLoginValues = {
 };
 
 export const SubChefValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+};
+
+export const QsrSubAdminValues = {
   firstName: "",
   lastName: "",
   email: "",

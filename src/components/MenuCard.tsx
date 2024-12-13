@@ -10,7 +10,9 @@ import ColoredSpinner from "./ColoredSpinner";
 import { formatPrice } from "../utils/formatMethods";
 import {
   deleteDineInMenu,
+  deleteQsrSubAdminDineInMenu,
   showHideDineInMenu,
+  showHideQsrSubAdminDineInMenu,
 } from "../_redux/dinningMenu/dinningMenuAction";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FaConciergeBell } from "react-icons/fa";
@@ -42,6 +44,15 @@ const MenuCard = ({
     if (mode === "dineIn") {
       await dispatch(
         showHideDineInMenu(
+          {
+            hide: !menu?.hide,
+          },
+          menu?._id
+        )
+      );
+    } else if (mode === "qsrSubAdmin") {
+      await dispatch(
+        showHideQsrSubAdminDineInMenu(
           {
             hide: !menu?.hide,
           },
@@ -204,6 +215,8 @@ const MenuCard = ({
                       onClick={() =>
                         mode === "dineIn"
                           ? dispatch(deleteDineInMenu(menu?._id))
+                          : mode === "qsrSubAdmin" 
+                          ? dispatch(deleteQsrSubAdminDineInMenu(menu?._id))
                           : dispatch(deleteMenu(menu?._id))
                       }
                     />

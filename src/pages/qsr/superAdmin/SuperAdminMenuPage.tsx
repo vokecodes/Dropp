@@ -159,6 +159,7 @@ const SuperAdminMenuPage = () => {
           description,
           note,
           images,
+          ingredients,
         }) => ({
           foodName,
           price,
@@ -168,6 +169,7 @@ const SuperAdminMenuPage = () => {
           description,
           note,
           images,
+          ingredients,
         }))(values);
         await dispatch(addDineInMenu(copiedValues, closeCopyMenuModal));
       } else {
@@ -337,9 +339,6 @@ const SuperAdminMenuPage = () => {
                     <div className="inline-flex flex-row">
                         <div className="flex flex-col lg:flex-row justify-between items-center gap-y-3 lg:gap-y-0 lg:gap-x-5">
                             <div className="w-full lg:w-fit flex flex-row justify-between items-center lg:justify-start lg:gap-x-5">
-                                <Link className="flex flex-row justify-center items-center w-12 h-12 rounded-full bg_gray_color shrink-0" to={QSR_ROUTES.linkQsrOrders}>
-                                    <MdOutlineArrowBackIosNew size={25} className="color-[#8E8E8E]" />
-                                </Link>
 
                                 <h1 className="text-xl text-black font_medium mt-1.5 text-center lg:text-start w-full lg:w-fit">
                                     Menu board

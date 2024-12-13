@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { shallowEqual, useSelector } from "react-redux";
@@ -51,16 +51,18 @@ const CashierLogin = () => {
     initialValues: CashierLoginValues,
     validationSchema: CashierLoginSchema,
     onSubmit: () => {
+      setErrorMessage('')
       SERVER.post(`${QSR_CASHIER_URL}/login`, { ...values })
           .then(({ data }) => {
             dispatch(loginCashier({ ...data?.data, userType: "cashier" }));
+            navigate("/cashier")
           })
           .catch((error) => {
-            dispatch(catchError({ error: error?.message }));
+            dispatch(catchError({ error: error?.response.data.message }));
+            setErrorMessage(error?.response.data.message)
           })
           .finally(() => {
             setSubmitting(false)
-            navigate("/cashier")
           });
 
       // TrackGoogleAnalyticsEvent(
