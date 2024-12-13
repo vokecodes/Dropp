@@ -254,12 +254,12 @@ const QsrTopNav = ({ page, event }: any) => {
             {person?.userType === USER_TYPE.CHEF ||
             person?.userType === USER_TYPE.COMPANY ? (
               <>
-                <span className="sr-only">Homemade</span>
+                <span className="sr-only">Dropp</span>
                 <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
               </>
             ) : (
               <Link to="/">
-                <span className="sr-only">Homemade</span>
+                <span className="sr-only">Dropp</span>
                 <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
               </Link>
             )}
