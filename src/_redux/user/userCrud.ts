@@ -267,6 +267,19 @@ export const getQsrSubAdminOrdersPage = (
 ) => {
   return SERVER.get(
     `${QSR_CASHIER_URL}/sub-admin/qsr-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+   );
+};
+
+export const downloadRestaurantReport = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = "",
+  breakdownOption = ""
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
   );
 };
 

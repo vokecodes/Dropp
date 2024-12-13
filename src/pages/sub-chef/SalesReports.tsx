@@ -9,9 +9,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import PageTitle from "../../components/PageTitle";
 import { useAppDispatch } from "../../redux/hooks";
-import {
-  getRestaurantSubChefDashboardAccount,
-} from "../../_redux/user/userAction";
+import { getRestaurantSubChefDashboardAccount } from "../../_redux/user/userAction";
 import { formatRemoteAmountKobo } from "../../utils/formatMethods";
 import {
   getSubChefOrdersPage,
@@ -67,22 +65,22 @@ const SalesReports = () => {
     shallowEqual
   );
 
-
-  const [section, setSection] = useState([])
+  const [section, setSection] = useState([]);
 
   const fetchSections = async () => {
-    await getSubChefRestaurantSections().then(({ data }) => {
+    await getSubChefRestaurantSections()
+      .then(({ data }) => {
         setSection(data.data);
-    }).catch((err) => {
+      })
+      .catch((err) => {
         const error = err?.response?.data;
         console.log(error);
-      });;
+      });
   };
-
 
   useEffect(() => {
     dispatch(subChefGetTables());
-    fetchSections()
+    fetchSections();
   }, []);
 
   useEffect(() => {
@@ -152,7 +150,6 @@ const SalesReports = () => {
     },
   ];
 
-  
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -207,23 +204,23 @@ const SalesReports = () => {
   };
 
   const fetchOrders = async () => {
-    await getSubChefOrdersPage(ordersPage, startDate, endDate).then(({ data }) => {
-      if (page === 1) {
-        setOrdersTransactions(data.data);
-      } else {
-        setOrdersTransactions((prevTransactions: any) => [
-          ...prevTransactions,
-          ...data.data,
-        ]);
+    await getSubChefOrdersPage(ordersPage, startDate, endDate).then(
+      ({ data }) => {
+        if (page === 1) {
+          setOrdersTransactions(data.data);
+        } else {
+          setOrdersTransactions((prevTransactions: any) => [
+            ...prevTransactions,
+            ...data.data,
+          ]);
+        }
+        setOrdersPage(ordersPage + 1);
+        setOrdersHasMore(
+          data.pagination.currentPage !== data.pagination.totalPages
+        );
       }
-      setOrdersPage(ordersPage + 1);
-      setOrdersHasMore(
-        data.pagination.currentPage !== data.pagination.totalPages
-      );
-    });
+    );
   };
-  
-  
 
   // Reset page and data when filters change
   const resetFilters = () => {
@@ -235,7 +232,7 @@ const SalesReports = () => {
 
   useEffect(() => {
     dispatch(
-        getRestaurantSubChefDashboardAccount(
+      getRestaurantSubChefDashboardAccount(
         startDate,
         endDate,
         paymentType,
@@ -246,8 +243,6 @@ const SalesReports = () => {
     fetchRestaurantOrders();
     fetchOrders();
   }, [endDate, paymentType, filterSection, filterTable]);
-
-  
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -538,7 +533,8 @@ const SalesReports = () => {
                 Payment Type
               </label>
               <div className="mt-2 lg:mt-0">
-                <div className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                <div
+                  className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
                   onClick={() => {
                     setOpenPaymentOptions(!openPaymentOptions);
                   }}
@@ -753,7 +749,7 @@ const SalesReports = () => {
                     fill="#F78F9B"
                     className="size-5"
                     data-tooltip-id="net-sales"
-                    data-tooltip-content="Gross sales minus platform fees."
+                    data-tooltip-content="Gross sales including platform fees."
                     data-tooltip-place="right-end"
                     data-tooltip-class="bg-white"
                   >
@@ -958,7 +954,6 @@ const SalesReports = () => {
                   data={transactions}
                   getMore={fetchRestaurantOrders}
                   hasMore={hasMore}
-                  
                 >
                   <div
                     ref={tableContainerRef}
@@ -1699,7 +1694,6 @@ const SalesReports = () => {
                   data={ordersTransactions}
                   getMore={fetchOrders}
                   hasMore={ordersHasMore}
-                  
                 >
                   <div
                     ref={tableContainerRef}

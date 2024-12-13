@@ -94,15 +94,14 @@ const CustomTooltip = ({ payload, label }: any) => {
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
-  const { user, dashboardLoading, dashboard } =
-    useSelector(
-      (state: any) => ({
-        user: state.user.user,
-        dashboardLoading: state.user.dashboardLoading,
-        dashboard: state.user.dashboard,
-      }),
-      shallowEqual
-    );
+  const { user, dashboardLoading, dashboard } = useSelector(
+    (state: any) => ({
+      user: state.user.user,
+      dashboardLoading: state.user.dashboardLoading,
+      dashboard: state.user.dashboard,
+    }),
+    shallowEqual
+  );
 
   const safeDivide = (a: any, b: any) => {
     if (b === 0) {
@@ -179,7 +178,10 @@ const DashboardPage = () => {
     },
     {
       title: "Restaurants",
-      value: currentRestaurant !== "All" ? 1 : dashboard?.restaurants || restaurants?.length,
+      value:
+        currentRestaurant !== "All"
+          ? 1
+          : dashboard?.restaurants || restaurants?.length,
       toolTipId: "restaurants",
       toolTipContent: "Total number of restaurants",
     },
@@ -245,7 +247,15 @@ const DashboardPage = () => {
         SERVER.get(
           "https://v6.exchangerate-api.com/v6/5ce22ab53db63681b9dd1eee/latest/USD"
         ),
-        SERVER.get(`${ADMIN_DROPP_DASHBOARD_URL}/chart?fromDate=${startDate}&toDate=${endDate}&restaurantId=${currentRestaurant !== "All" ? restaurants.filter(item => item?.business?.businessName === currentRestaurant)[0]?.profile?._id : '' }`),
+        SERVER.get(
+          `${ADMIN_DROPP_DASHBOARD_URL}/chart?fromDate=${startDate}&toDate=${endDate}&restaurantId=${
+            currentRestaurant !== "All"
+              ? restaurants.filter(
+                  (item) => item?.business?.businessName === currentRestaurant
+                )[0]?.profile?._id
+              : ""
+          }`
+        ),
       ]);
 
       // Handle restaurants data
@@ -273,9 +283,9 @@ const DashboardPage = () => {
       const conversionRate = exchangeRes.data?.conversion_rates["NGN"];
       console.log("Currency (NGN)= ", conversionRate);
       setConversion(conversionRate);
-      
-      const adminChart = chartRes.data?.data
-      setChartData(adminChart)
+
+      const adminChart = chartRes.data?.data;
+      setChartData(adminChart);
       setCurrentChartYears(Object.keys(adminChart).reverse());
       setCurrentChartYear(Object.keys(adminChart).reverse()[0]);
     } catch (error) {
@@ -287,20 +297,28 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    if(currentRestaurant !== "All"){
-      const restaurantId = restaurants.filter(item => item?.business?.businessName === currentRestaurant)
-      
-      dispatch(getAdminDashboardAccountSingle(startDate, endDate, restaurantId[0]?.profile?._id));
+    if (currentRestaurant !== "All") {
+      const restaurantId = restaurants.filter(
+        (item) => item?.business?.businessName === currentRestaurant
+      );
 
-      setTotalRestaurants(1)
-    }else{
+      dispatch(
+        getAdminDashboardAccountSingle(
+          startDate,
+          endDate,
+          restaurantId[0]?.profile?._id
+        )
+      );
+
+      setTotalRestaurants(1);
+    } else {
       dispatch(getAdminDashboardAccount(startDate, endDate));
     }
-    
+
     // Call the function to fetch data
     fetchData();
   }, [startDate, endDate, currentRestaurant]);
-  
+
   const handleClickAway = (flag: string) => {
     if (flag === "restaurant") {
       setOpenRestaurantOptions(false);
@@ -308,21 +326,24 @@ const DashboardPage = () => {
       setOpenCurrentChartData(false);
     }
   };
-  
-  const formatYAxis = number => currencyType == 'Dollars' ? `$${number.toLocaleString()}` : `₦${number.toLocaleString()}`;
-  
-  const formatMonth = month => monthNames[month - 1];
-  
-  const convertDollars = chartData && chartData[currentChartYear]?.map((item: any) => {
-    return {
-      month: item.month,
-      GMV: item.GMV / conversion,
-      revenue: item.revenue / conversion
-    };
-  });
-  
-  
-  
+
+  const formatYAxis = (number) =>
+    currencyType == "Dollars"
+      ? `$${number.toLocaleString()}`
+      : `₦${number.toLocaleString()}`;
+
+  const formatMonth = (month) => monthNames[month - 1];
+
+  const convertDollars =
+    chartData &&
+    chartData[currentChartYear]?.map((item: any) => {
+      return {
+        month: item.month,
+        GMV: item.GMV / conversion,
+        revenue: item.revenue / conversion,
+      };
+    });
+
   const convertMonthNumbersToNames = (data: any) => {
     const monthNames = [
       "January",
@@ -344,16 +365,16 @@ const DashboardPage = () => {
         ...item,
         month: monthNames[item.month - 1],
         GMV: item.GMV.toLocaleString(),
-        revenue: item.revenue.toLocaleString()
+        revenue: item.revenue.toLocaleString(),
       };
     });
-  }
-  
+  };
+
   const downloadChart = () => {
     if (!chartData) {
       alert("No data to download!");
     }
-    
+
     const csvRows = [];
     const filename = "data.csv";
     const initialData =
@@ -387,10 +408,10 @@ const DashboardPage = () => {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  }
-  
+  };
+
   const todaysDate = new Date().toJSON().slice(0, 10);
-  
+
   return (
     <AdminDashboardLayout>
       <div className="w-full px-6 py-4 bg-white" style={{}}>
@@ -527,22 +548,22 @@ const DashboardPage = () => {
                 onClick={() => setCurrencyType("Dollars")}
               >
                 <p className="font_medium">Dollars</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="#BABABA"
-                    className="h-5 w-5"
-                    data-tooltip-id={"converter"}
-                    data-tooltip-content={`$1 = ₦${conversion.toLocaleString()}`}
-                    data-tooltip-place="right-end"
-                    data-tooltip-type="light"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="#BABABA"
+                  className="h-5 w-5"
+                  data-tooltip-id={"converter"}
+                  data-tooltip-content={`$1 = ₦${conversion.toLocaleString()}`}
+                  data-tooltip-place="right-end"
+                  data-tooltip-type="light"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 <Tooltip id={"converter"} />
               </div>
             </div>
@@ -562,7 +583,7 @@ const DashboardPage = () => {
                   fill="#BABABA"
                   className="size-5"
                   data-tooltip-id="net-sales"
-                  data-tooltip-content="Gross sales minus platform fees."
+                  data-tooltip-content="Gross sales including platform fees."
                   data-tooltip-place="right-end"
                   data-tooltip-class="bg-white"
                 >
