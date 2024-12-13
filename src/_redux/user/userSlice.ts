@@ -9,6 +9,7 @@ const initialState = {
   restaurantWallet: null,
   restaurantWalletTransaction: null,
   subChefs: null,
+  subAdmins: null,
   dashboardLoading: false,
   dashboard: null,
   chartData: null,
@@ -64,6 +65,11 @@ export const userSLice = createSlice({
       state.error = null;
       state.subChefs = action.payload;
     },
+    getSubAdmins: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.subAdmins = action.payload;
+    },
     // start dashboard call
     startDashboardCall: (state) => {
       state.dashboardLoading = true;
@@ -114,6 +120,7 @@ export const {
   getRestaurantWallet,
   getRestaurantWalletTransaction,
   getSubChefs,
+  getSubAdmins,
   getRestaurantDashboard,
   getAdminDashboard,
   getMonthlyChart,

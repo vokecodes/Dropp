@@ -22,524 +22,227 @@ import {
   COMPANY_ROUTES,
   HOME_ROUTES,
   SUB_CHEF_ROUTES,
+  QSR_SUBADMIN_ROUTES,
+  CASHIER_ROUTES,
+  QSR_ROUTES,
 } from "../routes/routes";
 import { USER_TYPE } from "../utils/Globals";
 import MenuItem from "./MenuItem";
 import LogoutButton from "./LogoutButton";
-import { SUB_CHEF_USER } from "../config/UserType";
+import { QSR_SUB_ADMIN_USER, SUB_CHEF_USER } from "../config/UserType";
 import { FaSquarePollVertical } from "react-icons/fa6";
+import { LuUsers } from "react-icons/lu";
 
-const TopNav = ({ page, event }: any) => {
+const QsrTopNav = ({ page, event }: any) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user, person } = useSelector(
+  const { user, person, cashier } = useSelector(
     (state: any) => ({
       user: state.auth.user,
       person: state.user.user,
+      cashier: state.cashier.cashier,
     }),
     shallowEqual
   );
 
-  const companyMenuItems = [
+  const superAdminMenuItems = [
     {
       icon: (
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === COMPANY_ROUTES.linkCompany
-              ? "#06c167"
-              : "#787878"
+            location?.pathname === QSR_ROUTES.linkQsr ? "#06c167" : "#787878"
           }
         />
       ),
       title: "Home",
-      active: location?.pathname === COMPANY_ROUTES.linkCompany,
-      to: COMPANY_ROUTES.linkCompany,
-    },
-    {
-      icon: (
-        <CgFileDocument
-          size={24}
-          color={
-            location?.pathname === COMPANY_ROUTES.linkCompanyEmployees
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Employees",
-      active: location?.pathname === COMPANY_ROUTES.linkCompanyEmployees,
-      to: COMPANY_ROUTES.linkCompanyEmployees,
-    },
-    {
-      icon: (
-        <RiWallet3Line
-          size={24}
-          color={
-            location?.pathname === COMPANY_ROUTES.linkCompanyWallet
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "My Wallet",
-      active: location?.pathname === COMPANY_ROUTES.linkCompanyWallet,
-      to: COMPANY_ROUTES.linkCompanyWallet,
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === COMPANY_ROUTES.linkCompanySettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === COMPANY_ROUTES.linkCompanySettings,
-      to: COMPANY_ROUTES.linkCompanySettings,
-    },
-  ];
-
-  const chefMenuItems = [
-    {
-      icon: (
-        <MdHomeFilled
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
-          }
-        />
-      ),
-      title: "Home",
-      active: location?.pathname === CHEF_ROUTES.linkChef,
-      to: CHEF_ROUTES.linkChef,
-    },
-    {
-      icon: (
-        <CgFileDocument
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefOrders
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Orders",
-      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
-      to: CHEF_ROUTES.linkChefOrders,
-    },
-    {
-      icon: (
-        <CiForkAndKnife
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Menu",
-      active: location?.pathname === CHEF_ROUTES.linkChefMenu,
-      to: CHEF_ROUTES.linkChefMenu,
-    },
-    {
-      icon: (
-        <RiWallet3Line
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "My Wallet",
-      active: location?.pathname === CHEF_ROUTES.linkChefWallet,
-      to: CHEF_ROUTES.linkChefWallet,
-    },
-    {
-      icon: (
-        <BsChatDots
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Chat",
-      active: location?.pathname === CHEF_ROUTES.linkChefChat,
-      to: CHEF_ROUTES.linkChefChat,
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === CHEF_ROUTES.linkChefSettings,
-      to: CHEF_ROUTES.linkChefSettings,
-    },
-  ];
-
-  const restaurantMenuItems = [
-    {
-      icon: (
-        <MdHomeFilled
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
-          }
-        />
-      ),
-      title: "Home",
-      active: location?.pathname === CHEF_ROUTES.linkChef,
-      to: CHEF_ROUTES.linkChef,
+      active: location?.pathname === QSR_ROUTES.linkQsr,
+      to: QSR_ROUTES.linkQsr,
     },
     {
       icon: (
         <FaSquarePollVertical
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefReports
+            location?.pathname === QSR_ROUTES.linkQsrReports
               ? "#06c167"
               : "#787878"
           }
         />
       ),
-      title: "Reports",
-      active: location?.pathname === CHEF_ROUTES.linkChefReports,
-      to: CHEF_ROUTES.linkChefReports,
+      title: "Report",
+      active: location?.pathname === QSR_ROUTES.linkQsrReports,
+      to: QSR_ROUTES.linkQsrReports,
+      beta: true,
     },
     {
       icon: (
-        <CgFileDocument
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrMenu
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Menu",
+      active:
+        location?.pathname === QSR_ROUTES.linkQsrMenu,
+      to: QSR_ROUTES.linkQsrMenu,
+    },
+    {
+      icon: (
+        <LuUsers
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefOrders
+            location?.pathname === QSR_ROUTES.linkQsrCashier
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Cashier",
+      active: location?.pathname === QSR_ROUTES.linkQsrCashier,
+      to: QSR_ROUTES.linkQsrCashier,
+    },
+    {
+        icon: (
+            <BsChatDots
+            size={24}
+            color={
+                location?.pathname === QSR_ROUTES.linkQsrAudit
+                ? "#06c167"
+                : "#787878"
+            }
+            />
+        ),
+        title: "Audit log",
+        coming: true,
+        active: location?.pathname === QSR_ROUTES.linkQsrAudit,
+        to: "#",
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === QSR_ROUTES.linkQsrSettings,
+      to: QSR_ROUTES.linkQsrSettings,
+    },
+  ];
+  
+  const subAdminMenuItems = [
+    {
+      icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdmin
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Report",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdmin,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdmin,
+      beta: true,
+    },
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Menu",
+      active:
+        location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
+    },
+    {
+      icon: (
+        <LuUsers
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Cashier",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier,
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+    },
+  ];
+  
+  const cashierMenuItems = [
+    {
+      icon: (
+        <MdHomeFilled
+          size={24}
+          color={
+            location?.pathname === CASHIER_ROUTES.linkCashier ? "#06c167" : "#787878"
+          }
+        />
+      ),
+      title: "Home",
+      active: location?.pathname === CASHIER_ROUTES.linkCashier,
+      to: CASHIER_ROUTES.linkCashier,
+    },
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === CASHIER_ROUTES.linkCashierOrders
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Orders",
-      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
-      to: CHEF_ROUTES.linkChefOrders,
-    },
-    {
-      icon: (
-        <CiForkAndKnife
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefDineIn
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefTableManagement
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Dine in",
       active:
-        location?.pathname === CHEF_ROUTES.linkChefDineIn ||
-        location?.pathname === CHEF_ROUTES.linkChefTableManagement,
-      to: CHEF_ROUTES.linkChefDineIn,
-    },
-    {
-      icon: (
-        <MdOutlineFoodBank
-          size={28}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Menu",
-      active:
-        location?.pathname === CHEF_ROUTES.linkChefMenu ||
-        location?.pathname === CHEF_ROUTES.linkChefMenuOnline ||
-        location?.pathname === CHEF_ROUTES.linkChefMenuDineIn,
-      to: CHEF_ROUTES.linkChefMenu,
-    },
-    {
-      icon: (
-        <GiKnifeFork
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkKitchen
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Kitchen",
-      active: location?.pathname === CHEF_ROUTES.linkKitchen,
-      to: CHEF_ROUTES.linkKitchen,
-    },
-    {
-      icon: (
-        <RiWallet3Line
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefWallet
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "My Wallet",
-      active: location?.pathname === CHEF_ROUTES.linkChefWallet,
-      to: CHEF_ROUTES.linkChefWallet,
-    },
-    {
-      icon: (
-        <BsChatDots
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefChat
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Chat",
-      active: location?.pathname === CHEF_ROUTES.linkChefChat,
-      to: CHEF_ROUTES.linkChefChat,
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefSettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === CHEF_ROUTES.linkChefSettings,
-      to: CHEF_ROUTES.linkChefSettings,
-    },
-  ];
-
-  const customerMenuItems = [
-    {
-      icon: <AiOutlineSearch size={24} color={"#787878"} />,
-      title: "Find a meal",
-      active: false,
-      to: HOME_ROUTES.linkExplore,
-    },
-    {
-      icon: (
-        <CgFileDocument
-          size={24}
-          color={
-            location?.pathname === CUSTOMER_ROUTES.linkCustomer ||
-            location?.pathname === CUSTOMER_ROUTES.linkCustomerOrders
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "My Orders",
-      active:
-        location?.pathname === CUSTOMER_ROUTES.linkCustomer ||
-        location?.pathname === CUSTOMER_ROUTES.linkCustomerOrders,
-      to: CUSTOMER_ROUTES.linkCustomer,
-    },
-    {
-      icon: (
-        <RiWallet3Line
-          size={24}
-          color={
-            location?.pathname === CUSTOMER_ROUTES.linkCustomerWallet
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "My Wallet",
-      active: location?.pathname === CUSTOMER_ROUTES.linkCustomerWallet,
-      to: CUSTOMER_ROUTES.linkCustomerWallet,
-    },
-    {
-      icon: (
-        <GrFavorite
-          size={24}
-          color={
-            location?.pathname === CUSTOMER_ROUTES.linkCustomerFavourites
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "My Favourites",
-      active: location?.pathname === CUSTOMER_ROUTES.linkCustomerFavourites,
-      to: CUSTOMER_ROUTES.linkCustomerFavourites,
-    },
-    {
-      icon: (
-        <BsChatDots
-          size={24}
-          color={
-            location?.pathname === CUSTOMER_ROUTES.linkCustomerChat
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Chat",
-      active: location?.pathname === CUSTOMER_ROUTES.linkCustomerChat,
-      to: CUSTOMER_ROUTES.linkCustomerChat,
-    },
-    {
-      icon: (
-        <RxStarFilled
-          size={24}
-          color={
-            location?.pathname === CUSTOMER_ROUTES.linkCustomerSubscription
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Subscription",
-      active: location?.pathname === CUSTOMER_ROUTES.linkCustomerSubscription,
-      to: CUSTOMER_ROUTES.linkCustomerSubscription,
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === CUSTOMER_ROUTES.linkCustomerSettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === CUSTOMER_ROUTES.linkCustomerSettings,
-      to: CUSTOMER_ROUTES.linkCustomerSettings,
-    },
-  ];
-
-  const subChefMenuItems = [
-    {
-      icon: (
-        <MdOutlineFoodBank
-          size={28}
-          color={
-            location?.pathname === SUB_CHEF_ROUTES.linkSubChef
-              ? "#06c167"
-              : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline
-              ? "#06c167"
-              : location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Menu",
-      active:
-        location?.pathname === SUB_CHEF_ROUTES.linkSubChef ||
-        location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuOnline ||
-        location?.pathname === SUB_CHEF_ROUTES.linkSubChefMenuDineIn,
-      to: SUB_CHEF_ROUTES.linkSubChef,
-    },
-    {
-      icon: (
-        <CiForkAndKnife
-          size={24}
-          color={
-            location?.pathname === SUB_CHEF_ROUTES.linkSubChefDineIn
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Dine in",
-      active: location?.pathname === SUB_CHEF_ROUTES.linkSubChefDineIn,
-      to: SUB_CHEF_ROUTES.linkSubChefDineIn,
-    },
-    {
-      icon: (
-        <CgFileDocument
-          size={24}
-          color={
-            location?.pathname === SUB_CHEF_ROUTES.linkSubChefTableManagement
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Tables",
-      active: location?.pathname === SUB_CHEF_ROUTES.linkSubChefTableManagement,
-      to: SUB_CHEF_ROUTES.linkSubChefTableManagement,
-    },
-    {
-      icon: (
-        <GiKnifeFork
-          size={24}
-          color={
-            location?.pathname === SUB_CHEF_ROUTES.linkKitchen
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Kitchen",
-      active: location?.pathname === SUB_CHEF_ROUTES.linkKitchen,
-      to: SUB_CHEF_ROUTES.linkKitchen,
-      newTab: true,
-    },
-    {
-      icon: (
-        <AiFillSetting
-          size={24}
-          color={
-            location?.pathname === SUB_CHEF_ROUTES.linkSubChefSettings
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Settings",
-      active: location?.pathname === SUB_CHEF_ROUTES.linkSubChefSettings,
-      to: SUB_CHEF_ROUTES.linkSubChefSettings,
-    },
+        location?.pathname === CASHIER_ROUTES.linkCashierOrders,
+      to: CASHIER_ROUTES.linkCashierOrders,
+    }
   ];
 
   const menuItems =
-    person?.userType === USER_TYPE.SUB_CHEF
-      ? subChefMenuItems
-      : person?.isRestaurant
-      ? restaurantMenuItems
-      : person?.userType === USER_TYPE.CHEF
-      ? chefMenuItems
-      : person?.userType === USER_TYPE.COMPANY
-      ? companyMenuItems
-      : customerMenuItems;
+    user?.user?.chefType === "quick_service"
+      ? superAdminMenuItems
+      : user?.user?.userType === QSR_SUB_ADMIN_USER
+      ? subAdminMenuItems
+      : cashierMenuItems;
 
   const notHomeRoutes = location?.pathname.startsWith("/c");
 
@@ -561,7 +264,7 @@ const TopNav = ({ page, event }: any) => {
               </Link>
             )}
           </div>
-          {user?.user ? (
+          {(user?.user || cashier) ? (
             <div className={notHomeRoutes ? "lg:hidden" : ""}>
               <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                 <span className="sr-only">Open menu</span>
@@ -632,7 +335,7 @@ const TopNav = ({ page, event }: any) => {
           className="fixed z-10 top-2 h-svh lg:-top-5 transform transition w-full lg:w-96 lg:right-10"
         >
           <div className="w-11/12 lg:w-auto mx-auto h-svh lg:h-auto divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-            {user ? (
+            {(user || cashier) ? (
               <div className="w-full h-full">
                 <div className="flex flex-col gallery_bg py-3 rounded-t-xl">
                   <div className="flex self-end mr-5">
@@ -731,4 +434,4 @@ const TopNav = ({ page, event }: any) => {
   );
 };
 
-export default TopNav;
+export default QsrTopNav;

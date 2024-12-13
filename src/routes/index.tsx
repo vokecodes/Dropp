@@ -1,26 +1,27 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   BrowserRouter,
 } from "react-router-dom";
 import { connect, shallowEqual, useSelector } from "react-redux";
 import Home from "../pages/dropp-main/Home";
-import Dashboard from "../pages/dropp-main/Dashboard";
 import AuthRoutes from "./authRoutes";
 import {
   ADMIN_ROUTES,
   AUTH_ROUTES,
+  CASHIER_ROUTES,
   CHEF_ROUTES,
   COMPANY_ROUTES,
   CUSTOMER_ROUTES,
   HOME_ROUTES,
+  QSR_ROUTES,
+  QSR_SUBADMIN_ROUTES,
   SUB_CHEF_ROUTES,
   WAITER_ROUTES,
 } from "./routes";
 import NotFound from "../components/NotFound";
-import { ADMIN_USER, CHEF_USER, COMPANY_USER, SUB_CHEF_USER } from "../config/UserType";
+import { ADMIN_USER, CHEF_USER, COMPANY_USER, QSR_SUB_ADMIN_USER, SUB_CHEF_USER } from "../config/UserType";
 import Explore from "../pages/customer/Explore";
 import ChefShop from "../pages/chef/ChefShop";
 import RestaurantShop from "../pages/chef/RestaurantShop";
@@ -39,9 +40,9 @@ import CompanyRoutes from "../pages/company/Routes";
 import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";
 import CustomerEventSignUp from "../pages/events/SignUp";
-import DashRoutes from "../pages/dashboard/Routes";
 import AdminRoutes from "../pages/dashboard/Routes";
-import IdleTimerLayout from "../utils/idleTimerLayout";
+import { QsrRoutes, CashierRoutes, QsrSubAdminRoutes } from "../pages/qsr/Routes";
+import QsrShop from "../pages/qsr/QsrShop";
 
 const AppRoutes = () => {
   const { user } = useSelector(
@@ -61,11 +62,15 @@ const AppRoutes = () => {
         <Route
           path={HOME_ROUTES.exploreRestaurant}
           element={<RestaurantShop />}
-          />
+        />
+        <Route
+          path={HOME_ROUTES.exploreQsr}
+          element={<QsrShop />}
+        />
         <Route
           path={HOME_ROUTES.exploreRestaurantEdit}
           element={<RestaurantShop />}
-          />
+        />
         <Route
           path={HOME_ROUTES.chefLandingPage}
           element={<ChefLandingPage />}
@@ -87,15 +92,27 @@ const AppRoutes = () => {
 
         <Route path={WAITER_ROUTES.waiter} element={<WaiterRoutes />} />
 
+        <Route path={CASHIER_ROUTES.cashier} element={<CashierRoutes />} />
         
           {user?.user ? (
             <>
               {user?.user?.userType === CHEF_USER ? (
-                <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
+                <>
+                  {user?.user?.chefType === 'quick_service' ? (
+                    <Route path={QSR_ROUTES.qsr} element={<QsrRoutes />} />
+                  ) : (
+                    <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
+                  )}
+                </>
               ) : user?.user?.userType === SUB_CHEF_USER ? (
                 <Route
                   path={SUB_CHEF_ROUTES.subChef}
                   element={<SubChefRoutes />}
+                />
+              ) : user?.user?.userType === QSR_SUB_ADMIN_USER ? (
+                <Route
+                  path={QSR_SUBADMIN_ROUTES.qsrSubAdmin}
+                  element={<QsrSubAdminRoutes />}
                 />
               ) : user?.user?.userType === COMPANY_USER ? (
                 <Route

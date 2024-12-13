@@ -4,8 +4,8 @@ import { HOME_ROUTES } from "../routes/routes";
 
 const Footer = ({ logo }) => {
   return (
-    <div className="bg-[#24412C]">
-      <div className="relative lg:pt-60">
+    <div className={`bg-[#24412C]`}>
+      <div className="relative lg:pt-30">
         <div className="w-4/5 mx-auto flex flex-col lg:flex-row justify-center gap-y-10 py-14">
           <div className="w-full lg:mr-20">
             <Link to="/">

@@ -91,13 +91,20 @@ export const DineInNewMenuValues = {
   images: "",
 };
 
+export const cashierValues = {
+  employeeName: "",
+  employeeID: "",
+  password: "",
+  whatsappNumber: "",
+};
+
 export const WaiterTableValues = {
   section: "",
   employeeAssigned: "",
   employeeID: "",
   table: "",
   password: "",
-  whatasappNumber: "",
+  whatsappNumber: "",
 };
 
 export const SuperWaiterTableValues = {
@@ -137,6 +144,17 @@ export const RestaurantCheckoutValues = {
   notes: "",
 };
 
+export const QsrCheckoutValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+};
+
+export const CashierLoginValues = {
+  employeeID: "",
+  password: "",
+};
+
 export const WaiterLoginValues = {
   employeeID: "",
   table: "",
@@ -149,6 +167,13 @@ export const SuperWaiterLoginValues = {
 };
 
 export const SubChefValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+};
+
+export const QsrSubAdminValues = {
   firstName: "",
   lastName: "",
   email: "",
