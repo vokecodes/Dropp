@@ -53,12 +53,13 @@ const Kitchen = () => {
   const ref = useRef(null);
   const [restaurantOrders, setRestaurantOrders] = useState([]);
   
-  const [selectedTable, setSelectedTable] = useState<any>(null);
+  const [selectedTable, setSelectedTable] = useState<any>('');
   const [selectedCategory, setSelectedCategory] = useState<any>("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   
   const loading = useRef(false)
+  const [filterLoading, setFilterLoading] = useState(false)
   const [hasMore, setHasMore] = useState({
     "pending": true,
     "cooking": true,
@@ -86,28 +87,32 @@ const Kitchen = () => {
   
     try {
       const { data } = await SERVER.get(
-        `${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}`
+        `${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}&selectedTable=${selectedTable ? selectedTable?._id : ''}&selectedCategory=${selectedCategory}&startDate=${startDate}&endDate=${endDate}`
       );
   
       const totalPages = data?.pagination.totalPages || 1;
   
-      setColumns((prevColumns) => {
-        const updatedColumns = { ...prevColumns };
+      if(currentPage === 1 && noSkip){
+        setColumns({...data?.data})
+      }else{
+        setColumns((prevColumns) => {
+          const updatedColumns = { ...prevColumns };
+    
+          Object.keys(data?.data || {}).forEach((status) => {
+            if (!updatedColumns[status]) {
+              updatedColumns[status] = [];
+            }
+    
+            const existingIds = new Set(updatedColumns[status].map((item) => item._id));
   
-        Object.keys(data?.data || {}).forEach((status) => {
-          if (!updatedColumns[status]) {
-            updatedColumns[status] = [];
-          }
-  
-          const existingIds = new Set(updatedColumns[status].map((item) => item._id));
-
-          const newItems = data.data[status].filter((item) => !existingIds.has(item._id));
-          
-          updatedColumns[status] = [...updatedColumns[status], ...newItems];
+            const newItems = data.data[status].filter((item) => !existingIds.has(item._id));
+            
+            updatedColumns[status] = [...updatedColumns[status], ...newItems];
+          });
+    
+          return updatedColumns;
         });
-  
-        return updatedColumns;
-      });
+      }
   
       setColumnCount((prev) => {
         const newCount = { ...prev };
@@ -147,6 +152,7 @@ const Kitchen = () => {
       }else{
         loading.current = false;
       }
+      setFilterLoading(false)
     }
     
   };
@@ -169,10 +175,11 @@ const Kitchen = () => {
   };
 
   useEffect(() => {
+    setFilterLoading(true)
     dispatch(getTables());
     getDinningMenuCategories();
-    getRestaurantOrdersColumn();
-  }, []);
+    getRestaurantOrdersColumn(1);
+  }, [endDate, selectedCategory, selectedTable]);
 
   
   const loadMore = () => {
@@ -451,40 +458,9 @@ const Kitchen = () => {
 
     const localFiltered = Object.fromEntries(
       Object.entries(columns).map(([key, value]) => {
-        // Filter the table first
-        const filteredTable = !selectedTable
-          ? (value as any[])
-          : (value as any[]).filter((item: any) => {
-              return item.table?.table === selectedTable?.table;
-            });
-  
-        // Filter by category
-        const filteredCategory = !selectedCategory
-          ? filteredTable
-          : filteredTable.filter((item: any) => {
-              return item.menu?.category === selectedCategory?.value;
-            });
-  
-        // Filter by start date
-        const filteredStartDate = !startDate
-          ? filteredCategory
-          : filteredCategory.filter((item: any) => {
-              const createdAt = new Date(item.createdAt);
-              const date = new Date(startDate);
-              return createdAt >= date;
-            });
-  
-        // Filter by end date
-        const filteredEndDate = !endDate
-          ? filteredStartDate
-          : filteredStartDate.filter((item: any) => {
-              const createdAt = new Date(item.createdAt);
-              const date = new Date(endDate);
-              return createdAt <= date;
-            });
   
         // Sort by 'createdAt' before returning
-        const sortedArray = sortByCreatedAt(filteredEndDate);
+        const sortedArray = sortByCreatedAt((value as any[]));
   
         // Add display IDs
         const withDisplayIds = addDisplayIds(sortedArray);
@@ -661,7 +637,7 @@ const Kitchen = () => {
                           >
                             <div
                               className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                selectedTable?.table === s?.table
+                                selectedTable?._id === s?._id
                                   ? "primary_bg_color"
                                   : "bg_gray_color"
                               }`}
@@ -767,7 +743,25 @@ const Kitchen = () => {
               setSelectedCategory("");
             }}
           >
-            <p className="font_medium">Reset</p>
+            {filterLoading ? (
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" stroke="#6D6D6D" strokeWidth="4" />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          ) : (
+            <>
+              <p className="font_medium">Reset</p>
+            </>
+          )}
           </div>
         </div>
 
