@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import { ClickAwayListener, Modal } from "@mui/material";
@@ -18,7 +17,6 @@ import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
 import moment from "moment";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-import invariant from "tiny-invariant";
 import {
   draggable,
   dropTargetForElements,
@@ -28,8 +26,6 @@ import KitchenCard from "../../components/kitchenCard";
 import KitchenBoard from "../../components/KitchenBoard";
 import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
-import InfinityScroll from "../../components/InfinityScroll";
-import { getOrderCount } from "../../_redux/user/userCrud";
 
 const socket = io(import.meta.env.VITE_BASE_URL, {
   withCredentials: true,
@@ -55,8 +51,14 @@ const Kitchen = () => {
   );
 
   const ref = useRef(null);
-
   const [restaurantOrders, setRestaurantOrders] = useState([]);
+  
+  const [selectedTable, setSelectedTable] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<any>("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  
+  const loading = useRef(false)
   const [hasMore, setHasMore] = useState({
     "pending": true,
     "cooking": true,
@@ -67,143 +69,88 @@ const Kitchen = () => {
     "archived": true,
   });
   const [page, setPage] = useState(1);
+  const [columns, setColumns] = useState<any>({});
+  const [columnCount, setColumnCount] = useState({
+    "pending": 0,
+    "cooking": 0,
+    "ready": 0,
+    "sent": 0,
+    "completed": 0,
+    "declined": 0,
+    "archived": 0,
+  });
 
-  const [selectedTable, setSelectedTable] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-  // const getRestaurantOrders = async (currentPage = page) => {
-  //   SERVER.get(`${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`)
-  //     .then(({ data }) => {
-  //       if (currentPage === 1) {
-  //         setRestaurantOrders(data.data);
-  //       } else {
-  //         setRestaurantOrders((prevTransactions: any) => [
-  //           ...prevTransactions,
-  //           ...data.data,
-  //         ]);
-  //       }
-        
-  //       if(Number(data.pagination.totalPages) > 1){
-  //         setPage(page + 1);
-  //         setHasMore(
-  //           Number(data.pagination.totalPages) > 1 &&
-  //           Number(data.pagination.currentPage) <= Number(data.pagination.totalPages)
-  //         );
-  //       }else{
-  //         setHasMore(false)
-  //       }
-  //     })
-  //     .catch((err) => {});
-  // };
+  const getRestaurantOrdersColumn = async (currentPage = page, noSkip=true) => {
+    if (loading.current) return;
+    loading.current = true;
   
-  // const getRestaurantOrdersColumn = async (currentPage = page) => {
-  //   SERVER.get(`${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}`)
-  //     .then(({ data }) => {
-  //       console.log('columnData= ', data)
-  //     })
-  //     .catch((err) => {});
-  //   };
-    
-    const [columns, setColumns] = useState<any>({});
-    const [columnCount, setColumnCount] = useState({
-      "pending": 0,
-      "cooking": 0,
-      "ready": 0,
-      "sent": 0,
-      "completed": 0,
-      "declined": 0,
-      "archived": 0,
-    });
-    const [columnPages, setColumnPages] = useState({
-      "pending": 1,
-      "cooking": 1,
-      "ready": 1,
-      "sent": 1,
-      "completed": 1,
-      "declined": 1,
-      "archived": 1,
-    })
-    const [getMoreOrders, setGetMoreOrders] = useState(true)
+    try {
+      const { data } = await SERVER.get(
+        `${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}`
+      );
+  
+      const totalPages = data?.pagination.totalPages || 1;
+  
+      setColumns((prevColumns) => {
+        const updatedColumns = { ...prevColumns };
+  
+        Object.keys(data?.data || {}).forEach((status) => {
+          if (!updatedColumns[status]) {
+            updatedColumns[status] = [];
+          }
+  
+          const existingIds = new Set(updatedColumns[status].map((item) => item._id));
 
-    const getRestaurantOrdersColumn = async (currentPage = page) => {
-      try {
-      SERVER.get(`${RESTAURANT_ORDER_URL}/order-column?page=${currentPage}`)
-        .then(({ data }) => {
-          let localCount = {}
+          const newItems = data.data[status].filter((item) => !existingIds.has(item._id));
           
-          setColumns((prevColumns) => {
-            const updatedColumns = { ...prevColumns };
-          
-            Object.keys(data?.data).forEach((status) => {
-              if (!updatedColumns[status]) {
-                updatedColumns[status] = [];
-              }
-          
-              const existingIds = new Set(updatedColumns[status].map((item) => item.id));
-          
-              const newItems = data?.data[status].filter((item) => !existingIds.has(item.id));
-          
-              updatedColumns[status] = [...updatedColumns[status], ...newItems];
-
-              setColumnCount((prev) => {
-                const newCount = { ...prev }
-
-                newCount[status] = data?.columnCount[status].totalCount
-
-                return newCount
-              })
-              
-              setHasMore((prev) => {
-                const newHas = { ...prev }
-
-                console.log(
-                  'hasmore= ', 
-                  status, 
-                  updatedColumns[status].length, 
-                  data?.columnCount[status].totalCount, 
-                  !(updatedColumns[status].length === data?.columnCount[status].totalCount)
-                )
-
-                newHas[status] = !(updatedColumns[status].length === data?.columnCount[status].totalCount)
-
-                return newHas
-              })
-
-            });
-          
-            return updatedColumns;
-          });
-    
-          setGetMoreOrders(false)
-        })
-        .catch((err) => {});
-
+          updatedColumns[status] = [...updatedColumns[status], ...newItems];
+        });
+  
+        return updatedColumns;
+      });
+  
+      setColumnCount((prev) => {
+        const newCount = { ...prev };
+        Object.keys(data?.columnCount || {}).forEach((status) => {
+          newCount[status] = data.columnCount[status]?.totalCount || 0;
+        });
+        return newCount;
+      });
+  
+      setHasMore((prev) => {
+        const newHasMore = { ...prev };
+  
+        Object.keys(data?.columnCount || {}).forEach((status) => {
+          const totalCount = data.columnCount[status]?.totalCount || 0;
+          const currentCount =
+            (columns[status]?.length || 0) + (data.data[status]?.length || 0);
+          newHasMore[status] = currentCount < totalCount;
+        });
+  
+        return newHasMore;
+      });
+  
+      if(noSkip){
+        setPage((prevPage) => {
+          let newPage = 0
+          newPage = prevPage < totalPages ? prevPage + 1 : prevPage
+          return newPage
+        });
+      }
     } catch (error) {
       console.error("Error fetching orders:", error);
+    } finally{
+      if(noSkip){
+        setTimeout(() => {
+          loading.current = false;
+        }, 2000)
+      }else{
+        loading.current = false;
+      }
     }
+    
   };
-
-  
-  // const getRestaurantOrderCount = async () => {
-  //   await getOrderCount(
-  //     startDate,
-  //     endDate,
-  //     selectedTable,
-  //     selectedCategory,
-  //     "status",
-  //     user._id
-  //   ).then(({ data }) => {
-  //       console.log('data= ', data)
-  //       setColumnCount({
-  //         ...data?.data,
-  //       })
-  //     })
-  //     .catch((err) => {
-  //       console.log('err= ', err)
-  //     });
-  // };
+    
 
   const [dinningMenuCategories, setDinningMenuCategories] = useState<any>([]);
   const getDinningMenuCategories = () => {
@@ -224,19 +171,15 @@ const Kitchen = () => {
   useEffect(() => {
     dispatch(getTables());
     getDinningMenuCategories();
+    getRestaurantOrdersColumn();
   }, []);
 
-  useEffect(() => {
-    if(getMoreOrders === true){
-      setPage((prevPage) => prevPage + 1);
-      getRestaurantOrdersColumn();
-    }
-  }, [getMoreOrders]);
-
-  // Load more data when user scrolls
+  
   const loadMore = () => {
-    setGetMoreOrders(true)
-  };
+    if(loading.current) return
+    getRestaurantOrdersColumn()
+  }
+
 
   const [soundNotification, setSoundNotification] = useState(() => {
     return JSON.parse(localStorage.getItem("playSound")) || false;
@@ -255,7 +198,7 @@ const Kitchen = () => {
   useEffect(() => {
     socket.on("newKitchenOrder", (newOrder) => {
       // Call getRestaurantOrders to update the orders
-      getRestaurantOrders();
+      getRestaurantOrdersColumn();
       receiveNotification();
     });
     return () => {
@@ -278,104 +221,105 @@ const Kitchen = () => {
   const openDeclineModal = () => setDeclineModal(true);
   const closeDeclineModal = () => setDeclineModal(false);
 
-  const [startCooking, setStartCooking] = useState();
-  const [readyForPickup, setReadyForPickup] = useState();
-  const [sent, setSent] = useState();
-  const [voided, setVoided] = useState();
-  const [decline, setDecline] = useState();
-  const [declineOrder, setDeclineOrder] = useState();
-  const [declineOrderMenu, setDeclineOrderMenu] = useState();
-  const [declineReason, setDeclineReason] = useState();
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [declineOrder, setDeclineOrder] = useState('');
+  const [declineOrderMenu, setDeclineOrderMenu] = useState('');
+  const [declineReason, setDeclineReason] = useState('');
   const [declineLoading, setDeclineLoading] = useState(false);
 
-  const updateOrders = (item: any, menuId: any) => {
+  const updateOrders = (item: any, menuId: any, status: string) => {
     const elem = item?.data.order.find(m => m.id === menuId)
 
-    setRestaurantOrders((prevOrders: any) =>
-      prevOrders.map((order: any) => order._id === menuId ? { ...order, ...elem } : order)
-    );
+    setColumns((prevOrders: any) => {
+      const newOrders = { ...prevOrders };
+    
+      // Safely filter out the item from the current status
+      const prevArr = (newOrders[status] || []).filter(
+        (order: any) => order._id !== menuId
+      ).slice(0, 20);
+    
+      // Add the item to the new status
+      const newArr = [...(newOrders[elem.status] || []), { ...elem }].slice(0, 20);
+    
+      return { ...newOrders, [status]: [...prevArr], [elem.status]: [...newArr] };
+    });    
+    getRestaurantOrdersColumn(page - 1, false)
+
+    setColumnCount((prev) => {
+      const newCount = { ...prev };
+
+      newCount[status] = prev[status]--
+      newCount[elem.status] = prev[elem.status]++
+
+      return newCount;
+    });
   }
 
-  const handleStartCooking = async (orderId, menuId: any) => {
-    setStartCooking(menuId);
+  const handleStartCooking = async (orderId, menuId: any, menuStatus="pending") => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, { 
-      status: "cooking",
+      status: 'cooking',
     })
       .then(({ data }) => {
-        updateOrders(data, menuId);
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setStartCooking());
+      .finally(() => setCurrentOrder(null));
   };
 
-  const handleReadyForPickup = async (orderId, menuId: any) => {
-    setReadyForPickup(menuId);
+  const handleReadyForPickup = async (orderId, menuId: any, menuStatus='cooking') => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
       status: "ready",
     })
       .then(({ data }) => {
-        updateOrders(data, menuId);
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setReadyForPickup());
+      .finally(() => setCurrentOrder(''));
   };
 
-  const handleSent = async (orderId, menuId: any) => {
-    setSent(menuId);
+  const handleSent = async (orderId, menuId: any, menuStatus="ready") => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
       status: "sent",
     })
       .then(({ data }) => {
-        updateOrders(data, menuId);
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setSent());
+      .finally(() => setCurrentOrder(''));
   };
 
-  const handleVoided = async (orderId, menuId: any) => {
-    setVoided(menuId);
+  const handleVoided = async (orderId, menuId: any, menuStatus="sent") => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
       status: "archived",
     })
       .then(({ data }) => {
-        updateOrders(data, menuId);
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setVoided());
+      .finally(() => setCurrentOrder(''));
   };
 
-  const handleDecline = async (orderId, menuId, reason) => {
-    setDeclineLoading(true);
+  const handleDecline = async (orderId, menuId, reason, menuStatus="pending") => {
+    setCurrentOrder(true);
     SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
       status: "declined",
       reason,
     })
       .then(({ data }) => {
-        setDeclineOrder();
-        setDeclineOrderMenu();
-        setDeclineReason();
-        updateOrders(data, menuId);
+        setDeclineOrder('');
+        setDeclineOrderMenu('');
+        setDeclineReason('');
+        updateOrders(data, menuId, menuStatus);
         closeDeclineModal();
       })
       .catch((err) => {})
-      .finally(() => setDeclineLoading(false));
+      .finally(() => setCurrentOrder(false));
   };
 
-  const CalculateAverageTime = (objectList) => {
-    if (!objectList.length) {
-      return 0;
-    }
-
-    const timestamps = objectList.map((obj) => moment(obj.createdAt).valueOf());
-
-    const totalTime = timestamps.reduce((acc, timestamp) => acc + timestamp, 0);
-
-    const averageTime = totalTime / objectList.length;
-
-    const averageTimeFormatted = moment.utc(averageTime).format("HH:mm:ss");
-
-    return averageTimeFormatted;
-  };
 
   const getAllKitchenOrders = async () => {
     let currentPage = 1;
@@ -473,56 +417,19 @@ const Kitchen = () => {
     }
   };
 
-  const [openTablesOptions, setOpenTablesOptions] = useState(false);
-  const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
 
-  const sortByUpdatedAt = (arr) => {
+  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
       return dateB - dateA;
     });
   };
 
-  const todaysDate = new Date().toJSON().slice(0, 10);
+  const addDisplayIds = (orders: any[]) => {
+    const suffixes: { [key: string]: number } = {};
 
-  const filteredTable = !selectedTable
-    ? restaurantOrders
-    : restaurantOrders.filter((item: any, i: any) => {
-        return item.table?.table == selectedTable?.table;
-      });
-
-  const filteredCategory = !selectedCategory
-    ? filteredTable
-    : filteredTable.filter((item: any, i: any) => {
-        return item.menu?.category == selectedCategory?.value;
-      });
-
-  const filteredStartDate = !startDate
-    ? filteredCategory
-    : filteredCategory.filter((item: any, i: any) => {
-        const createdAt = new Date(item.createdAt);
-        const date = new Date(startDate);
-        return createdAt >= date;
-      });
-
-  const filteredEndDate = !endDate
-    ? filteredStartDate
-    : filteredStartDate.filter((item: any, i: any) => {
-        const createdAt = new Date(item.createdAt);
-        const date = new Date(endDate);
-        return createdAt <= date;
-      });
-
-  const filteredRestaurantOrders = sortByUpdatedAt(filteredEndDate);
-
-
-  useEffect(() => {
-
-    const suffixes = {};
-
-    filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
-
+    orders.forEach((order) => {
       if (!suffixes[order.parent]) {
         suffixes[order.parent] = 0;
       }
@@ -531,8 +438,67 @@ const Kitchen = () => {
       order.displayId = `${order.parent}-${suffix}`;
 
       suffixes[order.parent] += 1;
-    })
-  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate])
+    });
+
+    return orders;
+  };
+
+  // Filter the object while retaining its structure
+  const [filteredColumns, setFilteredColumns] = useState({})
+
+  useEffect(() => {
+    setFilteredColumns({})
+
+    const localFiltered = Object.fromEntries(
+      Object.entries(columns).map(([key, value]) => {
+        // Filter the table first
+        const filteredTable = !selectedTable
+          ? (value as any[])
+          : (value as any[]).filter((item: any) => {
+              return item.table?.table === selectedTable?.table;
+            });
+  
+        // Filter by category
+        const filteredCategory = !selectedCategory
+          ? filteredTable
+          : filteredTable.filter((item: any) => {
+              return item.menu?.category === selectedCategory?.value;
+            });
+  
+        // Filter by start date
+        const filteredStartDate = !startDate
+          ? filteredCategory
+          : filteredCategory.filter((item: any) => {
+              const createdAt = new Date(item.createdAt);
+              const date = new Date(startDate);
+              return createdAt >= date;
+            });
+  
+        // Filter by end date
+        const filteredEndDate = !endDate
+          ? filteredStartDate
+          : filteredStartDate.filter((item: any) => {
+              const createdAt = new Date(item.createdAt);
+              const date = new Date(endDate);
+              return createdAt <= date;
+            });
+  
+        // Sort by 'createdAt' before returning
+        const sortedArray = sortByCreatedAt(filteredEndDate);
+  
+        // Add display IDs
+        const withDisplayIds = addDisplayIds(sortedArray);
+  
+        // Return the key and the processed array
+        return [key, withDisplayIds];
+      })
+    );
+
+    setFilteredColumns({...localFiltered})
+  }, [columnCount, columns, selectedTable, selectedCategory, endDate, startDate])
+
+  const [openTablesOptions, setOpenTablesOptions] = useState(false);
+  const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
 
   const handleClickAway = (flag: string) => {
     if (flag === "categories") {
@@ -544,7 +510,7 @@ const Kitchen = () => {
 
   useEffect(() => {
     return monitorForElements({
-      onDrop({ source, location }) {
+      onDrop({ source, location }: any) {
         const destination = location.current.dropTargets[0];
 
         if (!destination) {
@@ -556,11 +522,11 @@ const Kitchen = () => {
         const order = source.data.order;
 
         if (destinationLocation === "Cooking") {
-          handleStartCooking(order?.parent, order?._id);
+          handleStartCooking(order?.parent, order?._id, order?.status);
         } else if (destinationLocation === "Ready for pickup") {
-          handleReadyForPickup(order?.parent, order?._id);
+          handleReadyForPickup(order?.parent, order?._id, order?.status);
         } else if (destinationLocation === "Sent") {
-          handleSent(order?.parent, order?._id);
+          handleSent(order?.parent, order?._id, order?.status);
         } else if (
           destinationLocation === "Decline" &&
           sourceLocation === "New orders"
@@ -569,14 +535,14 @@ const Kitchen = () => {
           setDeclineOrderMenu(order?._id);
           openDeclineModal();
         } else if (destinationLocation === "Void") {
-          handleVoided(order?.parent, order?._id);
+          handleVoided(order?.parent, order?._id, order?.status);
         }
       },
     });
   }, [restaurantOrders]);
 
-  // console.log('column= ', columns['pending']?.length, columns['completed']?.length)
-  // console.log('count= ', columnCount)
+  const todaysDate = new Date().toJSON().slice(0, 10);
+
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -847,19 +813,16 @@ const Kitchen = () => {
         </div>
       </div>
 
-      <div className="w-fit md:w-full md:px-6 py-4">
+      <div className="w-full h-svh lg:overflow-hidden p-4 bg-white">
         
         <div
           ref={ref}
-          className="kitchen-div bg-white rounded-2xl w-fit md:w-full p-0 md:p-5 mt-3 h-screen overflow-x-scroll"
+          className="kitchen-div rounded-2xl w-full p-0 h-full overflow-x-scroll pb-3"
         >
-          {/* <div className="flex flex-col items-center justify-start gap-y-4"> */}
-          {/* <div className="w-full h-full"> */}
-
-          <div className="snap-x md:snap-none snap-mandatory flex flex-row w-screen overflow-x-scroll md:w-fit h-full px-5 md:px-0 gap-x-5 no-scroll-bar">
+          <div className="snap-x md:snap-none snap-mandatory flex flex-row w-fit h-full gap-x-5 no-scroll-bar">
             {/* NEW ORDERS */}
             <KitchenBoard
-              restaurantOrders={columns['pending'] || []}
+              restaurantOrders={filteredColumns['pending'] || []}
               title="New orders"
               headerBg="primary_bg_color"
               bodyBg="bg_pink"
@@ -868,9 +831,9 @@ const Kitchen = () => {
               hasMore={hasMore?.pending}
               columnCount={columnCount.pending}
               orders={
-                columns['pending'] &&
-                columns['pending']?.length > 0 &&
-                columns['pending']
+                filteredColumns['pending'] &&
+                filteredColumns['pending']?.length > 0 &&
+                filteredColumns['pending']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" &&
@@ -881,20 +844,21 @@ const Kitchen = () => {
                       key={order?._id}
                       order={order}
                       restaurantOrders={columns['pending']}
-                      filteredRestaurantOrders={columns['pending']}
+                      filteredRestaurantOrders={filteredColumns['pending']}
                       title={"New orders"}
                       kitchenCardButtons={[
                         <KitchenButton
                           title="Start Cooking"
                           extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                          loading={startCooking === order?._id}
+                          loading={currentOrder === order?._id}
                           onClick={() =>
                             handleStartCooking(order?.parent, order?._id)
                           }
-                        />,
-                        <KitchenButton
+                          />,
+                          <KitchenButton
                           title="Decline"
                           extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                          loading={currentOrder === order?._id}
                           onClick={() => {
                             setDeclineOrder(order?.parent);
                             setDeclineOrderMenu(order?._id);
@@ -909,7 +873,7 @@ const Kitchen = () => {
 
             {/* COOKING */}
             <KitchenBoard
-              restaurantOrders={columns['cooking'] || []}
+              restaurantOrders={filteredColumns['cooking'] || []}
               title="Cooking"
               headerBg="bg-zinc-500"
               bodyBg="bg-zinc-200"
@@ -918,9 +882,9 @@ const Kitchen = () => {
               hasMore={hasMore?.cooking}
               columnCount={columnCount.cooking}
               orders={
-                columns['cooking'] &&
-                columns['cooking']?.length > 0 &&
-                columns['cooking']
+                filteredColumns['cooking'] &&
+                filteredColumns['cooking']?.length > 0 &&
+                filteredColumns['cooking']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" &&
@@ -930,14 +894,14 @@ const Kitchen = () => {
                     <KitchenCard
                       key={i}
                       order={order}
-                      restaurantOrders={restaurantOrders}
-                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      restaurantOrders={columns['cooking']}
+                      filteredRestaurantOrders={filteredColumns['cooking']}
                       title={"Cooking"}
                       kitchenCardButtons={[
                         <KitchenButton
                           title="Ready For Pickup"
                           extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                          loading={readyForPickup === order?._id}
+                          loading={currentOrder === order?._id}
                           onClick={() =>
                             handleReadyForPickup(order?.parent, order?._id)
                           }
@@ -945,9 +909,9 @@ const Kitchen = () => {
                         <KitchenButton
                           title="Void"
                           extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                          loading={voided === order?._id}
+                          loading={currentOrder === order?._id}
                           onClick={() => {
-                            handleVoided(order?.parent, order?._id);
+                            handleVoided(order?.parent, order?._id, order?.status);
                           }}
                         />,
                       ]}
@@ -958,17 +922,18 @@ const Kitchen = () => {
 
             {/* READY */}
             <KitchenBoard
-              restaurantOrders={columns['ready'] || []}
+              restaurantOrders={filteredColumns['ready'] || []}
               title="Ready for pickup"
               headerBg="bg-green-600"
               bodyBg="bg-green-100"
+              status="ready"
               getMore={loadMore}
               hasMore={hasMore?.ready}
               columnCount={columnCount.ready}
               orders={
-                columns['ready'] &&
-                columns['ready']?.length > 0 &&
-                columns['ready']
+                filteredColumns['ready'] &&
+                filteredColumns['ready']?.length > 0 &&
+                filteredColumns['ready']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" && ro?.status === "ready"
@@ -977,14 +942,14 @@ const Kitchen = () => {
                     <KitchenCard
                       key={i}
                       order={order}
-                      restaurantOrders={restaurantOrders}
-                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      restaurantOrders={columns['ready']}
+                      filteredRestaurantOrders={filteredColumns['ready']}
                       title={"Ready for pickup"}
                       kitchenCardButtons={[
                         <KitchenButton
                           title="Sent"
                           extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                          loading={sent === order?._id}
+                          loading={currentOrder === order?._id}
                           onClick={() =>
                             handleSent(order?.parent, order?._id)
                           }
@@ -992,9 +957,9 @@ const Kitchen = () => {
                         <KitchenButton
                           title="Void"
                           extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                          loading={voided === order?._id}
+                          loading={currentOrder === order?._id}
                           onClick={() => {
-                            handleVoided(order?.parent, order?._id);
+                            handleVoided(order?.parent, order?._id, order?.status);
                           }}
                         />,
                       ]}
@@ -1005,17 +970,18 @@ const Kitchen = () => {
 
             {/* SENT */}
             <KitchenBoard
-              restaurantOrders={columns['sent'] || []}
+              restaurantOrders={filteredColumns['sent'] || []}
               title="Sent"
               headerBg="bg-yellow-500"
               bodyBg="bg-yellow-100"
+              status="sent"
               getMore={loadMore}
               hasMore={hasMore?.sent}
               columnCount={columnCount.sent}
               orders={
-                columns['sent'] &&
-                columns['sent']?.length > 0 &&
-                columns['sent']
+                filteredColumns['sent'] &&
+                filteredColumns['sent']?.length > 0 &&
+                filteredColumns['sent']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" && ro?.status === "sent"
@@ -1024,16 +990,16 @@ const Kitchen = () => {
                     <KitchenCard
                       key={i}
                       order={order}
-                      restaurantOrders={restaurantOrders}
-                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      restaurantOrders={columns['sent']}
+                      filteredRestaurantOrders={filteredColumns['sent']}
                       title={"Sent"}
                       kitchenCardButtons={[
                         <KitchenButton
                           title="Void"
                           extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
-                          loading={voided === order?._id}
+                          loading={currentOrder === order?._id}
                           onClick={() => {
-                            handleVoided(order?.parent, order?._id);
+                            handleVoided(order?.parent, order?._id, order?.status);
                           }}
                         />,
                       ]}
@@ -1044,17 +1010,18 @@ const Kitchen = () => {
 
             {/* COMPLETED */}
             <KitchenBoard
-              restaurantOrders={columns['completed'] || []}
+              restaurantOrders={filteredColumns['completed'] || []}
               title="Completed"
               headerBg="bg-green-900"
               bodyBg="bg-gray-100"
+              status="completed"
               getMore={loadMore}
               hasMore={hasMore?.completed}
               columnCount={columnCount.completed}
               orders={
-                columns['completed'] &&
-                columns['completed']?.length > 0 &&
-                columns['completed']
+                filteredColumns['completed'] &&
+                filteredColumns['completed']?.length > 0 &&
+                filteredColumns['completed']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "completed" &&
@@ -1064,8 +1031,8 @@ const Kitchen = () => {
                     <KitchenCard
                       key={i}
                       order={order}
-                      restaurantOrders={restaurantOrders}
-                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      restaurantOrders={columns['completed']}
+                      filteredRestaurantOrders={filteredColumns['completed']}
                       title={"Completed"}
                     />
                   ))
@@ -1074,17 +1041,18 @@ const Kitchen = () => {
 
             {/* DECLINE */}
             <KitchenBoard
-              restaurantOrders={columns['declined'] || []}
+              restaurantOrders={filteredColumns['declined'] || []}
               title="Decline"
               headerBg="bg-red-900"
               bodyBg="bg-red-100"
+              status="declined"
               getMore={loadMore}
               hasMore={hasMore?.declined}
               columnCount={columnCount.declined}
               orders={
-                columns['declined'] &&
-                columns['declined']?.length > 0 &&
-                columns['declined']
+                filteredColumns['declined'] &&
+                filteredColumns['declined']?.length > 0 &&
+                filteredColumns['declined']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" &&
@@ -1094,8 +1062,8 @@ const Kitchen = () => {
                     <KitchenCard
                       key={i}
                       order={order}
-                      restaurantOrders={restaurantOrders}
-                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      restaurantOrders={columns['declined']}
+                      filteredRestaurantOrders={filteredColumns['declined']}
                       title={"Decline"}
                     />
                   ))
@@ -1104,17 +1072,18 @@ const Kitchen = () => {
 
             {/* VOIDED */}
             <KitchenBoard
-              restaurantOrders={columns['archived'] || []}
+              restaurantOrders={filteredColumns['archived'] || []}
               title="Void"
               headerBg="bg-black"
               bodyBg="bg-neutral-100"
+              status="archived"
               getMore={loadMore}
               hasMore={hasMore?.archived}
               columnCount={columnCount.archived}
               orders={
-                columns['archived'] &&
-                columns['archived']?.length > 0 &&
-                columns['archived']
+                filteredColumns['archived'] &&
+                filteredColumns['archived']?.length > 0 &&
+                filteredColumns['archived']
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" &&
@@ -1124,16 +1093,14 @@ const Kitchen = () => {
                     <KitchenCard
                       key={i}
                       order={order}
-                      restaurantOrders={restaurantOrders}
-                      filteredRestaurantOrders={filteredRestaurantOrders}
+                      restaurantOrders={columns['archived']}
+                      filteredRestaurantOrders={filteredColumns['archived']}
                       title={"Void"}
                     />
                   ))
               }
             />
           </div>
-          {/* </div> */}
-          {/* </div> */}
         </div>
         
       </div>
