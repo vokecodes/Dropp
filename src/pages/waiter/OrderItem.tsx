@@ -19,7 +19,9 @@ const OrderItem = ({
   getTableOrders,
   selectedCategory,
   waiter,
-  chef
+  chef,
+  page,
+  table
 }: any) => {
   const [openNotes, setOpenNotes] = useState(false)
   const [sendToKitchenLoading, setSendToKitchen] = useState(false);
@@ -31,7 +33,7 @@ const OrderItem = ({
     })
       .then(({ data }) => {
         closeOrdersModal();
-        getTableOrders();
+        getTableOrders(page - 1, false);
       })
       .catch((err) => {})
       .finally(() => setSendToKitchen(false));
@@ -66,7 +68,7 @@ const OrderItem = ({
         <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
           {!["completed"].includes(selectedCategory) && (
             <Link
-              to={`/restaurant/${chef?.business?.businessName}/${waiter.table}/add/${order?.id}`}
+              to={`/restaurant/${chef?.business?.businessName}/${table}/add/${order?.id}`}
               target="_blank"
             >
               <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">Add order <FaPlus /></p>
@@ -106,6 +108,8 @@ const OrderItem = ({
         </div>
 
         <div className="flex flex-col justify-start items-center w-full mt-3">
+        {order?.status}
+        {order?.order.map(o => o.status)}
           {order?.order &&
             order?.order?.length > 0 &&
             order?.order
