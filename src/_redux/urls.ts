@@ -89,6 +89,8 @@ export const DINNING_MENU_TAG_URL = `${BASE_API_URL}/dinning-menu-tag`;
 
 export const RESTAURANT_ORDER_URL = `${BASE_API_URL}/restaurant-order`;
 
+export const QSR_ORDER_URL = `${BASE_API_URL}/qsr-order`;
+
 export const ADMIN_DROPP_DASHBOARD_URL = `${BASE_API_URL}/admin/dropp-dashboard`;
 
 export const ADMIN_ALL_RESTAURANTS = `${BASE_API_URL}/admin/restaurants/all`;
@@ -98,6 +100,8 @@ export const ADMIN_ALL_ORDERS = `${BASE_API_URL}/admin/orders/all`;
 export const ADMIN_ALL_CUSTOMERS = `${BASE_API_URL}/admin/customers/all`;
 
 export const RESTAURANT_TABLE_URL = `${BASE_API_URL}/restaurant-table`;
+
+export const QSR_CASHIER_URL = `${BASE_API_URL}/cashier`;
 
 export const RESTAURANT_SECTION_URL = `${BASE_API_URL}/restaurant-section`;
 

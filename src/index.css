@@ -1136,3 +1136,7 @@ html {
 .reduce-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Darker on hover */
 }
+
+.qsr-shop .carousel-root, .qsr-shop .carousel-root div, .qsr-shop .carousel-root ul, .qsr-shop .carousel-root ul li {
+  height: 100%;
+}

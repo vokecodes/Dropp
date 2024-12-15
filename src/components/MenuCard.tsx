@@ -10,7 +10,9 @@ import ColoredSpinner from "./ColoredSpinner";
 import { formatPrice } from "../utils/formatMethods";
 import {
   deleteDineInMenu,
+  deleteQsrSubAdminDineInMenu,
   showHideDineInMenu,
+  showHideQsrSubAdminDineInMenu,
 } from "../_redux/dinningMenu/dinningMenuAction";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FaConciergeBell } from "react-icons/fa";
@@ -48,6 +50,15 @@ const MenuCard = ({
           menu?._id
         )
       );
+    } else if (mode === "qsrSubAdmin") {
+      await dispatch(
+        showHideQsrSubAdminDineInMenu(
+          {
+            hide: !menu?.hide,
+          },
+          menu?._id
+        )
+      );
     } else {
       await dispatch(
         showHideMenu(
@@ -69,7 +80,7 @@ const MenuCard = ({
 
   return (
     <>
-      <div className="bg-white shadow rounded-xl w-full relative">
+      <div className="bg-white shadow rounded-xl w-full h-full relative">
         {menu?.discount && (
           <div className="absolute mt-5 ml-5 z-10">
             <div className="yellow_bg w-40 h-10 rounded-2xl flex items-center justify-center">
@@ -176,10 +187,10 @@ const MenuCard = ({
                   )} */}
 
                   {!kitchen && (
-                    <div className="w-full flex flex-row items-center justify-between gap-x-5">
+                    <div className="w-full flex flex-row items-center justify-between gap-x-2 lg:gap-x-5">
                       <Button
                         title={favourite ? "Add to bag" : "Edit"}
-                        extraClasses="w-full rounded-full"
+                        extraClasses="!w-1/2 !px-6"
                         disabled={menu?.hide}
                         onClick={favourite ? () => {} : onClickEdit}
                       />
@@ -187,7 +198,7 @@ const MenuCard = ({
                       {!favourite && (
                         <Button
                           title={"Duplicate"}
-                          extraClasses="w-full rounded-full"
+                          extraClasses="!w-1/2 !px-6"
                           disabled={menu?.hide}
                           onClick={onClickCopy}
                         />
@@ -200,10 +211,12 @@ const MenuCard = ({
                       title="Delete"
                       disabled={menu?.hide}
                       loading={mode === "dineIn" ? dinningMenuLoading : loading}
-                      extraClasses="w-full rounded-full px-8 py-2 mt-2"
+                      extraClasses="!w-full !mx-auto rounded-full px-8 py-2 mt-2"
                       onClick={() =>
                         mode === "dineIn"
                           ? dispatch(deleteDineInMenu(menu?._id))
+                          : mode === "qsrSubAdmin" 
+                          ? dispatch(deleteQsrSubAdminDineInMenu(menu?._id))
                           : dispatch(deleteMenu(menu?._id))
                       }
                     />
