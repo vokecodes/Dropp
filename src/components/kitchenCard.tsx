@@ -9,7 +9,7 @@ const KitchenCard = ({
     order,
     restaurantOrders,
     filteredRestaurantOrders,
-    kitchenCardButtons,
+    kitchenCardButtons=[],
     title
 }) => {
     const [openNotes, setOpenNotes] = useState(false)

@@ -283,6 +283,19 @@ export const downloadRestaurantReport = (
   );
 };
 
+export const getOrderCount = (
+  fromDate = "",
+  toDate = "",
+  table = "",
+  category = "",
+  countOption,
+  restaurantId
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/order-count/${restaurantId}/${countOption}?fromDate=${fromDate}&toDate=${toDate}&category=${category}&table=${table}`
+  );
+};
+
 export const getSubChefRestaurantOrdersPage = (
   page = 1,
   fromDate = "",
