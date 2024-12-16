@@ -312,7 +312,7 @@ const SalesReports = () => {
             ? "gift"
             : order?.order[0]?.status === "archived"
             ? "void"
-            : order?.order[0]?.status,
+            : order?.order[0]?.status || '---',
         ].join(",");
       });
 
