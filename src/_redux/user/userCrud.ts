@@ -284,6 +284,7 @@ export const downloadRestaurantReport = (
   );
 };
 
+
 export const downloadSubChefRestaurantReport = (
   fromDate = "",
   toDate = "",
@@ -294,6 +295,19 @@ export const downloadSubChefRestaurantReport = (
 ) => {
   return SERVER.get(
     `${SUB_CHEF_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const getOrderCount = (
+  fromDate = "",
+  toDate = "",
+  table = "",
+  category = "",
+  countOption,
+  restaurantId
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/order-count/${restaurantId}/${countOption}?fromDate=${fromDate}&toDate=${toDate}&category=${category}&table=${table}`
   );
 };
 
