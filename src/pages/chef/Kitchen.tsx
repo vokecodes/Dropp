@@ -81,6 +81,14 @@ const Kitchen = () => {
     "archived": 0,
   });
 
+  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
+    return arr.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateB - dateA;
+    });
+  };
+
   const getRestaurantOrdersColumn = async (currentPage = page, noSkip=true) => {
     if (loading.current) return;
     loading.current = true;
@@ -107,7 +115,7 @@ const Kitchen = () => {
   
             const newItems = data.data[status].filter((item) => !existingIds.has(item._id));
             
-            updatedColumns[status] = [...updatedColumns[status], ...newItems];
+            updatedColumns[status] = sortByCreatedAt([...updatedColumns[status], ...newItems]);
           });
     
           return updatedColumns;
@@ -241,12 +249,12 @@ const Kitchen = () => {
       const newOrders = { ...prevOrders };
     
       // Safely filter out the item from the current status
-      const prevArr = (newOrders[status] || []).filter(
+      const prevArr = sortByCreatedAt((newOrders[status] || []).filter(
         (order: any) => order._id !== menuId
-      ).slice(0, 20);
+      ).slice(0, 20));
     
       // Add the item to the new status
-      const newArr = [...(newOrders[elem.status] || []), { ...elem }].slice(0, 20);
+      const newArr = sortByCreatedAt([{ ...elem }, ...(newOrders[elem.status] || [])].slice(0, 20));
     
       return { ...newOrders, [status]: [...prevArr], [elem.status]: [...newArr] };
     });    
@@ -425,14 +433,6 @@ const Kitchen = () => {
   };
 
 
-  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
-    return arr.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return dateB - dateA;
-    });
-  };
-
   const addDisplayIds = (orders: any[]) => {
     const suffixes: { [key: string]: number } = {};
 
@@ -525,7 +525,7 @@ const Kitchen = () => {
         <div className="flex flex-col md:flex-row items-center justify-between py-6 md:justify-start gap-y-3 md:gap-y-0 md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/">
-              <span className="sr-only">Homemade</span>
+              <span className="sr-only">Dropp</span>
               <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
             </Link>
           </div>
