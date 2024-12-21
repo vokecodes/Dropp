@@ -47,7 +47,6 @@ const RestaurantCart = ({
   reviewView,
   setReviewView,
   errorLogin,
-  setErrorLogin,
   handleDelete,
   selectedMealQuantityReached,
   showMinimumQuantityReached,

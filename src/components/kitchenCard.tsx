@@ -9,7 +9,7 @@ const KitchenCard = ({
     order,
     restaurantOrders,
     filteredRestaurantOrders,
-    kitchenCardButtons,
+    kitchenCardButtons=[],
     title
 }) => {
     const [openNotes, setOpenNotes] = useState(false)
@@ -34,7 +34,7 @@ const KitchenCard = ({
     <div
         ref={dragRef}
         key={order?._id}
-        className="bg-white w-full  mb-2 p-3 rounded-xl cursor-move"
+        className="bg-white w-full shrink-0 mb-2 p-3 rounded-xl cursor-move"
         style={dragging ? { opacity: 0.4, borderColor: '#16a34a', borderStyle: 'solid', borderWidth: '6px' } : {}}
     >
         <p className="font-semibold font_medium">

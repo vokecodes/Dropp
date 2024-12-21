@@ -22,8 +22,9 @@ import { logoutCard } from "../card/cardSLice";
 import { logoutSubscriptionMenu } from "../subscriptionMenu/subscriptionMenuSlice";
 import { logoutSubscription } from "../subscription/subscriptionSlice";
 import { logoutWaiter } from "../waiter/waiterSlice";
-import { SUB_CHEF_USER } from "../../config/UserType";
+import { QUICK_SERVICE_USER, SUB_CHEF_USER } from "../../config/UserType";
 import { logoutDiningMenu } from "../dinningMenu/dinningMenuSlice";
+import { logoutCashier } from "../cashier/cashierSlice";
 
 export const registerLoginUserAccount =
   (
@@ -57,6 +58,8 @@ export const registerLoginUserAccount =
             } else {
               if (user?.userType === SUB_CHEF_USER) {
                 navigate("/sub-chef");
+              } else if (user?.chefType === QUICK_SERVICE_USER) {
+                navigate("/qsr");
               } else {
                 navigate(`/${user?.userType}`);
               }
@@ -91,7 +94,7 @@ export const forgotResetPasswordUserAccount =
       });
   };
 
-export const logOutUserAccount = (navigate: any, admin= false) => (dispatch: any) => {
+export const logOutUserAccount = (navigate: any, admin= false, cashier=false) => (dispatch: any) => {
   dispatch(logoutAccount());
   dispatch(logoutUserProfile());
   dispatch(logoutBusiness());
@@ -107,11 +110,14 @@ export const logOutUserAccount = (navigate: any, admin= false) => (dispatch: any
   dispatch(logoutSubscription());
   dispatch(logoutWaiter());
   dispatch(logoutDiningMenu());
+  dispatch(logoutCashier());
 
   sessionStorage.removeItem("auth");
 
   if(admin){
     navigate("/auth/admin-login");
+  }else if(cashier){
+    navigate("/cashier")
   }else{
     navigate("/auth");
   }

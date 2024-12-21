@@ -4,3 +4,6 @@ export const WAITER_USER = "waiter";
 export const CUSTOMER_USER = "customer";
 export const COMPANY_USER = "company";
 export const ADMIN_USER = "admin";
+export const QUICK_SERVICE_USER = "quick_service";
+export const QSR_SUB_ADMIN_USER = "qsrSubAdmin";
+export const CASHIER_USER = "cashier";

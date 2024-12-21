@@ -10,8 +10,9 @@ import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import PageTitle from "../../components/PageTitle";
 import { useAppDispatch } from "../../redux/hooks";
 import { getRestaurantSubChefDashboardAccount } from "../../_redux/user/userAction";
-import { formatRemoteAmountKobo } from "../../utils/formatMethods";
+import { formatRemoteAmountKobo, generateUUIDBasedOnStringLength } from "../../utils/formatMethods";
 import {
+  downloadSubChefRestaurantReport,
   getSubChefOrdersPage,
   getSubChefRestaurantOrdersPage,
 } from "../../_redux/user/userCrud";
@@ -25,6 +26,14 @@ import { getSubChefRestaurantSections } from "../../_redux/section/sectionCrud";
 import InfinityScroll from "../../components/InfinityScroll";
 
 const PAYMENT_OPTIONS = ["All", "Online", "POS"];
+
+const ORDER_OPTIONS = [
+  "Completed sales",
+  "Declined sales",
+  "Voided sales",
+  "Gifted sales",
+  "Incomplete sales",
+];
 
 const BannerSkeletonLoader = () => (
   <div className="p-6">
@@ -50,8 +59,7 @@ const DashboardItemSkeletonLoader = () => (
 
 const platformOptions = ["Online", "Dine-in"];
 const paymentOptions = ["POS", "Online"];
-const typeOptions = ["Sales", "Gift"];
-const statusOptions = ["Completed", "Kitchen", "Declined", "Void"];
+const statusOptions = ["Declined", "Void", "Gift", "Incomplete"];
 
 const SalesReports = () => {
   const dispatch = useAppDispatch();
@@ -99,16 +107,19 @@ const SalesReports = () => {
     return a / b;
   };
 
+  const [breakdownOption, setBreakdownOptions] = useState(ORDER_OPTIONS[0]);
+  const [openBreakdownOptions, setOpenBreakdownOptions] = useState(false);
+
   const dashboardItems = [
     {
       title: "Tickets",
-      value: dashboard?.tickets,
+      value: dashboard?.tickets || 0,
       toolTipId: "tickets",
       toolTipContent: "Total number of checkouts",
     },
     {
       title: "Orders",
-      value: dashboard?.orders,
+      value: dashboard?.orders || 0,
       toolTipId: "orders",
       toolTipContent: "Total number of meals placed/checkout",
     },
@@ -118,15 +129,15 @@ const SalesReports = () => {
         formatRemoteAmountKobo(
           safeDivide(dashboard?.totalNetSales, dashboard?.orders)
         ).naira +
-        formatRemoteAmountKobo(
-          safeDivide(dashboard?.totalNetSales, dashboard?.orders)
-        ).kobo,
+          formatRemoteAmountKobo(
+            safeDivide(dashboard?.totalNetSales, dashboard?.orders)
+          ).kobo || 0,
       toolTipId: "avg-orders-size",
       toolTipContent: "Net sales divided by total orders",
     },
     {
       title: "Avg. Order",
-      value: Math.round(safeDivide(dashboard?.orders, dashboard?.tickets)),
+      value: Math.round(safeDivide(dashboard?.orders, dashboard?.tickets)) || 0,
       toolTipId: "avg-order",
       toolTipContent: "Total orders divided by total tickets",
     },
@@ -136,15 +147,15 @@ const SalesReports = () => {
         formatRemoteAmountKobo(
           safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
         ).naira +
-        formatRemoteAmountKobo(
-          safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
-        ).kobo,
+          formatRemoteAmountKobo(
+            safeDivide(dashboard?.totalNetSales, dashboard?.tickets)
+          ).kobo || 0,
       toolTipId: "avg-tickets-size",
       toolTipContent: "Total net sales divided by the total tickets",
     },
     {
       title: "Unique Customers",
-      value: dashboard?.customers,
+      value: dashboard?.customers || 0,
       toolTipId: "unique-customers",
       toolTipContent: "Customer counts",
     },
@@ -169,13 +180,11 @@ const SalesReports = () => {
     _id: "",
     table: "All",
   });
-  const [ordersTransactions, setOrdersTransactions] = useState<any>([]); // Assuming transactions is your data array
-  const [ordersHasMore, setOrdersHasMore] = useState(true); // Flag to track if there are more items to load
-  const [ordersPage, setOrdersPage] = useState(1); // Page number for pagination
 
   const [transactions, setTransactions] = useState<any>([]); // Assuming transactions is your data array
   const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
   const [page, setPage] = useState(1); // Page number for pagination
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   // Function to fetch more data when scrolling
   const fetchRestaurantOrders = async () => {
@@ -185,7 +194,8 @@ const SalesReports = () => {
       endDate,
       paymentType,
       filterSection,
-      filterTable
+      filterTable,
+      breakdownOption
     ).then(({ data }) => {
       if (page === 1) {
         setTransactions(data.data);
@@ -195,54 +205,68 @@ const SalesReports = () => {
           ...data.data,
         ]);
       }
-      setPage(page + 1);
-      setHasMore(
-        data.pagination.totalPages > 0 &&
-          data.pagination.currentPage !== data.pagination.totalPages
-      );
-    });
-  };
 
-  const fetchOrders = async () => {
-    await getSubChefOrdersPage(ordersPage, startDate, endDate).then(
-      ({ data }) => {
-        if (page === 1) {
-          setOrdersTransactions(data.data);
-        } else {
-          setOrdersTransactions((prevTransactions: any) => [
-            ...prevTransactions,
-            ...data.data,
-          ]);
-        }
-        setOrdersPage(ordersPage + 1);
-        setOrdersHasMore(
-          data.pagination.currentPage !== data.pagination.totalPages
+      if (Number(data.pagination.totalPages) > 1) {
+        setPage(page + 1);
+        setHasMore(
+          Number(data.pagination.totalPages) > 1 &&
+            Number(data.pagination.currentPage) !==
+              Number(data.pagination.totalPages)
         );
+      } else {
+        setHasMore(false);
       }
-    );
+    });
   };
 
   // Reset page and data when filters change
   const resetFilters = () => {
     setPage(1);
     setHasMore(true);
-    setOrdersPage(1);
-    setOrdersHasMore(true);
+  };
+
+  const handleSelectedStatus = () => {
+    if (selectedStatus === "Declined") {
+      setBreakdownOptions(ORDER_OPTIONS[1]);
+    } else if (selectedStatus === "Void") {
+      setBreakdownOptions(ORDER_OPTIONS[2]);
+    } else if (selectedStatus === "Gift") {
+      setBreakdownOptions(ORDER_OPTIONS[3]);
+    } else if (selectedStatus === "Incomplete") {
+      setBreakdownOptions(ORDER_OPTIONS[4]);
+    } else if (selectedStatus === "All") {
+      setBreakdownOptions("");
+    }
+    setSelectedStatus("");
   };
 
   useEffect(() => {
-    dispatch(
-      getRestaurantSubChefDashboardAccount(
-        startDate,
-        endDate,
-        paymentType,
-        filterSection,
-        filterTable
-      )
-    );
-    fetchRestaurantOrders();
-    fetchOrders();
-  }, [endDate, paymentType, filterSection, filterTable]);
+    setPage(1);
+    handleSelectedStatus();
+  }, [
+    selectedStatus,
+    breakdownOption,
+    endDate,
+    paymentType,
+    filterSection,
+    filterTable,
+  ]);
+
+  useEffect(() => {
+    if (page === 1) {
+      dispatch(
+        getRestaurantSubChefDashboardAccount(
+          startDate,
+          endDate,
+          paymentType,
+          filterSection,
+          filterTable,
+          breakdownOption
+        )
+      );
+      fetchRestaurantOrders();
+    }
+  }, [page, breakdownOption, endDate, paymentType, filterSection, filterTable]);
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -273,19 +297,19 @@ const SalesReports = () => {
         const formattedDate = moment(order.createdAt).format("DD/MM/YYYY");
         const formattedTime = moment(order.createdAt).format("hh:mm A");
 
-        const foodDetails = order.cartMenu
+        const foodDetails = order.order
           ?.map(
-            (menu: any) => `${menu.foodName} X ${menu.quantity}- ₦${menu.price}`
+            (menu: any) => `${menu.menu.foodName} X ${menu.quantity}- ₦${menu.amount}`
           )
           .join("; ");
 
-        const totalMeal = order?.cartMenu?.reduce(
+        const totalMeal = order?.order?.reduce(
           (total: any, item: any) => total + item.quantity,
           0
         );
 
         return [
-          `#${order.id.substring(order?.id?.length - 5)}`,
+          `#${order._id.substring(order?._id?.length - 5)}`,
           formattedDate,
           formattedTime,
           order?.name || "-",
@@ -297,109 +321,45 @@ const SalesReports = () => {
           order?.table?.employeeAssigned || "-",
           `₦${order?.totalAmount}`,
           order?.posPayment ? "POS" : "Online",
-          order?.status,
+          order?.gift === true
+            ? "gift"
+            : order?.order[0]?.status === "archived"
+            ? "void"
+            : order?.order[0]?.status || '---',
         ].join(",");
       });
 
     return [header, ...rows].join("\n");
   };
 
-  const dineExportToCSV = async (data: any) => {
+  const dineExportToCSV = async () => {
     setIsDownloading(true);
     try {
-      const csv = await dineInConvertToCSV(data);
-
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "dine-in-orders.csv");
-        link.style.visibility = "hidden";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (err) {
-      console.error("CSV Export Error:", err);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
-  const orderConvertToCSV = (data: any, startDate: any) => {
-    const header = [
-      "Ticket No.",
-      "Date",
-      "Time",
-      "Name",
-      "Email",
-      "Phone No.",
-      "Food",
-      "Total Orders",
-      "Amount",
-      "Status",
-    ].join(",");
-
-    const rows = data
-      .filter((order: any) =>
-        startDate
-          ? moment(order.createdAt).isSameOrAfter(startDate, "day")
-          : order.createdAt
-      )
-      ?.map((order: any) => {
-        const formattedDate = moment(order.createdAt).format("DD/MM/YYYY");
-        const formattedTime = moment(order.createdAt).format("hh:mm A");
-
-        const foodDetails = order.cartMenu
-          ?.map(
-            (menu: any) => `${menu.foodName} X ${menu.quantity}- ₦${menu.price}`
-          )
-          .join("; ");
-
-        const totalMeal = order?.cartMenu?.reduce(
-          (total: any, item: any) => total + item.quantity,
-          0
-        );
-
-        return [
-          `#${order.id.substring(order?.id?.length - 5)}`,
-          formattedDate,
-          formattedTime,
-          order.name || "-",
-          order.email || "-",
-          order.phoneNumber || "-",
-          foodDetails,
-          totalMeal,
-          `₦${order.totalAmount}`,
-          order.status,
-        ].join(",");
+      await downloadSubChefRestaurantReport(
+        startDate,
+        endDate,
+        paymentType,
+        filterSection,
+        filterTable,
+        breakdownOption
+      ).then(({ data }) => {
+        const csv = dineInConvertToCSV(data?.data);
+        
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+  
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", "dine-in-orders.csv");
+          link.style.visibility = "hidden";
+  
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       });
 
-    return [header, ...rows].join("\n");
-  };
-
-  const orderExportToCSV = async (data: any) => {
-    setIsDownloading(true);
-
-    try {
-      const csv = await orderConvertToCSV(data, startDate);
-
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "online-orders.csv");
-        link.style.visibility = "hidden";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
     } catch (err) {
       console.error("CSV Export Error:", err);
     } finally {
@@ -421,9 +381,7 @@ const SalesReports = () => {
     }
   };
 
-  const ordersListUnsorted = ordersTransactions.concat(transactions);
-
-  const ordersList = ordersListUnsorted.sort((a: any, b: any) =>
+  const ordersList = transactions.sort((a: any, b: any) =>
     moment(b.createdAt).diff(moment(a.createdAt))
   );
 
@@ -445,40 +403,10 @@ const SalesReports = () => {
         }
       });
 
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const filteredStatus = !selectedStatus
-    ? filteredPayment
-    : filteredPayment?.filter((item: any, i: any) => {
-        if (item?.restaurant) {
-          if (selectedStatus === "Void") {
-            return item?.order[0]?.status === "archived";
-          } else if (selectedStatus === "Kitchen") {
-            return !["completed", "declined", "archived"].includes(
-              item?.order[0]?.status
-            );
-          } else {
-            return item?.order[0]?.status === selectedStatus.toLowerCase();
-          }
-        } else {
-          return item?.status === selectedStatus.toLowerCase();
-        }
-      });
-
-  const [selectedType, setSelectedType] = useState("");
-  const filteredType = !selectedType
-    ? filteredStatus
-    : filteredStatus?.filter((item: any, i: any) => {
-        if (selectedType === "Gift") {
-          return item?.gift == true;
-        } else {
-          return !item?.gift;
-        }
-      });
-
   const [selectedPlatform, setSelectedPlatform] = useState("");
   const filteredPlatform = !selectedPlatform
-    ? filteredType
-    : filteredType?.filter((item: any, i: any) => {
+    ? filteredPayment
+    : filteredPayment?.filter((item: any, i: any) => {
         if (selectedPlatform === "Dine-in") {
           return item?.restaurant;
         } else {
@@ -495,8 +423,21 @@ const SalesReports = () => {
       setOpenSectionOptions(false);
     } else if (flag === "table") {
       setOpenTableOptions(false);
+    } else if (flag === "breakdownOption") {
+      setOpenBreakdownOptions(false);
     }
   };
+
+  const todaysDate = new Date()
+    .toLocaleString("en-GB", {
+      timeZone: "Africa/Lagos",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .split("/")
+    .reverse()
+    .join("-");
 
   return (
     <>
@@ -504,7 +445,7 @@ const SalesReports = () => {
         <div className="w-full px-6 py-4 bg-white" style={{}}>
           <PageTitle title={moment().format("MMMM Do, YYYY")} />
           <div className="w-4/5 my-10 flex flex-wrap gap-3">
-            <div className="w-1/5">
+            <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">
                 Start Date
               </label>
@@ -517,7 +458,7 @@ const SalesReports = () => {
                 onChange={(e: any) => setStartDate(e.target.value)}
               />
             </div>
-            <div className="w-1/5">
+            <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">End Date</label>
               <input
                 type="date"
@@ -528,7 +469,7 @@ const SalesReports = () => {
                 onChange={(e: any) => setEndDate(e.target.value)}
               />
             </div>
-            <div className="w-1/5">
+            <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">
                 Payment Type
               </label>
@@ -584,7 +525,7 @@ const SalesReports = () => {
                 )}
               </div>
             </div>
-            <div className="w-1/5">
+            <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">Section</label>
               <div className="mt-2 lg:mt-0">
                 <div
@@ -663,7 +604,7 @@ const SalesReports = () => {
                 )}
               </div>
             </div>
-            <div className="w-1/5">
+            <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">Table</label>
               <div
                 className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
@@ -735,6 +676,59 @@ const SalesReports = () => {
                 </ClickAwayListener>
               )}
             </div>
+            <div className="w-full lg:w-1/5">
+              <label className="text-sm font_medium text-black">
+                Breakdown
+              </label>
+              <div
+                className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
+                onClick={() => setOpenBreakdownOptions(!openBreakdownOptions)}
+              >
+                <p className={`text-xs lg:text-sm filter_text font_medium`}>
+                  {breakdownOption}
+                </p>
+                {openBreakdownOptions ? (
+                  <TiArrowSortedUp color="#8E8E8E" size={20} />
+                ) : (
+                  <TiArrowSortedDown color="#8E8E8E" size={20} />
+                )}
+              </div>
+              {openBreakdownOptions && (
+                <ClickAwayListener
+                  onClickAway={() => handleClickAway("breakdownOption")}
+                >
+                  <div
+                    className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
+                  >
+                    {ORDER_OPTIONS?.length > 0 &&
+                      ORDER_OPTIONS?.map((s: any, i: number) => (
+                        <div
+                          className="flex items-center cursor-pointer mb-2"
+                          key={i}
+                          onClick={() => {
+                            resetFilters();
+                            setBreakdownOptions(s);
+                            setOpenBreakdownOptions(false);
+                          }}
+                        >
+                          <div
+                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                              breakdownOption === s
+                                ? "primary_bg_color"
+                                : "bg_gray_color"
+                            }`}
+                          />
+                          <p
+                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                          >
+                            {s}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                </ClickAwayListener>
+              )}
+            </div>
           </div>
           <div className="my-4 bg-[#FDEEF0] rounded-xl flex justify-between">
             {dashboardLoading ? (
@@ -742,7 +736,19 @@ const SalesReports = () => {
             ) : (
               <div className="p-6">
                 <div className="flex gap-3 align-items-center">
-                  <p className="text-base text-black font_medium">Net Sales</p>
+                  <p className="text-base text-black font_medium">
+                    {breakdownOption === ORDER_OPTIONS[0]
+                      ? "Net Sales"
+                      : breakdownOption === ORDER_OPTIONS[1]
+                      ? "Net Declined Sales"
+                      : breakdownOption === ORDER_OPTIONS[2]
+                      ? "Net Voided Sales"
+                      : breakdownOption === ORDER_OPTIONS[3]
+                      ? "Net Gifted Sales"
+                      : breakdownOption === ORDER_OPTIONS[4]
+                      ? "Net Incomplete Sales"
+                      : "Net Sales"}
+                  </p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -822,37 +828,28 @@ const SalesReports = () => {
             </div>
           )}
           <div className="bg-white border border-[#E1E1E1] rounded-xl p-6">
-            <div className="flex justify-between">
+            <div className="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-center gap-y-3">
               <div className="flex gap-3">
                 <div
                   className={`text-center font_medium py-2 w-36 h-10 rounded-full cursor-pointer ${
-                    selectedTable === "Dine-in sales"
+                    breakdownOption === "Completed sales"
                       ? "text-white primary_bg_color"
                       : "text-black bg-[#EDECEC]"
                   } `}
-                  onClick={() => setSelectedTable("Dine-in sales")}
+                  onClick={() => setBreakdownOptions(ORDER_OPTIONS[0])}
                 >
                   <p>Sales</p>
                 </div>
-                {/* <div
-                  className={`text-center font_medium py-2 w-36 h-10 rounded-full cursor-pointer ${
-                    selectedTable === "Online sales"
-                      ? "text-white primary_bg_color"
-                      : "text-black bg-[#EDECEC]"
-                  } `}
-                  onClick={() => setSelectedTable("Online sales")}
-                >
-                  <p>Online sales</p>
-                </div> */}
+
                 <div
                   className={`text-center font_medium py-2 w-28 h-10 rounded-full cursor-pointer ${
-                    selectedTable === "Categories"
+                    breakdownOption !== "Completed sales"
                       ? "text-white primary_bg_color"
                       : "text-black bg-[#EDECEC]"
                   } `}
-                  onClick={() => setSelectedTable("Categories")}
+                  onClick={() => setBreakdownOptions("")}
                 >
-                  <p>Categories</p>
+                  <p>Others</p>
                 </div>
               </div>
 
@@ -860,11 +857,7 @@ const SalesReports = () => {
                 <div
                   className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
                   onClick={() => {
-                    if (selectedTable === "Dine-in sales") {
-                      dineExportToCSV(transactions);
-                    } else if (selectedTable === "Online sales") {
-                      orderExportToCSV(ordersTransactions);
-                    }
+                    dineExportToCSV();
                   }}
                 >
                   {isDownloading ? (
@@ -948,19 +941,23 @@ const SalesReports = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-4 flow-root overflow-hidden">
-              {selectedTable === "Dine-in sales" && (
-                <InfinityScroll
-                  data={transactions}
-                  getMore={fetchRestaurantOrders}
-                  hasMore={hasMore}
-                >
-                  <div
-                    ref={tableContainerRef}
-                    className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8"
-                  >
-                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                      <div className="overflow-x-auto">
+
+            <div className="w-full mt-4 flow-root overflow-hidden">
+              <InfinityScroll
+                data={transactions}
+                getMore={fetchRestaurantOrders}
+                hasMore={hasMore}
+              >
+                <div ref={tableContainerRef} className="-my-2 overflow-x-auto">
+                  <div className="inline-block min-w-full py-2 align-middle">
+                    <div className="overflow-x-auto">
+                      {dashboardLoading ? (
+                        <div className="my-4 grid grid-cols-2 gap-3">
+                          {[...Array(4)]?.map((_, i) => (
+                            <DashboardItemSkeletonLoader key={i} />
+                          ))}
+                        </div>
+                      ) : (
                         <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
                           {/* Table headers */}
                           <thead>
@@ -1062,36 +1059,41 @@ const SalesReports = () => {
                                                     </>
                                                   )}
                                                 </RadioGroup.Option>
-                                                {table?.map((item: any) => (
-                                                  <RadioGroup.Option
-                                                    key={item.table}
-                                                    value={item.table}
-                                                    className={
-                                                      "flex items-center cursor-pointer mb-2"
-                                                    }
-                                                  >
-                                                    {({ active, checked }) => (
-                                                      <>
-                                                        <div
-                                                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                            checked
-                                                              ? "primary_bg_color"
-                                                              : "bg_gray_color"
-                                                          }`}
-                                                        />
+                                                {table
+                                                  ?.filter((item) => item.table)
+                                                  .map((item: any) => (
+                                                    <RadioGroup.Option
+                                                      key={item.table}
+                                                      value={item.table}
+                                                      className={
+                                                        "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                    >
+                                                      {({
+                                                        active,
+                                                        checked,
+                                                      }) => (
+                                                        <>
+                                                          <div
+                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                              checked
+                                                                ? "primary_bg_color"
+                                                                : "bg_gray_color"
+                                                            }`}
+                                                          />
 
-                                                        <div className="">
-                                                          <RadioGroup.Label
-                                                            as="p"
-                                                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                          >
-                                                            {item.table}
-                                                          </RadioGroup.Label>
-                                                        </div>
-                                                      </>
-                                                    )}
-                                                  </RadioGroup.Option>
-                                                ))}
+                                                          <div className="">
+                                                            <RadioGroup.Label
+                                                              as="p"
+                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                            >
+                                                              {item.table}
+                                                            </RadioGroup.Label>
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                    </RadioGroup.Option>
+                                                  ))}
                                               </div>
                                             </RadioGroup>
                                           </div>
@@ -1118,113 +1120,6 @@ const SalesReports = () => {
                                 className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
                               >
                                 Waiter
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                              >
-                                <Popover className="relative">
-                                  {({ open }) => (
-                                    <>
-                                      <Popover.Button
-                                        className={`flex flex-row items-center space-between gap-x-1`}
-                                      >
-                                        <span className="text-nowrap">
-                                          Type
-                                        </span>
-                                        {open ? (
-                                          <BiSolidUpArrow />
-                                        ) : (
-                                          <BiSolidDownArrow />
-                                        )}
-                                      </Popover.Button>
-
-                                      <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-200"
-                                        enterFrom="opacity-0 translate-y-1"
-                                        enterTo="opacity-100 translate-y-0"
-                                        leave="transition ease-in duration-150"
-                                        leaveFrom="opacity-100 translate-y-0"
-                                        leaveTo="opacity-0 translate-y-1"
-                                      >
-                                        <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                          <div className="w-full">
-                                            <RadioGroup
-                                              value={selectedType}
-                                              onChange={setSelectedType}
-                                            >
-                                              <div className="space-y-3">
-                                                <RadioGroup.Option
-                                                  value={""}
-                                                  className={
-                                                    "flex items-center cursor-pointer mb-2"
-                                                  }
-                                                >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
-
-                                                      <div className="">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          All
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                                {typeOptions?.map(
-                                                  (item: any) => (
-                                                    <RadioGroup.Option
-                                                      key={item}
-                                                      value={item}
-                                                      className={
-                                                        "flex items-center cursor-pointer mb-2"
-                                                      }
-                                                    >
-                                                      {({
-                                                        active,
-                                                        checked,
-                                                      }) => (
-                                                        <>
-                                                          <div
-                                                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                              checked
-                                                                ? "primary_bg_color"
-                                                                : "bg_gray_color"
-                                                            }`}
-                                                          />
-
-                                                          <div className="text-sm">
-                                                            <RadioGroup.Label
-                                                              as="p"
-                                                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                            >
-                                                              {item}
-                                                            </RadioGroup.Label>
-                                                          </div>
-                                                        </>
-                                                      )}
-                                                    </RadioGroup.Option>
-                                                  )
-                                                )}
-                                              </div>
-                                            </RadioGroup>
-                                          </div>
-                                        </Popover.Panel>
-                                      </Transition>
-                                    </>
-                                  )}
-                                </Popover>
                               </th>
                               <th
                                 scope="col"
@@ -1446,79 +1341,52 @@ const SalesReports = () => {
                                   )}
                                 </Popover>
                               </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                              >
-                                <Popover className="relative">
-                                  {({ open }) => (
-                                    <>
-                                      <Popover.Button
-                                        className={`flex flex-row items-center space-between gap-x-1`}
-                                      >
-                                        <span className="text-nowrap">
-                                          Status
-                                        </span>
-                                        {open ? (
-                                          <BiSolidUpArrow />
-                                        ) : (
-                                          <BiSolidDownArrow />
-                                        )}
-                                      </Popover.Button>
 
-                                      <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-200"
-                                        enterFrom="opacity-0 translate-y-1"
-                                        enterTo="opacity-100 translate-y-0"
-                                        leave="transition ease-in duration-150"
-                                        leaveFrom="opacity-100 translate-y-0"
-                                        leaveTo="opacity-0 translate-y-1"
-                                      >
-                                        <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                          <div className="w-full">
-                                            <RadioGroup
-                                              value={selectedStatus}
-                                              onChange={setSelectedStatus}
-                                            >
-                                              <div className="space-y-3">
-                                                <RadioGroup.Option
-                                                  value={""}
-                                                  className={
-                                                    "flex items-center cursor-pointer mb-2"
-                                                  }
-                                                  onClick={() =>
-                                                    setSelectedStatus("")
-                                                  }
+                              {breakdownOption !== ORDER_OPTIONS[0] && (
+                                <>
+                                  <th
+                                    scope="col"
+                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                  >
+                                    <Popover className="relative">
+                                      {({ open }) => (
+                                        <>
+                                          <Popover.Button
+                                            className={`flex flex-row items-center space-between gap-x-1`}
+                                          >
+                                            <span className="text-nowrap">
+                                              Status
+                                            </span>
+                                            {open ? (
+                                              <BiSolidUpArrow />
+                                            ) : (
+                                              <BiSolidDownArrow />
+                                            )}
+                                          </Popover.Button>
+
+                                          <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-200"
+                                            enterFrom="opacity-0 translate-y-1"
+                                            enterTo="opacity-100 translate-y-0"
+                                            leave="transition ease-in duration-150"
+                                            leaveFrom="opacity-100 translate-y-0"
+                                            leaveTo="opacity-0 translate-y-1"
+                                          >
+                                            <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                              <div className="w-full">
+                                                <RadioGroup
+                                                  value={selectedStatus}
+                                                  onChange={setSelectedStatus}
                                                 >
-                                                  {({ active, checked }) => (
-                                                    <>
-                                                      <div
-                                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                          checked
-                                                            ? "primary_bg_color"
-                                                            : "bg_gray_color"
-                                                        }`}
-                                                      />
-
-                                                      <div className="text-sm">
-                                                        <RadioGroup.Label
-                                                          as="p"
-                                                          className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                        >
-                                                          All
-                                                        </RadioGroup.Label>
-                                                      </div>
-                                                    </>
-                                                  )}
-                                                </RadioGroup.Option>
-                                                {statusOptions?.map(
-                                                  (item: any) => (
+                                                  <div className="space-y-3">
                                                     <RadioGroup.Option
-                                                      key={item}
-                                                      value={item}
+                                                      value={"All"}
                                                       className={
                                                         "flex items-center cursor-pointer mb-2"
+                                                      }
+                                                      onClick={() =>
+                                                        setSelectedStatus("All")
                                                       }
                                                     >
                                                       {({
@@ -1539,35 +1407,76 @@ const SalesReports = () => {
                                                               as="p"
                                                               className={`text-xs lg:text-sm secondary_gray_color text-black`}
                                                             >
-                                                              {item}
+                                                              All
                                                             </RadioGroup.Label>
                                                           </div>
                                                         </>
                                                       )}
                                                     </RadioGroup.Option>
-                                                  )
-                                                )}
+                                                    {statusOptions?.map(
+                                                      (item: any) => (
+                                                        <RadioGroup.Option
+                                                          key={item}
+                                                          value={item}
+                                                          className={
+                                                            "flex items-center cursor-pointer mb-2"
+                                                          }
+                                                        >
+                                                          {({
+                                                            active,
+                                                            checked,
+                                                          }) => (
+                                                            <>
+                                                              <div
+                                                                className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                                  checked
+                                                                    ? "primary_bg_color"
+                                                                    : "bg_gray_color"
+                                                                }`}
+                                                              />
+
+                                                              <div className="text-sm">
+                                                                <RadioGroup.Label
+                                                                  as="p"
+                                                                  className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                                >
+                                                                  {item}
+                                                                </RadioGroup.Label>
+                                                              </div>
+                                                            </>
+                                                          )}
+                                                        </RadioGroup.Option>
+                                                      )
+                                                    )}
+                                                  </div>
+                                                </RadioGroup>
                                               </div>
-                                            </RadioGroup>
-                                          </div>
-                                        </Popover.Panel>
-                                      </Transition>
-                                    </>
-                                  )}
-                                </Popover>
-                              </th>
+                                            </Popover.Panel>
+                                          </Transition>
+                                        </>
+                                      )}
+                                    </Popover>
+                                  </th>
+
+                                  <th
+                                    scope="col"
+                                    className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px] max-w-[250px]"
+                                  >
+                                    Note
+                                  </th>
+                                </>
+                              )}
                             </tr>
                           </thead>
                           {/* Table body */}
                           <tbody className="divide-y divide-gray-200">
                             {filteredOrders?.map(
                               (transaction: any, i: number) => (
-                                <tr key={transaction.id + i}>
+                                <tr
+                                  key={generateUUIDBasedOnStringLength("ttru")}
+                                >
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    #
-                                    {transaction.id.substring(
-                                      transaction?.id?.length - 5
-                                    )}
+                                    #{transaction._id?.slice(-5)}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                     {moment(transaction?.createdAt).format(
@@ -1592,32 +1501,35 @@ const SalesReports = () => {
                                     {transaction?.table?.table}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                    {transaction?.cartMenu?.map((menu: any) => (
+                                    {transaction?.order?.map((menu: any, n) => (
                                       <div
-                                        key={menu?._id}
+                                        key={generateUUIDBasedOnStringLength(
+                                          "fgtr"
+                                        )}
                                         className="flex items-center"
                                       >
                                         <div className="h-10 w-10 flex-shrink-0">
                                           <img
                                             className="h-10 w-10 rounded-full object-cover"
-                                            src={menu?.images[0]}
+                                            src={menu?.menu.images[0]}
                                             alt=""
                                           />
                                         </div>
                                         <div className="ml-4">
                                           <div className="font-medium text-wrap">
-                                            {menu?.foodName} X {menu?.quantity}
+                                            {menu?.menu.foodName} X{" "}
+                                            {menu?.quantity}
                                           </div>
                                           <div className="">
                                             ₦
                                             {parseInt(
-                                              menu?.eventAmount
-                                                ? menu?.eventAmount
-                                                : menu?.discount
-                                                ? menu.price -
-                                                  (menu.price / 100) *
-                                                    menu.discount
-                                                : menu.price
+                                              menu?.menu.eventAmount
+                                                ? menu?.menu.eventAmount
+                                                : menu?.menu.discount
+                                                ? menu.menu.price -
+                                                  (menu.menu.price / 100) *
+                                                    menu.menu.discount
+                                                : menu.menu.price
                                             ).toLocaleString()}
                                           </div>
                                         </div>
@@ -1625,7 +1537,7 @@ const SalesReports = () => {
                                     ))}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    {transaction?.cartMenu?.reduce(
+                                    {transaction?.order?.reduce(
                                       (total: any, item: any) =>
                                         total + item.quantity,
                                       0
@@ -1634,9 +1546,6 @@ const SalesReports = () => {
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                     {transaction?.table?.employeeAssigned ||
                                       "-"}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    {transaction?.gift ? "Gift" : "Sales"}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
                                     {
@@ -1658,295 +1567,53 @@ const SalesReports = () => {
                                       ? "Dine-in"
                                       : "Online"}
                                   </td>
-                                  <td className="capitalize whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                    {transaction?.restaurant &&
-                                    transaction?.order[0].status === "archived"
-                                      ? "void"
-                                      : transaction?.restaurant &&
-                                        ![
-                                          "completed",
-                                          "kitchen",
-                                          "declined",
-                                          "void",
-                                        ].includes(
-                                          transaction?.order[0]?.status
-                                        )
-                                      ? "kitchen"
-                                      : transaction?.restaurant &&
-                                        transaction?.order[0]?.status !==
-                                          "archived"
-                                      ? transaction?.order[0]?.status
-                                      : transaction?.status}
-                                  </td>
-                                </tr>
-                              )
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </InfinityScroll>
-              )}
+                                  {breakdownOption !== ORDER_OPTIONS[0] && (
+                                    <>
+                                      <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
+                                        {!!transaction?.order &&
+                                          (transaction?.restaurant &&
+                                          transaction?.order[0]?.status ===
+                                            "archived" ? (
+                                            <p className="w-fit text-xs text-medium text-[#CFAC00] border border-solid border-[#CFAC00] bg-[#FAF8EC] px-3 py-1 text-center rounded-3xl">
+                                              Void
+                                            </p>
+                                          ) : transaction?.restaurant &&
+                                            transaction?.order[0]?.status ===
+                                              "declined" ? (
+                                            <p className="w-fit text-xs text-medium text-[#C10606] border border-solid border-[#C10606] bg-[#E9A9A9] px-3 py-1 text-center rounded-3xl">
+                                              Declined
+                                            </p>
+                                          ) : (transaction?.restaurant &&
+                                              transaction?.gift === true) ||
+                                            transaction?.order[0]
+                                              ?.paymentStatus === "gift" ? (
+                                            <p className="w-fit text-xs text-medium text-[#06C167] border border-solid border-[#06C167] bg-[#F2FFF9] px-3 py-1 text-center rounded-3xl">
+                                              Gift
+                                            </p>
+                                          ) : (
+                                            <p>
+                                              {transaction?.order[0]?.status}
+                                            </p>
+                                          ))}
+                                      </td>
 
-              {selectedTable === "Online sales" && (
-                <InfinityScroll
-                  data={ordersTransactions}
-                  getMore={fetchOrders}
-                  hasMore={ordersHasMore}
-                >
-                  <div
-                    ref={tableContainerRef}
-                    className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8"
-                  >
-                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-300">
-                          {/* Table headers */}
-                          <thead>
-                            <tr>
-                              <th
-                                scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#7E7E7E] sm:pl-0 min-w-[100px]"
-                              >
-                                TICKET NO.
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[100px]"
-                              >
-                                DATE
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[100px]"
-                              >
-                                TIME
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[100px]"
-                              >
-                                NAME
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[200px]"
-                              >
-                                EMAIL
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[150px]"
-                              >
-                                PHONE NO.
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[200px]"
-                              >
-                                FOOD
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[150px]"
-                              >
-                                TOTAL ORDERS
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[150px]"
-                              >
-                                AMOUNT
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E] min-w-[100px]"
-                              >
-                                STATUS
-                              </th>
-                            </tr>
-                          </thead>
-                          {/* Table body */}
-                          <tbody className="divide-y divide-gray-200">
-                            {ordersTransactions?.map(
-                              (transaction: any, i: number) => (
-                                <tr key={transaction.id + i}>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    #
-                                    {transaction.id.substring(
-                                      transaction?.id?.length - 5
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {moment(transaction?.createdAt).format(
-                                      "DD/MM/YYYY"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {moment(transaction?.createdAt).format(
-                                      "hh:mm A"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {transaction?.customer?.firstName}{" "}
-                                    {transaction?.customer?.lastName}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {transaction?.customer?.email}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {transaction?.phoneNumber}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {transaction?.cartMenu?.map((menu: any) => (
-                                      <div
-                                        key={menu?._id}
-                                        className="flex items-center"
-                                      >
-                                        <div className="h-10 w-10 flex-shrink-0">
-                                          <img
-                                            className="h-10 w-10 rounded-full object-cover"
-                                            src={menu?.images[0]}
-                                            alt=""
-                                          />
-                                        </div>
-                                        <div className="ml-4">
-                                          <div className="font-medium">
-                                            {menu?.foodName} X {menu?.quantity}
-                                          </div>
-                                          <div className="">
-                                            ₦
-                                            {parseInt(
-                                              menu?.eventAmount
-                                                ? menu?.eventAmount
-                                                : menu?.discount
-                                                ? menu.price -
-                                                  (menu.price / 100) *
-                                                    menu.discount
-                                                : menu.price
-                                            ).toLocaleString()}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {transaction?.cartMenu?.reduce(
-                                      (total: any, item: any) =>
-                                        total + item.quantity,
-                                      0
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {
-                                      formatRemoteAmountKobo(
-                                        transaction?.totalAmount
-                                      ).naira
-                                    }
-                                    {
-                                      formatRemoteAmountKobo(
-                                        transaction?.totalAmount
-                                      ).kobo
-                                    }
-                                  </td>
-                                  <td className="capitalize whitespace-nowrap py-4 pl-4 pr-3 text-sm font_medium text-[#310E0E] sm:pl-0">
-                                    {transaction?.status}
-                                  </td>
+                                      <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px] max-w-[200px] text-wrap">
+                                        {transaction?.notes
+                                          ? transaction?.notes
+                                          : "N/A"}
+                                      </td>
+                                    </>
+                                  )}
                                 </tr>
                               )
                             )}
                           </tbody>
                         </table>
-                      </div>
+                      )}
                     </div>
                   </div>
-                </InfinityScroll>
-              )}
-              {/* {selectedTable === "Categories" && (
-                        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                            <table className="min-w-full divide-y divide-gray-300">
-                              <thead>
-                                <tr>
-                                  <th
-                                    scope="col"
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[#7E7E7E] sm:pl-0"
-                                  >
-                                    ITEM
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E]"
-                                  >
-                                    NUMBER
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E]"
-                                  >
-                                    PERCENTAGE
-                                  </th>
-                                  <th
-                                    scope="col"
-                                    className="px-3 py-3.5 text-left text-sm font-semibold text-[#7E7E7E]"
-                                  >
-                                    AMOUNT
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-gray-200">
-                                {transactions.map((transaction, i) => (
-                                  <tr key={transaction.email}>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                      {transaction.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.title}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                      {transaction.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.title}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                      {transaction.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.title}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.email}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                      {transaction.role}
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      )} */}
+                </div>
+              </InfinityScroll>
             </div>
           </div>
         </div>

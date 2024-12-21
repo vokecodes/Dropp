@@ -1,7 +1,7 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingSpinner from "./LoadingSpinner";
 
-const InfinityScroll = ({ children, data, getMore, hasMore }) => {
+const InfinityScroll = ({ children, data, getMore, hasMore, scrollableTarget='' }) => {
   return (
     <InfiniteScroll
       dataLength={data?.length} // This is important to track the length of your data array
@@ -16,6 +16,7 @@ const InfinityScroll = ({ children, data, getMore, hasMore }) => {
       endMessage={
         <p className="mt-5 text-center font_medium">Yay, you've seen it all.</p>
       } // Message when all items have been loaded
+      scrollableTarget={scrollableTarget}
     >
       {children}
     </InfiniteScroll>

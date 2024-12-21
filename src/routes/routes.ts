@@ -44,6 +44,8 @@ export const HOME_ROUTES = {
   linkExplore: "/explore",
   exploreChef: "explore/:businessName/:foodName?",
   linkExploreChef: "/explore/:businessName/:foodName?",
+  exploreQsr: "restaurant/qsr/:businessName",
+  linkExploreQsr: "/restaurant/qsr/:businessName",
   exploreRestaurant: "restaurant/:businessName/:table",
   linkExploreRestaurant: "/restaurant/:businessName/:table",
   exploreRestaurantEdit: "restaurant/:businessName/:table/add/:menuId",
@@ -126,6 +128,23 @@ export const CHEF_ROUTES = {
   linkChefReports: "/chef/reports",
 };
 
+export const QSR_ROUTES = {
+  qsr: "/qsr/*",
+  linkQsr: "/qsr",
+  qsrOrders: "orders",
+  linkQsrOrders: "/qsr/orders",
+  qsrMenu: "menu",
+  linkQsrMenu: "/qsr/menu",
+  qsrCashier: "cashier-management",
+  linkQsrCashier: "/qsr/cashier-management",
+  qsrAudit: "audit",
+  linkQsrAudit: "/qsr/audit",
+  qsrSettings: "settings",
+  linkQsrSettings: "/qsr/settings",
+  qsrReports: "reports",
+  linkQsrReports: "/qsr/reports",
+};
+
 export const SUB_CHEF_ROUTES = {
   subChef: "/sub-chef/*",
   linkSubChef: "/sub-chef",
@@ -152,6 +171,28 @@ export const SUB_CHEF_ROUTES = {
 export const WAITER_ROUTES = {
   waiter: "/waiter/*",
   linkWaiter: "/waiter",
+};
+
+export const QSR_SUBADMIN_ROUTES = {
+  qsrSubAdmin: "/qsr-sub-admin/*",
+  linkQsrSubAdmin: "/qsr-sub-admin",
+  qsrSubAdminMenu: "menu",
+  linkQsrSubAdminMenu: "/qsr-sub-admin/menu",
+  qsrSubAdminCashier: "cashier-management",
+  linkQsrSubAdminCashier: "/qsr-sub-admin/cashier-management",
+  qsrSubAdminSettings: "settings",
+  linkQsrSubAdminSettings: "/qsr-sub-admin/settings",
+  // qsrSubAdminReports: "reports",
+  // linkQsrSubAdminReports: "/qsr-sub-admin/reports",
+};
+
+export const CASHIER_ROUTES = {
+  cashier: "/cashier/*",
+  linkCashier: "/cashier",
+  cashierLogin: "/cashier/*",
+  linkCashierLogin: "/cashier",
+  cashierOrders: "orders",
+  linkCashierOrders: "/cashier/orders",
 };
 
 export const ADMIN_ROUTES = {

@@ -7,6 +7,10 @@ import {
   addSubChefDineInMenu,
   updateSubChefDineInMenu,
   subChefDeleteChefDineInMenu,
+  getQsrSubAdminDineInMenuCrud,
+  addQsrSubAdminDineInMenuCrud,
+  updateQsrSubAdminDineInMenuCrud,
+  deleteQsrSubAdminDineInMenuCrud,
 } from "./dinningMenuCrud";
 import {
   startCall,
@@ -81,6 +85,75 @@ export const deleteDineInMenu = (menuId: string) => (dispatch: any) => {
       dispatch(catchError({ error: error?.message }));
     });
 };
+
+
+
+export const getQsrSubAdminDineInMenus = () => (dispatch: any) => {
+  dispatch(startCall());
+  return getQsrSubAdminDineInMenuCrud()
+    .then(({ data }) => {
+      dispatch(getAddUpdateDinningMenu(data?.dinningMenu));
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+
+      dispatch(catchError({ error: error?.message }));
+    });
+};
+
+export const addQsrSubAdminDineInMenu =
+  (data: any, closeMenuModal: any) => (dispatch: any) => {
+    dispatch(startCall());
+    return addQsrSubAdminDineInMenuCrud(data)
+      .then(({ data }) => {
+        dispatch(getAddUpdateDinningMenu(data?.dinningMenu));
+        closeMenuModal();
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
+export const updateQsrSubAdminDineInMenu =
+  (data: any, menuId: string, closeBusinessModal: any) => (dispatch: any) => {
+    dispatch(startCall());
+    return updateQsrSubAdminDineInMenuCrud(data, menuId)
+      .then(({ data }) => {
+        dispatch(getAddUpdateDinningMenu(data?.dinningMenu));
+        closeBusinessModal();
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+
+        dispatch(catchError({ error: error?.message }));
+      });
+  };
+
+export const showHideQsrSubAdminDineInMenu =
+  (data: any, menuId: string) => (dispatch: any) => {
+    dispatch(hideStartCall());
+    return updateQsrSubAdminDineInMenuCrud(data, menuId)
+      .then(({ data }) => {
+        dispatch(showHideDinningMenuUpdate(data?.dinningMenu));
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(hideCatchError({ error: error?.message }));
+      });
+  };
+
+export const deleteQsrSubAdminDineInMenu = (menuId: string) => (dispatch: any) => {
+  dispatch(startCall());
+  return deleteQsrSubAdminDineInMenuCrud(menuId)
+    .then(({ data }) => dispatch(getAddUpdateDinningMenu(data?.dinningMenu)))
+    .catch((err) => {
+      const error = err?.response?.data;
+      dispatch(catchError({ error: error?.message }));
+    });
+};
+
+
 
 export const getSubChefDineInMenus = () => (dispatch: any) => {
   dispatch(startCall());

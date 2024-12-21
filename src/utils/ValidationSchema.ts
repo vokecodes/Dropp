@@ -130,12 +130,19 @@ export const DineInNewMenuInputsSchema = Yup.object().shape({
   note: Yup.string(),
 });
 
+export const CashierInputsSchema = Yup.object().shape({
+  employeeName: Yup.string().required("Employee name is required."),
+  employeeID: Yup.string().required("Employee ID is required."),
+  whatsappNumber: Yup.string().optional(),
+  password: Yup.string().required("Password is required."),
+});
+
 export const WaiterTableInputsSchema = Yup.object().shape({
   section: Yup.string().required("Section is required."),
   employeeAssigned: Yup.string().required("Employee name is required."),
   employeeID: Yup.string().required("Employee ID is required."),
   table: Yup.string().required("Table is required."),
-  whatasappNumber: Yup.string().optional(),
+  whatsappNumber: Yup.string().optional(),
   password: Yup.string().required("Password is required."),
 });
 
@@ -178,6 +185,17 @@ export const RestaurantCheckoutSchema = Yup.object().shape({
   notes: Yup.string().optional(),
 });
 
+export const QsrCheckoutSchema = Yup.object().shape({
+  name: Yup.string().optional(),
+  email: Yup.string().email().optional(),
+  phoneNumber: Yup.string().required("Phone Number is required."),
+});
+
+export const CashierLoginSchema = Yup.object().shape({
+  employeeID: Yup.string().required("Employee ID is required."),
+  password: Yup.string().required("Password is required."),
+});
+
 export const WaiterLoginSchema = Yup.object().shape({
   employeeID: Yup.string().required("Employee ID is required."),
   table: Yup.string().required("Table is required."),
@@ -190,6 +208,22 @@ export const SuperWaiterLoginSchema = Yup.object().shape({
 });
 
 export const CreateSubChefSchema = Yup.object().shape({
+  firstName: Yup.string().required("First name is required."),
+  lastName: Yup.string().required("Last name is required."),
+  email: Yup.string().email().required("Email is required."),
+  password: Yup.string()
+    .required("Password is required.")
+    .matches(/\w*[a-z]\w*/, "Password must have a small letter")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+    .matches(/\d/, "Password must have a number")
+    .matches(
+      /[!+@#$%^&*()\-_"=+{}; :,<.>]/,
+      "Password must have a special character"
+    )
+    .min(8, ({ min }) => `Password must be at least ${min} characters`),
+});
+
+export const CreateQsrSubAdminSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required."),
   lastName: Yup.string().required("Last name is required."),
   email: Yup.string().email().required("Email is required."),

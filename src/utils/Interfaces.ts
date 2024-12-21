@@ -115,6 +115,7 @@ export type MenuItemProps = {
   newTab?: boolean | any;
   beta?: boolean;
   pro?: boolean;
+  coming?: boolean;
 };
 
 export type DashboardLayoutProps = {

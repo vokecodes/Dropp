@@ -20,7 +20,8 @@ const MenuOrderItem = ({
   getTableOrders,
   selectedCategory,
   waiter,
-  chef
+  chef,
+  table
 }: any) => {
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -75,7 +76,7 @@ const MenuOrderItem = ({
       >
         <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
           <Link
-            to={`/restaurant/${chef?.business?.businessName}/add/${order?.id}`}
+            to={`/restaurant/${chef?.business?.businessName}/${table}/add/${order?.id}`}
             target="_blank"
           >
             <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">Add order <FaPlus /></p>
@@ -113,11 +114,13 @@ const MenuOrderItem = ({
         </div>
 
         <div className="flex flex-col justify-start items-center w-full mt-3">
+          {order?.status}
+          {order?.order.map(o => o.status)}
           {order?.order &&
             order?.order
               ?.filter(
                 (o: any) =>
-                  o?.status === orderStatus || o?.status === secondOrderStatus
+                  !["pending", "completed"].includes(order?.status) && (o?.status === secondOrderStatus || o?.status === 'ready' || o?.status === 'pending' || o?.status === 'cooking')
               )
               ?.map((menuOrder: any, num: number) => (
                 <div

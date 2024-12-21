@@ -1,6 +1,7 @@
 import {
   EVENT_URL,
   ORDER_URL,
+  QSR_ORDER_URL,
   RESTAURANT_ORDER_URL,
   SUBSCRIPTION_URL,
   SUB_CHEF_URL,
@@ -41,6 +42,10 @@ export const getChefUserSubscriptionOrders = () => {
 
 export const createARestaurantOrder = (data: any) => {
   return SERVER.post(`${RESTAURANT_ORDER_URL}`, { ...data });
+};
+
+export const createAQsrOrder = (data: any) => {
+  return SERVER.post(`${QSR_ORDER_URL}`, { ...data });
 };
 
 export const editARestaurantOrder = (menuId: string, data: any) => {

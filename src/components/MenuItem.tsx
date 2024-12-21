@@ -15,6 +15,7 @@ const MenuItem = ({
   newTab,
   beta,
   pro,
+  coming,
 }: MenuItemProps) => {
   const { user } = useSelector(
     (state: any) => ({
@@ -70,7 +71,7 @@ const MenuItem = ({
       ) : (
         <Link to={to} target={newTab ? "_blank" : ""}>
           <div
-            className={`flex items-center my-2 pl-10 py-2 cursor-pointer ${
+            className={`flex items-center my-1 lg:my-2 pl-10 py-1 lg:py-2 cursor-pointer ${
               active && "bg_menu"
             }`}
           >
@@ -86,6 +87,13 @@ const MenuItem = ({
               <div className="ms-5 bg-yellow-400 rounded-full w-12 h-8 flex items-center justify-center">
                 <p className="text-black text-sm font_medium fw-semibold">
                   Beta
+                </p>
+              </div>
+            )}
+            {coming && (
+              <div className="ms-2 bg-[#F3FFF9] border border-[#06C167] rounded-full w-fit h-fit px-3 py-1 flex items-center justify-center">
+                <p className="text-[#06C167] text-xs font_medium fw-semibold text-nowrap">
+                  Coming Soon
                 </p>
               </div>
             )}

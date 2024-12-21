@@ -19,10 +19,13 @@ import { Images } from "../config/images";
 import { AUTH_DATA } from "../reducers/type";
 import MenuItemLocal from "./MenuItem";
 import {
+  CASHIER_ROUTES,
   CHEF_ROUTES,
   COMPANY_ROUTES,
   CUSTOMER_ROUTES,
   HOME_ROUTES,
+  QSR_ROUTES,
+  QSR_SUBADMIN_ROUTES,
   SUB_CHEF_ROUTES,
 } from "../routes/routes";
 
@@ -40,15 +43,18 @@ import { FaSquarePollVertical } from "react-icons/fa6";
 import { GiKnifeFork } from "react-icons/gi";
 import { USER_TYPE } from "../utils/Globals";
 import LogoutButton from "./LogoutButton";
+import { LuUsers } from "react-icons/lu";
+import { QSR_SUB_ADMIN_USER } from "../config/UserType";
 
 const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, admin }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { auth, person } = useSelector(
+  const { auth, person, cashier } = useSelector(
     (state: any) => ({
       auth: state.auth.user,
       person: state.user.user,
+      cashier: state.cashier.cashier,
     }),
     shallowEqual
   );
@@ -558,8 +564,205 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
     },
   ];
 
+  const superAdminMenuItems = [
+    {
+      icon: (
+        <MdHomeFilled
+          size={24}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsr ? "#06c167" : "#787878"
+          }
+        />
+      ),
+      title: "Home",
+      active: location?.pathname === QSR_ROUTES.linkQsr,
+      to: QSR_ROUTES.linkQsr,
+    },
+    {
+      icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrReports
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Report",
+      active: location?.pathname === QSR_ROUTES.linkQsrReports,
+      to: QSR_ROUTES.linkQsrReports,
+      beta: true,
+    },
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrMenu
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Menu",
+      active:
+        location?.pathname === QSR_ROUTES.linkQsrMenu,
+      to: QSR_ROUTES.linkQsrMenu,
+    },
+    {
+      icon: (
+        <LuUsers
+          size={24}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrCashier
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Cashier",
+      active: location?.pathname === QSR_ROUTES.linkQsrCashier,
+      to: QSR_ROUTES.linkQsrCashier,
+    },
+    {
+        icon: (
+            <BsChatDots
+            size={24}
+            color={
+                location?.pathname === QSR_ROUTES.linkQsrAudit
+                ? "#06c167"
+                : "#787878"
+            }
+            />
+        ),
+        title: "Audit log",
+        coming: true,
+        active: location?.pathname === QSR_ROUTES.linkQsrAudit,
+        to: "#",
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === QSR_ROUTES.linkQsrSettings,
+      to: QSR_ROUTES.linkQsrSettings,
+    },
+  ];
+  
+  const subAdminMenuItems = [
+    {
+      icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdmin
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Report",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdmin,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdmin,
+      beta: true,
+    },
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Menu",
+      active:
+        location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
+    },
+    {
+      icon: (
+        <LuUsers
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Cashier",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminCashier,
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+      to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+    },
+  ];
+  
+  const cashierMenuItems = [
+    {
+      icon: (
+        <MdHomeFilled
+          size={24}
+          color={
+            location?.pathname === CASHIER_ROUTES.linkCashier ? "#06c167" : "#787878"
+          }
+        />
+      ),
+      title: "Home",
+      active: location?.pathname === CASHIER_ROUTES.linkCashier,
+      to: CASHIER_ROUTES.linkCashier,
+    },
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === CASHIER_ROUTES.linkCashierOrders
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Orders",
+      active:
+        location?.pathname === CASHIER_ROUTES.linkCashierOrders,
+      to: CASHIER_ROUTES.linkCashierOrders,
+    }
+  ];
+
   const menuItems =
-    person?.userType === USER_TYPE.SUB_CHEF
+    auth?.user?.chefType === "quick_service"
+      ? superAdminMenuItems
+      : auth?.user?.userType === QSR_SUB_ADMIN_USER
+      ? subAdminMenuItems
+      : cashier
+      ? cashierMenuItems
+      : person?.userType === USER_TYPE.SUB_CHEF
       ? subChefMenuItems
       : person?.isRestaurant
       ? restaurantMenuItems

@@ -22,6 +22,7 @@ export default function AlertDialog({
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        className='rounded-2xl'
       >
         <DialogTitle id="alert-dialog-title">
           {"Alert"}
@@ -32,7 +33,7 @@ export default function AlertDialog({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose} className='!text-[#06C167] hover:!bg-[#06C167]/10'>Close</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
