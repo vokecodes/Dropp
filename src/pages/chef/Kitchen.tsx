@@ -69,15 +69,16 @@ const Kitchen = () => {
             ...data.data,
           ]);
         }
-        
-        if(Number(data.pagination.totalPages) > 1){
+
+        if (Number(data.pagination.totalPages) > 1) {
           setPage(page + 1);
           setHasMore(
             Number(data.pagination.totalPages) > 1 &&
-            Number(data.pagination.currentPage) <= Number(data.pagination.totalPages)
+              Number(data.pagination.currentPage) <=
+                Number(data.pagination.totalPages)
           );
-        }else{
-          setHasMore(false)
+        } else {
+          setHasMore(false);
         }
       })
       .catch((err) => {});
@@ -147,7 +148,6 @@ const Kitchen = () => {
 
   const [startCooking, setStartCooking] = useState();
   const [readyForPickup, setReadyForPickup] = useState();
-  const [sent, setSent] = useState();
   const [voided, setVoided] = useState();
   const [decline, setDecline] = useState();
   const [declineOrder, setDeclineOrder] = useState();
@@ -156,16 +156,18 @@ const Kitchen = () => {
   const [declineLoading, setDeclineLoading] = useState(false);
 
   const updateOrders = (item: any, menuId: any) => {
-    const elem = item?.data.order.find(m => m.id === menuId)
+    const elem = item?.data.order.find((m) => m.id === menuId);
 
     setRestaurantOrders((prevOrders: any) =>
-      prevOrders.map((order: any) => order._id === menuId ? { ...order, ...elem } : order)
+      prevOrders.map((order: any) =>
+        order._id === menuId ? { ...order, ...elem } : order
+      )
     );
-  }
+  };
 
   const handleStartCooking = async (orderId, menuId: any) => {
     setStartCooking(menuId);
-    SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, { 
+    SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
       status: "cooking",
     })
       .then(({ data }) => {
@@ -185,18 +187,6 @@ const Kitchen = () => {
       })
       .catch((err) => {})
       .finally(() => setReadyForPickup());
-  };
-
-  const handleSent = async (orderId, menuId: any) => {
-    setSent(menuId);
-    SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
-      status: "sent",
-    })
-      .then(({ data }) => {
-        updateOrders(data, menuId);
-      })
-      .catch((err) => {})
-      .finally(() => setSent());
   };
 
   const handleVoided = async (orderId, menuId: any) => {
@@ -391,7 +381,6 @@ const Kitchen = () => {
     new_orders: 0,
     cooking: 0,
     pickup: 0,
-    sent: 0,
     completed: 0,
     decline: 0,
     void: 0,
@@ -402,7 +391,6 @@ const Kitchen = () => {
       new_orders: 0,
       cooking: 0,
       pickup: 0,
-      sent: 0,
       completed: 0,
       decline: 0,
       void: 0,
@@ -410,73 +398,64 @@ const Kitchen = () => {
 
     const suffixes = {};
 
-    filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "pending"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          new_orders: prevState.new_orders + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "cooking"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          cooking: prevState.cooking + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "ready"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          pickup: prevState.pickup + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "sent"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          sent: prevState.sent + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "completed" &&
-      order?.status === "completed"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          completed: prevState.completed + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "declined"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          decline: prevState.decline + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "archived"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          void: prevState.void + 1
-        }));
-      }
+    filteredRestaurantOrders &&
+      filteredRestaurantOrders?.length > 0 &&
+      filteredRestaurantOrders?.map((order, i) => {
+        if (order?.parentStatus === "kitchen" && order?.status === "pending") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            new_orders: prevState.new_orders + 1,
+          }));
+        }
 
-      if (!suffixes[order.parent]) {
-        suffixes[order.parent] = 0;
-      }
+        if (order?.parentStatus === "kitchen" && order?.status === "cooking") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            cooking: prevState.cooking + 1,
+          }));
+        }
 
-      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
-      order.displayId = `${order.parent}-${suffix}`;
+        if (order?.parentStatus === "kitchen" && order?.status === "ready") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            pickup: prevState.pickup + 1,
+          }));
+        }
 
-      suffixes[order.parent] += 1;
-    })
-  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate])
+        if (
+          order?.parentStatus === "completed" &&
+          order?.status === "completed"
+        ) {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            completed: prevState.completed + 1,
+          }));
+        }
+
+        if (order?.parentStatus === "kitchen" && order?.status === "declined") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            decline: prevState.decline + 1,
+          }));
+        }
+
+        if (order?.parentStatus === "kitchen" && order?.status === "archived") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            void: prevState.void + 1,
+          }));
+        }
+
+        if (!suffixes[order.parent]) {
+          suffixes[order.parent] = 0;
+        }
+
+        const suffix = String.fromCharCode(97 + suffixes[order.parent]);
+        order.displayId = `${order.parent}-${suffix}`;
+
+        suffixes[order.parent] += 1;
+      });
+  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate]);
 
   const handleClickAway = (flag: string) => {
     if (flag === "categories") {
@@ -503,8 +482,6 @@ const Kitchen = () => {
           handleStartCooking(order?.parent, order?._id);
         } else if (destinationLocation === "Ready for pickup") {
           handleReadyForPickup(order?.parent, order?._id);
-        } else if (destinationLocation === "Sent") {
-          handleSent(order?.parent, order?._id);
         } else if (
           destinationLocation === "Decline" &&
           sourceLocation === "New orders"
@@ -519,7 +496,6 @@ const Kitchen = () => {
     });
   }, [restaurantOrders]);
 
-
   return (
     <>
       <div className="lg:mx-5 px-4 sm:px-6">
@@ -527,7 +503,11 @@ const Kitchen = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/">
               <span className="sr-only">Homemade</span>
-              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img
+                className="h-5 lg:h-6 w-auto"
+                src="/images/logo.svg"
+                alt=""
+              />
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
@@ -921,53 +901,8 @@ const Kitchen = () => {
                         title={"Ready for pickup"}
                         kitchenCardButtons={[
                           <KitchenButton
-                            title="Sent"
-                            extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                            loading={sent === order?._id}
-                            onClick={() =>
-                              handleSent(order?.parent, order?._id)
-                            }
-                          />,
-                          <KitchenButton
                             title="Void"
                             extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                            loading={voided === order?._id}
-                            onClick={() => {
-                              handleVoided(order?.parent, order?._id);
-                            }}
-                          />,
-                        ]}
-                      />
-                    ))
-                }
-              />
-
-              {/* SENT */}
-              <KitchenBoard
-                restaurantOrders={restaurantOrders}
-                title="Sent"
-                headerBg="bg-yellow-500"
-                bodyBg="bg-yellow-100"
-                columnCount={columnCount.sent}
-                orders={
-                  restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" && ro?.status === "sent"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={"Sent"}
-                        kitchenCardButtons={[
-                          <KitchenButton
-                            title="Void"
-                            extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
                             loading={voided === order?._id}
                             onClick={() => {
                               handleVoided(order?.parent, order?._id);
@@ -985,7 +920,7 @@ const Kitchen = () => {
                 title="Completed"
                 headerBg="bg-green-900"
                 bodyBg="bg-gray-100"
-                columnCount={columnCount.sent}
+                columnCount={columnCount.completed}
                 orders={
                   restaurantOrders &&
                   restaurantOrders?.length > 0 &&
