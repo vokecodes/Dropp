@@ -13,9 +13,9 @@ import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
 import InfinityScroll from "../../components/InfinityScroll";
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.VITE_BASE_URL, {
+//   withCredentials: true,
+// });
 
 const WaiterDashboard = () => {
   const { waiter } = useSelector(
@@ -45,7 +45,7 @@ const WaiterDashboard = () => {
 
   const getTableOrders = async (currentPage = page) => {
     SERVER.get(
-      `${RESTAURANT_ORDER_URL}/${waiter?.restaurant}/${waiter?.table}?page=${currentPage}`
+      `${RESTAURANT_ORDER_URL}/waiter/${waiter?.restaurant}/${waiter?.table}?page=${currentPage}`
     )
       .then(({ data }) => {
         if (currentPage === 1) {
@@ -78,26 +78,26 @@ const WaiterDashboard = () => {
     }, 3000);
   };
 
-  useEffect(() => {
-    const handleNewOrder = () => {
-      getTableOrders(1);
-      receiveNotification();
-    };
+  // useEffect(() => {
+  //   const handleNewOrder = () => {
+  //     getTableOrders(1);
+  //     receiveNotification();
+  //   };
 
-    socket.on("newRestaurantOrder", handleNewOrder);
-    socket.on("newReadyOrder", handleNewOrder);
-    socket.on("updatedOrder", () => {
-      getTableOrders(1);
-    });
+  //   socket.on("newRestaurantOrder", handleNewOrder);
+  //   socket.on("newReadyOrder", handleNewOrder);
+  //   socket.on("updatedOrder", () => {
+  //     getTableOrders(1);
+  //   });
 
-    return () => {
-      socket.off("newRestaurantOrder", handleNewOrder);
-      socket.off("newReadyOrder", handleNewOrder);
-      socket.off("updatedOrder", () => {
-        getTableOrders(1);
-      });
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("newRestaurantOrder", handleNewOrder);
+  //     socket.off("newReadyOrder", handleNewOrder);
+  //     socket.off("updatedOrder", () => {
+  //       getTableOrders(1);
+  //     });
+  //   };
+  // }, []);
 
   const CATEGORIES = [
     {
@@ -155,88 +155,97 @@ const WaiterDashboard = () => {
     };
 
     const suffixes = {};
-    const sortedByDate = sortByUpdatedAt(tableOrders);
+    const sortedByDate =
+      tableOrders?.length > 0 ? sortByUpdatedAt(tableOrders) : [];
 
     sortedByDate &&
       sortedByDate?.length > 0 &&
-      sortedByDate?.filter(item => !item.parentOrder).forEach((item, i) => {
-        const orderArray = item?.children?.length
-          ? [...item.order, ...item.children.reduce((acc, curr) => [...acc, ...curr.order], [])]
-          : item.order;
+      sortedByDate
+        ?.filter((item) => !item.parentOrder)
+        .forEach((item, i) => {
+          const orderArray = item?.children?.length
+            ? [
+                ...item.order,
+                ...item.children.reduce(
+                  (acc, curr) => [...acc, ...curr.order],
+                  []
+                ),
+              ]
+            : item.order;
 
-        const newOrder = {
-          ...item,
-          order: orderArray
-        }
+          const newOrder = {
+            ...item,
+            order: orderArray,
+          };
 
-        if (
-          item?.status === "pending" &&
-          !updatedColumnCount["New order"]?.some((s) => s.id === item.id)
-        ) {
-          updatedColumnCount["New order"] = [
-            ...updatedColumnCount["New order"],
-            newOrder,
-          ];
-        }
+          if (
+            item?.status === "pending" &&
+            !updatedColumnCount["New order"]?.some((s) => s.id === item.id)
+          ) {
+            updatedColumnCount["New order"] = [
+              ...updatedColumnCount["New order"],
+              newOrder,
+            ];
+          }
 
-        if (item?.status === "kitchen") {
-          item?.order?.forEach((o: any) => {
-            if (
-              o?.status === "pending" &&
-              !updatedColumnCount["Kitchen"]?.some((s) => s.id === item.id)
-            ) {
-              updatedColumnCount["Kitchen"] = [
-                ...updatedColumnCount["Kitchen"],
-                newOrder,
-              ];
-            }
+          if (item?.status === "kitchen") {
+            item?.order?.forEach((o: any) => {
+              if (
+                o?.status === "pending" &&
+                !updatedColumnCount["Kitchen"]?.some((s) => s.id === item.id)
+              ) {
+                updatedColumnCount["Kitchen"] = [
+                  ...updatedColumnCount["Kitchen"],
+                  newOrder,
+                ];
+              }
 
-            if (
-              (o?.status === "ready" || o?.status === "sent") &&
-              !updatedColumnCount["Ready"]?.some((s) => s.id === item.id)
-            ) {
-              updatedColumnCount["Ready"] = [
-                ...updatedColumnCount["Ready"],
-                newOrder,
-              ];
-            }
+              if (
+                (o?.status === "ready" || o?.status === "sent") &&
+                !updatedColumnCount["Ready"]?.some((s) => s.id === item.id)
+              ) {
+                updatedColumnCount["Ready"] = [
+                  ...updatedColumnCount["Ready"],
+                  newOrder,
+                ];
+              }
 
-            if (
-              o?.status === "cooking" &&
-              !updatedColumnCount["Cooking"]?.some((s) => s.id === item.id)
-            ) {
-              updatedColumnCount["Cooking"] = [
-                ...updatedColumnCount["Cooking"],
-                newOrder,
-              ];
-            }
+              if (
+                o?.status === "cooking" &&
+                !updatedColumnCount["Cooking"]?.some((s) => s.id === item.id)
+              ) {
+                updatedColumnCount["Cooking"] = [
+                  ...updatedColumnCount["Cooking"],
+                  newOrder,
+                ];
+              }
 
-            if (!suffixes[newOrder?.id]) {
-              suffixes[newOrder?.id] = 0;
-            }
+              if (!suffixes[newOrder?.id]) {
+                suffixes[newOrder?.id] = 0;
+              }
 
-            const suffix = String.fromCharCode(97 + suffixes[newOrder?.id]);
-            o.displayId = `${newOrder?.id}-${suffix}`;
+              const suffix = String.fromCharCode(97 + suffixes[newOrder?.id]);
+              o.displayId = `${newOrder?.id}-${suffix}`;
 
-            suffixes[newOrder?.id] += 1;
-          });
-        }
+              suffixes[newOrder?.id] += 1;
+            });
+          }
 
-        if (
-          item?.status === "completed" &&
-          !updatedColumnCount["Completed"]?.some((s) => s.id === item.id)
-        ) {
-          updatedColumnCount["Completed"] = [
-            ...updatedColumnCount["Completed"],
-            newOrder,
-          ];
-        }
-      });
+          if (
+            item?.status === "completed" &&
+            !updatedColumnCount["Completed"]?.some((s) => s.id === item.id)
+          ) {
+            updatedColumnCount["Completed"] = [
+              ...updatedColumnCount["Completed"],
+              newOrder,
+            ];
+          }
+        });
 
     setColumnCount(updatedColumnCount);
   }, [tableOrders]);
 
-  console.log('column= ', columnCount["New order"])
+  console.log("column= ", columnCount["New order"]);
 
   return (
     <>
@@ -335,7 +344,6 @@ const WaiterDashboard = () => {
               data={tableOrders}
               getMore={getTableOrders}
               hasMore={hasMore}
-              
             >
               <div className="flex flex-col mt-2">
                 {tableOrders ? (

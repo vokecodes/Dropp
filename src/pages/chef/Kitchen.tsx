@@ -30,9 +30,9 @@ import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
 import InfinityScroll from "../../components/InfinityScroll";
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.VITE_BASE_URL, {
+//   withCredentials: true,
+// });
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -120,16 +120,16 @@ const Kitchen = () => {
   };
 
   // Listen for new orders from the server
-  useEffect(() => {
-    socket.on("newKitchenOrder", (newOrder) => {
-      // Call getRestaurantOrders to update the orders
-      getRestaurantOrders();
-      receiveNotification();
-    });
-    return () => {
-      socket.off("newRestaurantOrder");
-    };
-  }, []);
+  // useEffect(() => {
+  //   socket.on("newKitchenOrder", (newOrder) => {
+  //     // Call getRestaurantOrders to update the orders
+  //     getRestaurantOrders();
+  //     receiveNotification();
+  //   });
+  //   return () => {
+  //     socket.off("newRestaurantOrder");
+  //   };
+  // }, []);
 
   useEffect(() => {
     const handleUnload = () => {
@@ -148,6 +148,7 @@ const Kitchen = () => {
 
   const [startCooking, setStartCooking] = useState();
   const [readyForPickup, setReadyForPickup] = useState();
+  const [sent, setSent] = useState();
   const [voided, setVoided] = useState();
   const [decline, setDecline] = useState();
   const [declineOrder, setDeclineOrder] = useState();
@@ -187,6 +188,18 @@ const Kitchen = () => {
       })
       .catch((err) => {})
       .finally(() => setReadyForPickup());
+  };
+
+  const handleSent = async (orderId, menuId: any) => {
+    setSent(menuId);
+    SERVER.patch(`${RESTAURANT_ORDER_URL}/${orderId}/${menuId}`, {
+      status: "sent",
+    })
+      .then(({ data }) => {
+        updateOrders(data, menuId);
+      })
+      .catch((err) => {})
+      .finally(() => setSent());
   };
 
   const handleVoided = async (orderId, menuId: any) => {
@@ -381,6 +394,7 @@ const Kitchen = () => {
     new_orders: 0,
     cooking: 0,
     pickup: 0,
+    sent: 0,
     completed: 0,
     decline: 0,
     void: 0,
@@ -391,6 +405,7 @@ const Kitchen = () => {
       new_orders: 0,
       cooking: 0,
       pickup: 0,
+      sent: 0,
       completed: 0,
       decline: 0,
       void: 0,
@@ -419,6 +434,13 @@ const Kitchen = () => {
           setColumnCount((prevState) => ({
             ...prevState,
             pickup: prevState.pickup + 1,
+          }));
+        }
+
+        if (order?.parentStatus === "kitchen" && order?.status === "sent") {
+          setColumnCount((prevState) => ({
+            ...prevState,
+            sent: prevState.sent + 1,
           }));
         }
 
@@ -482,6 +504,8 @@ const Kitchen = () => {
           handleStartCooking(order?.parent, order?._id);
         } else if (destinationLocation === "Ready for pickup") {
           handleReadyForPickup(order?.parent, order?._id);
+        } else if (destinationLocation === "Sent") {
+          handleSent(order?.parent, order?._id);
         } else if (
           destinationLocation === "Decline" &&
           sourceLocation === "New orders"
@@ -901,8 +925,53 @@ const Kitchen = () => {
                         title={"Ready for pickup"}
                         kitchenCardButtons={[
                           <KitchenButton
+                            title="Sent"
+                            extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                            loading={sent === order?._id}
+                            onClick={() =>
+                              handleSent(order?.parent, order?._id)
+                            }
+                          />,
+                          <KitchenButton
                             title="Void"
                             extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                            loading={voided === order?._id}
+                            onClick={() => {
+                              handleVoided(order?.parent, order?._id);
+                            }}
+                          />,
+                        ]}
+                      />
+                    ))
+                }
+              />
+
+              {/* SENT */}
+              <KitchenBoard
+                restaurantOrders={restaurantOrders}
+                title="Sent"
+                headerBg="bg-yellow-500"
+                bodyBg="bg-yellow-100"
+                columnCount={columnCount.sent}
+                orders={
+                  restaurantOrders &&
+                  restaurantOrders?.length > 0 &&
+                  filteredRestaurantOrders
+                    ?.filter(
+                      (ro) =>
+                        ro?.parentStatus === "kitchen" && ro?.status === "sent"
+                    )
+                    ?.map((order: any) => (
+                      <KitchenCard
+                        key={order?._id}
+                        order={order}
+                        restaurantOrders={restaurantOrders}
+                        filteredRestaurantOrders={filteredRestaurantOrders}
+                        title={"Sent"}
+                        kitchenCardButtons={[
+                          <KitchenButton
+                            title="Void"
+                            extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
                             loading={voided === order?._id}
                             onClick={() => {
                               handleVoided(order?.parent, order?._id);
@@ -920,7 +989,7 @@ const Kitchen = () => {
                 title="Completed"
                 headerBg="bg-green-900"
                 bodyBg="bg-gray-100"
-                columnCount={columnCount.completed}
+                columnCount={columnCount.sent}
                 orders={
                   restaurantOrders &&
                   restaurantOrders?.length > 0 &&
