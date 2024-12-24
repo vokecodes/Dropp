@@ -410,10 +410,10 @@ export const getQsrDashboardAccount =
   };
 
   export const getRestaurantSubChefDashboardAccount =
-  (fromDate = "", toDate = "", payment = "", section = "", table = "") =>
+  (fromDate = "", toDate = "", payment = "", section = "", table = "", breakdownOption) =>
   (dispatch: any) => {
     dispatch(startDashboardCall());
-    return getRestaurantSubChefDashboardCrud(fromDate, toDate, payment, section, table)
+    return getRestaurantSubChefDashboardCrud(fromDate, toDate, payment, section, table, breakdownOption)
       .then(({ data }) => {
         dispatch(getRestaurantDashboard({ ...data?.data }));
       })

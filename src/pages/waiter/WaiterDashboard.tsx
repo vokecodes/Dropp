@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import OrderItem from "./OrderItem";
 import { SERVER } from "../../config/axios";
@@ -26,9 +25,6 @@ const WaiterDashboard = () => {
   );
   const navigate = useNavigate();
 
-  const [tableOrders, setTableOrders] = useState([]);
-  const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
-  const [page, setPage] = useState(1); // Page number for pagination
   const [chef, setChef] = useState<any>(null);
 
   const getChef = async () => {
@@ -43,26 +39,101 @@ const WaiterDashboard = () => {
     }
   };
 
-  const getTableOrders = async (currentPage = page) => {
-    SERVER.get(
-      `${RESTAURANT_ORDER_URL}/waiter/${waiter?.restaurant}/${waiter?.table}?page=${currentPage}`
-    )
-      .then(({ data }) => {
-        if (currentPage === 1) {
-          setTableOrders(data.data);
-        } else {
-          setTableOrders((prevTransactions: any) => [
-            ...prevTransactions,
-            ...data.data,
-          ]);
-        }
-        setPage(currentPage + 1);
-        setHasMore(
-          data.pagination.totalPages > 0 &&
-            data.pagination.currentPage !== data.pagination.totalPages
+  const loading = useRef(false);
+  const [hasMore, setHasMore] = useState({
+    pending: true,
+    cooking: true,
+    ready: true,
+    completed: true,
+    kitchen: true,
+  });
+  const [page, setPage] = useState(1);
+  const [columns, setColumns] = useState<any>({});
+  const [columnCount, setColumnCount] = useState({
+    pending: 0,
+    cooking: 0,
+    ready: 0,
+    completed: 0,
+    kitchen: 0,
+  });
+
+  const getTableOrders = async (currentPage = page, noSkip = true) => {
+    if (loading.current) return;
+    loading.current = true;
+
+    try {
+      const { data } = await SERVER.get(
+        `${RESTAURANT_ORDER_URL}/waiter/${waiter?.restaurant}/${waiter?._id}?page=${currentPage}&waiterType=waiter`
+      );
+
+      const totalPages = data?.pagination.totalPages || 1;
+
+      if (currentPage === 1) {
+        setColumns({ ...data?.data[waiter?.table] });
+      } else {
+        setColumns((prevColumns: any) => {
+          const updatedColumns = { ...prevColumns };
+
+          Object.keys(data?.data[waiter?.table] || {}).forEach((status) => {
+            if (!updatedColumns[status]) {
+              updatedColumns[status] = [];
+            }
+
+            const existingIds = new Set(
+              updatedColumns[status].map((item) => item.id)
+            );
+
+            const newItems = data?.data[waiter?.table][status].filter(
+              (item) => !existingIds.has(item.id)
+            );
+
+            updatedColumns[status] = [...updatedColumns[status], ...newItems];
+          });
+
+          return updatedColumns;
+        });
+      }
+
+      setColumnCount((prev) => {
+        const newCount = { ...prev };
+        Object.keys(data?.columnCount[waiter?.table] || {}).forEach(
+          (status) => {
+            newCount[status] =
+              data.columnCount[waiter?.table][status]?.totalCount || 0;
+          }
         );
-      })
-      .catch((err) => {});
+        return newCount;
+      });
+
+      setHasMore((prev) => {
+        const newHasMore = { ...prev };
+
+        Object.keys(data?.columnCount[waiter?.table] || {}).forEach(
+          (status) => {
+            const totalCount =
+              data.columnCount[waiter?.table][status]?.totalCount || 0;
+            const currentCount =
+              (columns[status]?.length || 0) +
+              (data?.data[waiter?.table][status]?.length || 0);
+            newHasMore[status] = currentCount < totalCount;
+          }
+        );
+
+        return newHasMore;
+      });
+
+      if (noSkip) {
+        setPage((prevPage) => {
+          let newPage = 0;
+          newPage = prevPage < totalPages ? prevPage + 1 : prevPage;
+          return newPage;
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      loading.current = false;
+    }
   };
 
   const [soundNotification, setSoundNotification] = useState(() => {
@@ -104,14 +175,14 @@ const WaiterDashboard = () => {
       label: "New order",
       value: "pending",
     },
-    { label: "Kitchen", value: "pending" },
+    { label: "Kitchen", value: "kitchen" },
     { label: "Cooking", value: "cooking" },
     { label: "Ready", value: "ready" },
     { label: "Completed", value: "completed" },
   ];
 
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-  const [selectedOrder, setSelectedOrder] = useState();
+  const [selectedOrder, setSelectedOrder] = useState({});
   const [selectedReadyOrder, setSelectedReadyOrder] = useState();
 
   const [ordersModal, setOrdersModal] = useState(false);
@@ -120,132 +191,68 @@ const WaiterDashboard = () => {
     setOrdersModal(true);
   };
   const closeOrdersModal = () => {
-    setSelectedOrder();
+    setSelectedOrder({});
     setOrdersModal(false);
   };
 
   useEffect(() => {
-    getTableOrders(page);
+    getTableOrders(1);
     getChef();
   }, []);
 
-  const sortByUpdatedAt = (arr) => {
+  const loadMore = () => {
+    if (loading.current) return;
+    getTableOrders();
+  };
+
+  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.updatedAt);
-      const dateB = new Date(b.updatedAt);
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
       return dateB - dateA;
     });
   };
 
-  const [columnCount, setColumnCount] = useState({
-    "New order": [],
-    Kitchen: [],
-    Cooking: [],
-    Ready: [],
-    Completed: [],
-  });
+  const addDisplayIds = (restaurantOrders: any[]) => {
+    const suffixes: { [key: string]: number } = {}; // Track suffixes for each restaurantOrder
+
+    restaurantOrders.forEach((restaurantOrder) => {
+      const parentId = restaurantOrder.id?.toString(); // Use restaurantOrder's unique ID
+      suffixes[parentId] = 0; // Initialize suffix counter for this parent order
+
+      restaurantOrder.order.forEach((item: any) => {
+        const suffix = String.fromCharCode(97 + suffixes[parentId]); // Generate suffix (a, b, c, ...)
+        item.displayId = `${parentId}-${suffix}`; // Add displayId to order item
+        suffixes[parentId] += 1; // Increment suffix counter
+      });
+    });
+
+    return restaurantOrders;
+  };
+
+  // Filter the object while retaining its structure
+  const [filteredColumns, setFilteredColumns] = useState({});
 
   useEffect(() => {
-    const updatedColumnCount = {
-      "New order": [],
-      Kitchen: [],
-      Cooking: [],
-      Ready: [],
-      Completed: [],
-    };
+    setFilteredColumns({});
 
-    const suffixes = {};
-    const sortedByDate =
-      tableOrders?.length > 0 ? sortByUpdatedAt(tableOrders) : [];
+    const localFiltered = Object.fromEntries(
+      Object.entries(columns).map(([key, value]) => {
+        // Sort by 'createdAt' before returning
+        const sortedArray = sortByCreatedAt(value as any[]);
 
-    sortedByDate &&
-      sortedByDate?.length > 0 &&
-      sortedByDate
-        ?.filter((item) => !item.parentOrder)
-        .forEach((item, i) => {
-          const orderArray = item?.children?.length
-            ? [
-                ...item.order,
-                ...item.children.reduce(
-                  (acc, curr) => [...acc, ...curr.order],
-                  []
-                ),
-              ]
-            : item.order;
+        // Add display IDs
+        const withDisplayIds = addDisplayIds(sortedArray);
 
-          const newOrder = {
-            ...item,
-            order: orderArray,
-          };
+        // Return the key and the processed array
+        return [key, withDisplayIds];
+      })
+    );
 
-          if (
-            item?.status === "pending" &&
-            !updatedColumnCount["New order"]?.some((s) => s.id === item.id)
-          ) {
-            updatedColumnCount["New order"] = [
-              ...updatedColumnCount["New order"],
-              newOrder,
-            ];
-          }
+    setFilteredColumns({ ...localFiltered });
+  }, [columnCount, columns, selectedCategory]);
 
-          if (item?.status === "kitchen") {
-            item?.order?.forEach((o: any) => {
-              if (
-                o?.status === "pending" &&
-                !updatedColumnCount["Kitchen"]?.some((s) => s.id === item.id)
-              ) {
-                updatedColumnCount["Kitchen"] = [
-                  ...updatedColumnCount["Kitchen"],
-                  newOrder,
-                ];
-              }
-
-              if (
-                (o?.status === "ready" || o?.status === "sent") &&
-                !updatedColumnCount["Ready"]?.some((s) => s.id === item.id)
-              ) {
-                updatedColumnCount["Ready"] = [
-                  ...updatedColumnCount["Ready"],
-                  newOrder,
-                ];
-              }
-
-              if (
-                o?.status === "cooking" &&
-                !updatedColumnCount["Cooking"]?.some((s) => s.id === item.id)
-              ) {
-                updatedColumnCount["Cooking"] = [
-                  ...updatedColumnCount["Cooking"],
-                  newOrder,
-                ];
-              }
-
-              if (!suffixes[newOrder?.id]) {
-                suffixes[newOrder?.id] = 0;
-              }
-
-              const suffix = String.fromCharCode(97 + suffixes[newOrder?.id]);
-              o.displayId = `${newOrder?.id}-${suffix}`;
-
-              suffixes[newOrder?.id] += 1;
-            });
-          }
-
-          if (
-            item?.status === "completed" &&
-            !updatedColumnCount["Completed"]?.some((s) => s.id === item.id)
-          ) {
-            updatedColumnCount["Completed"] = [
-              ...updatedColumnCount["Completed"],
-              newOrder,
-            ];
-          }
-        });
-
-    setColumnCount(updatedColumnCount);
-  }, [tableOrders]);
-
-  console.log("column= ", columnCount["New order"]);
+  console.log("column= ", filteredColumns, columnCount);
 
   return (
     <>
@@ -326,7 +333,7 @@ const WaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            {columnCount[cat?.label]?.length}
+                            {columnCount[cat?.value]}
                           </p>
                         </div>
                       </div>
@@ -341,26 +348,24 @@ const WaiterDashboard = () => {
         <div className="rounded-2xl h-full w-full lg:p-5 mt-3 flex flex-col lg:flex-row justify-start items-center lg:items-start">
           <div className="w-full lg:w-8/12 h-full flex flex-col gap-x-5">
             <InfinityScroll
-              data={tableOrders}
-              getMore={getTableOrders}
-              hasMore={hasMore}
+              data={filteredColumns[selectedCategory?.value] || []}
+              getMore={loadMore}
+              hasMore={hasMore[selectedCategory?.value]}
             >
               <div className="flex flex-col mt-2">
-                {tableOrders ? (
-                  columnCount[selectedCategory?.label] &&
-                  columnCount[selectedCategory?.label].length > 0 ? (
-                    columnCount[selectedCategory?.label]?.map(
+                {columns ? (
+                  filteredColumns[selectedCategory?.value] &&
+                  filteredColumns[selectedCategory?.value].length > 0 ? (
+                    filteredColumns[selectedCategory?.value]?.map(
                       (tableOrder: any, i: number) => {
                         if (
-                          selectedCategory?.label !== "Kitchen" &&
-                          ["pending", "completed"].includes(
-                            selectedCategory?.value
-                          )
+                          ["pending", "completed"].includes(tableOrder?.status)
                         ) {
                           return (
                             <OrderItem
                               key={i}
                               order={tableOrder}
+                              page={page}
                               selectedOrder={selectedOrder}
                               ordersModal={ordersModal}
                               openOrdersModal={() =>
@@ -371,6 +376,7 @@ const WaiterDashboard = () => {
                               selectedCategory={selectedCategory?.value}
                               chef={chef}
                               waiter={waiter}
+                              table={waiter?.table}
                             />
                           );
                         } else {
@@ -392,6 +398,7 @@ const WaiterDashboard = () => {
                               getTableOrders={getTableOrders}
                               chef={chef}
                               waiter={waiter}
+                              table={waiter?.table}
                             />
                           );
                         }

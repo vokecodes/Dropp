@@ -31,7 +31,7 @@ const statusOptions = [
 
 const ChefDineIn = () => {
   const dispatch = useAppDispatch();
-
+  
   const { table } = useSelector(
     (state: any) => ({
       table: state.table.table,
@@ -40,36 +40,82 @@ const ChefDineIn = () => {
     shallowEqual
   );
 
+  const ref = useRef('')
+  
+  
   const [restaurantOrders, setRestaurantOrders] = useState([]);
-  const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
-  const [page, setPage] = useState(1); // Page number for pagination
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const [dashboardLoading, setDashboardLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [tableCount, setTableCount] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [selectedTable, setSelectedTable] = useState("All orders");
+  const [q, setQ] = useState("");
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const getRestaurantOrders = async (currentPage = page) => {
-    SERVER.get(`${RESTAURANT_ORDER_URL}/all-restaurant?page=${currentPage}`)
+  const getRestaurantOrders = async (currentPage = page, searchText='') => {
+
+    let searchTable = ''
+    if(selectedTable !== "All orders"){
+      searchTable = table.filter(item => item?.table === selectedTable)[0]._id
+    }
+
+
+    SERVER.get(`${RESTAURANT_ORDER_URL}/all-restaurant?page=${currentPage}&table=${searchTable}&searchText=${searchText}`)
       .then(({ data }) => {
         if (currentPage === 1) {
           setRestaurantOrders(data.data);
         } else {
-          setRestaurantOrders((prevTransactions: any) => [
-            ...prevTransactions,
-            ...data.data,
-          ]);
+          setRestaurantOrders((prevColumns: any) => {
+            const updatedColumns = [ ...prevColumns ];
+            let newArr = []
+      
+            const existingIds = new Set(updatedColumns.map((item) => item.id));
+
+            const newItems = data?.data.filter((item) => !existingIds.has(item.id));
+            
+            newArr = [...updatedColumns, ...newItems];
+      
+            return newArr;
+          });
         }
+
+        const totalCount = searchText ? Object.keys(data.orderCountByTable).reduce((a, c) => a += data.orderCountByTable[c], 0) : data.pagination.allOrdersCount
+
+        setTableCount({...data.orderCountByTable, totalCount: totalCount})
         setPage(currentPage + 1);
+
         setHasMore(
           data.pagination.totalPages > 0 &&
-            data.pagination.currentPage !== data.pagination.totalPages
+            data.pagination.currentPage < data.pagination.totalPages
         );
       })
-      .catch((err) => {});
+      .catch((err) => {})
+      .finally(() => {
+        setLoading(false)
+      });
   };
 
   useEffect(() => {
-    getRestaurantOrders();
-  }, []);
+    getRestaurantOrders(1);
+  }, [selectedTable]);
+
+  const handleSearchChange = (e: any) => {
+    const value = e.target.value;
+    setQ(value);
+    
+    setLoading(true);
+  
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  
+    timeoutRef.current = setTimeout(() => {
+      getRestaurantOrders(1, value || '');
+    }, 1000); 
+  };
 
   const [openApprovalModal, setOpenApprovalModal] = useState(false);
   const closeApprovalModal = () => {
@@ -185,11 +231,9 @@ const ChefDineIn = () => {
     });
   };
 
-  const [selectedTable, setSelectedTable] = useState("All orders");
-  const [tablesMap, setTablesMap] = useState({});
-  const [q, setQ] = useState("");
+  const [filteredOrders, setFilteredOrders] = useState([])
 
-  const sortedByDate = restaurantOrders && sortByUpdatedAt(restaurantOrders);
+  const sortedByDate = restaurantOrders && sortByUpdatedAt(filteredOrders);
 
   const statusFiltered =
     selectedStatus === "All"
@@ -200,106 +244,71 @@ const ChefDineIn = () => {
             : item?.status === selectedStatus;
         });
 
-  const tableFiltered =
-    selectedTable === "All orders"
-      ? statusFiltered
-      : statusFiltered.filter((item) => item?.table?.table === selectedTable);
-
-  const searchFiltered =
-    q === ""
-      ? tableFiltered
-      : tableFiltered.filter(
-          (item: any) =>
-            item?.id?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
-            item?.name?.toString().toLowerCase().indexOf(q.toLowerCase()) >
-              -1 ||
-            item?.email?.toString().toLowerCase().indexOf(q.toLowerCase()) >
-              -1 ||
-            item?.phoneNumber
-              ?.toString()
-              .toLowerCase()
-              .indexOf(q.toLowerCase()) > -1 ||
-            item?.table?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
-        );
 
   useEffect(() => {
-    const tableOrderMap = {};
-    tableOrderMap["All orders"] = 0;
-
-    table &&
-      table?.length > 0 &&
-      table
-        .filter((table) => table?.table && table.userType === "waiter")
-        .map((item, i) => {
-          tableOrderMap[item?.table] = 0;
-        });
-
-    table &&
-      restaurantOrders &&
-      restaurantOrders.map((item, i) => {
-        const currentTable = item?.table?.table;
-
-        tableOrderMap["All orders"] += 1;
-        tableOrderMap[currentTable] += 1;
-
-        item.order = item.order.map(obj => ({
-          ...obj,
-          parentPaid: (item?.paid && !item?.posPayment) ?? null,
-          parentId: item?.id ?? null,
-          parentStatus: item?.status ?? null
-        }));
-        
-        const orderArray = item?.children?.length
-          ? [
-              ...item.order,
-              ...item.children.reduce(
-                (acc, curr) => [
-                  ...acc,
-                  ...(curr?.order?.map(obj => ({
-                    ...obj,
-                    parentPaid: (curr?.paid && !curr?.posPayment) ?? null,
-                    parentId: curr?.id ?? null,
-                    parentStatus: curr?.status ?? null
-                  })) || [])
-                ],
-                []
-              )
-            ]
-          : item.order;        
-
-        item.order = orderArray
-
-        const count = item?.order.reduce(
-          (num, elem) =>
+    const updateOrders = () => {
+      const localOrders = restaurantOrders.filter(o => !o.parentOrder).map((item) => {
+        // Helper function to transform orders
+        const transformOrders = (orderArray, parent) =>
+          orderArray.map((obj) => ({
+            ...obj,
+            parentPaid: (parent?.paid && !parent?.posPayment) ?? null,
+            parentId: parent?.id ?? null,
+            parentStatus: parent?.status ?? null,
+          }));
+  
+        // Process parent orders
+        let updatedOrder = transformOrders(item.order || [], item);
+  
+        // Process children orders only if not already included
+        if (item?.children?.length) {
+          const childrenOrders = item.children.flatMap((child) =>
+            transformOrders(child.order || [], child)
+          );
+  
+          // Combine parent and child orders without duplicating existing orders
+          const orderSet = new Set(updatedOrder.map((o) => o.id)); // Use `id` as a unique key
+          childrenOrders.forEach((childOrder) => {
+            if (!orderSet.has(childOrder.id)) {
+              updatedOrder.push(childOrder);
+              orderSet.add(childOrder.id);
+            }
+          });
+        }
+  
+        // Calculate unresolved count
+        const unresolvedCount = updatedOrder.filter(
+          (elem) =>
             elem.salesType !== "sales" &&
             elem.salesType !== "gift" &&
             elem.status !== "archived"
-              ? num - 1
-              : num + 0,
-          item?.order.length
-        );
-
-        if(item?.children?.length){
-          if (count === item?.order.length) {
-            item.approvalStatus = "Confirmed";
-          } else if (count < item?.order.length && count > 0) {
-            item.approvalStatus = "Unresolved";
-          } else if (count === 0) {
-            item.approvalStatus = "Pending";
-          }
-        }else{
-          if (item?.paid === true || count === item?.order.length) {
-            item.approvalStatus = "Confirmed";
-          } else if (count < item?.order.length && count > 0) {
-            item.approvalStatus = "Unresolved";
-          } else if (count === 0) {
-            item.approvalStatus = "Pending";
-          }
-        }
+        ).length;
+  
+        // Determine approval status
+        const getApprovalStatus = () => {
+          if (updatedOrder.length === 0) return "Pending";
+          if (unresolvedCount === 0) return "Confirmed";
+          if (unresolvedCount > 0 && unresolvedCount < updatedOrder.length)
+            return "Unresolved";
+          return "Pending";
+        };
+  
+        return {
+          ...item,
+          order: updatedOrder,
+          approvalStatus: getApprovalStatus(),
+        };
       });
-
-    setTablesMap(tableOrderMap);
+  
+      return localOrders;
+    };
+  
+    const updatedOrders = updateOrders();
+    // Assuming there's a state setter or function to save updated orders
+    setFilteredOrders([...updatedOrders]);
+  
   }, [table, restaurantOrders]);
+  
 
   const dineInConvertToCSV = (data: any) => {
     const header = [
@@ -360,29 +369,48 @@ const ChefDineIn = () => {
   };
 
   const dineExportToCSV = async (data: any) => {
+    // Set downloading state to true
     setIsDownloading(true);
+  
+    // Wait for the download operation to complete
     try {
-      const csv = await dineInConvertToCSV(data);
-
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-
+      const searchText = ref.current.value || '';
+  
+      let searchTable = '';
+      if (selectedTable !== 'All orders') {
+        searchTable = table.filter((item) => item?.table === selectedTable)[0]._id;
+      }
+  
+      // Start the API call and handle the response
+      const { data: apiData } = await SERVER.get(
+        `${RESTAURANT_ORDER_URL}/all-restaurant/download?table=${searchTable}&searchText=${searchText}`
+      );
+  
+      // Convert data to CSV format
+      const csv = await dineInConvertToCSV(apiData?.data);
+  
+      // Create and trigger the CSV file download
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+  
       if (link.download !== undefined) {
         const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "dine-in-orders.csv");
-        link.style.visibility = "hidden";
-
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'dine-in-orders.csv');
+        link.style.visibility = 'hidden';
+  
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }
+  
     } catch (err) {
-      console.error("CSV Export Error:", err);
+      console.error('CSV Export Error:', err);
     } finally {
+      // Set downloading state to false after the operation completes
       setIsDownloading(false);
     }
-  };
+  };  
 
   const tableContainerRef = useRef<any>(null);
 
@@ -445,7 +473,10 @@ const ChefDineIn = () => {
                             ? "primary_bg_color text-white"
                             : "bg_sec_gray_color text-gray-600"
                         }`}
-                        onClick={() => setSelectedTable("All orders")}
+                        onClick={() => {
+                          setLoading(true)
+                          setSelectedTable("All orders")
+                        }}
                       >
                         <div className="flex flex-row justify-between items-center">
                           <div className="ml-1 flex flex-row justify-between items-center">
@@ -466,13 +497,13 @@ const ChefDineIn = () => {
                                     : "primary_txt_color"
                                 }`}
                               >
-                                {tablesMap && tablesMap["All orders"]}
+                                {tableCount && tableCount.totalCount}
                               </p>
                             </div>
                           </div>
                         </div>
                       </div>
-                      {Object.keys(tablesMap)
+                      {Object.keys(tableCount)
                         .filter(
                           (item) =>
                             item &&
@@ -488,7 +519,10 @@ const ChefDineIn = () => {
                                 ? "primary_bg_color text-white"
                                 : "bg_sec_gray_color text-gray-600"
                             }`}
-                            onClick={() => setSelectedTable(cat)}
+                            onClick={() => {
+                              setLoading(true)
+                              setSelectedTable(cat)
+                            }}
                           >
                             <div className="flex flex-row justify-between items-center">
                               <div className="ml-1 flex flex-row justify-between items-center">
@@ -509,7 +543,7 @@ const ChefDineIn = () => {
                                         : "primary_txt_color"
                                     }`}
                                   >
-                                    {tablesMap && tablesMap[cat]}
+                                    {tableCount && tableCount[cat]}
                                   </p>
                                 </div>
                               </div>
@@ -529,12 +563,11 @@ const ChefDineIn = () => {
                         </div>
                         <div className="flex-1 ml-4">
                           <input
+                            ref={ref}
                             placeholder="Search orders"
                             className="py-2 w-full rounded-full input_text text-md font_regular outline-none"
                             value={q}
-                            onChange={(e: any) => {
-                              setQ(e.target.value);
-                            }}
+                            onChange={handleSearchChange}
                           />
                         </div>
                       </div>
@@ -544,7 +577,7 @@ const ChefDineIn = () => {
                       <div
                         className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
                         onClick={() => {
-                          dineExportToCSV(searchFiltered);
+                          dineExportToCSV();
                         }}
                       >
                         {isDownloading ? (
@@ -629,408 +662,408 @@ const ChefDineIn = () => {
                     </div>
                   </div>
 
-                  <div className="w-full mt-4 flow-root overflow-hidden">
-                    <InfinityScroll
-                      data={restaurantOrders}
-                      getMore={getRestaurantOrders}
-                      hasMore={hasMore}
-                    >
-                      <div
-                        ref={tableContainerRef}
-                        className="-my-2 overflow-x-auto"
+                  {dashboardLoading || loading ? (
+                    <div className="my-4 grid grid-cols-2 gap-3">
+                      {[...Array(4)]?.map((_, i) => (
+                        <DashboardItemSkeletonLoader key={i} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full mt-4 flow-root overflow-hidden">
+                      <InfinityScroll
+                        data={restaurantOrders}
+                        getMore={getRestaurantOrders}
+                        hasMore={hasMore}
                       >
-                        <div className="inline-block min-w-full py-2 align-middle">
-                          <div className="overflow-x-auto">
-                            {dashboardLoading ? (
-                              <div className="my-4 grid grid-cols-2 gap-3">
-                                {[...Array(4)]?.map((_, i) => (
-                                  <DashboardItemSkeletonLoader key={i} />
-                                ))}
-                              </div>
-                            ) : (
-                              <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
-                                {/* Table headers */}
-                                <thead>
-                                  <tr>
-                                    <th
-                                      scope="col"
-                                      className="py-3.5 pl-4 pr-3 text-left text-sm font_medium text-black font-normal sm:pl-0 min-w-[100px]"
-                                    >
-                                      Ticket No.
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                    >
-                                      Date
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                    >
-                                      Time
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px] max-w-[250px]"
-                                    >
-                                      Name
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
-                                    >
-                                      Email
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                    >
-                                      Phone No.
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                    >
-                                      Table
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                    >
-                                      Approval
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
-                                    >
-                                      Food
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
-                                    >
-                                      Total Orders
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                    >
-                                      Amount
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
-                                    >
-                                      Payment
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
-                                    >
-                                      Platform
-                                    </th>
-                                    <th
-                                      scope="col"
-                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
-                                    >
-                                      <Popover className="relative">
-                                        {({ open }) => (
-                                          <>
-                                            <Popover.Button
-                                              className={`flex flex-row items-center space-between gap-x-1`}
-                                            >
-                                              <span className="text-nowrap">
-                                                Status
-                                              </span>
-                                              {open ? (
-                                                <BiSolidUpArrow />
-                                              ) : (
-                                                <BiSolidDownArrow />
-                                              )}
-                                            </Popover.Button>
-
-                                            <Transition
-                                              as={Fragment}
-                                              enter="transition ease-out duration-200"
-                                              enterFrom="opacity-0 translate-y-1"
-                                              enterTo="opacity-100 translate-y-0"
-                                              leave="transition ease-in duration-150"
-                                              leaveFrom="opacity-100 translate-y-0"
-                                              leaveTo="opacity-0 translate-y-1"
-                                            >
-                                              <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
-                                                <div className="w-full">
-                                                  <RadioGroup
-                                                    value={selectedStatus}
-                                                    onChange={setSelectedStatus}
-                                                  >
-                                                    <div className="space-y-3">
-                                                      <RadioGroup.Option
-                                                        value={"All"}
-                                                        className={
-                                                          "flex items-center cursor-pointer mb-2"
-                                                        }
-                                                        onClick={() =>
-                                                          setSelectedStatus(
-                                                            "All"
-                                                          )
-                                                        }
-                                                      >
-                                                        {({
-                                                          active,
-                                                          checked,
-                                                        }) => (
-                                                          <>
-                                                            <div
-                                                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                                checked
-                                                                  ? "primary_bg_color"
-                                                                  : "bg_gray_color"
-                                                              }`}
-                                                            />
-
-                                                            <div className="text-sm">
-                                                              <RadioGroup.Label
-                                                                as="p"
-                                                                className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                              >
-                                                                All
-                                                              </RadioGroup.Label>
-                                                            </div>
-                                                          </>
-                                                        )}
-                                                      </RadioGroup.Option>
-                                                      {statusOptions?.map(
-                                                        (item: any, i) => (
-                                                          <RadioGroup.Option
-                                                            key={item}
-                                                            value={item}
-                                                            className={
-                                                              "flex items-center cursor-pointer mb-2"
-                                                            }
-                                                            onClick={() =>
-                                                              setSelectedStatus(
-                                                                item
-                                                              )
-                                                            }
-                                                          >
-                                                            {({
-                                                              active,
-                                                              checked,
-                                                            }) => (
-                                                              <>
-                                                                <div
-                                                                  className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                                                    checked
-                                                                      ? "primary_bg_color"
-                                                                      : "bg_gray_color"
-                                                                  }`}
-                                                                />
-
-                                                                <div className="text-sm">
-                                                                  <RadioGroup.Label
-                                                                    as="p"
-                                                                    className={`text-xs lg:text-sm secondary_gray_color text-black`}
-                                                                  >
-                                                                    {toTitleCase(item)}
-                                                                  </RadioGroup.Label>
-                                                                </div>
-                                                              </>
-                                                            )}
-                                                          </RadioGroup.Option>
-                                                        )
-                                                      )}
-                                                    </div>
-                                                  </RadioGroup>
-                                                </div>
-                                              </Popover.Panel>
-                                            </Transition>
-                                          </>
-                                        )}
-                                      </Popover>
-                                    </th>
-                                  </tr>
-                                </thead>
-                                {/* Table body */}
-                                <tbody className="divide-y divide-gray-200">
-                                  {searchFiltered?.filter(item => !item.parentOrder).map(
-                                    (transaction: any, i: number) => (
-                                      <tr key={transaction.id + i}>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                          #{transaction.id?.slice(-5)}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                          {moment(
-                                            transaction?.createdAt
-                                          ).format("DD/MM/YYYY")}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                          {moment(
-                                            transaction?.createdAt
-                                          ).format("hh:mm A")}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
-                                          {transaction?.name}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
-                                          {transaction?.email}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                          {transaction?.phoneNumber}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                          {transaction?.table?.table}
-                                        </td>
-                                        <td
-                                          className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px] cursor-pointer"
-                                          onClick={() => {
-                                            setApprovalOrder(transaction);
-                                            setOpenApprovalModal(true);
-                                          }}
-                                        >
-                                          <p
-                                            className={`w-fit text-xs text-medium bg-[#ffffff] border border-solid px-3 py-1 text-center rounded-3xl flex flex-row items-center justify-center gap-x-1 ${
-                                              transaction?.approvalStatus ===
-                                              "Confirmed"
-                                                ? "text-[#06C167] border-[#06C167]"
-                                                : transaction?.approvalStatus ===
-                                                  "Unresolved"
-                                                ? "text-[#DB4E12] border-[#DB4E12]"
-                                                : "text-[#000000] border-[#D8D8D8]"
-                                            }`}
-                                          >
-                                            {transaction?.approvalStatus}{" "}
-                                            <MdKeyboardArrowRight size={20} />
-                                          </p>
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                          {transaction?.order?.map(
-                                            (menu: any, i) => (
-                                              <div
-                                                key={i}
-                                                className={`flex items-center ${
-                                                  menu?.status === "archived" &&
-                                                  "opacity-25"
-                                                }`}
+                        <div
+                          ref={tableContainerRef}
+                          className="-my-2 overflow-x-auto"
+                        >
+                          <div className="inline-block min-w-full py-2 align-middle">
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-300 h-auto min-h-48">
+                                  {/* Table headers */}
+                                  <thead>
+                                    <tr>
+                                      <th
+                                        scope="col"
+                                        className="py-3.5 pl-4 pr-3 text-left text-sm font_medium text-black font-normal sm:pl-0 min-w-[100px]"
+                                      >
+                                        Ticket No.
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                      >
+                                        Date
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                      >
+                                        Time
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px] max-w-[250px]"
+                                      >
+                                        Name
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                                      >
+                                        Email
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                      >
+                                        Phone No.
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                      >
+                                        Table
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                      >
+                                        Approval
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                                      >
+                                        Food
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[100px]"
+                                      >
+                                        Total Orders
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                      >
+                                        Amount
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                                      >
+                                        Payment
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                                      >
+                                        Platform
+                                      </th>
+                                      <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
+                                      >
+                                        <Popover className="relative">
+                                          {({ open }) => (
+                                            <>
+                                              <Popover.Button
+                                                className={`flex flex-row items-center space-between gap-x-1`}
                                               >
-                                                <div className="h-10 w-10 flex-shrink-0">
-                                                  <img
-                                                    className="h-10 w-10 rounded-full object-cover"
-                                                    src={menu?.menu.images[0]}
-                                                    alt=""
-                                                  />
-                                                </div>
-                                                <div className="ml-4">
-                                                  <div className="font-medium text-wrap">
-                                                    {menu?.menu.foodName} X{" "}
-                                                    {menu?.quantity}
+                                                <span className="text-nowrap">
+                                                  Status
+                                                </span>
+                                                {open ? (
+                                                  <BiSolidUpArrow />
+                                                ) : (
+                                                  <BiSolidDownArrow />
+                                                )}
+                                              </Popover.Button>
+
+                                              <Transition
+                                                as={Fragment}
+                                                enter="transition ease-out duration-200"
+                                                enterFrom="opacity-0 translate-y-1"
+                                                enterTo="opacity-100 translate-y-0"
+                                                leave="transition ease-in duration-150"
+                                                leaveFrom="opacity-100 translate-y-0"
+                                                leaveTo="opacity-0 translate-y-1"
+                                              >
+                                                <Popover.Panel className="box-border absolute -left-10 z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                                                  <div className="w-full">
+                                                    <RadioGroup
+                                                      value={selectedStatus}
+                                                      onChange={setSelectedStatus}
+                                                    >
+                                                      <div className="space-y-3">
+                                                        <RadioGroup.Option
+                                                          value={"All"}
+                                                          className={
+                                                            "flex items-center cursor-pointer mb-2"
+                                                          }
+                                                          onClick={() =>
+                                                            setSelectedStatus(
+                                                              "All"
+                                                            )
+                                                          }
+                                                        >
+                                                          {({
+                                                            active,
+                                                            checked,
+                                                          }) => (
+                                                            <>
+                                                              <div
+                                                                className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                                  checked
+                                                                    ? "primary_bg_color"
+                                                                    : "bg_gray_color"
+                                                                }`}
+                                                              />
+
+                                                              <div className="text-sm">
+                                                                <RadioGroup.Label
+                                                                  as="p"
+                                                                  className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                                >
+                                                                  All
+                                                                </RadioGroup.Label>
+                                                              </div>
+                                                            </>
+                                                          )}
+                                                        </RadioGroup.Option>
+                                                        {statusOptions?.map(
+                                                          (item: any, i) => (
+                                                            <RadioGroup.Option
+                                                              key={item}
+                                                              value={item}
+                                                              className={
+                                                                "flex items-center cursor-pointer mb-2"
+                                                              }
+                                                              onClick={() =>
+                                                                setSelectedStatus(
+                                                                  item
+                                                                )
+                                                              }
+                                                            >
+                                                              {({
+                                                                active,
+                                                                checked,
+                                                              }) => (
+                                                                <>
+                                                                  <div
+                                                                    className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                                                      checked
+                                                                        ? "primary_bg_color"
+                                                                        : "bg_gray_color"
+                                                                    }`}
+                                                                  />
+
+                                                                  <div className="text-sm">
+                                                                    <RadioGroup.Label
+                                                                      as="p"
+                                                                      className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                                                                    >
+                                                                      {toTitleCase(item)}
+                                                                    </RadioGroup.Label>
+                                                                  </div>
+                                                                </>
+                                                              )}
+                                                            </RadioGroup.Option>
+                                                          )
+                                                        )}
+                                                      </div>
+                                                    </RadioGroup>
                                                   </div>
-                                                  <div className="">
-                                                    ₦
-                                                    {parseInt(
-                                                      menu?.menu.eventAmount
-                                                        ? menu?.menu.eventAmount
-                                                        : menu?.menu.discount
-                                                        ? menu.menu.price -
-                                                          (menu.menu.price /
-                                                            100) *
-                                                            menu.menu.discount
-                                                        : menu.menu.price
-                                                    ).toLocaleString()}
+                                                </Popover.Panel>
+                                              </Transition>
+                                            </>
+                                          )}
+                                        </Popover>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  {/* Table body */}
+                                  <tbody className="divide-y divide-gray-200">
+                                    {statusFiltered?.filter(item => !item.parentOrder).map(
+                                      (transaction: any, i: number) => (
+                                        <tr key={transaction.id + i}>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                            #{transaction.id?.slice(-5)}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                            {moment(
+                                              transaction?.createdAt
+                                            ).format("DD/MM/YYYY")}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                            {moment(
+                                              transaction?.createdAt
+                                            ).format("hh:mm A")}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
+                                            {transaction?.name}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
+                                            {transaction?.email}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                            {transaction?.phoneNumber}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                            {transaction?.table?.table}
+                                          </td>
+                                          <td
+                                            className="whitespace-nowrap py-4 pl-0 text-left text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px] cursor-pointer"
+                                            onClick={() => {
+                                              setApprovalOrder(transaction);
+                                              setOpenApprovalModal(true);
+                                            }}
+                                          >
+                                            <p
+                                              className={`w-fit text-xs text-medium bg-[#ffffff] border border-solid px-3 py-1 text-center rounded-3xl flex flex-row items-center justify-center gap-x-1 ${
+                                                transaction?.approvalStatus ===
+                                                "Confirmed"
+                                                  ? "text-[#06C167] border-[#06C167]"
+                                                  : transaction?.approvalStatus ===
+                                                    "Unresolved"
+                                                  ? "text-[#DB4E12] border-[#DB4E12]"
+                                                  : "text-[#000000] border-[#D8D8D8]"
+                                              }`}
+                                            >
+                                              {transaction?.approvalStatus}{" "}
+                                              <MdKeyboardArrowRight size={20} />
+                                            </p>
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
+                                            {transaction?.order?.map(
+                                              (menu: any, i) => (
+                                                <div
+                                                  key={i}
+                                                  className={`flex items-center ${
+                                                    menu?.status === "archived" &&
+                                                    "opacity-25"
+                                                  }`}
+                                                >
+                                                  <div className="h-10 w-10 flex-shrink-0">
+                                                    <img
+                                                      className="h-10 w-10 rounded-full object-cover"
+                                                      src={menu?.menu.images[0]}
+                                                      alt=""
+                                                    />
+                                                  </div>
+                                                  <div className="ml-4">
+                                                    <div className="font-medium text-wrap">
+                                                      {menu?.menu.foodName} X{" "}
+                                                      {menu?.quantity}
+                                                    </div>
+                                                    <div className="">
+                                                      ₦
+                                                      {parseInt(
+                                                        menu?.menu.eventAmount
+                                                          ? menu?.menu.eventAmount
+                                                          : menu?.menu.discount
+                                                          ? menu.menu.price -
+                                                            (menu.menu.price /
+                                                              100) *
+                                                              menu.menu.discount
+                                                          : menu.menu.price
+                                                      ).toLocaleString()}
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
-                                            )
-                                          )}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                          {transaction?.order?.reduce(
-                                            (total: any, item: any) =>
-                                              total + item.quantity,
-                                            0
-                                          )}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                          {
-                                            formatRemoteAmountKobo(
-                                              transaction?.order
-                                                .filter(
-                                                  (item) =>
-                                                    item.status !== "archived"
-                                                )
-                                                .reduce(
-                                                  (acc, curr) =>
-                                                    curr.menu?.discount
-                                                      ? acc +
-                                                        curr.amount -
-                                                        curr.amount *
-                                                          (curr.menu?.discount /
-                                                            100)
-                                                      : acc + curr.amount,
-                                                  0
-                                                )
-                                            ).naira
-                                          }
-                                          {
-                                            formatRemoteAmountKobo(
-                                              transaction?.order
-                                                .filter(
-                                                  (item) =>
-                                                    item.status !== "archived"
-                                                )
-                                                .reduce(
-                                                  (acc, curr) =>
-                                                    curr.menu?.discount
-                                                      ? acc +
-                                                        curr.amount -
-                                                        curr.amount *
-                                                          (curr.menu?.discount /
-                                                            100)
-                                                      : acc + curr.amount,
-                                                  0
-                                                )
-                                            ).kobo
-                                          }
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                          {transaction?.posPayment
-                                            ? "POS"
-                                            : "Online"}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                          {transaction?.restaurant
-                                            ? "Dine-in"
-                                            : "Online"}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
-                                          {transaction?.status === "pending" ? (
-                                            <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
-                                              Pending
-                                            </p>
-                                          ) : transaction?.restaurant &&
-                                            transaction?.status ===
-                                              "completed" ? (
-                                            <p className="w-fit text-xs text-medium text-[#ffffff] border border-solid border_credit_color primary_bg_color px-3 py-1 text-center rounded-3xl">
-                                              Completed
-                                            </p>
-                                          ) : (
-                                            <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
-                                              Kitchen
-                                            </p>
-                                          )}
-                                        </td>
-                                      </tr>
-                                    )
-                                  )}
-                                </tbody>
-                              </table>
-                            )}
+                                              )
+                                            )}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                            {transaction?.order?.reduce(
+                                              (total: any, item: any) =>
+                                                total + item.quantity,
+                                              0
+                                            )}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                            {
+                                              formatRemoteAmountKobo(
+                                                transaction?.order
+                                                  .filter(
+                                                    (item) =>
+                                                      item.status !== "archived"
+                                                  )
+                                                  .reduce(
+                                                    (acc, curr) =>
+                                                      curr.menu?.discount
+                                                        ? acc +
+                                                          curr.amount -
+                                                          curr.amount *
+                                                            (curr.menu?.discount /
+                                                              100)
+                                                        : acc + curr.amount,
+                                                    0
+                                                  )
+                                              ).naira
+                                            }
+                                            {
+                                              formatRemoteAmountKobo(
+                                                transaction?.order
+                                                  .filter(
+                                                    (item) =>
+                                                      item.status !== "archived"
+                                                  )
+                                                  .reduce(
+                                                    (acc, curr) =>
+                                                      curr.menu?.discount
+                                                        ? acc +
+                                                          curr.amount -
+                                                          curr.amount *
+                                                            (curr.menu?.discount /
+                                                              100)
+                                                        : acc + curr.amount,
+                                                    0
+                                                  )
+                                              ).kobo
+                                            }
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                            {transaction?.posPayment
+                                              ? "POS"
+                                              : "Online"}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                            {transaction?.restaurant
+                                              ? "Dine-in"
+                                              : "Online"}
+                                          </td>
+                                          <td className="whitespace-nowrap py-4 pl-0 font_medium lg:pl-3 min-w-[150px] h-full">
+                                            {transaction?.status === "pending" ? (
+                                              <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
+                                                Pending
+                                              </p>
+                                            ) : transaction?.restaurant &&
+                                              transaction?.status ===
+                                                "completed" ? (
+                                              <p className="w-fit text-xs text-medium text-[#ffffff] border border-solid border_credit_color primary_bg_color px-3 py-1 text-center rounded-3xl">
+                                                Completed
+                                              </p>
+                                            ) : (
+                                              <p className="w-fit text-xs text-medium text-[#000000] border border-solid border-[#000000] bg-[#ffffff] px-3 py-1 text-center rounded-3xl">
+                                                Kitchen
+                                              </p>
+                                            )}
+                                          </td>
+                                        </tr>
+                                      )
+                                    )}
+                                  </tbody>
+                                </table>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </InfinityScroll>
-                  </div>
+                      </InfinityScroll>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -213,10 +213,11 @@ export const getRestaurantSubChefDashboardCrud = (
   toDate = "",
   payment = "",
   section = "",
-  table = ""
+  table = "",
+  breakdownOption = ""
 ) => {
   return SERVER.get(
-    `${SUB_CHEF_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+    `${SUB_CHEF_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
   );
 };
 
@@ -283,15 +284,43 @@ export const downloadRestaurantReport = (
   );
 };
 
+
+export const downloadSubChefRestaurantReport = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = "",
+  breakdownOption = ""
+) => {
+  return SERVER.get(
+    `${SUB_CHEF_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const getOrderCount = (
+  fromDate = "",
+  toDate = "",
+  table = "",
+  category = "",
+  countOption,
+  restaurantId
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/order-count/${restaurantId}/${countOption}?fromDate=${fromDate}&toDate=${toDate}&category=${category}&table=${table}`
+  );
+};
+
 export const getSubChefRestaurantOrdersPage = (
   page = 1,
   fromDate = "",
   toDate = "",
   payment = "",
   section = "",
-  table = ""
+  table = "",
+  breakdownOption = ""
 ) => {
-  return SERVER.get(`${SUB_CHEF_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`);
+  return SERVER.get(`${SUB_CHEF_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`);
 };
 
 export const getAdminDashboardCrud = (

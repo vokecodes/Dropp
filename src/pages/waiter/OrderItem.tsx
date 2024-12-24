@@ -1,4 +1,9 @@
-import { IoIosArrowDown, IoIosArrowDropdown, IoIosArrowUp, IoMdClose } from "react-icons/io";
+import {
+  IoIosArrowDown,
+  IoIosArrowDropdown,
+  IoIosArrowUp,
+  IoMdClose,
+} from "react-icons/io";
 import { dateFormatter, formatPrice } from "../../utils/formatMethods";
 import Button from "../../components/Button";
 import { Modal } from "@mui/material";
@@ -19,9 +24,11 @@ const OrderItem = ({
   getTableOrders,
   selectedCategory,
   waiter,
-  chef
+  chef,
+  page,
+  table,
 }: any) => {
-  const [openNotes, setOpenNotes] = useState(false)
+  const [openNotes, setOpenNotes] = useState(false);
   const [sendToKitchenLoading, setSendToKitchen] = useState(false);
 
   const sendToKitchen = async (selectedOrder: any) => {
@@ -31,7 +38,7 @@ const OrderItem = ({
     })
       .then(({ data }) => {
         closeOrdersModal();
-        getTableOrders();
+        getTableOrders(page - 1, false);
       })
       .catch((err) => {})
       .finally(() => setSendToKitchen(false));
@@ -66,27 +73,31 @@ const OrderItem = ({
         <div className="flex flex-row justify-end items-center w-full mt-3 gap-x-3">
           {!["completed"].includes(selectedCategory) && (
             <Link
-              to={`/restaurant/${chef?.business?.businessName}/${waiter.table}/add/${order?.id}`}
+              to={`/restaurant/${chef?.business?.businessName}/${table}/add/${order?.id}`}
               target="_blank"
             >
-              <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">Add order <FaPlus /></p>
+              <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">
+                Add order <FaPlus />
+              </p>
             </Link>
           )}
 
-          <DownloadPDFButton 
-            chef={chef} 
+          <DownloadPDFButton
+            chef={chef}
             waiter={waiter}
             receiptValues={{
               customerName: order?.name,
               totalAmount: order?.totalAmount,
               cartMenu: order?.order ? order?.order : [],
-              paidBy: order?.posPayment ? 'POS' : 'Online',
-            }} 
+              paidBy: order?.posPayment ? "POS" : "Online",
+            }}
             orderId={order?.id}
-            date={order?.updatedAt ? order?.updatedAt : ''}
+            date={order?.updatedAt ? order?.updatedAt : ""}
             waiterScreen={true}
           >
-            <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">View bill <FaReceipt /></p>
+            <p className="flex flex-row items-center justify-center gap-x-2 rounded-full text-sm font-semibold text-center px-5 py-1 bg-green-100 cursor-pointer">
+              View bill <FaReceipt />
+            </p>
           </DownloadPDFButton>
         </div>
 
@@ -106,6 +117,7 @@ const OrderItem = ({
         </div>
 
         <div className="flex flex-col justify-start items-center w-full mt-3">
+          {order?.status} - {order?.order.map((o) => o.status)}
           {order?.order &&
             order?.order?.length > 0 &&
             order?.order
@@ -134,10 +146,13 @@ const OrderItem = ({
                   <div className="flex shrink-0">
                     <p className="text-1xl pt-1 font-bold">
                       ₦
-                      {formatPrice(menuOrder?.menu?.discount
-                        ? menuOrder?.amount -
-                          (menuOrder?.amount / 100) * menuOrder?.menu.discount
-                        : menuOrder?.amount)}
+                      {formatPrice(
+                        menuOrder?.menu?.discount
+                          ? menuOrder?.amount -
+                              (menuOrder?.amount / 100) *
+                                menuOrder?.menu.discount
+                          : menuOrder?.amount
+                      )}
                     </p>
                   </div>
                 </div>
@@ -152,7 +167,20 @@ const OrderItem = ({
           <div className="w-full flex flex-row items-center justify-end gap-x-3">
             <PaymentStatus order={order} />
             <p className="primary_txt_color font-semibold font_medium text-lg">
-              ₦{formatPrice(order?.order?.filter(item => item.status !== "archived").reduce((acc, curr) => curr.menu?.discount ? acc + curr.amount - (curr.amount * ( curr.menu?.discount / 100)) : acc + curr.amount, 0))}
+              ₦
+              {formatPrice(
+                order?.order
+                  ?.filter((item) => item.status !== "archived")
+                  .reduce(
+                    (acc, curr) =>
+                      curr.menu?.discount
+                        ? acc +
+                          curr.amount -
+                          curr.amount * (curr.menu?.discount / 100)
+                        : acc + curr.amount,
+                    0
+                  )
+              )}
             </p>
           </div>
         </div>
@@ -160,18 +188,25 @@ const OrderItem = ({
 
         {order?.notes && (
           <>
-            <div className='w-full font_medium text-sm px-2'>
-              <div className='w-full flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-neutral-200/80 hover:rounded-xl duration-500' onClick={() => setOpenNotes(!openNotes)}>
-                <p className="text-[#585858] text-lg font-medium font_medium">Note:</p>
+            <div className="w-full font_medium text-sm px-2">
+              <div
+                className="w-full flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-neutral-200/80 hover:rounded-xl duration-500"
+                onClick={() => setOpenNotes(!openNotes)}
+              >
+                <p className="text-[#585858] text-lg font-medium font_medium">
+                  Note:
+                </p>
                 {openNotes ? (
-                    <IoIosArrowUp size={20} />
+                  <IoIosArrowUp size={20} />
                 ) : (
-                    <IoIosArrowDown size={20} />
+                  <IoIosArrowDown size={20} />
                 )}
               </div>
-                {openNotes && (
-                    <p className='font_medium text-base text-wrap'>{order?.notes}</p>
-                )}
+              {openNotes && (
+                <p className="font_medium text-base text-wrap">
+                  {order?.notes}
+                </p>
+              )}
             </div>
             <hr className="w-4/5 h-1 mx-auto" />
           </>
@@ -188,7 +223,6 @@ const OrderItem = ({
           </div>
         )}
       </div>
-      
     </>
   );
 };
