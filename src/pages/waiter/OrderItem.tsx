@@ -117,7 +117,7 @@ const OrderItem = ({
         </div>
 
         <div className="flex flex-col justify-start items-center w-full mt-3">
-          {order?.status} - {order?.order.map((o) => o.status)}
+          {/* {order?.status} - {order?.order.map((o) => o.status)} */}
           {order?.order &&
             order?.order?.length > 0 &&
             order?.order
