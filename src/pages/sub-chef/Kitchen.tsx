@@ -78,6 +78,7 @@ const Kitchen = () => {
     completed: 0,
     declined: 0,
     archived: 0,
+    pickup: 0,
   });
 
   const sortByCreatedAt = (arr: { createdAt: string }[]) => {
