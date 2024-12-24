@@ -64,7 +64,6 @@ const Kitchen = () => {
     pending: true,
     cooking: true,
     ready: true,
-    sent: true,
     completed: true,
     declined: true,
     archived: true,
@@ -423,7 +422,9 @@ const Kitchen = () => {
     const completedOrders =
       allOrders &&
       allOrders?.filter(
-        (ro) => ro?.parentStatus === "completed" && ro?.status === "completed"
+        (ro) =>
+          (ro?.parentStatus === "completed" || ro?.parentStatus === "sent") &&
+          (ro?.status === "completed" || ro?.status === "sent")
       ).length;
 
     const avgTime = "-";
@@ -1012,50 +1013,6 @@ const Kitchen = () => {
               }
             />
 
-            {/* SENT */}
-            <KitchenBoard
-              restaurantOrders={filteredColumns["sent"] || []}
-              title="Sent"
-              headerBg="bg-yellow-500"
-              bodyBg="bg-yellow-100"
-              status="sent"
-              getMore={loadMore}
-              hasMore={hasMore?.sent}
-              columnCount={columnCount.sent}
-              orders={
-                filteredColumns["sent"] &&
-                filteredColumns["sent"]?.length > 0 &&
-                filteredColumns["sent"]
-                  ?.filter(
-                    (ro) =>
-                      ro?.parentStatus === "kitchen" && ro?.status === "sent"
-                  )
-                  ?.map((order: any, i) => (
-                    <KitchenCard
-                      key={i}
-                      order={order}
-                      restaurantOrders={columns["sent"]}
-                      filteredRestaurantOrders={filteredColumns["sent"]}
-                      title={"Sent"}
-                      kitchenCardButtons={[
-                        <KitchenButton
-                          title="Void"
-                          extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
-                          loading={currentOrder === order?._id}
-                          onClick={() => {
-                            handleVoided(
-                              order?.parent,
-                              order?._id,
-                              order?.status
-                            );
-                          }}
-                        />,
-                      ]}
-                    />
-                  ))
-              }
-            />
-
             {/* COMPLETED */}
             <KitchenBoard
               restaurantOrders={filteredColumns["completed"] || []}
@@ -1065,7 +1022,7 @@ const Kitchen = () => {
               status="completed"
               getMore={loadMore}
               hasMore={hasMore?.completed}
-              columnCount={columnCount.completed}
+              columnCount={columnCount.completed + columnCount.sent}
               orders={
                 filteredColumns["completed"] &&
                 filteredColumns["completed"]?.length > 0 &&

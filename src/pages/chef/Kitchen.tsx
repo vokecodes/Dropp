@@ -74,6 +74,7 @@ const Kitchen = () => {
     pending: 0,
     cooking: 0,
     ready: 0,
+    sent: 0,
     completed: 0,
     declined: 0,
     archived: 0,
@@ -1021,7 +1022,7 @@ const Kitchen = () => {
               status="completed"
               getMore={loadMore}
               hasMore={hasMore?.completed}
-              columnCount={columnCount.completed}
+              columnCount={columnCount.completed + columnCount.sent}
               orders={
                 filteredColumns["completed"] &&
                 filteredColumns["completed"]?.length > 0 &&
