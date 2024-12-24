@@ -75,6 +75,12 @@ const SignUpPage = () => {
     { value: "Others", label: "Others", type: "chef" },
   ];
 
+  const groupedRestaurantTypes = [
+    restaurantTypes.slice(0, 3),
+    restaurantTypes.slice(3, 6),
+    restaurantTypes.slice(6, 8),
+  ];
+
   const [restaurantType, setRestaurantType] = useState<any>("");
   const chooseResType = (resType: any) => {
     setRestaurantType(resType);
@@ -139,7 +145,11 @@ const SignUpPage = () => {
         // });
         // sessionStorage.setItem("auth", JSON.stringify(data));
         dispatch(registerLoginAccount({ ...data?.data }));
-        navigate("/chef");
+        if (values.type === "quick_service") {
+          navigate("/qsr");
+        } else {
+          navigate("/chef");
+        }
       })
       .catch((error) => {
         const { message } = error.response.data;
@@ -422,63 +432,31 @@ const SignUpPage = () => {
                   <p className="font_regular mb-3">
                     Select your Restaurant type
                   </p>
-                  <div className="w-full flex flex-row items-center justify-center gap-x-2 gap-y-3 my-3 flex-wrap">
-                    {restaurantTypes.slice(0, 3).map((item, i) => (
-                      <div
-                        key={item.value}
-                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
-                          restaurantType == item.value
-                            ? "bg_primary text-white hover:bg-bg_primary"
-                            : "hover:bg-neutral-100"
-                        } `}
-                        onClick={() => {
-                          chooseResType(item.value);
-                          props.setFieldValue("restaurantType", item.value);
-                          props.setFieldValue("type", item.type);
-                        }}
-                      >
-                        <p className="font_regular text-sm">{item.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="w-full flex flex-row items-center justify-center gap-x-2 gap-y-3 my-3 flex-wrap">
-                    {restaurantTypes.slice(3, 6).map((item, i) => (
-                      <div
-                        key={item.value}
-                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
-                          restaurantType == item.value
-                            ? "bg_primary text-white hover:bg-bg_primary"
-                            : "hover:bg-neutral-100"
-                        } `}
-                        onClick={() => {
-                          chooseResType(item.value);
-                          props.setFieldValue("restaurantType", item.value);
-                          props.setFieldValue("type", item.type);
-                        }}
-                      >
-                        <p className="font_regular text-sm">{item.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="w-full flex flex-row items-center justify-center gap-x-2 gap-y-3 my-3 flex-wrap">
-                    {restaurantTypes.slice(6, 8).map((item, i) => (
-                      <div
-                        key={item.value}
-                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
-                          restaurantType == item.value
-                            ? "bg_primary text-white hover:bg-bg_primary"
-                            : "hover:bg-neutral-100"
-                        } `}
-                        onClick={() => {
-                          chooseResType(item.value);
-                          props.setFieldValue("restaurantType", item.value);
-                          props.setFieldValue("type", item.type);
-                        }}
-                      >
-                        <p className="font_regular text-sm">{item.label}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {groupedRestaurantTypes.map((group, groupIndex) => (
+                    <div
+                      key={`group-${groupIndex}`}
+                      className="w-full flex flex-row items-center justify-center gap-x-2 gap-y-3 my-3 flex-wrap"
+                    >
+                      {group.map((item) => (
+                        <div
+                          key={item.value}
+                          className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
+                            restaurantType == item.value
+                              ? "bg_primary text-white hover:bg-bg_primary"
+                              : "hover:bg-neutral-100"
+                          }`}
+                          onClick={() => {
+                            chooseResType(item.value);
+                            props.setFieldValue("restaurantType", item.value);
+                            props.setFieldValue("type", item.type);
+                          }}
+                        >
+                          <p className="font_regular text-sm">{item.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+
                   <ErrorMessage
                     name="restaurantType"
                     component="span"
