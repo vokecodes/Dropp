@@ -37,12 +37,15 @@ const SignUpPage = () => {
     lastName: Yup.string().required("Last name is required."),
     email: Yup.string().email().required("Email is required."),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters')
-      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .matches(/\d/, 'Password must contain at least one number')
-      .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
-      .required('Password is required'),
+      .min(8, "Password must be at least 8 characters")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/\d/, "Password must contain at least one number")
+      .matches(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        "Password must contain at least one special character"
+      )
+      .required("Password is required"),
     confirmPassword: Yup.string()
       .required("Confirm password is required.")
       .oneOf([Yup.ref("password")], "Passwords do not match"),
@@ -58,16 +61,17 @@ const SignUpPage = () => {
       "Number of restaurant locations is required."
     ),
     referral: Yup.string().optional(),
+    type: Yup.string().optional(),
   });
 
   const restaurantTypes = [
-    { value: "Dine-in", label: "Dine-in" },
-    { value: "Private Chefs", label: "Private Chefs" },
-    { value: "Bar & Lounge", label: "Bar & Lounge" },
-    { value: "Cafe", label: "Cafe" },
-    { value: "Food Truck", label: "Food Truck" },
-    { value: "Fast Casual", label: "Fast Casual" },
-    { value: "Others", label: "Others" },
+    { value: "Dine-in", label: "Dine-in", type: "restaurant" },
+    { value: "Private Chefs", label: "Private Chefs", type: "chef" },
+    { value: "Bar & Lounge", label: "Bar & Lounge", type: "restaurant" },
+    { value: "Cafe", label: "Cafe", type: "quick_service" },
+    { value: "Food Truck", label: "Food Truck", type: "quick_service" },
+    { value: "Fast Casual", label: "Fast Casual", type: "quick_service" },
+    { value: "Others", label: "Others", type: "chef" },
   ];
 
   const [restaurantType, setRestaurantType] = useState<any>("");
@@ -163,6 +167,7 @@ const SignUpPage = () => {
               restaurantLocation: [],
               restaurantLocationNum: "",
               referral: "",
+              type: "",
             }}
             validationSchema={registerSchema}
             onSubmit={(values, formikBag) => {
@@ -292,7 +297,10 @@ const SignUpPage = () => {
                   </div>
                   {props.touched.password && props.errors.password ? (
                     <div className="w-full">
-                      <p className="text-[12px] font_light text-red-500 mt-1">Password should be a minimum of 8 characters. These includes letters, numbers and special characters.</p>
+                      <p className="text-[12px] font_light text-red-500 mt-1">
+                        Password should be a minimum of 8 characters. These
+                        includes letters, numbers and special characters.
+                      </p>
                     </div>
                   ) : null}
                   {/* <ErrorMessage
@@ -425,6 +433,7 @@ const SignUpPage = () => {
                         onClick={() => {
                           chooseResType(item.value);
                           props.setFieldValue("restaurantType", item.value);
+                          props.setFieldValue("type", item.type);
                         }}
                       >
                         <p className="font_regular text-sm">{item.label}</p>
