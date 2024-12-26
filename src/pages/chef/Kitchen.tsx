@@ -1016,7 +1016,15 @@ const Kitchen = () => {
 
             {/* COMPLETED */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["completed"] || []}
+              restaurantOrders={
+                filteredColumns["completed"].length > 0 ||
+                filteredColumns["sent"].length > 0
+                  ? [
+                      ...filteredColumns["completed"],
+                      ...filteredColumns["sent"],
+                    ]
+                  : []
+              }
               title="Completed"
               headerBg="bg-green-900"
               bodyBg="bg-gray-100"
