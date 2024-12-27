@@ -1017,8 +1017,7 @@ const Kitchen = () => {
             {/* COMPLETED */}
             <KitchenBoard
               restaurantOrders={
-                filteredColumns["completed"].length > 0 ||
-                filteredColumns["sent"].length > 0
+                filteredColumns["completed"] || filteredColumns["sent"]
                   ? [
                       ...filteredColumns["completed"],
                       ...filteredColumns["sent"],
