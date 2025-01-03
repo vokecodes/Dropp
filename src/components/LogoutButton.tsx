@@ -3,11 +3,11 @@ import { BsBoxArrowLeft } from "react-icons/bs";
 import { useAppDispatch } from "../redux/hooks";
 import { logOutUserAccount } from "../_redux/auth/authAction";
 
-const LogoutButton = ({ admin }: any) => {
+const LogoutButton = ({ admin, cashier }: any) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handlePressLogout = () => dispatch(logOutUserAccount(navigate, admin));
+  const handlePressLogout = () => dispatch(logOutUserAccount(navigate, admin, cashier));
 
   return (
     <div

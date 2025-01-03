@@ -8,6 +8,8 @@ import {
   RESTAURANT_ORDER_URL,
   ADMIN_DROPP_DASHBOARD_URL,
   ADMIN_ALL_RESTAURANTS,
+  QSR_ORDER_URL,
+  QSR_CASHIER_URL,
 } from "../urls";
 import { SERVER } from "../../config/axios";
 
@@ -145,6 +147,32 @@ export const changeSubChefPassword = (data: any) => {
   });
 };
 
+export const registerAQsrSubAdmin = (data: any) => {
+  return SERVER.post(`${QSR_CASHIER_URL}/sub-admin/register`, { ...data });
+};
+
+export const getChefQsrSubAdmins = () => {
+  return SERVER.get(`${QSR_CASHIER_URL}/sub-admin`);
+};
+
+export const deleteAQsrSubAdmin = (subChefId: string) => {
+  return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/${subChefId}`);
+};
+
+export const getQsrSubAdminProfile = () => {
+  return SERVER.get(`${QSR_CASHIER_URL}/sub-admin`);
+};
+
+export const updateQsrSubAdminProfile = (data: any) => {
+  return SERVER.patch(`${QSR_CASHIER_URL}/sub-admin`, { ...data });
+};
+
+export const changeQsrSubAdminPassword = (data: any) => {
+  return SERVER.patch(`${QSR_CASHIER_URL}/sub-admin/change-password`, {
+    ...data,
+  });
+};
+
 export const getRestaurantDashboardCrud = (
   fromDate = "",
   toDate = "",
@@ -158,15 +186,38 @@ export const getRestaurantDashboardCrud = (
   );
 };
 
+export const getQsrDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+  );
+};
+
+export const getQsrSubAdminDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_CASHIER_URL}/sub-admin/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+  );
+};
+
 export const getRestaurantSubChefDashboardCrud = (
   fromDate = "",
   toDate = "",
   payment = "",
   section = "",
-  table = ""
+  table = "",
+  breakdownOption = ""
 ) => {
   return SERVER.get(
-    `${SUB_CHEF_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`
+    `${SUB_CHEF_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
   );
 };
 
@@ -196,15 +247,80 @@ export const getRestaurantOrdersPage = (
   );
 };
 
+export const getQsrOrdersPage = (
+  page = 1,
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_ORDER_URL}/qsr-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+  );
+};
+
+export const getQsrSubAdminOrdersPage = (
+  page = 1,
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  cashier = ""
+) => {
+  return SERVER.get(
+    `${QSR_CASHIER_URL}/sub-admin/qsr-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&cashier=${cashier}`
+   );
+};
+
+export const downloadRestaurantReport = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = "",
+  breakdownOption = ""
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+
+export const downloadSubChefRestaurantReport = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  section = "",
+  table = "",
+  breakdownOption = ""
+) => {
+  return SERVER.get(
+    `${SUB_CHEF_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const getOrderCount = (
+  fromDate = "",
+  toDate = "",
+  table = "",
+  category = "",
+  countOption,
+  restaurantId
+) => {
+  return SERVER.get(
+    `${RESTAURANT_ORDER_URL}/order-count/${restaurantId}/${countOption}?fromDate=${fromDate}&toDate=${toDate}&category=${category}&table=${table}`
+  );
+};
+
 export const getSubChefRestaurantOrdersPage = (
   page = 1,
   fromDate = "",
   toDate = "",
   payment = "",
   section = "",
-  table = ""
+  table = "",
+  breakdownOption = ""
 ) => {
-  return SERVER.get(`${SUB_CHEF_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}`);
+  return SERVER.get(`${SUB_CHEF_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`);
 };
 
 export const getAdminDashboardCrud = (

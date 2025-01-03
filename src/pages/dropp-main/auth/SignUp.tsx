@@ -37,12 +37,15 @@ const SignUpPage = () => {
     lastName: Yup.string().required("Last name is required."),
     email: Yup.string().email().required("Email is required."),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters')
-      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .matches(/\d/, 'Password must contain at least one number')
-      .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
-      .required('Password is required'),
+      .min(8, "Password must be at least 8 characters")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/\d/, "Password must contain at least one number")
+      .matches(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        "Password must contain at least one special character"
+      )
+      .required("Password is required"),
     confirmPassword: Yup.string()
       .required("Confirm password is required.")
       .oneOf([Yup.ref("password")], "Passwords do not match"),
@@ -58,16 +61,24 @@ const SignUpPage = () => {
       "Number of restaurant locations is required."
     ),
     referral: Yup.string().optional(),
+    type: Yup.string().optional(),
   });
 
   const restaurantTypes = [
-    { value: "Dine-in", label: "Dine-in" },
-    { value: "Private Chefs", label: "Private Chefs" },
-    { value: "Bar & Lounge", label: "Bar & Lounge" },
-    { value: "Cafe", label: "Cafe" },
-    { value: "Food Truck", label: "Food Truck" },
-    { value: "Fast Casual", label: "Fast Casual" },
-    { value: "Others", label: "Others" },
+    { value: "QSR", label: "QSR", type: "quick_service" },
+    { value: "Dine-in", label: "Dine-in", type: "restaurant" },
+    { value: "Private Chefs", label: "Private Chefs", type: "chef" },
+    { value: "Bar & Lounge", label: "Bar & Lounge", type: "restaurant" },
+    { value: "Cafe", label: "Cafe", type: "quick_service" },
+    { value: "Food Truck", label: "Food Truck", type: "quick_service" },
+    { value: "Fast Casual", label: "Fast Casual", type: "quick_service" },
+    { value: "Others", label: "Others", type: "chef" },
+  ];
+
+  const groupedRestaurantTypes = [
+    restaurantTypes.slice(0, 3),
+    restaurantTypes.slice(3, 6),
+    restaurantTypes.slice(6, 8),
   ];
 
   const [restaurantType, setRestaurantType] = useState<any>("");
@@ -134,7 +145,11 @@ const SignUpPage = () => {
         // });
         // sessionStorage.setItem("auth", JSON.stringify(data));
         dispatch(registerLoginAccount({ ...data?.data }));
-        navigate("/chef");
+        if (values.type === "quick_service") {
+          navigate("/qsr");
+        } else {
+          navigate("/chef");
+        }
       })
       .catch((error) => {
         const { message } = error.response.data;
@@ -163,6 +178,7 @@ const SignUpPage = () => {
               restaurantLocation: [],
               restaurantLocationNum: "",
               referral: "",
+              type: "",
             }}
             validationSchema={registerSchema}
             onSubmit={(values, formikBag) => {
@@ -292,7 +308,10 @@ const SignUpPage = () => {
                   </div>
                   {props.touched.password && props.errors.password ? (
                     <div className="w-full">
-                      <p className="text-[12px] font_light text-red-500 mt-1">Password should be a minimum of 8 characters. These includes letters, numbers and special characters.</p>
+                      <p className="text-[12px] font_light text-red-500 mt-1">
+                        Password should be a minimum of 8 characters. These
+                        includes letters, numbers and special characters.
+                      </p>
                     </div>
                   ) : null}
                   {/* <ErrorMessage
@@ -413,24 +432,31 @@ const SignUpPage = () => {
                   <p className="font_regular mb-3">
                     Select your Restaurant type
                   </p>
-                  <div className="w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap">
-                    {restaurantTypes.map((item, i) => (
-                      <div
-                        key={item.value}
-                        className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
-                          restaurantType == item.value
-                            ? "bg_primary text-white hover:bg-bg_primary"
-                            : "hover:bg-neutral-100"
-                        } `}
-                        onClick={() => {
-                          chooseResType(item.value);
-                          props.setFieldValue("restaurantType", item.value);
-                        }}
-                      >
-                        <p className="font_regular text-sm">{item.label}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {groupedRestaurantTypes.map((group, groupIndex) => (
+                    <div
+                      key={`group-${groupIndex}`}
+                      className="w-full flex flex-row items-center justify-center gap-x-2 gap-y-3 my-3 flex-wrap"
+                    >
+                      {group.map((item) => (
+                        <div
+                          key={item.value}
+                          className={`w-fit h-fit px-5 py-2 rounded-full border border-neutral cursor-pointer ${
+                            restaurantType == item.value
+                              ? "bg_primary text-white hover:bg-bg_primary"
+                              : "hover:bg-neutral-100"
+                          }`}
+                          onClick={() => {
+                            chooseResType(item.value);
+                            props.setFieldValue("restaurantType", item.value);
+                            props.setFieldValue("type", item.type);
+                          }}
+                        >
+                          <p className="font_regular text-sm">{item.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+
                   <ErrorMessage
                     name="restaurantType"
                     component="span"

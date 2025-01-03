@@ -1,35 +1,37 @@
-// @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import { ClickAwayListener, Modal } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import { useAppDispatch } from "../../redux/hooks";
-import { subChefGetTables } from "../../_redux/table/tableAction";
+import { getTables, subChefGetTables } from "../../_redux/table/tableAction";
 import { SERVER } from "../../config/axios";
-import { SUB_CHEF_URL } from "../../_redux/urls";
+import {
+  DINNING_MENU_CATEGORY_URL,
+  RESTAURANT_ORDER_URL,
+  SUB_CHEF_URL,
+} from "../../_redux/urls";
 import Button from "../../components/Button";
 import OutlineButton from "../../components/OutlineButton";
 import KitchenButton from "../../components/KitchenButton";
 import { Link, useNavigate } from "react-router-dom";
-import { SUB_CHEF_ROUTES } from "../../routes/routes";
+import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
-import io from "socket.io-client";
-import { SoundNotification } from "../../components/SoundNotification";
+import moment from "moment";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-import KitchenBoard from "../../components/KitchenBoard";
-import KitchenCard from "../../components/kitchenCard";
 import {
   draggable,
   dropTargetForElements,
   monitorForElements,
-} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import KitchenCard from "../../components/kitchenCard";
+import KitchenBoard from "../../components/KitchenBoard";
+import { SoundNotification } from "../../components/SoundNotification";
+import io from "socket.io-client";
 import { getSubChefDineInMenuCategories } from "../../_redux/dinningMenu/dinningMenuCrud";
-import InfinityScroll from "../../components/InfinityScroll";
 
-
-const socket = io(import.meta.env.VITE_BASE_API_URL, {
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.VITE_BASE_URL, {
+//   withCredentials: true,
+// });
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -49,29 +51,129 @@ const Kitchen = () => {
   );
 
   const ref = useRef(null);
-
   const [restaurantOrders, setRestaurantOrders] = useState([]);
-  const [hasMore, setHasMore] = useState(true); 
-  const [page, setPage] = useState(1); 
 
-  const getRestaurantOrders = async (currentPage = page) => {
-    SERVER.get(`${SUB_CHEF_URL}/restaurant?page=${currentPage}`)
-      .then(({ data }) => {
-        if (currentPage === 1) {
-          setRestaurantOrders(data.data);
-        } else {
-          setRestaurantOrders((prevTransactions: any) => [
-            ...prevTransactions,
-            ...data.data,
-          ]);
-        }
-        setPage(currentPage + 1);
-        setHasMore(
-          data.pagination.totalPages > 0 &&
-            data.pagination.currentPage !== data.pagination.totalPages
-        );
-      })
-      .catch((err) => {});
+  const [selectedTable, setSelectedTable] = useState<any>("");
+  const [selectedCategory, setSelectedCategory] = useState<any>("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const loading = useRef(false);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const [hasMore, setHasMore] = useState({
+    pending: true,
+    cooking: true,
+    ready: true,
+    completed: true,
+    declined: true,
+    archived: true,
+  });
+  const [page, setPage] = useState(1);
+  const [columns, setColumns] = useState<any>({});
+  const [columnCount, setColumnCount] = useState({
+    pending: 0,
+    cooking: 0,
+    ready: 0,
+    sent: 0,
+    completed: 0,
+    declined: 0,
+    archived: 0,
+    pickup: 0,
+  });
+
+  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
+    return arr.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateB - dateA;
+    });
+  };
+
+  const getRestaurantOrdersColumn = async (
+    currentPage = page,
+    noSkip = true
+  ) => {
+    if (loading.current) return;
+    loading.current = true;
+
+    try {
+      const { data } = await SERVER.get(
+        `${SUB_CHEF_URL}/order-column?page=${currentPage}&selectedTable=${
+          selectedTable ? selectedTable?._id : ""
+        }&selectedCategory=${selectedCategory}&startDate=${startDate}&endDate=${endDate}`
+      );
+
+      const totalPages = data?.pagination.totalPages || 1;
+
+      if (currentPage === 1 && noSkip) {
+        setColumns({ ...data?.data });
+      } else {
+        setColumns((prevColumns) => {
+          const updatedColumns = { ...prevColumns };
+
+          Object.keys(data?.data || {}).forEach((status) => {
+            if (!updatedColumns[status]) {
+              updatedColumns[status] = [];
+            }
+
+            const existingIds = new Set(
+              updatedColumns[status].map((item) => item._id)
+            );
+
+            const newItems = data.data[status].filter(
+              (item) => !existingIds.has(item._id)
+            );
+
+            updatedColumns[status] = sortByCreatedAt([
+              ...updatedColumns[status],
+              ...newItems,
+            ]);
+          });
+
+          return updatedColumns;
+        });
+      }
+
+      setColumnCount((prev) => {
+        const newCount = { ...prev };
+        Object.keys(data?.columnCount || {}).forEach((status) => {
+          newCount[status] = data.columnCount[status]?.totalCount || 0;
+        });
+        return newCount;
+      });
+
+      setHasMore((prev) => {
+        const newHasMore = { ...prev };
+
+        Object.keys(data?.columnCount || {}).forEach((status) => {
+          const totalCount = data.columnCount[status]?.totalCount || 0;
+          const currentCount =
+            (columns[status]?.length || 0) + (data.data[status]?.length || 0);
+          newHasMore[status] = currentCount < totalCount;
+        });
+
+        return newHasMore;
+      });
+
+      if (noSkip) {
+        setPage((prevPage) => {
+          let newPage = 0;
+          newPage = prevPage < totalPages ? prevPage + 1 : prevPage;
+          return newPage;
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      if (noSkip) {
+        setTimeout(() => {
+          loading.current = false;
+        }, 2000);
+      } else {
+        loading.current = false;
+      }
+      setFilterLoading(false);
+    }
   };
 
   const [dinningMenuCategories, setDinningMenuCategories] = useState<any>([]);
@@ -91,11 +193,16 @@ const Kitchen = () => {
   };
 
   useEffect(() => {
+    setFilterLoading(true);
     dispatch(subChefGetTables());
-    getRestaurantOrders(page);
     getDinningMenuCategories();
-  }, []);
+    getRestaurantOrdersColumn(1);
+  }, [endDate, selectedCategory, selectedTable]);
 
+  const loadMore = () => {
+    if (loading.current) return;
+    getRestaurantOrdersColumn();
+  };
 
   const [soundNotification, setSoundNotification] = useState(() => {
     return JSON.parse(localStorage.getItem("playSound")) || false;
@@ -110,96 +217,151 @@ const Kitchen = () => {
     }, 3000);
   };
 
-
   // Listen for new orders from the server
-  useState(() => {
-    socket.on("newKitchenOrder", (newOrder) => {
-      // Call getRestaurantOrders to update the orders
-      getRestaurantOrders();
-      receiveNotification();
-    });
-    return () => {
-      socket.off("newRestaurantOrder");
-    };
-  }, []);
+  // useEffect(() => {
+  //   socket.on("newKitchenOrder", (newOrder) => {
+  //     // Call getRestaurantOrders to update the orders
+  //     getRestaurantOrdersColumn();
+  //     receiveNotification();
+  //   });
+  //   return () => {
+  //     socket.off("newRestaurantOrder");
+  //   };
+  // }, []);
 
   useEffect(() => {
     const handleUnload = () => {
       localStorage.removeItem("kitchenTabActive");
     };
-  
+
     localStorage.setItem("kitchenTabActive", "true");
-  
+
     window.addEventListener("beforeunload", handleUnload);
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
-
 
   const [declineModal, setDeclineModal] = useState(false);
   const openDeclineModal = () => setDeclineModal(true);
   const closeDeclineModal = () => setDeclineModal(false);
 
-  const [startCooking, setStartCooking] = useState();
-  const [readyForPickup, setReadyForPickup] = useState();
-  const [sent, setSent] = useState();
-  const [voided, setVoided] = useState();
-  const [decline, setDecline] = useState();
-  const [declineOrder, setDeclineOrder] = useState();
-  const [declineOrderMenu, setDeclineOrderMenu] = useState();
-  const [declineReason, setDeclineReason] = useState();
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [declineOrder, setDeclineOrder] = useState("");
+  const [declineOrderMenu, setDeclineOrderMenu] = useState("");
+  const [declineReason, setDeclineReason] = useState("");
   const [declineLoading, setDeclineLoading] = useState(false);
 
-  const handleStartCooking = async (orderId, menuId: any) => {
-    setStartCooking(menuId);
+  const updateOrders = (item: any, menuId: any, status: string) => {
+    const elem = item?.data.order.find((m) => m.id === menuId);
+
+    setColumns((prevOrders: any) => {
+      const newOrders = { ...prevOrders };
+
+      // Safely filter out the item from the current status
+      const prevArr = sortByCreatedAt(
+        (newOrders[status] || [])
+          .filter((order: any) => order._id !== menuId)
+          .slice(0, 20)
+      );
+
+      // Add the item to the new status
+      const newArr = sortByCreatedAt(
+        [{ ...elem }, ...(newOrders[elem.status] || [])].slice(0, 20)
+      );
+
+      return {
+        ...newOrders,
+        [status]: [...prevArr],
+        [elem.status]: [...newArr],
+      };
+    });
+    getRestaurantOrdersColumn(page - 1, false);
+
+    setColumnCount((prev) => {
+      const newCount = { ...prev };
+
+      newCount[status] = prev[status]--;
+      newCount[elem.status] = prev[elem.status]++;
+
+      return newCount;
+    });
+  };
+
+  const handleStartCooking = async (
+    orderId,
+    menuId: any,
+    menuStatus = "pending"
+  ) => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${SUB_CHEF_URL}/${orderId}/${menuId}`, {
       status: "cooking",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setStartCooking());
+      .finally(() => setCurrentOrder(null));
   };
 
-  const handleReadyForPickup = async (orderId, menuId: any) => {
-    setReadyForPickup(menuId);
+  const handleReadyForPickup = async (
+    orderId,
+    menuId: any,
+    menuStatus = "cooking"
+  ) => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${SUB_CHEF_URL}/${orderId}/${menuId}`, {
       status: "ready",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setReadyForPickup());
+      .finally(() => setCurrentOrder(""));
   };
 
-  const handleSent = async (orderId, menuId: any) => {
-    setSent(menuId);
+  const handleSent = async (orderId, menuId: any, menuStatus = "ready") => {
+    setCurrentOrder(menuId);
     SERVER.patch(`${SUB_CHEF_URL}/${orderId}/${menuId}`, {
       status: "sent",
     })
       .then(({ data }) => {
-        getRestaurantOrders();
+        updateOrders(data, menuId, menuStatus);
       })
       .catch((err) => {})
-      .finally(() => setSent());
+      .finally(() => setCurrentOrder(""));
   };
 
-  const handleDecline = async (orderId, menuId, reason) => {
-    setDeclineLoading(true);
+  const handleVoided = async (orderId, menuId: any, menuStatus = "sent") => {
+    setCurrentOrder(menuId);
+    SERVER.patch(`${SUB_CHEF_URL}/${orderId}/${menuId}`, {
+      status: "archived",
+    })
+      .then(({ data }) => {
+        updateOrders(data, menuId, menuStatus);
+      })
+      .catch((err) => {})
+      .finally(() => setCurrentOrder(""));
+  };
+
+  const handleDecline = async (
+    orderId,
+    menuId,
+    reason,
+    menuStatus = "pending"
+  ) => {
+    setCurrentOrder(true);
     SERVER.patch(`${SUB_CHEF_URL}/${orderId}/${menuId}`, {
       status: "declined",
       reason,
     })
       .then(({ data }) => {
-        setDeclineOrder();
-        setDeclineOrderMenu();
-        setDeclineReason();
-        getRestaurantOrders();
+        setDeclineOrder("");
+        setDeclineOrderMenu("");
+        setDeclineReason("");
+        updateOrders(data, menuId, menuStatus);
         closeDeclineModal();
       })
       .catch((err) => {})
-      .finally(() => setDeclineLoading(false));
+      .finally(() => setCurrentOrder(false));
   };
 
   const getAllKitchenOrders = async () => {
@@ -209,7 +371,7 @@ const Kitchen = () => {
     const fetchAllOrders = async (currentPage) => {
       try {
         const response = await SERVER.get(
-          `${RESTAURANT_ORDER_URL}/restaurant?page=${currentPage}`
+          `${SUB_CHEF_URL}/restaurant?page=${currentPage}`
         );
         const fetchedOrders = response.data.data;
 
@@ -261,7 +423,9 @@ const Kitchen = () => {
     const completedOrders =
       allOrders &&
       allOrders?.filter(
-        (ro) => ro?.parentStatus === "completed" && ro?.status === "completed"
+        (ro) =>
+          (ro?.parentStatus === "completed" || ro?.parentStatus === "sent") &&
+          (ro?.status === "completed" || ro?.status === "sent")
       ).length;
 
     const avgTime = "-";
@@ -298,146 +462,58 @@ const Kitchen = () => {
     }
   };
 
-  const [openTablesOptions, setOpenTablesOptions] = useState(false);
-  const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
+  const addDisplayIds = (orders: any[]) => {
+    const suffixes: { [key: string]: number } = {};
 
-  const sortByUpdatedAt = (arr) => {
-    return arr.sort((a, b) => {
-      const dateA = new Date(a.updatedAt);
-      const dateB = new Date(b.updatedAt);
-      return dateB - dateA;
-    });
-  }
-
-  const todaysDate = new Date().toJSON().slice(0, 10);
-  
-  const [selectedTable, setSelectedTable] = useState("");
-  const filteredTable = !selectedTable
-    ? restaurantOrders
-    : restaurantOrders.filter((item: any, i: any) => {
-        return item.table?.table == selectedTable?.table;
-      });
-
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const filteredCategory = !selectedCategory
-  ? filteredTable
-  : filteredTable.filter((item: any, i: any) => {
-    return item.menu?.category == selectedCategory?.value;
-  });
-  
-  const [startDate, setStartDate] = useState("");
-  const filteredStartDate = !startDate
-  ? filteredCategory
-  : filteredCategory.filter((item: any, i: any) => {
-    const createdAt = new Date(item.createdAt);
-    const date = new Date(startDate);
-    return createdAt >= date;
-  });
-  
-  
-  const [endDate, setEndDate] = useState("");
-  const filteredEndDate = !endDate
-  ? filteredStartDate
-  : filteredStartDate.filter((item: any, i: any) => {
-    const createdAt = new Date(item.createdAt);
-    const date = new Date(endDate);
-    return createdAt <= date;
-  });
-
-
-  const filteredRestaurantOrders = sortByUpdatedAt(filteredEndDate);
-  
-
-  const [columnCount, setColumnCount] = useState({
-    new_orders: 0,
-    cooking: 0,
-    pickup: 0,
-    sent: 0,
-    completed: 0,
-    decline: 0,
-    void: 0,
-  });
-
-  useEffect(() => {
-    setColumnCount({
-      new_orders: 0,
-      cooking: 0,
-      pickup: 0,
-      sent: 0,
-      completed: 0,
-      decline: 0,
-      void: 0,
-    });
-
-    const suffixes = {};
-
-    filteredRestaurantOrders && filteredRestaurantOrders?.length > 0 && filteredRestaurantOrders?.map((order, i) => {
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "pending"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          new_orders: prevState.new_orders + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "cooking"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          cooking: prevState.cooking + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "ready"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          pickup: prevState.pickup + 1
-        }));
-      }
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "sent"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          sent: prevState.sent + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "completed" &&
-      order?.status === "completed"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          completed: prevState.completed + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "declined"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          decline: prevState.decline + 1
-        }));
-      } 
-      
-      if(order?.parentStatus === "kitchen" &&
-      order?.status === "archived"){
-        setColumnCount(prevState => ({
-          ...prevState,
-          void: prevState.void + 1
-        }));
-      }
-
+    orders.forEach((order) => {
       if (!suffixes[order.parent]) {
         suffixes[order.parent] = 0;
       }
 
-      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
-      order.displayId = `${order.parent}-${suffix}`;
+      if (order?.parentStatus === "kitchen" && order?.status === "ready") {
+        setColumnCount((prevState) => ({
+          ...prevState,
+          pickup: prevState.pickup + 1,
+        }));
+      }
 
       suffixes[order.parent] += 1;
-    })
-  }, [restaurantOrders, selectedTable, selectedCategory, endDate, startDate])
+    });
+
+    return orders;
+  };
+
+  // Filter the object while retaining its structure
+  const [filteredColumns, setFilteredColumns] = useState({});
+
+  useEffect(() => {
+    setFilteredColumns({});
+
+    const localFiltered = Object.fromEntries(
+      Object.entries(columns).map(([key, value]) => {
+        // Sort by 'createdAt' before returning
+        const sortedArray = sortByCreatedAt(value as any[]);
+
+        // Add display IDs
+        const withDisplayIds = addDisplayIds(sortedArray);
+
+        // Return the key and the processed array
+        return [key, withDisplayIds];
+      })
+    );
+
+    setFilteredColumns({ ...localFiltered });
+  }, [
+    columnCount,
+    columns,
+    selectedTable,
+    selectedCategory,
+    endDate,
+    startDate,
+  ]);
+
+  const [openTablesOptions, setOpenTablesOptions] = useState(false);
+  const [openCategoriesOptions, setOpenCategoriesOptions] = useState(false);
 
   const handleClickAway = (flag: string) => {
     if (flag === "categories") {
@@ -447,37 +523,40 @@ const Kitchen = () => {
     }
   };
 
-
   useEffect(() => {
     return monitorForElements({
-      onDrop({ source, location }) {
+      onDrop({ source, location }: any) {
         const destination = location.current.dropTargets[0];
 
         if (!destination) {
-            return;
+          return;
         }
 
         const destinationLocation = destination.data.title;
         const sourceLocation = source.data.title;
         const order = source.data.order;
 
-        if (destinationLocation === 'Cooking'){
-          console.log('cooking')
-          handleStartCooking(order?.parent, order?._id)
-        }else if(destinationLocation === 'Ready for pickup'){
-          handleReadyForPickup(order?.parent, order?._id)
-        }else if(destinationLocation === 'Sent'){
-          handleSent(order?.parent, order?._id)
-        }else if(destinationLocation === 'Decline' && sourceLocation === 'New orders'){
+        if (destinationLocation === "Cooking") {
+          handleStartCooking(order?.parent, order?._id, order?.status);
+        } else if (destinationLocation === "Ready for pickup") {
+          handleReadyForPickup(order?.parent, order?._id, order?.status);
+        } else if (destinationLocation === "Sent") {
+          handleSent(order?.parent, order?._id, order?.status);
+        } else if (
+          destinationLocation === "Decline" &&
+          sourceLocation === "New orders"
+        ) {
           setDeclineOrder(order?.parent);
           setDeclineOrderMenu(order?._id);
           openDeclineModal();
-        }else if(destinationLocation === 'Void'){
-          handleVoided(order?.parent, order?._id);
+        } else if (destinationLocation === "Void") {
+          handleVoided(order?.parent, order?._id, order?.status);
         }
-      }
+      },
     });
   }, [restaurantOrders]);
+
+  const todaysDate = new Date().toJSON().slice(0, 10);
 
   return (
     <>
@@ -485,14 +564,17 @@ const Kitchen = () => {
         <div className="flex flex-col md:flex-row items-center justify-between py-6 md:justify-start gap-y-3 md:gap-y-0 md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/">
-              <span className="sr-only">Homemade</span>
-              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
+              <span className="sr-only">Dropp</span>
+              <img
+                className="h-5 lg:h-6 w-auto"
+                src="/images/logo.svg"
+                alt=""
+              />
             </Link>
           </div>
           <div className="flex flex-row items-center justify-end gap-x-3 shrink-0">
-
-            <SoundNotification 
-              playNotif={playSound && soundNotification} 
+            <SoundNotification
+              playNotif={playSound && soundNotification}
               soundNotification={soundNotification}
               setSoundNotification={setSoundNotification}
               setPlaySound={setPlaySound}
@@ -585,35 +667,37 @@ const Kitchen = () => {
                       </p>
                     </div>
                     {table?.length > 0 &&
-                      table?.filter(item => !!item?.table).map((s: any, i: number) => (
-                        <div
-                          className="flex items-center cursor-pointer mb-2"
-                          key={i}
-                          onClick={() => {
-                            setSelectedTable(s);
-                            setOpenTablesOptions(false);
-                          }}
-                        >
+                      table
+                        ?.filter((item) => !!item?.table)
+                        .map((s: any, i: number) => (
                           <div
-                            className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                              selectedTable?.table === s?.table
-                                ? "primary_bg_color"
-                                : "bg_gray_color"
-                            }`}
-                          />
-                          <p
-                            className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                            className="flex items-center cursor-pointer mb-2"
+                            key={i}
+                            onClick={() => {
+                              setSelectedTable(s);
+                              setOpenTablesOptions(false);
+                            }}
                           >
-                            {s?.table}
-                          </p>
-                        </div>
-                      ))}
+                            <div
+                              className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                selectedTable?._id === s?._id
+                                  ? "primary_bg_color"
+                                  : "bg_gray_color"
+                              }`}
+                            />
+                            <p
+                              className={`text-xs lg:text-sm secondary_gray_color text-black`}
+                            >
+                              {s?.table}
+                            </p>
+                          </div>
+                        ))}
                   </div>
                 </ClickAwayListener>
               )}
             </div>
           </div>
-          
+
           <div className="w-4/5 lg:w-36">
             <label className="text-sm font_medium text-black">Categories</label>
             <div className="mt-2 lg:mt-0">
@@ -688,9 +772,13 @@ const Kitchen = () => {
               )}
             </div>
           </div>
-          
+
           <div
-            className={`py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer ${endDate || startDate || selectedTable || selectedCategory ? 'text-white primary_bg_color' : 'text-black bg-[#EDECEC]'}`}
+            className={`py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer ${
+              endDate || startDate || selectedTable || selectedCategory
+                ? "text-white primary_bg_color"
+                : "text-black bg-[#EDECEC]"
+            }`}
             onClick={() => {
               setEndDate("");
               setStartDate("");
@@ -698,11 +786,34 @@ const Kitchen = () => {
               setSelectedCategory("");
             }}
           >
-            <p className="font_medium">Reset</p>
-                
+            {filterLoading ? (
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="#6D6D6D"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+            ) : (
+              <>
+                <p className="font_medium">Reset</p>
+              </>
+            )}
           </div>
         </div>
-        
+
         <div
           className="py-2 px-4 w-4/5 lg:w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
           onClick={() => {
@@ -745,271 +856,265 @@ const Kitchen = () => {
         </div>
       </div>
 
-      <div className="w-fit md:w-full md:px-6 py-4">
-        <InfinityScroll
-          data={restaurantOrders}
-          getMore={getRestaurantOrders}
-          hasMore={hasMore}
-          
+      <div className="w-full h-svh lg:overflow-hidden p-4 bg-white">
+        <div
+          ref={ref}
+          className="kitchen-div rounded-2xl w-full p-0 h-full overflow-x-scroll pb-3"
         >
-          <div
-            ref={ref}
-            className="kitchen-div bg-white rounded-2xl w-fit md:w-full p-0 md:p-5 mt-3 h-screen overflow-x-scroll"
-          >
-            {/* <div className="flex flex-col items-center justify-start gap-y-4"> */}
-            {/* <div className="w-full h-full"> */}
-
-            <div className="snap-x md:snap-none snap-mandatory flex flex-row w-screen overflow-x-scroll md:w-fit h-full px-5 md:px-0 gap-x-5 no-scroll-bar">
-              {/* NEW ORDERS */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='New orders'
-                headerBg='primary_bg_color'
-                bodyBg='bg_pink'
-                columnCount={columnCount.new_orders}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                    ?.filter(
-                      (ro) =>
-                        ro?.parentStatus === "kitchen" &&
-                        ro?.status === "pending"
-                    )
-                    ?.map((order: any) => (
-                      <KitchenCard
-                        key={order?._id}
-                        order={order}
-                        restaurantOrders={restaurantOrders}
-                        filteredRestaurantOrders={filteredRestaurantOrders}
-                        title={'New orders'}
-                        kitchenCardButtons={[
-                          <KitchenButton
-                            title="Start Cooking"
-                            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                            loading={startCooking === order?._id}
-                            onClick={() =>
+          <div className="snap-x md:snap-none snap-mandatory flex flex-row w-fit h-full gap-x-5 no-scroll-bar">
+            {/* NEW ORDERS */}
+            <KitchenBoard
+              restaurantOrders={filteredColumns["pending"] || []}
+              title="New orders"
+              headerBg="primary_bg_color"
+              bodyBg="bg_pink"
+              status="pending"
+              getMore={loadMore}
+              hasMore={hasMore?.pending}
+              columnCount={columnCount.pending}
+              orders={
+                filteredColumns["pending"] &&
+                filteredColumns["pending"]?.length > 0 &&
+                filteredColumns["pending"]
+                  ?.filter(
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" && ro?.status === "pending"
+                  )
+                  ?.map((order: any) => (
+                    <KitchenCard
+                      key={order?._id}
+                      order={order}
+                      restaurantOrders={columns["pending"]}
+                      filteredRestaurantOrders={filteredColumns["pending"]}
+                      title={"New orders"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Start Cooking"
+                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                          loading={currentOrder === order?._id}
+                          onClick={() =>
                             handleStartCooking(order?.parent, order?._id)
-                            }
-                          />,
-                          <KitchenButton
-                            title="Decline"
-                            extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
-                            onClick={() => {
+                          }
+                        />,
+                        <KitchenButton
+                          title="Decline"
+                          extraClasses="mt-2 text-red-600 bg-red-100 border-red-600"
+                          loading={currentOrder === order?._id}
+                          onClick={() => {
                             setDeclineOrder(order?.parent);
                             setDeclineOrderMenu(order?._id);
                             openDeclineModal();
-                            }}
-                          />
-                        ]}
-                      />
-                    ))}
-              />
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* COOKING */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='Cooking'
-                headerBg='bg-zinc-500'
-                bodyBg='bg-zinc-200'
-                columnCount={columnCount.cooking}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
+            {/* COOKING */}
+            <KitchenBoard
+              restaurantOrders={filteredColumns["cooking"] || []}
+              title="Cooking"
+              headerBg="bg-zinc-500"
+              bodyBg="bg-zinc-200"
+              status="cooking"
+              getMore={loadMore}
+              hasMore={hasMore?.cooking}
+              columnCount={columnCount.cooking}
+              orders={
+                filteredColumns["cooking"] &&
+                filteredColumns["cooking"]?.length > 0 &&
+                filteredColumns["cooking"]
                   ?.filter(
-                      (ro) =>
-                      ro?.parentStatus === "kitchen" &&
-                      ro?.status === "cooking"
+                    (ro) =>
+                      ro?.parentStatus === "kitchen" && ro?.status === "cooking"
                   )
-                  ?.map((order: any) => (
-                      <KitchenCard
-                          key={order?._id}
-                          order={order}
-                          restaurantOrders={restaurantOrders}
-                          filteredRestaurantOrders={filteredRestaurantOrders}
-                          title={'Cooking'}
-                          kitchenCardButtons={[
-                              <KitchenButton
-                                  title="Ready For Pickup"
-                                  extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                                  loading={readyForPickup === order?._id}
-                                  onClick={() =>
-                                  handleReadyForPickup(order?.parent, order?._id)
-                                  }
-                              />,
-                              <KitchenButton
-                                  title="Void"
-                                  extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
-                                  loading={voided === order?._id}
-                                  onClick={() => {
-                                  handleVoided(order?.parent, order?._id);
-                                  }}
-                              />
-                          ]}
-                      />
-                  ))}
-              />
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={columns["cooking"]}
+                      filteredRestaurantOrders={filteredColumns["cooking"]}
+                      title={"Cooking"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Ready For Pickup"
+                          extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
+                          loading={currentOrder === order?._id}
+                          onClick={() =>
+                            handleReadyForPickup(order?.parent, order?._id)
+                          }
+                        />,
+                        <KitchenButton
+                          title="Void"
+                          extraClasses="mt-2 bg_kitchen_ready border_kitchen_ready text_kitchen_ready"
+                          loading={currentOrder === order?._id}
+                          onClick={() => {
+                            handleVoided(
+                              order?.parent,
+                              order?._id,
+                              order?.status
+                            );
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* READY */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='Ready for pickup'
-                headerBg='bg-green-600'
-                bodyBg='bg-green-100'
-                columnCount={columnCount.pickup}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
+            {/* READY */}
+            <KitchenBoard
+              restaurantOrders={filteredColumns["ready"] || []}
+              title="Ready for pickup"
+              headerBg="bg-green-600"
+              bodyBg="bg-green-100"
+              status="ready"
+              getMore={loadMore}
+              hasMore={hasMore?.ready}
+              columnCount={columnCount.ready}
+              orders={
+                filteredColumns["ready"] &&
+                filteredColumns["ready"]?.length > 0 &&
+                filteredColumns["ready"]
                   ?.filter(
-                      (ro) =>
+                    (ro) =>
                       ro?.parentStatus === "kitchen" && ro?.status === "ready"
                   )
-                  ?.map((order: any) => (
-                      <KitchenCard
-                          key={order?._id}
-                          order={order}
-                          restaurantOrders={restaurantOrders}
-                          filteredRestaurantOrders={filteredRestaurantOrders}
-                          title={'Ready for pickup'}
-                          kitchenCardButtons={[
-                            <KitchenButton
-                              title="Sent"
-                              extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                              loading={sent === order?._id}
-                              onClick={() => handleSent(order?.parent, order?._id)}
-                            />,
-                            <KitchenButton
-                              title="Void"
-                              extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
-                              loading={voided === order?._id}
-                              onClick={() => {
-                                handleVoided(order?.parent, order?._id);
-                              }}
-                            />
-                          ]}
-                      />
-                  ))}
-              />
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={columns["ready"]}
+                      filteredRestaurantOrders={filteredColumns["ready"]}
+                      title={"Ready for pickup"}
+                      kitchenCardButtons={[
+                        <KitchenButton
+                          title="Sent"
+                          extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                          loading={currentOrder === order?._id}
+                          onClick={() => handleSent(order?.parent, order?._id)}
+                        />,
+                        <KitchenButton
+                          title="Void"
+                          extraClasses="mt-2 text-green-600 bg-green-100 border-green-600"
+                          loading={currentOrder === order?._id}
+                          onClick={() => {
+                            handleVoided(
+                              order?.parent,
+                              order?._id,
+                              order?.status
+                            );
+                          }}
+                        />,
+                      ]}
+                    />
+                  ))
+              }
+            />
 
-              {/* SENT */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='Sent'
-                headerBg='bg-yellow-500'
-                bodyBg='bg-yellow-100'
-                columnCount={columnCount.sent}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
-                  ?.filter(
-                      (ro) =>
-                      ro?.parentStatus === "kitchen" && ro?.status === "sent"
-                  )
-                  ?.map((order: any) => (
-                      <KitchenCard
-                          key={order?._id}
-                          order={order}
-                          restaurantOrders={restaurantOrders}
-                          filteredRestaurantOrders={filteredRestaurantOrders}
-                          title={'Sent'}
-                          kitchenCardButtons={[
-                            <KitchenButton
-                              title="Void"
-                              extraClasses="mt-2 text-yellow-600 bg-yellow-100 border-yellow-600"
-                              loading={voided === order?._id}
-                              onClick={() => {
-                                handleVoided(order?.parent, order?._id);
-                              }}
-                            />
-                          ]}
-                      />
-                  ))}
-              />
-
-              {/* COMPLETED */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='Completed'
-                headerBg='bg-green-900'
-                bodyBg='bg-gray-100'
-                columnCount={columnCount.sent}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
+            {/* COMPLETED */}
+            <KitchenBoard
+              restaurantOrders={
+                filteredColumns["completed"] || filteredColumns["sent"]
+                  ? [
+                      ...filteredColumns["completed"],
+                      ...filteredColumns["sent"],
+                    ]
+                  : []
+              }
+              title="Completed"
+              headerBg="bg-green-900"
+              bodyBg="bg-gray-100"
+              status="completed"
+              getMore={loadMore}
+              hasMore={hasMore?.completed}
+              columnCount={columnCount.completed + columnCount.sent}
+              orders={
+                filteredColumns["completed"] &&
+                filteredColumns["completed"]?.length > 0 &&
+                filteredColumns["completed"]
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "completed" &&
                       ro?.status === "completed"
                   )
-                  ?.map((order: any) => (
-                      <KitchenCard
-                          key={order?._id}
-                          order={order}
-                          restaurantOrders={restaurantOrders}
-                          filteredRestaurantOrders={filteredRestaurantOrders}
-                          title={'Completed'}
-                      />
-                  ))}
-              />
-              
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={columns["completed"]}
+                      filteredRestaurantOrders={filteredColumns["completed"]}
+                      title={"Completed"}
+                    />
+                  ))
+              }
+            />
 
-              {/* DECLINE */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='Decline'
-                headerBg='bg-red-900'
-                bodyBg='bg-red-100'
-                columnCount={columnCount.decline}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
+            {/* DECLINE */}
+            <KitchenBoard
+              restaurantOrders={filteredColumns["declined"] || []}
+              title="Decline"
+              headerBg="bg-red-900"
+              bodyBg="bg-red-100"
+              status="declined"
+              getMore={loadMore}
+              hasMore={hasMore?.declined}
+              columnCount={columnCount.declined}
+              orders={
+                filteredColumns["declined"] &&
+                filteredColumns["declined"]?.length > 0 &&
+                filteredColumns["declined"]
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" &&
                       ro?.status === "declined"
                   )
-                  ?.map((order: any) => (
-                      <KitchenCard
-                          key={order?._id}
-                          order={order}
-                          restaurantOrders={restaurantOrders}
-                          filteredRestaurantOrders={filteredRestaurantOrders}
-                          title={'Decline'}
-                      />
-                  ))}
-              />
-              
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={columns["declined"]}
+                      filteredRestaurantOrders={filteredColumns["declined"]}
+                      title={"Decline"}
+                    />
+                  ))
+              }
+            />
 
-              {/* VOIDED */}
-              <KitchenBoard 
-                restaurantOrders={restaurantOrders}
-                title='Void'
-                headerBg='bg-black'
-                bodyBg='bg-neutral-100'
-                columnCount={columnCount.void}
-                orders={restaurantOrders &&
-                  restaurantOrders?.length > 0 &&
-                  filteredRestaurantOrders
+            {/* VOIDED */}
+            <KitchenBoard
+              restaurantOrders={filteredColumns["archived"] || []}
+              title="Void"
+              headerBg="bg-black"
+              bodyBg="bg-neutral-100"
+              status="archived"
+              getMore={loadMore}
+              hasMore={hasMore?.archived}
+              columnCount={columnCount.archived}
+              orders={
+                filteredColumns["archived"] &&
+                filteredColumns["archived"]?.length > 0 &&
+                filteredColumns["archived"]
                   ?.filter(
                     (ro) =>
                       ro?.parentStatus === "kitchen" &&
                       ro?.status === "archived"
                   )
-                  ?.map((order: any) => (
-                      <KitchenCard
-                          key={order?._id}
-                          order={order}
-                          restaurantOrders={restaurantOrders}
-                          filteredRestaurantOrders={filteredRestaurantOrders}
-                          title={'Void'}
-                      />
-                  ))}
-              />
-              
-            </div>
-            {/* </div> */}
-            {/* </div> */}
+                  ?.map((order: any, i) => (
+                    <KitchenCard
+                      key={i}
+                      order={order}
+                      restaurantOrders={columns["archived"]}
+                      filteredRestaurantOrders={filteredColumns["archived"]}
+                      title={"Void"}
+                    />
+                  ))
+              }
+            />
           </div>
-        </InfinityScroll>
+        </div>
       </div>
 
       <Modal

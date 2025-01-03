@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import OrderItem from "./OrderItem";
 import { SERVER } from "../../config/axios";
@@ -17,9 +16,9 @@ import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
 import InfinityScroll from "../../components/InfinityScroll";
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.VITE_BASE_URL, {
+//   withCredentials: true,
+// });
 
 const SuperWaiterDashboard = () => {
   const { superWaiter } = useSelector(
@@ -28,13 +27,8 @@ const SuperWaiterDashboard = () => {
     }),
     shallowEqual
   );
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
-  const [restaurantOrders, setRestaurantOrders] = useState([]);
   const [table, setTable] = useState([]);
-  const [hasMore, setHasMore] = useState(true); // Flag to track if there are more items to load
-  const [page, setPage] = useState(1); // Page number for pagination
   const [chef, setChef] = useState<any>(null);
 
   const getChef = async () => {
@@ -44,40 +38,111 @@ const SuperWaiterDashboard = () => {
       if (data) {
         setChef(data.data);
       }
+    } catch (error) {}
+  };
+
+  const loading = useRef(false);
+  const [hasMore, setHasMore] = useState<any>({});
+  const [page, setPage] = useState(1);
+  const [columns, setColumns] = useState<any>({});
+  const [columnCount, setColumnCount] = useState<any>({});
+
+  const getRestaurantOrders = async (currentPage = page, noSkip = true) => {
+    if (loading.current) return;
+    loading.current = true;
+
+    try {
+      const { data } = await SERVER.get(
+        `${RESTAURANT_ORDER_URL}/waiter/${superWaiter?.restaurant}/${superWaiter?._id}?page=${currentPage}&waiterType=superWaiter`
+      );
+
+      const totalPages = data?.pagination?.totalPages || 1;
+
+      if (currentPage === 1) {
+        setColumns({ ...data?.data });
+      } else {
+        setColumns((prevColumns: any) => {
+          const updatedColumns = { ...prevColumns };
+
+          Object.keys(data?.data || {}).forEach((tableId) => {
+            if (!updatedColumns[tableId]) {
+              updatedColumns[tableId] = {};
+            }
+
+            // Loop through statuses for each table
+            Object.keys(data?.data[tableId] || {}).forEach((status) => {
+              if (!updatedColumns[tableId][status]) {
+                updatedColumns[tableId][status] = [];
+              }
+
+              const existingIds = new Set(
+                updatedColumns[tableId][status].map((item: any) => item.id)
+              );
+
+              // Filter new items to avoid duplicates
+              const newItems = data?.data[tableId][status].filter(
+                (item: any) => !existingIds.has(item.id)
+              );
+
+              updatedColumns[tableId][status] = [
+                ...updatedColumns[tableId][status],
+                ...newItems,
+              ];
+            });
+          });
+
+          return updatedColumns;
+        });
+      }
+
+      setColumnCount((prev) => {
+        const newCount = { ...prev };
+
+        Object.keys(data?.columnCount || {}).forEach((tableId) => {
+          if (!newCount[tableId]) {
+            newCount[tableId] = {};
+          }
+
+          Object.keys(data?.columnCount[tableId] || {}).forEach((status) => {
+            newCount[tableId][status] =
+              data.columnCount[tableId][status]?.totalCount || 0;
+          });
+        });
+
+        return newCount;
+      });
+
+      setHasMore((prev) => {
+        const newHasMore = { ...prev };
+
+        Object.keys(data?.columnCount || {}).forEach((tableId) => {
+          if (!newHasMore[tableId]) {
+            newHasMore[tableId] = {};
+          }
+
+          Object.keys(data?.columnCount[tableId] || {}).forEach((status) => {
+            const totalCount =
+              data.columnCount[tableId][status]?.totalCount || 0;
+            const currentCount =
+              (columns[tableId]?.[status]?.length || 0) +
+              (data?.data[tableId]?.[status]?.length || 0);
+            newHasMore[tableId][status] = currentCount < totalCount;
+          });
+        });
+
+        return newHasMore;
+      });
+
+      if (noSkip) {
+        setPage((prevPage) => {
+          return prevPage < totalPages ? prevPage + 1 : prevPage;
+        });
+      }
     } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      loading.current = false;
     }
-  };
-
-  const getRestaurantOrders = async (currentPage = page) => {
-    SERVER.get(
-      `${RESTAURANT_ORDER_URL}/all-restaurant-orders/${superWaiter?.restaurant}?page=${currentPage}`
-    )
-      .then(({ data }) => {
-        if (currentPage === 1) {
-          setRestaurantOrders(data.data);
-        } else {
-          setRestaurantOrders((prevTransactions: any) => [
-            ...prevTransactions,
-            ...data.data,
-          ]);
-        }
-        setPage(currentPage + 1);
-        setHasMore(
-          data.pagination.totalPages > 0 &&
-            data.pagination.currentPage !== data.pagination.totalPages
-        );
-      })
-      .catch((err) => {});
-  };
-
-  const getRestaurantTables = async () => {
-    SERVER.get(
-      `${RESTAURANT_TABLE_URL}/super-tables/${superWaiter?.restaurant}`
-    )
-      .then(({ data }) => {
-        setTable(data?.data);
-      })
-      .catch((err) => {});
   };
 
   const [soundNotification, setSoundNotification] = useState(() => {
@@ -94,32 +159,32 @@ const SuperWaiterDashboard = () => {
   };
 
   // Listen for new orders from the server
-  useEffect(() => {
-    const handleNewOrder = () => {
-      getRestaurantOrders(1);
-      receiveNotification();
-    };
+  // useEffect(() => {
+  //   const handleNewOrder = () => {
+  //     getRestaurantOrders(1);
+  //     receiveNotification();
+  //   };
 
-    socket.on("newRestaurantOrder", handleNewOrder);
-    socket.on("newReadyOrder", handleNewOrder);
-    socket.on("updatedRestaurantOrder", handleNewOrder);
-    socket.on("updatedOrder", () => {
-      getRestaurantOrders(1);
-    });
+  //   socket.on("newRestaurantOrder", handleNewOrder);
+  //   socket.on("newReadyOrder", handleNewOrder);
+  //   socket.on("updatedRestaurantOrder", handleNewOrder);
+  //   socket.on("updatedOrder", () => {
+  //     getRestaurantOrders(1);
+  //   });
 
-    return () => {
-      socket.off("newRestaurantOrder", handleNewOrder);
-      socket.off("newReadyOrder", handleNewOrder);
-      socket.off("updatedRestaurantOrder", handleNewOrder);
-      socket.off("updatedOrder", () => {
-        getRestaurantOrders(1);
-      });
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("newRestaurantOrder", handleNewOrder);
+  //     socket.off("newReadyOrder", handleNewOrder);
+  //     socket.off("updatedRestaurantOrder", handleNewOrder);
+  //     socket.off("updatedOrder", () => {
+  //       getRestaurantOrders(1);
+  //     });
+  //   };
+  // }, []);
 
   const CATEGORIES = [
     { label: "New order", value: "pending" },
-    { label: "Kitchen", value: "pending" },
+    { label: "Kitchen", value: "kitchen" },
     { label: "Cooking", value: "cooking" },
     { label: "Ready", value: "ready" },
     { label: "Completed", value: "completed" },
@@ -128,8 +193,8 @@ const SuperWaiterDashboard = () => {
   const [tablesMap, setTablesMap] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
 
-  const [selectedTable, setSelectedTable] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState();
+  const [selectedTable, setSelectedTable] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState("");
   const [selectedReadyOrder, setSelectedReadyOrder] = useState();
 
   const [ordersModal, setOrdersModal] = useState(false);
@@ -138,7 +203,7 @@ const SuperWaiterDashboard = () => {
     setOrdersModal(true);
   };
   const closeOrdersModal = () => {
-    setSelectedOrder();
+    setSelectedOrder("");
     setOrdersModal(false);
   };
 
@@ -147,114 +212,66 @@ const SuperWaiterDashboard = () => {
   const handleClickAway = () => setOpenTableLinks(false);
 
   useEffect(() => {
-    getRestaurantTables();
-    getRestaurantOrders(page);
+    getRestaurantOrders(1);
     getChef();
   }, []);
 
-  const sortByUpdatedAt = (arr) => {
+  const loadMore = () => {
+    if (loading.current) return;
+    getRestaurantOrders();
+  };
+
+  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.updatedAt);
-      const dateB = new Date(b.updatedAt);
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
       return dateB - dateA;
     });
   };
 
-  useEffect(() => {
-    const tableOrderMap = {};
-    const sortedByDate = sortByUpdatedAt(restaurantOrders)
+  const addDisplayIds = (orders: any[]) => {
+    const suffixes: { [key: string]: number } = {}; // Track suffixes for each parent ID
 
-    table && superWaiter && table?.length > 0 && table.filter(table => table.userType === 'waiter' && superWaiter.subTables.includes(table._id) ).map((item, i) => {
+    orders.forEach((order) => {
+      const parentId = order.id?.toString(); // Use the order's unique ID
+      if (!suffixes[parentId]) suffixes[parentId] = 0; // Initialize suffix counter
 
-      tableOrderMap[item?.table] = {
-        "New order": [],
-        Kitchen: [],
-        Cooking: [],
-        Ready: [],
-        Completed: [],
-      }
-    })
-
-    const suffixes = {};
-
-    table && superWaiter && sortedByDate &&
-      sortedByDate?.length > 0 && sortedByDate.filter(item => !item.parentOrder).forEach(order => {
-        const tableNumber = order?.table?.table;
-        const orderArray = order?.children?.length
-          ? [...order.order, ...order.children.reduce((acc, curr) => [...acc, ...curr.order], [])]
-          : order.order;
-        
-        const orderStatus = order?.status;
-        const newOrder = {
-          ...order,
-          order: orderArray
-        }
-
-        if (!tableNumber || !superWaiter.subTables.includes(order?.table._id)) {
-          return;
-        }
-
-        if (orderStatus === "pending") {
-          tableOrderMap[tableNumber]["New order"]?.push(newOrder);
-        }
-
-        if (orderStatus === "kitchen") {
-          newOrder?.order?.forEach((o: any) => {
-            if (o?.status === "pending") {
-              if (
-                tableOrderMap[tableNumber]["Kitchen"].some(
-                  (item) => item.id === newOrder.id
-                )
-              ) {
-                return;
-              } else {
-                tableOrderMap[tableNumber]["Kitchen"]?.push(newOrder);
-              }
-            }
-
-            if (o?.status === "ready" || o?.status === "sent") {
-              if (
-                tableOrderMap[tableNumber]["Ready"].some(
-                  (item) => item.id === newOrder.id
-                )
-              ) {
-                return;
-              } else {
-                tableOrderMap[tableNumber]["Ready"]?.push(newOrder);
-              }
-            }
-
-            if (o?.status === "cooking") {
-              if (
-                tableOrderMap[tableNumber]["Cooking"].some(
-                  (item) => item.id === newOrder.id
-                )
-              ) {
-                return;
-              } else {
-                tableOrderMap[tableNumber]["Cooking"]?.push(newOrder);
-              }
-            }
-
-            if (!suffixes[newOrder?.id]) {
-              suffixes[newOrder?.id] = 0;
-            }
-      
-            const suffix = String.fromCharCode(97 + suffixes[newOrder?.id]);
-            o.displayId = `${newOrder?.id}-${suffix}`;
-      
-            suffixes[newOrder?.id] += 1;
-          });
-        }
-
-        if (orderStatus === "completed") {
-          tableOrderMap[tableNumber]["Completed"]?.push(newOrder);
-        }
+      order.order.forEach((item: any) => {
+        const suffix = String.fromCharCode(97 + suffixes[parentId]); // Generate suffix (a, b, c, ...)
+        item.displayId = `${parentId}-${suffix}`; // Add displayId with table and status
+        suffixes[parentId] += 1; // Increment suffix counter
       });
+    });
 
-    setTablesMap(tableOrderMap);
-    !selectedTable && setSelectedTable(Object.keys(tableOrderMap)[0]);
-  }, [restaurantOrders, table]);
+    return orders;
+  };
+
+  // State for filtered columns
+  const [filteredColumns, setFilteredColumns] = useState<any>({});
+
+  useEffect(() => {
+    setFilteredColumns({});
+
+    const localFiltered = Object.fromEntries(
+      Object.entries(columns).map(([tableId, tableData]) => {
+        const processedStatuses = Object.fromEntries(
+          Object.entries(tableData as any).map(([status, orders]) => {
+            if (!Array.isArray(orders)) return [status, []];
+
+            const sortedArray = sortByCreatedAt(orders);
+            const withDisplayIds = addDisplayIds(sortedArray);
+
+            return [status, withDisplayIds];
+          })
+        );
+
+        return [tableId, processedStatuses];
+      })
+    );
+
+    setFilteredColumns({ ...localFiltered });
+    !selectedTable && setSelectedTable(Object.keys(localFiltered)[0]);
+  }, [columnCount, columns, selectedCategory, selectedTable]);
 
   return (
     <>
@@ -263,7 +280,11 @@ const SuperWaiterDashboard = () => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <>
               <span className="sr-only">Dropp</span>
-              <img className="h-5 lg:h-6 w-auto" src="/images/logo.svg" alt="" />
+              <img
+                className="h-5 lg:h-6 w-auto"
+                src="/images/logo.svg"
+                alt=""
+              />
             </>
           </div>
 
@@ -285,7 +306,7 @@ const SuperWaiterDashboard = () => {
       >
         <div className="px-2 flex justify-between items-center">
           <h3 className="font_bold text-2xl font-semibold">
-            {superWaiter?.table}
+            {superWaiter?.employeeAssigned}
           </h3>
 
           <div className="mt-2 lg:mt-0">
@@ -311,7 +332,7 @@ const SuperWaiterDashboard = () => {
                 <div
                   className={`absolute z-10 bg-white mb-2 w-32 lg:w-36 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                 >
-                  {Object.keys(tablesMap)?.map((item: any, i: number) => (
+                  {Object.keys(filteredColumns)?.map((item: any, i: number) => (
                     <Link
                       key={i}
                       to={`/restaurant/${superWaiter?.businessName}/${item}`}
@@ -335,12 +356,12 @@ const SuperWaiterDashboard = () => {
         <div className="w-full h-fit py-1">
           {/* TABLES */}
           <div className="w-full h-fit py-1">
-            {table?.length > 0 && (
+            {Object.keys(columnCount)?.length > 0 && (
               <div
                 className="flex flex-row h-fit w-full px-2 pb-1 rounded my-1 gap-x-3 overflow-x-scroll reduce-scrollbar"
                 style={{ maxHeight: "250px" }}
               >
-                {Object.keys(tablesMap).map((cat: any, i: number) => (
+                {Object.keys(columnCount).map((cat: any, i: number) => (
                   <div
                     key={i}
                     className={`flex flex-row justify-between items-center w-fit h-fit py-2 px-4 my-1 gap-x-1 rounded-full shrink-0 cursor-pointer ${
@@ -367,7 +388,7 @@ const SuperWaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            {tablesMap && tablesMap[cat]["New order"]?.length}
+                            {selectedTable && columnCount[cat].pending}
                           </p>
                         </div>
                       </div>
@@ -414,9 +435,8 @@ const SuperWaiterDashboard = () => {
                                 : "primary_txt_color"
                             }`}
                           >
-                            {tablesMap &&
-                              tablesMap[selectedTable] &&
-                              tablesMap[selectedTable][cat?.label]?.length}
+                            {selectedTable &&
+                              columnCount[selectedTable][cat?.value]}
                           </p>
                         </div>
                       </div>
@@ -431,34 +451,55 @@ const SuperWaiterDashboard = () => {
         <div className="rounded-2xl h-full w-full lg:p-5 mt-3 flex flex-col lg:flex-row justify-start items-center lg:items-start">
           <div className="w-full lg:w-8/12 h-full flex flex-col gap-x-5">
             <InfinityScroll
-              data={restaurantOrders}
-              getMore={getRestaurantOrders}
-              hasMore={hasMore}
-              
+              data={
+                (selectedTable &&
+                  filteredColumns[selectedTable][selectedCategory.value]) ||
+                []
+              }
+              getMore={loadMore}
+              hasMore={
+                selectedTable && hasMore[selectedTable][selectedCategory.value]
+              }
             >
               <div className="flex flex-col mt-2">
-                {tablesMap ? (
-                  tablesMap[selectedTable] ? (
-                    tablesMap[selectedTable][selectedCategory?.label] &&
-                    tablesMap[selectedTable][selectedCategory?.label].length >
-                      0 ? (
-                      tablesMap[selectedTable][selectedCategory?.label]?.map(
-                        (tableOrder: any, i: number) => {
-                          if(selectedCategory?.label !== 'Kitchen' && ['pending', 'completed'].includes(selectedCategory?.value)){
-                            return (<OrderItem
+                {filteredColumns ? (
+                  filteredColumns[selectedTable] ? (
+                    filteredColumns[selectedTable][selectedCategory?.value] &&
+                    filteredColumns[selectedTable][selectedCategory?.value]
+                      .length > 0 ? (
+                      filteredColumns[selectedTable][
+                        selectedCategory?.value
+                      ]?.map((tableOrder: any, i: number) => {
+                        if (
+                          selectedCategory?.value !== "Kitchen" &&
+                          ["pending", "completed"].includes(
+                            selectedCategory?.value
+                          )
+                        ) {
+                          return (
+                            <OrderItem
                               key={i}
                               order={tableOrder}
+                              page={page}
                               selectedOrder={selectedOrder}
                               ordersModal={ordersModal}
-                              openOrdersModal={() => openOrdersModal(tableOrder)}
+                              openOrdersModal={() =>
+                                openOrdersModal(tableOrder)
+                              }
                               closeOrdersModal={closeOrdersModal}
                               getTableOrders={getRestaurantOrders}
                               selectedCategory={selectedCategory?.value}
                               chef={chef}
-                              waiter={table.filter(item => item.table === selectedTable)[0]}
-                            />)
-                          }else{
-                            return (<MenuOrderItem
+                              table={
+                                Object.keys(filteredColumns).filter(
+                                  (item) => item === selectedTable
+                                )[0]
+                              }
+                            />
+                          );
+                        } else {
+                          return (
+                            <MenuOrderItem
                               key={i}
                               orderStatus={selectedCategory?.value}
                               secondOrderStatus="sent"
@@ -466,17 +507,23 @@ const SuperWaiterDashboard = () => {
                               order={tableOrder}
                               orderLength={tableOrder?.order?.length}
                               selectedOrder={selectedReadyOrder}
-                              ordersModal={ordersModal} 
+                              ordersModal={ordersModal}
                               selectedCategory={selectedCategory?.value}
-                              openOrdersModal={() => openOrdersModal(tableOrder)}
+                              openOrdersModal={() =>
+                                openOrdersModal(tableOrder)
+                              }
                               closeOrdersModal={() => closeOrdersModal()}
                               getTableOrders={getRestaurantOrders}
                               chef={chef}
-                              waiter={table.filter(item => item.table === selectedTable)[0]}
-                            />)
-                          }
+                              table={
+                                Object.keys(filteredColumns).filter(
+                                  (item) => item === selectedTable
+                                )[0]
+                              }
+                            />
+                          );
                         }
-                      )
+                      })
                     ) : (
                       <div>No orders for the selected category.</div>
                     )

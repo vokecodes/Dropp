@@ -17,6 +17,7 @@ import dinningMenuReducer from "../_redux/dinningMenu/dinningMenuSlice";
 import tableReducer from "../_redux/table/tableSlice";
 import waiterReducer from "../_redux/waiter/waiterSlice";
 import sectionReducer from "../_redux/section/sectionSlice";
+import cashierReducer from "../_redux/cashier/cashierSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   employees: employeeReducer,
   waiter: waiterReducer,
   section: sectionReducer,
+  cashier: cashierReducer,
 });
 
 export default rootReducer;
