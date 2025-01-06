@@ -286,7 +286,8 @@ const SalesReports = () => {
 
         const foodDetails = order.order
           ?.map(
-            (menu: any) => `${menu.menu.foodName} X ${menu.quantity}- ₦${menu.amount}`
+            (menu: any) =>
+              `${menu.menu.foodName} X ${menu.quantity}- ₦${menu.amount}`
           )
           .join("; ");
 
@@ -312,7 +313,7 @@ const SalesReports = () => {
             ? "gift"
             : order?.order[0]?.status === "archived"
             ? "void"
-            : order?.order[0]?.status || '---',
+            : order?.order[0]?.status || "---",
         ].join(",");
       });
 
@@ -331,22 +332,21 @@ const SalesReports = () => {
         breakdownOption
       ).then(({ data }) => {
         const csv = dineInConvertToCSV(data?.data);
-        
+
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
         const link = document.createElement("a");
-  
+
         if (link.download !== undefined) {
           const url = URL.createObjectURL(blob);
           link.setAttribute("href", url);
           link.setAttribute("download", "dine-in-orders.csv");
           link.style.visibility = "hidden";
-  
+
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
         }
       });
-
     } catch (err) {
       console.error("CSV Export Error:", err);
     } finally {
@@ -1498,35 +1498,37 @@ const SalesReports = () => {
                                     {transaction?.table?.table}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                    {transaction?.order?.map((menu: any, n) => (
+                                    {transaction?.order?.map((menu: any) => (
                                       <div
                                         key={generateUUIDBasedOnStringLength(
                                           "fgtr"
                                         )}
                                         className="flex items-center"
                                       >
-                                        <div className="h-10 w-10 flex-shrink-0">
-                                          <img
-                                            className="h-10 w-10 rounded-full object-cover"
-                                            src={menu?.menu.images[0]}
-                                            alt=""
-                                          />
-                                        </div>
+                                        {menu?.menu?.images.length > 0 && (
+                                          <div className="h-10 w-10 flex-shrink-0">
+                                            <img
+                                              className="h-10 w-10 rounded-full object-cover"
+                                              src={menu?.menu.images[0]}
+                                              alt=""
+                                            />
+                                          </div>
+                                        )}
                                         <div className="ml-4">
                                           <div className="font-medium text-wrap">
-                                            {menu?.menu.foodName} X{" "}
+                                            {menu?.menu?.foodName} X{" "}
                                             {menu?.quantity}
                                           </div>
                                           <div className="">
                                             ₦
                                             {parseInt(
-                                              menu?.menu.eventAmount
-                                                ? menu?.menu.eventAmount
-                                                : menu?.menu.discount
-                                                ? menu.menu.price -
-                                                  (menu.menu.price / 100) *
-                                                    menu.menu.discount
-                                                : menu.menu.price
+                                              menu?.menu?.eventAmount
+                                                ? menu?.menu?.eventAmount
+                                                : menu?.menu?.discount
+                                                ? menu?.menu?.price -
+                                                  (menu?.menu?.price / 100) *
+                                                    menu?.menu?.discount
+                                                : menu?.menu?.price
                                             ).toLocaleString()}
                                           </div>
                                         </div>
