@@ -27,9 +27,9 @@ import KitchenBoard from "../../components/KitchenBoard";
 import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
 
-// const socket = io(import.meta.env.VITE_BASE_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -81,10 +81,10 @@ const Kitchen = () => {
     pickup: 0,
   });
 
-  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
+  const sortByCreatedAt = (arr: { updatedAt: string }[]) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
+      const dateA = new Date(a.updatedAt).getTime();
+      const dateB = new Date(b.updatedAt).getTime();
       return dateB - dateA;
     });
   };
@@ -218,16 +218,16 @@ const Kitchen = () => {
   };
 
   // Listen for new orders from the server
-  // useEffect(() => {
-  //   socket.on("newKitchenOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrdersColumn();
-  //     receiveNotification();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useEffect(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrdersColumn();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
 
   useEffect(() => {
     const handleUnload = () => {
@@ -470,12 +470,8 @@ const Kitchen = () => {
         suffixes[order.parent] = 0;
       }
 
-      if (order?.parentStatus === "kitchen" && order?.status === "ready") {
-        setColumnCount((prevState) => ({
-          ...prevState,
-          pickup: prevState.pickup + 1,
-        }));
-      }
+      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
+      order.displayId = `${order.parent}-${suffix}`;
 
       suffixes[order.parent] += 1;
     });
@@ -1017,7 +1013,7 @@ const Kitchen = () => {
             {/* COMPLETED */}
             <KitchenBoard
               restaurantOrders={
-                filteredColumns["completed"] || filteredColumns["sent"]
+                (filteredColumns["completed"] || filteredColumns["sent"])
                   ? [
                       ...filteredColumns["completed"],
                       ...filteredColumns["sent"],

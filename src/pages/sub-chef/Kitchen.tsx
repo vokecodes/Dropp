@@ -29,9 +29,9 @@ import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
 import { getSubChefDineInMenuCategories } from "../../_redux/dinningMenu/dinningMenuCrud";
 
-// const socket = io(import.meta.env.VITE_BASE_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -218,16 +218,16 @@ const Kitchen = () => {
   };
 
   // Listen for new orders from the server
-  // useEffect(() => {
-  //   socket.on("newKitchenOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrdersColumn();
-  //     receiveNotification();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useEffect(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrdersColumn();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
 
   useEffect(() => {
     const handleUnload = () => {
