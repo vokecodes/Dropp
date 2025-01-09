@@ -121,7 +121,7 @@ export const NewMenuInputsSchema = Yup.object().shape({
 export const DineInNewMenuInputsSchema = Yup.object().shape({
   images: Yup.array(Yup.string()).required("Image is required."),
   foodName: Yup.string().required("Food name is required."),
-  price: Yup.string().required("Price is required."),
+  price: Yup.number().min(1).required("Price is required."),
   portion: Yup.string().required("Portion is required."),
   minimumQuantity: Yup.string().required("Minimum quantity is required."),
   description: Yup.string().required("Description is required."),
