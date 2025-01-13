@@ -20,7 +20,7 @@ import {
   };
   
   export const addCashier =
-    (data: any, closeOrdersModal: any, resetForm?: any) => (dispatch: any) => {
+    (data: any, closeOrdersModal: any, resetForm?: any, openModal?: any) => (dispatch: any) => {
       dispatch(startCall());
       return addQsrCashier(data)
         .then(({ data }) => {
@@ -28,6 +28,7 @@ import {
           resetForm();
           closeOrdersModal();
           dispatch(getCashier());
+          openModal();
         })
         .catch((err) => {
           const error = err?.response?.data;

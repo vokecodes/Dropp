@@ -1297,7 +1297,7 @@ const SuperAdminReport = () => {
                                 <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
                                   {transaction?.order?.map((menu: any) => (
                                     <div
-                                      key={menu?._id}
+                                      key={menu?.id}
                                       className="flex items-center"
                                     >
                                       <div className="h-10 w-10 flex-shrink-0">
