@@ -38,11 +38,13 @@ import { deleteAQsrSubAdmin, registerAQsrSubAdmin } from "../../../_redux/user/u
 const SuperAdminCashiers = () => {
   const dispatch = useAppDispatch();
 
-  const { loading, cashiers, section, subAdmins } = useSelector(
+  const { loading, cashiers, section, subAdmins, cashierError, subAdminError } = useSelector(
     (state: any) => ({
       cashiers: state.cashier.cashiers,
       subAdmins: state.user.subAdmins,
       loading: state.cashier.loading,
+      cashierError: state.cashier.error,
+      subAdminError: state.user.error
     }),
     shallowEqual
   );
@@ -56,6 +58,9 @@ const SuperAdminCashiers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState();
   const [selectedLoading, setSelectedLoading] = useState();
+  const [placed, setPlaced] = useState(false);
+  const openModal = () => setPlaced(true);
+  const closeModal = () => setPlaced(false);
 
   // CASHIER
   const [openEditCashier, setOpenEditCashier] = useState<any>(null);
@@ -89,9 +94,6 @@ const SuperAdminCashiers = () => {
   };
 
 
-
-
-
   const {
     handleChange,
     handleSubmit,
@@ -113,7 +115,7 @@ const SuperAdminCashiers = () => {
             updateCashier(values, editCashier?._id, closeOrdersModal, resetForm)
           );
         } else {
-          await dispatch(addCashier(values, closeOrdersModal, resetForm));
+          await dispatch(addCashier(values, closeOrdersModal, resetForm, openModal));
         }
       }
       setOpenEditCashier(false);
@@ -140,6 +142,7 @@ const SuperAdminCashiers = () => {
         closeSubAdminModal();
         resetForm();
         dispatch(getQsrSubAdminAccount());
+        openModal();
       }
     } catch (error) {
       setAddErrorMessage(error?.response?.data?.message);
@@ -163,9 +166,6 @@ const SuperAdminCashiers = () => {
     }
   };
 
-  
-
-  
   
   return (
     <>
@@ -434,6 +434,12 @@ const SuperAdminCashiers = () => {
                   </div>
                 </div>
 
+                {cashierError && (
+                  <p className="text-sm text-center text-red-600 my-2">
+                    {cashierError}
+                  </p>
+                )}
+
                 <div className="mt-5 w-full">
                   <div className="w-5/6 mx-auto">
                     <OutlineButton
@@ -634,6 +640,68 @@ const SuperAdminCashiers = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </Modal>
+
+          {/* ORDER PLACED MODAL */}
+          <Modal
+            open={placed}
+            onClose={() => {
+                closeModal();
+            }}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+          >
+            <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
+                <div className="flex flex-col justify-between items-center p-0 h-full">
+                    <div
+                        className="h-fit my-3 w-100 w-full flex flex-col gap-y-10 min-h-60% lg:min-h-[80%]"
+                    >
+                        <div className="flex">
+                            <p className="flex-1 text-xl text-center font_bold black2"></p>
+                            <IoMdClose
+                                size={24}
+                                color="#8E8E8E"
+                                className="cursor-pointer"
+                                onClick={() => {
+                                closeModal();
+                                }}
+                            />
+                        </div>
+
+                        <div
+                        className="flex flex-col justify-center items-center h-full w-full mb-5 h-fit lg:min-h-[80%]"
+                        >
+                            <div className="flex flex-col justify-center items-center w-full">
+                                <div className="my-6 w-20 lg:w-28 h-20 lg:h-28 border-8 primary_border_color rounded-full flex justify-center items-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="#06c167"
+                                    className="w-10 lg:w-14 h-10 lg:h-14"
+                                >
+                                    <path
+                                    fillRule="evenodd"
+                                    d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
+                                    clipRule="evenodd"
+                                    />
+                                </svg>
+                                </div>
+                                <p className="my-3 text-lg lg:text-xl text-center font_bold black2">
+                                  User has been created successfully!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="my-3 lg:my-10 w-full">
+                        <Button
+                            title="Done"
+                            extraClasses="w-full p-3 rounded-full"
+                            onClick={() => closeModal()}
+                        />
+                    </div>
+                </div>
             </div>
           </Modal>
 
