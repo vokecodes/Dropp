@@ -12,7 +12,7 @@ const TextArea = ({
   disabled,
 }: any) => {
   return (
-    <div className="relative my-6">
+    <div className="relative my-5">
       <textarea
         // placeholder={placeholder}
         value={value}
@@ -22,7 +22,7 @@ const TextArea = ({
         rows={4}
         className={`block w-full rounded-xl border gray_border_color input_text font_medium py-4 pl-8 pr-4 sm:text-sm outline-none ${extraClasses}`}
       />
-      <label className="bg-white placeholder_text_container absolute left-5 -top-3 pointer-events-none">
+      <label className="placeholder_text_container absolute left-5 top-4 pointer-events-none">
         <p className="placeholder_text text-base input_text input_placeholder">
           {placeholder}
         </p>
