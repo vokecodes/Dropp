@@ -15,11 +15,8 @@ import KitchenButton from "../../components/KitchenButton";
 import { Link, useNavigate } from "react-router-dom";
 import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
-import moment from "moment";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import {
-  draggable,
-  dropTargetForElements,
   monitorForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import KitchenCard from "../../components/kitchenCard";
@@ -64,6 +61,7 @@ const Kitchen = () => {
     pending: true,
     cooking: true,
     ready: true,
+    sent: true,
     completed: true,
     declined: true,
     archived: true,
@@ -485,8 +483,10 @@ const Kitchen = () => {
   useEffect(() => {
     setFilteredColumns({});
 
-    const localFiltered = Object.fromEntries(
-      Object.entries(columns).map(([key, value]) => {
+    let localFiltered = Object.keys(columns).length ? { ...columns, "completed": [...columns["completed"], ...columns["sent"]] } : {}
+    
+    localFiltered = Object.fromEntries(
+      Object.entries(localFiltered).map(([key, value]) => {
         // Sort by 'createdAt' before returning
         const sortedArray = sortByCreatedAt(value as any[]);
 
@@ -1012,20 +1012,13 @@ const Kitchen = () => {
 
             {/* COMPLETED */}
             <KitchenBoard
-              restaurantOrders={
-                (filteredColumns["completed"] || filteredColumns["sent"])
-                  ? [
-                      ...filteredColumns["completed"],
-                      ...filteredColumns["sent"],
-                    ]
-                  : []
-              }
+              restaurantOrders={filteredColumns["completed"] || []}
               title="Completed"
               headerBg="bg-green-900"
               bodyBg="bg-gray-100"
               status="completed"
               getMore={loadMore}
-              hasMore={hasMore?.completed}
+              hasMore={hasMore?.completed || hasMore?.sent}
               columnCount={columnCount.completed + columnCount.sent}
               orders={
                 filteredColumns["completed"] &&

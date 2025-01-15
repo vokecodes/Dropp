@@ -64,6 +64,7 @@ const Kitchen = () => {
     pending: true,
     cooking: true,
     ready: true,
+    sent: true,
     completed: true,
     declined: true,
     archived: true,
@@ -81,10 +82,10 @@ const Kitchen = () => {
     pickup: 0,
   });
 
-  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
+  const sortByCreatedAt = (arr: { updatedAt: string }[]) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
+      const dateA = new Date(a.updatedAt).getTime();
+      const dateB = new Date(b.updatedAt).getTime();
       return dateB - dateA;
     });
   };
@@ -470,12 +471,8 @@ const Kitchen = () => {
         suffixes[order.parent] = 0;
       }
 
-      if (order?.parentStatus === "kitchen" && order?.status === "ready") {
-        setColumnCount((prevState) => ({
-          ...prevState,
-          pickup: prevState.pickup + 1,
-        }));
-      }
+      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
+      order.displayId = `${order.parent}-${suffix}`;
 
       suffixes[order.parent] += 1;
     });
@@ -489,7 +486,9 @@ const Kitchen = () => {
   useEffect(() => {
     setFilteredColumns({});
 
-    const localFiltered = Object.fromEntries(
+    let localFiltered = Object.keys(columns).length ? { ...columns, "completed": [...columns["completed"], ...columns["sent"]] } : {}
+    
+    localFiltered = Object.fromEntries(
       Object.entries(columns).map(([key, value]) => {
         // Sort by 'createdAt' before returning
         const sortedArray = sortByCreatedAt(value as any[]);
@@ -1016,20 +1015,13 @@ const Kitchen = () => {
 
             {/* COMPLETED */}
             <KitchenBoard
-              restaurantOrders={
-                filteredColumns["completed"] || filteredColumns["sent"]
-                  ? [
-                      ...filteredColumns["completed"],
-                      ...filteredColumns["sent"],
-                    ]
-                  : []
-              }
+              restaurantOrders={filteredColumns["completed"] || []}
               title="Completed"
               headerBg="bg-green-900"
               bodyBg="bg-gray-100"
               status="completed"
               getMore={loadMore}
-              hasMore={hasMore?.completed}
+              hasMore={hasMore?.completed || hasMore?.sent}
               columnCount={columnCount.completed + columnCount.sent}
               orders={
                 filteredColumns["completed"] &&
