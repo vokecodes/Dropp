@@ -9,12 +9,14 @@ import Input from "../../../components/CustomInput";
 import {
   cashierValues,
   QsrSubAdminValues,
+  terminalValues,
 } from "../../../utils/FormInitialValue";
 import { useFormik } from "formik";
 import { useAppDispatch } from "../../../redux/hooks";
 import {
   CashierInputsSchema,
   CreateQsrSubAdminSchema,
+  TerminalInputsSchema,
 } from "../../../utils/ValidationSchema";
 import { Chip, FormControlLabel, ListItemText } from "@mui/material";
 import EmptyState from "../../../components/EmptyState";
@@ -31,20 +33,45 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
-import { addCashier, deleteCashier, getCashier, updateCashier } from "../../../_redux/cashier/cashierAction";
+import {
+  addCashier,
+  addTerminal,
+  deleteCashier,
+  deleteTerminal,
+  getCashier,
+  getTerminals,
+  updateCashier,
+  updateTerminal,
+} from "../../../_redux/cashier/cashierAction";
 import { getQsrSubAdminAccount } from "../../../_redux/user/userAction";
-import { deleteAQsrSubAdmin, registerAQsrSubAdmin } from "../../../_redux/user/userCrud";
+import {
+  deleteAQsrSubAdmin,
+  registerAQsrSubAdmin,
+} from "../../../_redux/user/userCrud";
+
+const USER_TABS = ["Sub admin", "Cashiers", "Terminals"];
 
 const SuperAdminCashiers = () => {
   const dispatch = useAppDispatch();
 
-  const { loading, cashiers, section, subAdmins, cashierError, subAdminError } = useSelector(
+  const {
+    loading,
+    cashiers,
+    section,
+    subAdmins,
+    cashierError,
+    subAdminError,
+    terminals,
+    terminalError,
+  } = useSelector(
     (state: any) => ({
       cashiers: state.cashier.cashiers,
       subAdmins: state.user.subAdmins,
       loading: state.cashier.loading,
       cashierError: state.cashier.error,
-      subAdminError: state.user.error
+      subAdminError: state.user.error,
+      terminals: state.cashier.terminals,
+      terminalError: state.cashier.terminalError,
     }),
     shallowEqual
   );
@@ -52,7 +79,10 @@ const SuperAdminCashiers = () => {
   useEffect(() => {
     dispatch(getCashier());
     dispatch(getQsrSubAdminAccount());
+    dispatch(getTerminals());
   }, []);
+
+  const [selectedTab, setSelectedTab] = useState(USER_TABS[0]);
 
   const [togglePassword, setTogglePassword] = useState("password");
   const [isLoading, setIsLoading] = useState(false);
@@ -70,14 +100,18 @@ const SuperAdminCashiers = () => {
   const closeOrdersModal = () => setOrdersModal(false);
   const [selectedCashier, setSelectedCashier] = useState();
   const [openDetails, setOpenDetails] = useState(false);
-  const closeOpenDetails = () => {
-    setOpenDetails(false)
-  }
+  const closeOpenDetails = () => setOpenDetails(false);
 
+  // TERMINAL
+  const [openEditTerminal, setOpenEditTerminal] = useState<any>(null);
+  const [editTerminal, setEditTerminal] = useState<any>(null);
+  const [terminalModal, setTerminalModal] = useState(false);
+  const openTerminalModal = () => setTerminalModal(true);
+  const closeTerminalModal = () => setTerminalModal(false);
 
   // SUBADMIN
   const [editSubAdmin, setEditSubAdmin] = useState<any>(null);
-  const [showSubAdmin, setShowSubAdmin] = useState(false)
+  const [showSubAdmin, setShowSubAdmin] = useState(false);
   const [subAdminModal, setSubAdminModal] = useState(false);
   const openSubAdminModal = () => setSubAdminModal(true);
   const closeSubAdminModal = () => setSubAdminModal(false);
@@ -93,7 +127,6 @@ const SuperAdminCashiers = () => {
     setSelectedSubAdmin();
   };
 
-
   const {
     handleChange,
     handleSubmit,
@@ -104,18 +137,43 @@ const SuperAdminCashiers = () => {
     errors,
     touched,
   } = useFormik({
-    initialValues: subAdminModal ? QsrSubAdminValues : cashierValues,
-    validationSchema: subAdminModal ? CreateQsrSubAdminSchema : CashierInputsSchema,
+    initialValues: subAdminModal
+      ? QsrSubAdminValues
+      : terminalModal
+      ? terminalValues
+      : cashierValues,
+    validationSchema: subAdminModal
+      ? CreateQsrSubAdminSchema
+      : terminalModal
+      ? TerminalInputsSchema
+      : CashierInputsSchema,
     onSubmit: async () => {
       if (subAdminModal) {
         handleAddSubAdmin();
+      } else if (terminalModal) {
+        if (openEditTerminal) {
+          await dispatch(
+            updateTerminal(
+              values,
+              editTerminal?._id,
+              closeTerminalModal,
+              resetForm
+            )
+          );
+        } else {
+          await dispatch(
+            addTerminal(values, closeTerminalModal, resetForm, openModal)
+          );
+        }
       } else {
         if (openEditCashier) {
           await dispatch(
             updateCashier(values, editCashier?._id, closeOrdersModal, resetForm)
           );
         } else {
-          await dispatch(addCashier(values, closeOrdersModal, resetForm, openModal));
+          await dispatch(
+            addCashier(values, closeOrdersModal, resetForm, openModal)
+          );
         }
       }
       setOpenEditCashier(false);
@@ -123,10 +181,17 @@ const SuperAdminCashiers = () => {
     },
   });
 
-
   const deleteACashier = async (tableId) => {
     setSelectedLoading(tableId);
     await dispatch(deleteCashier(tableId));
+    setTimeout(() => {
+      setSelectedLoading();
+    }, 1200);
+  };
+
+  const deleteATerminal = async (tableId) => {
+    setSelectedLoading(tableId);
+    await dispatch(deleteTerminal(tableId));
     setTimeout(() => {
       setSelectedLoading();
     }, 1200);
@@ -166,7 +231,6 @@ const SuperAdminCashiers = () => {
     }
   };
 
-  
   return (
     <>
       <QsrDashboardLayout>
@@ -200,15 +264,38 @@ const SuperAdminCashiers = () => {
                     setValues(cashierValues);
                   }}
                 />
+
+                <OutlineButton
+                  title="Create a Terminal"
+                  extraClasses="w-fit p-3 rounded-full"
+                  onClick={() => {
+                    openTerminalModal();
+                    setEditTerminal(null);
+                    setValues(terminalValues);
+                  }}
+                />
               </div>
             </div>
 
             <div className="bg-white rounded-2xl w-full py-10 px-5 mt-3">
               <div className="flex flex-col items-center justify-start gap-y-4">
                 <div className="w-full h-full">
-                  <div className="lg:w-4/5 bg-white rounded-3xl py-8">
-                  <div className="w-full flex flex-row items-center justify-start gap-x-3 my-2">
-                      <span
+                  <div className="lg:w-4/5">
+                    <div className="w-full flex flex-row items-center justify-start gap-x-3 my-2">
+                      {USER_TABS.map((tab: any, i: number) => (
+                        <span
+                          className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
+                            selectedTab === tab
+                              ? "primary_bg_color text-white"
+                              : "bg-[#EDECEC]"
+                          }`}
+                          onClick={() => setSelectedTab(tab)}
+                        >
+                          {tab}
+                        </span>
+                      ))}
+
+                      {/* <span
                         className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
                           showSubAdmin
                             ? "bg-[#EDECEC]"
@@ -228,10 +315,10 @@ const SuperAdminCashiers = () => {
                         onClick={() => setShowSubAdmin(true)}
                       >
                         Sub admin
-                      </span>
+                      </span> */}
                     </div>
-                    
-                    {showSubAdmin ? (
+
+                    {selectedTab === USER_TABS[0] && (
                       <>
                         {subAdmins?.length > 0 ? (
                           <div className="grid grid-cols-1 lg:grid-cols-3 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
@@ -250,8 +337,13 @@ const SuperAdminCashiers = () => {
                                     </p>
                                   </div>
                                   <div className="w-fit h-fit">
-                                    <Chip label="See details" size="small" className="cursor-pointer bg-black text-white"
-                                    onClick={() => openSeeSubAdminModal(subAdmin)}
+                                    <Chip
+                                      label="See details"
+                                      size="small"
+                                      className="cursor-pointer bg-black text-white"
+                                      onClick={() =>
+                                        openSeeSubAdminModal(subAdmin)
+                                      }
                                     />
                                   </div>
                                 </div>
@@ -272,62 +364,126 @@ const SuperAdminCashiers = () => {
                           <EmptyState title="No sub admin yet..." />
                         )}
                       </>
-                    ) : (
+                    )}
+
+                    {selectedTab === USER_TABS[1] && (
                       <>
                         {cashiers?.length > 0 ? (
                           <div className="grid grid-cols-1 lg:grid-cols-3 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
-                            {cashiers
-                              ?.map((cashier: any, i: number) => (
-                                <div
-                                  key={i}
-                                  className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1"
-                                >
-                                  <div className="flex flex-row items-center justify-between">
-                                    <div className="flex-1 ">
-                                      <p className="text-xl text-black font_medium">
-                                        {cashier?.employeeName}
-                                      </p>
-                                      <p className="text-md primary_txt_color font_medium ">
-                                        Cashiers
-                                      </p>
-                                    </div>
-
-                                    <div className="flex flex-col items-right justify-start gap-y-2">
-                                      <Chip label="Details" size="small" onClick={() => {
-                                          setSelectedCashier(cashier)
-                                          setOpenDetails(true)}
-                                      } />
-
-                                      {cashier.isSubAdmin && (
-                                        <Chip label="Sub Admin" size="small" />
-                                      )}
-                                    </div>
+                            {cashiers?.map((cashier: any, i: number) => (
+                              <div
+                                key={i}
+                                className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1"
+                              >
+                                <div className="flex flex-row items-center justify-between">
+                                  <div className="flex-1 ">
+                                    <p className="text-xl text-black font_medium">
+                                      {cashier?.employeeName}
+                                    </p>
+                                    <p className="text-md primary_txt_color font_medium ">
+                                      Cashiers
+                                    </p>
                                   </div>
-                                  <div className="mt-3">
-                                    <Button
-                                      title="Edit"
-                                      extraClasses="w-full !rounded-full !py-1"
+
+                                  <div className="flex flex-col items-right justify-start gap-y-2">
+                                    <Chip
+                                      label="Details"
+                                      size="small"
                                       onClick={() => {
-                                        openOrdersModal();
-                                        setEditCashier(cashier);
-                                        setOpenEditCashier(true);
-                                        setValues(cashier);
+                                        setSelectedCashier(cashier);
+                                        setOpenDetails(true);
                                       }}
                                     />
-                                    <OutlineButton
-                                      title="Delete"
-                                      extraClasses="w-full my-2 !rounded-full !py-1"
-                                      loading={selectedLoading === cashier?._id}
+
+                                    {cashier.isSubAdmin && (
+                                      <Chip label="Sub Admin" size="small" />
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="mt-3">
+                                  <Button
+                                    title="Edit"
+                                    extraClasses="w-full !rounded-full !py-1"
+                                    onClick={() => {
+                                      openOrdersModal();
+                                      setEditCashier(cashier);
+                                      setOpenEditCashier(true);
+                                      setValues(cashier);
+                                    }}
+                                  />
+                                  <OutlineButton
+                                    title="Delete"
+                                    extraClasses="w-full my-2 !rounded-full !py-1"
+                                    loading={selectedLoading === cashier?._id}
+                                    onClick={() => {
+                                      deleteACashier(cashier?._id);
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <EmptyState title="No Cashiers yet..." />
+                        )}
+                      </>
+                    )}
+
+                    {selectedTab === USER_TABS[2] && (
+                      <>
+                        {terminals?.length > 0 ? (
+                          <div className="grid grid-cols-1 lg:grid-cols-3 justify-between items-center lg:gap-3 gap-y-2 auto-rows-fr">
+                            {terminals?.map((terminal: any, i: number) => (
+                              <div
+                                key={i}
+                                className="flex flex-col items-stretch justify-between bg-white p-6 rounded-2xl shadow-xl w-full h-full mx-1"
+                              >
+                                <div className="flex flex-row items-center justify-between">
+                                  <div className="flex-1 ">
+                                    <p className="text-xl text-black font_medium">
+                                      {terminal?.employeeName}
+                                    </p>
+                                    <p className="text-md primary_txt_color font_medium ">
+                                      Terminals
+                                    </p>
+                                  </div>
+
+                                  <div className="flex flex-col items-right justify-start gap-y-2">
+                                    <Chip
+                                      label="Details"
+                                      size="small"
                                       onClick={() => {
-                                        deleteACashier(cashier?._id);
+                                        setSelectedCashier(cashier);
+                                        setOpenDetails(true);
                                       }}
                                     />
                                   </div>
                                 </div>
-                              ))}
+                                <div className="mt-3">
+                                  <Button
+                                    title="Edit"
+                                    extraClasses="w-full !rounded-full !py-1"
+                                    onClick={() => {
+                                      setEditTerminal(terminal);
+                                      setValues(terminal);
+                                      openTerminalModal();
+                                      setOpenEditTerminal(true);
+                                    }}
+                                  />
+                                  <OutlineButton
+                                    title="Delete"
+                                    extraClasses="w-full my-2 !rounded-full !py-1"
+                                    loading={selectedLoading === terminal?._id}
+                                    onClick={() => {
+                                      deleteATerminal(terminal?._id);
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         ) : (
-                          <EmptyState title="No Cashiers yet..." />
+                          <EmptyState title="No Terminals yet..." />
                         )}
                       </>
                     )}
@@ -368,7 +524,6 @@ const SuperAdminCashiers = () => {
                     className="flex flex-col justify-start items-center h-full w-full mb-5"
                     style={{ minHeight: "80%" }}
                   >
-
                     <Input
                       type="text"
                       placeholder="Cashier name"
@@ -454,6 +609,104 @@ const SuperAdminCashiers = () => {
             </div>
           </Modal>
 
+          {/* ADD TERMINAL */}
+          <Modal
+            open={terminalModal}
+            onClose={closeTerminalModal}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+          >
+            <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-4/5 -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-4 lg:p-7 my-10 outline-none overflow-y-scroll">
+              <div className="flex flex-col justify-between items-center p-0 h-fit">
+                <div
+                  className="h-fit my-3 w-full flex flex-col"
+                  style={{ minHeight: "80%" }}
+                >
+                  <div className="flex flex-row w-full py-1 ">
+                    <p className="w-10/12 text-center font_medium font-bold text-xl">
+                      {openEditTerminal ? "Edit Terminal" : "Add Terminal"}
+                    </p>
+                    <div className="w-2/12 flex flex-row items-center justify-center">
+                      <IoMdClose
+                        size={24}
+                        color="#8E8E8E"
+                        className="cursor-pointer self-end"
+                        onClick={closeTerminalModal}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className="flex flex-col justify-start items-center h-full w-full mb-5"
+                    style={{ minHeight: "80%" }}
+                  >
+                    <Input
+                      type="text"
+                      placeholder="Terminal"
+                      name="terminal"
+                      container="w-full"
+                      onChange={handleChange}
+                      value={values.terminal}
+                      error={
+                        errors.terminal && touched.terminal && errors.terminal
+                      }
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Cashier name"
+                      name="employeeName"
+                      container="w-full"
+                      onChange={handleChange}
+                      value={values.employeeName}
+                      error={
+                        errors.employeeName &&
+                        touched.employeeName &&
+                        errors.employeeName
+                      }
+                    />
+                    <Input
+                      placeholder="Password"
+                      name="password"
+                      container="w-full"
+                      type={togglePassword}
+                      password={true}
+                      onChange={handleChange}
+                      value={values.password}
+                      error={
+                        errors.password && touched.password && errors.password
+                      }
+                      onClickPassword={() => {
+                        const localValue = togglePassword;
+                        if (localValue === "password") {
+                          setTogglePassword("text");
+                        } else {
+                          setTogglePassword("password");
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {terminalError && (
+                  <p className="text-sm text-center text-red-600 my-2">
+                    {terminalError}
+                  </p>
+                )}
+
+                <div className="mt-5 w-full">
+                  <div className="w-5/6 mx-auto">
+                    <OutlineButton
+                      title="Save"
+                      extraClasses="w-full p-3 rounded-full"
+                      loading={loading}
+                      onClick={handleSubmit}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal>
+
           <Modal
             open={openDetails}
             onClose={closeOpenDetails}
@@ -479,18 +732,18 @@ const SuperAdminCashiers = () => {
 
                   <div className="mt-5 flex flex-col justify-start h-full w-full mb-5">
                     <p className="text-lg text-black font_medium">
-                        Cashier Name: {selectedCashier?.employeeName}
+                      Cashier Name: {selectedCashier?.employeeName}
                     </p>
                     <p className="text-lg text-black font_medium ">
-                        Cashier ID: {selectedCashier?.employeeID}
+                      Cashier ID: {selectedCashier?.employeeID}
                     </p>
                     {selectedCashier?.whatsappNumber && (
-                        <p className="text-lg text-black font_medium ">
+                      <p className="text-lg text-black font_medium ">
                         Whatsapp Number: {selectedCashier?.whatsappNumber}
-                        </p>
+                      </p>
                     )}
                     <p className="text-lg text-black font_medium ">
-                        Password: {selectedCashier?.password}
+                      Password: {selectedCashier?.password}
                     </p>
                   </div>
                 </div>
@@ -647,64 +900,59 @@ const SuperAdminCashiers = () => {
           <Modal
             open={placed}
             onClose={() => {
-                closeModal();
+              closeModal();
             }}
             aria-labelledby="parent-modal-title"
             aria-describedby="parent-modal-description"
           >
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
-                <div className="flex flex-col justify-between items-center p-0 h-full">
-                    <div
-                        className="h-fit my-3 w-100 w-full flex flex-col gap-y-10 min-h-60% lg:min-h-[80%]"
-                    >
-                        <div className="flex">
-                            <p className="flex-1 text-xl text-center font_bold black2"></p>
-                            <IoMdClose
-                                size={24}
-                                color="#8E8E8E"
-                                className="cursor-pointer"
-                                onClick={() => {
-                                closeModal();
-                                }}
-                            />
-                        </div>
+              <div className="flex flex-col justify-between items-center p-0 h-full">
+                <div className="h-fit my-3 w-100 w-full flex flex-col gap-y-10 min-h-60% lg:min-h-[80%]">
+                  <div className="flex">
+                    <p className="flex-1 text-xl text-center font_bold black2"></p>
+                    <IoMdClose
+                      size={24}
+                      color="#8E8E8E"
+                      className="cursor-pointer"
+                      onClick={() => {
+                        closeModal();
+                      }}
+                    />
+                  </div>
 
-                        <div
-                        className="flex flex-col justify-center items-center h-full w-full mb-5 h-fit lg:min-h-[80%]"
+                  <div className="flex flex-col justify-center items-center h-full w-full mb-5 h-fit lg:min-h-[80%]">
+                    <div className="flex flex-col justify-center items-center w-full">
+                      <div className="my-6 w-20 lg:w-28 h-20 lg:h-28 border-8 primary_border_color rounded-full flex justify-center items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="#06c167"
+                          className="w-10 lg:w-14 h-10 lg:h-14"
                         >
-                            <div className="flex flex-col justify-center items-center w-full">
-                                <div className="my-6 w-20 lg:w-28 h-20 lg:h-28 border-8 primary_border_color rounded-full flex justify-center items-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="#06c167"
-                                    className="w-10 lg:w-14 h-10 lg:h-14"
-                                >
-                                    <path
-                                    fillRule="evenodd"
-                                    d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
-                                    clipRule="evenodd"
-                                    />
-                                </svg>
-                                </div>
-                                <p className="my-3 text-lg lg:text-xl text-center font_bold black2">
-                                  User has been created successfully!
-                                </p>
-                            </div>
-                        </div>
+                          <path
+                            fillRule="evenodd"
+                            d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <p className="my-3 text-lg lg:text-xl text-center font_bold black2">
+                        User has been created successfully!
+                      </p>
                     </div>
-
-                    <div className="my-3 lg:my-10 w-full">
-                        <Button
-                            title="Done"
-                            extraClasses="w-full p-3 rounded-full"
-                            onClick={() => closeModal()}
-                        />
-                    </div>
+                  </div>
                 </div>
+
+                <div className="my-3 lg:my-10 w-full">
+                  <Button
+                    title="Done"
+                    extraClasses="w-full p-3 rounded-full"
+                    onClick={() => closeModal()}
+                  />
+                </div>
+              </div>
             </div>
           </Modal>
-
         </>
       </QsrDashboardLayout>
     </>

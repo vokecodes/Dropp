@@ -37,3 +37,22 @@ export const updateCashierQsrSubAdmin = (data: any, tableId: string) => {
 export const deleteCashierQsrSubAdmin = (tableId: string) => {
   return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/${tableId}/cashier`);
 };
+
+// TERMINAL
+export const getQsrTerminals = () => {
+  return SERVER.get(`${QSR_CASHIER_URL}/terminal`);
+};
+
+export const addQsrTerminal = (data: any) => {
+  return SERVER.post(`${QSR_CASHIER_URL}/terminal`, { ...data });
+};
+
+export const updateQsrTerminal = (data: any, tableId: string) => {
+  return SERVER.patch(`${QSR_CASHIER_URL}/terminal/${tableId}`, {
+    ...data,
+  });
+};
+
+export const deleteQsrTerminal = (tableId: string) => {
+  return SERVER.delete(`${QSR_CASHIER_URL}/terminal/${tableId}`);
+};

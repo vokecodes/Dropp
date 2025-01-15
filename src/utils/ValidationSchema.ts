@@ -137,6 +137,12 @@ export const CashierInputsSchema = Yup.object().shape({
   password: Yup.string().required("Password is required."),
 });
 
+export const TerminalInputsSchema = Yup.object().shape({
+  terminal: Yup.string().required("Terminal is required."),
+  employeeName: Yup.string().required("Employee name is required."),
+  password: Yup.string().required("Password is required."),
+});
+
 export const WaiterTableInputsSchema = Yup.object().shape({
   section: Yup.string().required("Section is required."),
   employeeAssigned: Yup.string().required("Employee name is required."),
