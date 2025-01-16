@@ -24,8 +24,8 @@ export const updateChefBusiness = (data: any) => {
 export const getABusinessByName = (chefName: any) =>
   SERVER.get(`${CHEF_BUSINESS_URL}/name/${chefName}`);
 
-export const getABusinessRestaurantByName = (chefName: any) =>
-  SERVER.get(`${CHEF_BUSINESS_URL}/restaurant/${chefName}`);
+export const getABusinessRestaurantByName = (chefName: any, hideMenus = false) =>
+  SERVER.get(`${CHEF_BUSINESS_URL}/restaurant/${chefName}/${hideMenus}`);
 
 export const getABusinessRestaurantOrderByName = (chefName: any) =>
   SERVER.get(`${CHEF_BUSINESS_URL}/restaurant-orders/${chefName}`);
