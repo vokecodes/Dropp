@@ -152,7 +152,6 @@ export const RestaurantCheckoutValues = {
 
 export const QsrCheckoutValues = {
   name: "",
-  email: "",
   phoneNumber: "",
 };
 

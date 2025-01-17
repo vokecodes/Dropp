@@ -9,7 +9,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import ColoredSpinner from "../../../components/ColoredSpinner";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { CHEF_ROUTES, QSR_ROUTES } from "../../../routes/routes";
+import { CASHIER_ROUTES, CHEF_ROUTES, QSR_ROUTES } from "../../../routes/routes";
 import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
 import { IoSearchSharp } from "react-icons/io5";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -171,34 +171,43 @@ const CashierOrderPage = () => {
         });
       };
 
-      const handlePayment = (orderId: string) => {
-        const handler = window.PaystackPop.setup({
-          key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
-          email: orderItem.email,
-          amount: Number(amount) * 100,
-          ref: orderId, // Use the generated order ID as a reference
-          metadata: {
-            transactionType: "QSR_ORDER",
-          },
-          onClose: () => alert("Transaction was not completed, window closed."),
-          callback: (response: any) => {
-            resetCartView();
-            dispatch(clearCart());
-            setCartMenu([]);
-            setOrderId(orderId);
-            openVerifyPaymentModal();
-            closeCartModal();
-            verifyTransaction(orderId);
-          },
-        });
+      // const handlePayment = (orderId: string) => {
+      //   const handler = window.PaystackPop.setup({
+      //     key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+      //     email: orderItem.email,
+      //     amount: Number(amount) * 100,
+      //     ref: orderId, // Use the generated order ID as a reference
+      //     metadata: {
+      //       transactionType: "QSR_ORDER",
+      //     },
+      //     onClose: () => alert("Transaction was not completed, window closed."),
+      //     callback: (response: any) => {
+      //       resetCartView();
+      //       dispatch(clearCart());
+      //       setCartMenu([]);
+      //       setOrderId(orderId);
+      //       openVerifyPaymentModal();
+      //       closeCartModal();
+      //       verifyTransaction(orderId);
+      //     },
+      //   });
 
-        handler.openIframe();
+      //   handler.openIframe();
+      // };
+
+      const handleSuccess = (orderId: string) => {
+        resetCartView();
+        dispatch(clearCart());
+        setCartMenu([]);
+        setOrderId(orderId);
+        openModal();
       };
-
+      
       const { data } = await createOrEditOrder();
 
       if (data.success) {
-        handlePayment(data.data.orderId);
+        // handlePayment(data.data.orderId);
+        handleSuccess(data.data.orderId);
       }
     } catch (err) {
       handleClickOpen();
@@ -349,7 +358,7 @@ const CashierOrderPage = () => {
                   
                 `}
               >
-                <Link className="flex items-center" to={QSR_ROUTES.linkQsrMenu}>
+                <Link className="flex items-center" to={CASHIER_ROUTES.linkCashierMenu}>
                   <OutlineButton
                     title="Menu Board"
                     extraClasses="px-8 py-2 mr-3"
@@ -508,7 +517,7 @@ const CashierOrderPage = () => {
                   <div className="flex flex-col lg:flex-row justify-between items-center gap-y-2 lg:gap-y-0 lg:gap-x-3">
                     <Link
                       className="flex items-center"
-                      to={QSR_ROUTES.linkQsrMenu}
+                      to={CASHIER_ROUTES.linkCashierMenu}
                     >
                       <OutlineButton
                         title="Menu Board"
@@ -622,10 +631,7 @@ const CashierOrderPage = () => {
                     </svg>
                   </div>
                   <p className="my-3 text-lg lg:text-xl text-center font_bold black2">
-                    Your order has been received!
-                  </p>
-                  <p className="text-sm lg:text-lg text-neutral-600 lg:text-black font_medium text-center">
-                    Check your email/WhatsApp to track order status.
+                    Your order is a success!
                   </p>
                 </div>
               </div>
