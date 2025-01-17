@@ -106,7 +106,7 @@ const CashierMenuPage = () => {
       try {
         const businessRestaurant = await getABusinessRestaurantByName(
           cashier.businessName,
-          true
+          false
         );
   
         if (businessRestaurant.data) {

@@ -194,7 +194,7 @@ const QsrCart = ({
 
       handleCheckout({
         order: cartOrder,
-        totalAmount: totalAmount + processingFee,
+        totalAmount: totalAmount,
         discountAmount,
         ...values,
         quick_service: chef?.profile?._id,
