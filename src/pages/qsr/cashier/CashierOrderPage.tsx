@@ -631,10 +631,7 @@ const CashierOrderPage = () => {
                     </svg>
                   </div>
                   <p className="my-3 text-lg lg:text-xl text-center font_bold black2">
-                    Your order has been received!
-                  </p>
-                  <p className="text-sm lg:text-lg text-neutral-600 lg:text-black font_medium text-center">
-                    Check your email/WhatsApp to track order status.
+                    Your order is a success!
                   </p>
                 </div>
               </div>
