@@ -75,12 +75,6 @@ const SignUpPage = () => {
     { value: "Others", label: "Others", type: "chef" },
   ];
 
-  const groupedRestaurantTypes = [
-    restaurantTypes.slice(0, 3),
-    restaurantTypes.slice(3, 6),
-    restaurantTypes.slice(6, 8),
-  ];
-
   const [restaurantType, setRestaurantType] = useState<any>("");
   const chooseResType = (resType: any) => {
     setRestaurantType(resType);
