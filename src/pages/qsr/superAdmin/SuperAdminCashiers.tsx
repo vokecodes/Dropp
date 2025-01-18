@@ -48,6 +48,7 @@ import {
   deleteAQsrSubAdmin,
   registerAQsrSubAdmin,
 } from "../../../_redux/user/userCrud";
+import { uuidGen } from "../../../utils/formatMethods";
 
 const USER_TABS = ["Sub-Admins", "Cashiers", "Terminals"];
 
@@ -88,7 +89,7 @@ const SuperAdminCashiers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState();
   const [selectedLoading, setSelectedLoading] = useState();
-  const [cashierType, setCashierType] = useState("subadmin");
+  const [cashierType, setCashierType] = useState("Sub-Admin");
   const [placed, setPlaced] = useState(false);
   const openModal = () => setPlaced(true);
   const closeModal = () => setPlaced(false);
@@ -266,6 +267,7 @@ const SuperAdminCashiers = () => {
                     openOrdersModal();
                     setEditCashier(null);
                     setValues(cashierValues);
+                    setOpenEditCashier(null)
                   }}
                 />
 
@@ -276,6 +278,7 @@ const SuperAdminCashiers = () => {
                     openTerminalModal();
                     setEditTerminal(null);
                     setValues(terminalValues);
+                    setOpenEditTerminal(null)
                   }}
                 />
               </div>
@@ -288,6 +291,7 @@ const SuperAdminCashiers = () => {
                     <div className="w-full flex flex-row items-center justify-start gap-x-3 my-2">
                       {USER_TABS.map((tab: any, i: number) => (
                         <span
+                          key={uuidGen()}
                           className={`rounded-full px-3 py-1 cursor-pointer font_medium ${
                             selectedTab === tab
                               ? "primary_bg_color text-white"
@@ -457,7 +461,7 @@ const SuperAdminCashiers = () => {
                                       label="Details"
                                       size="small"
                                       onClick={() => {
-                                        setSelectedCashier(cashier);
+                                        setSelectedCashier(terminal);
                                         setOpenDetails(true);
                                       }}
                                     />
