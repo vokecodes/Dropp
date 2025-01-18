@@ -49,7 +49,7 @@ import {
   registerAQsrSubAdmin,
 } from "../../../_redux/user/userCrud";
 
-const USER_TABS = ["Sub admin", "Cashiers", "Terminals"];
+const USER_TABS = ["Sub-Admins", "Cashiers", "Terminals"];
 
 const SuperAdminCashiers = () => {
   const dispatch = useAppDispatch();
@@ -88,6 +88,7 @@ const SuperAdminCashiers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState();
   const [selectedLoading, setSelectedLoading] = useState();
+  const [cashierType, setCashierType] = useState("subadmin");
   const [placed, setPlaced] = useState(false);
   const openModal = () => setPlaced(true);
   const closeModal = () => setPlaced(false);
@@ -161,6 +162,7 @@ const SuperAdminCashiers = () => {
             )
           );
         } else {
+          setCashierType('Terminal');
           await dispatch(
             addTerminal(values, closeTerminalModal, resetForm, openModal)
           );
@@ -171,6 +173,7 @@ const SuperAdminCashiers = () => {
             updateCashier(values, editCashier?._id, closeOrdersModal, resetForm)
           );
         } else {
+          setCashierType('Cashier');
           await dispatch(
             addCashier(values, closeOrdersModal, resetForm, openModal)
           );
@@ -207,6 +210,7 @@ const SuperAdminCashiers = () => {
         closeSubAdminModal();
         resetForm();
         dispatch(getQsrSubAdminAccount());
+        setCashierType('Sub-Admin');
         openModal();
       }
     } catch (error) {
@@ -244,7 +248,7 @@ const SuperAdminCashiers = () => {
 
               <div className="flex flex-col lg:flex-row justify-start items-center gap-x-3 gap-y-3 mx-auto md:mx-0">
                 <OutlineButton
-                  title="Create a sub admin"
+                  title="Create Sub-Admin"
                   extraClasses="w-full my-2 rounded-full"
                   blackTrue={true}
                   onClick={() => {
@@ -256,7 +260,7 @@ const SuperAdminCashiers = () => {
                 />
 
                 <Button
-                  title="Create a Cashier"
+                  title="Create Cashier"
                   extraClasses="w-fit p-3 rounded-full"
                   onClick={() => {
                     openOrdersModal();
@@ -266,7 +270,7 @@ const SuperAdminCashiers = () => {
                 />
 
                 <OutlineButton
-                  title="Create a Terminal"
+                  title="Create Terminal"
                   extraClasses="w-fit p-3 rounded-full"
                   onClick={() => {
                     openTerminalModal();
@@ -361,7 +365,7 @@ const SuperAdminCashiers = () => {
                             ))}
                           </div>
                         ) : (
-                          <EmptyState title="No sub admin yet..." />
+                          <EmptyState title="No Sub-Admins created..." />
                         )}
                       </>
                     )}
@@ -424,7 +428,7 @@ const SuperAdminCashiers = () => {
                             ))}
                           </div>
                         ) : (
-                          <EmptyState title="No Cashiers yet..." />
+                          <EmptyState title="No Cashiers created..." />
                         )}
                       </>
                     )}
@@ -483,7 +487,7 @@ const SuperAdminCashiers = () => {
                             ))}
                           </div>
                         ) : (
-                          <EmptyState title="No Terminals yet..." />
+                          <EmptyState title="No Terminal created..." />
                         )}
                       </>
                     )}
@@ -526,7 +530,7 @@ const SuperAdminCashiers = () => {
                   >
                     <Input
                       type="text"
-                      placeholder="Cashier name"
+                      placeholder="Cashier Name"
                       name="employeeName"
                       container="w-full"
                       onChange={handleChange}
@@ -777,7 +781,7 @@ const SuperAdminCashiers = () => {
 
                   <div className="mt-5 flex flex-col justify-start h-full w-full mb-5">
                     <p className="text-lg text-black font_medium">
-                      Full name: {selectedSubAdmin?.firstName}{" "}
+                      Full Name: {selectedSubAdmin?.firstName}{" "}
                       {selectedSubAdmin?.lastName}
                     </p>
                     <p className="text-lg text-black font_medium ">
@@ -804,7 +808,7 @@ const SuperAdminCashiers = () => {
                 <div className="h-fit my-3 w-full flex flex-col">
                   <div className="flex flex-row items-center">
                     <p className="flex-1 text-center font_medium font-bold text-xl">
-                      Add a sub admin
+                      Add Sub-Admin
                     </p>
                     <div className="">
                       <IoMdClose
@@ -937,7 +941,7 @@ const SuperAdminCashiers = () => {
                         </svg>
                       </div>
                       <p className="my-3 text-lg lg:text-xl text-center font_bold black2">
-                        User has been created successfully!
+                        { cashierType } created successfully!
                       </p>
                     </div>
                   </div>
