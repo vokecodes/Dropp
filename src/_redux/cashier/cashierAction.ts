@@ -2,15 +2,19 @@ import {
   addCashierQsrSubAdmin,
   addQsrCashier,
   addQsrTerminal,
+  addQsrTerminalQsrSubAdmin,
   deleteCashierQsrSubAdmin,
   deleteQsrCashier,
   deleteQsrTerminal,
+  deleteQsrTerminalQsrSubAdmin,
   getCashierQsrSubAdmin,
   getQsrCashier,
   getQsrTerminals,
+  getQsrTerminalsQsrSubAdmin,
   updateCashierQsrSubAdmin,
   updateQsrCashier,
   updateQsrTerminal,
+  updateQsrTerminalQsrSubAdmin,
 } from "./cashierCrud";
 import {
   startCall,
@@ -195,6 +199,67 @@ export const deleteTerminal = (menuId: string) => (dispatch: any) => {
     .then(({ data }) => {
       dispatch(getAddUpdateTerminal(data?.qsrCashier));
       dispatch(getTerminals());
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+      dispatch(catchTerminalError({ error: error?.message }));
+    });
+};
+
+export const getQsrSubAdminTerminals = () => (dispatch: any) => {
+  dispatch(startCall());
+  return getQsrTerminalsQsrSubAdmin()
+    .then(({ data }) => {
+      dispatch(getAddUpdateTerminal(data?.data));
+    })
+    .catch((err) => {
+      const error = err?.response?.data;
+
+      dispatch(catchTerminalError({ error: error?.message }));
+    });
+};
+
+export const addQsrSubAdminTerminal =
+  (data: any, closeOrdersModal: any, resetForm?: any, openModal?: any) =>
+  (dispatch: any) => {
+    dispatch(startCall());
+    return addQsrTerminalQsrSubAdmin(data)
+      .then(({ data }) => {
+        dispatch(getAddUpdateTerminal(data?.qsrCashier));
+        resetForm();
+        closeOrdersModal();
+        dispatch(getQsrSubAdminTerminals());
+        openModal();
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchTerminalError({ error: error?.message }));
+      });
+  };
+
+export const updateQsrSubAdminTerminal =
+  (data: any, menuId: string, closeOrdersModal: any, resetForm?: any) =>
+  (dispatch: any) => {
+    dispatch(startCall());
+    return updateQsrTerminalQsrSubAdmin(data, menuId)
+      .then(({ data }) => {
+        dispatch(getAddUpdateTerminal(data?.qsrCashier));
+        resetForm();
+        closeOrdersModal();
+        dispatch(getQsrSubAdminTerminals());
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(catchTerminalError({ error: error?.message }));
+      });
+  };
+
+export const deleteQsrSubAdminTerminal = (menuId: string) => (dispatch: any) => {
+  dispatch(startCall());
+  return deleteQsrTerminalQsrSubAdmin(menuId)
+    .then(({ data }) => {
+      dispatch(getAddUpdateTerminal(data?.qsrCashier));
+      dispatch(getQsrSubAdminTerminals());
     })
     .catch((err) => {
       const error = err?.response?.data;
