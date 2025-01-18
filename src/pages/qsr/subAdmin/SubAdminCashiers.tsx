@@ -101,7 +101,7 @@ const SubAdminCashiers = () => {
             <div className="flex flex-col md:flex-row w-full justify-between gap-y-2 md:gap-y-0">
               <div className="w-full flex flex-col lg:flex-row justify-start lg:justify-end items-center mx-auto md:mx-0">
                 <Button
-                  title="Create a Cashier"
+                  title="Create Cashier"
                   extraClasses="w-fit p-3 rounded-full"
                   onClick={() => {
                     openOrdersModal();
@@ -168,7 +168,7 @@ const SubAdminCashiers = () => {
                               ))}
                           </div>
                         ) : (
-                          <EmptyState title="No Cashiers yet..." />
+                          <EmptyState title="No Cashier created..." />
                         )}
                   </div>
                 </div>
@@ -210,7 +210,7 @@ const SubAdminCashiers = () => {
 
                     <Input
                       type="text"
-                      placeholder="Cashier name"
+                      placeholder="Cashier Name"
                       name="employeeName"
                       container="w-full"
                       onChange={handleChange}

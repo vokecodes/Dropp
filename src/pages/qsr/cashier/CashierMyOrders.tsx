@@ -441,6 +441,12 @@ const CashierMyOrders = () => {
                                       scope="col"
                                       className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
                                     >
+                                      Amount
+                                    </th>
+                                    {/* <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                                    >
                                       <Popover className="relative">
                                         {({ open }) => (
                                           <>
@@ -543,7 +549,7 @@ const CashierMyOrders = () => {
                                           </>
                                         )}
                                       </Popover>
-                                    </th>
+                                    </th> */}
                                     {/* <th
                                       scope="col"
                                       className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"

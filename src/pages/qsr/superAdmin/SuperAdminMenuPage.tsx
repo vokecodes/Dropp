@@ -341,7 +341,7 @@ const SuperAdminMenuPage = () => {
                             <div className="w-full lg:w-fit flex flex-row justify-between items-center lg:justify-start lg:gap-x-5">
 
                                 <h1 className="text-xl text-black font_medium mt-1.5 text-center lg:text-start w-full lg:w-fit">
-                                    Menu board
+                                    Menu Board
                                 </h1>
                             </div>
 
@@ -352,7 +352,7 @@ const SuperAdminMenuPage = () => {
                                     </div>
                                     <div className="flex-1 ml-4">
                                     <input
-                                        placeholder="Search menu"
+                                        placeholder="Search Menu"
                                         className="py-2 w-full lg:w-64 rounded-full input_text text-md font_regular outline-none"
                                         value={q}
                                         onChange={(e: any) => {
@@ -367,7 +367,7 @@ const SuperAdminMenuPage = () => {
 
                     <div className="flex flex-col lg:flex-row justify-between items-center gap-y-2 lg:gap-y-0 lg:gap-x-3">
                       <OutlineButton
-                        title="Add a new menu"
+                        title="Add New Menu"
                         extraClasses="!w-full lg:!w-52 px-8 py-2"
                         onClick={() => {
                           setValues(DineInNewMenuValues);
@@ -412,7 +412,7 @@ const SuperAdminMenuPage = () => {
                   </h2>
                   <div className="flex flex-col lg:flex-row justify-between items-center gap-y-2 lg:gap-y-0 lg:gap-x-3">
                     <OutlineButton
-                      title="Add a new menu"
+                      title="Add New Menu"
                       extraClasses="w-52 px-8 py-2"
                       onClick={() => {
                         setValues(DineInNewMenuValues);
@@ -443,7 +443,7 @@ const SuperAdminMenuPage = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
-                  {editMenu ? "Edit menu" : "Add a new menu"}
+                  {editMenu ? "Edit Menu" : "Add New Menu"}
                 </p>
                 <IoMdClose
                   size={24}
@@ -667,7 +667,7 @@ const SuperAdminMenuPage = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
-                  Copy menu
+                  Copy Menu
                 </p>
                 <IoMdClose
                   size={24}
@@ -889,7 +889,7 @@ const SuperAdminMenuPage = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
-                  Add a new category
+                  New Category
                 </p>
                 <IoMdClose
                   size={24}
@@ -918,7 +918,7 @@ const SuperAdminMenuPage = () => {
                           onClick={handleClickCategory}
                           className="primary_bg_color text-white text-xs rounded-lg py-1 px-2 cursor-pointer"
                         >
-                          Add category
+                          Add Category
                         </button>
                       </InputAdornment>
                     ),
@@ -962,7 +962,7 @@ const SuperAdminMenuPage = () => {
                 <div className="mt-10 absolute bottom-0 w-full">
                   <OutlineButton
                     loading={isLoadingCategories}
-                    title="Save Categories"
+                    title="Save"
                     extraClasses="w-full p-3 rounded-full px-8 py-2"
                     onClick={() => handleSaveCategory()}
                   />
