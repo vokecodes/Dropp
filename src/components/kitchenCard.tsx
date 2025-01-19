@@ -38,7 +38,7 @@ const KitchenCard = ({
         style={dragging ? { opacity: 0.4, borderColor: '#16a34a', borderStyle: 'solid', borderWidth: '6px' } : {}}
     >
         <p className="font-semibold font_medium">
-            {dateFormatter.format(new Date(order?.createdAt))}
+            {dateFormatter.format(new Date(order?.updatedAt))}
         </p>
         <p className="font-semibold font_medium mb-2">
             {order?.name} - {order?.table?.table} #

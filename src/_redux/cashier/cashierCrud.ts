@@ -3,21 +3,21 @@ import { QSR_CASHIER_URL } from "../urls";
 import { SERVER } from "../../config/axios";
 
 export const getQsrCashier = () => {
-  return SERVER.get(QSR_CASHIER_URL);
+  return SERVER.get(`${QSR_CASHIER_URL}/admin`);
 };
 
 export const addQsrCashier = (data: any) => {
-  return SERVER.post(QSR_CASHIER_URL, { ...data });
+  return SERVER.post(`${QSR_CASHIER_URL}/admin`, { ...data });
 };
 
 export const updateQsrCashier = (data: any, tableId: string) => {
-  return SERVER.patch(`${QSR_CASHIER_URL}/${tableId}`, {
+  return SERVER.patch(`${QSR_CASHIER_URL}/admin/${tableId}`, {
     ...data,
   });
 };
 
 export const deleteQsrCashier = (tableId: string) => {
-  return SERVER.delete(`${QSR_CASHIER_URL}/${tableId}`);
+  return SERVER.delete(`${QSR_CASHIER_URL}/admin/${tableId}`);
 };
 
 export const getCashierQsrSubAdmin = () => {
@@ -36,4 +36,41 @@ export const updateCashierQsrSubAdmin = (data: any, tableId: string) => {
 
 export const deleteCashierQsrSubAdmin = (tableId: string) => {
   return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/${tableId}/cashier`);
+};
+
+// TERMINAL
+export const getQsrTerminals = () => {
+  return SERVER.get(`${QSR_CASHIER_URL}/terminal`);
+};
+
+export const addQsrTerminal = (data: any) => {
+  return SERVER.post(`${QSR_CASHIER_URL}/terminal`, { ...data });
+};
+
+export const updateQsrTerminal = (data: any, tableId: string) => {
+  return SERVER.patch(`${QSR_CASHIER_URL}/terminal/${tableId}`, {
+    ...data,
+  });
+};
+
+export const deleteQsrTerminal = (tableId: string) => {
+  return SERVER.delete(`${QSR_CASHIER_URL}/terminal/${tableId}`);
+};
+
+export const getQsrTerminalsQsrSubAdmin = () => {
+  return SERVER.get(`${QSR_CASHIER_URL}/sub-admin/terminal`);
+};
+
+export const addQsrTerminalQsrSubAdmin = (data: any) => {
+  return SERVER.post(`${QSR_CASHIER_URL}/sub-admin/terminal`, { ...data });
+};
+
+export const updateQsrTerminalQsrSubAdmin = (data: any, tableId: string) => {
+  return SERVER.patch(`${QSR_CASHIER_URL}/sub-admin/terminal/${tableId}`, {
+    ...data,
+  });
+};
+
+export const deleteQsrTerminalQsrSubAdmin = (tableId: string) => {
+  return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/terminal/${tableId}`);
 };

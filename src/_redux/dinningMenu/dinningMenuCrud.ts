@@ -35,6 +35,12 @@ export const updateQsrSubAdminDineInMenuCrud = (data: any, menuId: string) => {
   });
 };
 
+export const updateQsrCashierDineInMenuCrud = (data: any, menuId: string, chefId: string) => {
+  return SERVER.patch(`${QSR_CASHIER_URL}/cashier/dinning-menu/${chefId}/${menuId}`, {
+    ...data,
+  });
+};
+
 export const deleteQsrSubAdminDineInMenuCrud = (menuId: string) => {
   return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/dinning-menu/${menuId}`);
 };

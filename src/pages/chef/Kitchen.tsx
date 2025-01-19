@@ -15,11 +15,8 @@ import KitchenButton from "../../components/KitchenButton";
 import { Link, useNavigate } from "react-router-dom";
 import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
-import moment from "moment";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import {
-  draggable,
-  dropTargetForElements,
   monitorForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import KitchenCard from "../../components/kitchenCard";
@@ -27,9 +24,9 @@ import KitchenBoard from "../../components/KitchenBoard";
 import { SoundNotification } from "../../components/SoundNotification";
 import io from "socket.io-client";
 
-// const socket = io(import.meta.env.VITE_BASE_URL, {
-//   withCredentials: true,
-// });
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  withCredentials: true,
+});
 
 const DECLINE_REASONS = [
   "Meal unavailable",
@@ -64,6 +61,7 @@ const Kitchen = () => {
     pending: true,
     cooking: true,
     ready: true,
+    sent: true,
     completed: true,
     declined: true,
     archived: true,
@@ -81,10 +79,10 @@ const Kitchen = () => {
     pickup: 0,
   });
 
-  const sortByCreatedAt = (arr: { createdAt: string }[]) => {
+  const sortByCreatedAt = (arr: { updatedAt: string }[]) => {
     return arr.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
+      const dateA = new Date(a.updatedAt).getTime();
+      const dateB = new Date(b.updatedAt).getTime();
       return dateB - dateA;
     });
   };
@@ -218,16 +216,16 @@ const Kitchen = () => {
   };
 
   // Listen for new orders from the server
-  // useEffect(() => {
-  //   socket.on("newKitchenOrder", (newOrder) => {
-  //     // Call getRestaurantOrders to update the orders
-  //     getRestaurantOrdersColumn();
-  //     receiveNotification();
-  //   });
-  //   return () => {
-  //     socket.off("newRestaurantOrder");
-  //   };
-  // }, []);
+  useEffect(() => {
+    socket.on("newKitchenOrder", (newOrder) => {
+      // Call getRestaurantOrders to update the orders
+      getRestaurantOrdersColumn();
+      receiveNotification();
+    });
+    return () => {
+      socket.off("newRestaurantOrder");
+    };
+  }, []);
 
   useEffect(() => {
     const handleUnload = () => {
@@ -470,12 +468,8 @@ const Kitchen = () => {
         suffixes[order.parent] = 0;
       }
 
-      if (order?.parentStatus === "kitchen" && order?.status === "ready") {
-        setColumnCount((prevState) => ({
-          ...prevState,
-          pickup: prevState.pickup + 1,
-        }));
-      }
+      const suffix = String.fromCharCode(97 + suffixes[order.parent]);
+      order.displayId = `${order.parent}-${suffix}`;
 
       suffixes[order.parent] += 1;
     });
@@ -489,8 +483,10 @@ const Kitchen = () => {
   useEffect(() => {
     setFilteredColumns({});
 
-    const localFiltered = Object.fromEntries(
-      Object.entries(columns).map(([key, value]) => {
+    let localFiltered = Object.keys(columns).length ? { ...columns, "completed": [...columns["completed"], ...columns["sent"]] } : {}
+    
+    localFiltered = Object.fromEntries(
+      Object.entries(localFiltered).map(([key, value]) => {
         // Sort by 'createdAt' before returning
         const sortedArray = sortByCreatedAt(value as any[]);
 
@@ -1016,20 +1012,13 @@ const Kitchen = () => {
 
             {/* COMPLETED */}
             <KitchenBoard
-              restaurantOrders={
-                filteredColumns["completed"] || filteredColumns["sent"]
-                  ? [
-                      ...filteredColumns["completed"],
-                      ...filteredColumns["sent"],
-                    ]
-                  : []
-              }
+              restaurantOrders={filteredColumns["completed"] || []}
               title="Completed"
               headerBg="bg-green-900"
               bodyBg="bg-gray-100"
               status="completed"
               getMore={loadMore}
-              hasMore={hasMore?.completed}
+              hasMore={hasMore?.completed || hasMore?.sent}
               columnCount={columnCount.completed + columnCount.sent}
               orders={
                 filteredColumns["completed"] &&

@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 import { useSelector, shallowEqual } from "react-redux";
-import { CiUser } from "react-icons/ci";
 import Hotjar from "@hotjar/browser";
 import BannerCard from "../../../components/BannerCard";
-import CheckItem from "../../../components/CheckItem";
 import DOrderCard from "../../../components/DOrderCard";
 import PageTitle from "../../../components/PageTitle";
 import { useAppDispatch } from "../../../redux/hooks";
-import { CHEF_ROUTES } from "../../../routes/routes";
+import { QSR_ROUTES } from "../../../routes/routes";
 import { getBusiness } from "../../../_redux/business/businessAction";
 import { getPayment } from "../../../_redux/payment/paymentAction";
 import {
@@ -21,7 +19,7 @@ import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
 
 const SuperAdminDashboard = () => {
   const dispatch = useAppDispatch();
-  const { user, business, payment, wallet, restaurantWallet, orders } =
+  const { user, business, payment, wallet, restaurantWallet, orders, dashboard } =
     useSelector(
       (state: any) => ({
         user: state.user.user,
@@ -30,6 +28,7 @@ const SuperAdminDashboard = () => {
         wallet: state.user.wallet,
         orders: state.orders.orders,
         restaurantWallet: state.user.restaurantWallet,
+        dashboard: state.user.dashboard,
       }),
       shallowEqual
     );
@@ -93,17 +92,13 @@ const SuperAdminDashboard = () => {
               <div className="my-5 flex justify-between">
                 <DOrderCard
                   title="New orders"
-                  total={
-                    orders?.filter((o: any) => o.status === "processed")?.length
-                  }
-                  to={CHEF_ROUTES.linkChefOrders}
+                  total={dashboard?.orders || 0}
+                  to={QSR_ROUTES.qsrReports}
                 />
                 <DOrderCard
                   title="Total orders"
-                  total={
-                    orders?.filter((o: any) => o.status === "completed")?.length
-                  }
-                  to={CHEF_ROUTES.linkChefOrders}
+                  total={dashboard?.orders || 0}
+                  to={QSR_ROUTES.qsrReports}
                 />
               </div>
               <div>

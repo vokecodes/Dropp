@@ -11,6 +11,7 @@ import {
   addQsrSubAdminDineInMenuCrud,
   updateQsrSubAdminDineInMenuCrud,
   deleteQsrSubAdminDineInMenuCrud,
+  updateQsrCashierDineInMenuCrud,
 } from "./dinningMenuCrud";
 import {
   startCall,
@@ -136,6 +137,19 @@ export const showHideQsrSubAdminDineInMenu =
     return updateQsrSubAdminDineInMenuCrud(data, menuId)
       .then(({ data }) => {
         dispatch(showHideDinningMenuUpdate(data?.dinningMenu));
+      })
+      .catch((err) => {
+        const error = err?.response?.data;
+        dispatch(hideCatchError({ error: error?.message }));
+      });
+  };
+
+  export const showHideQsrCashierDineInMenu =
+  (data: any, menuId: string, chefId: string, getChef: any) => (dispatch: any) => {
+    dispatch(hideStartCall());
+    return updateQsrCashierDineInMenuCrud(data, menuId, chefId)
+      .then(({ data }) => {
+        getChef();
       })
       .catch((err) => {
         const error = err?.response?.data;
