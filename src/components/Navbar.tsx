@@ -244,6 +244,21 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
     },
     {
       icon: (
+        <CgFileDocument
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefOrders
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Orders",
+      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
+      to: CHEF_ROUTES.linkChefOrders,
+    },
+    {
+      icon: (
         <CiForkAndKnife
           size={24}
           color={

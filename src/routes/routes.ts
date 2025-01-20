@@ -193,8 +193,6 @@ export const CASHIER_ROUTES = {
   linkCashierLogin: "/cashier",
   cashierOrders: "orders",
   linkCashierOrders: "/cashier/orders",
-  cashierMenu: "menu",
-  linkCashierMenu: "/cashier/menu",
 };
 
 export const ADMIN_ROUTES = {

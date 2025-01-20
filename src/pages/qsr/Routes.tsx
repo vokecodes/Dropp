@@ -16,7 +16,6 @@ import SubAdminMenuPage from "./subAdmin/SubAdminMenuPage";
 import QsrSubAdminSettings from "./subAdmin/SubAdminSettings";
 import CashierOrderPage from "./cashier/CashierOrderPage";
 import CashierMyOrders from "./cashier/CashierMyOrders";
-import CashierMenuPage from "./cashier/CashierMenuPage";
 
 export const QsrRoutes = () => {
   const { auth } = useSelector(
@@ -78,7 +77,6 @@ export const CashierRoutes = () => {
           <Route index element={cashier ? <CashierOrderPage /> : <CashierLogin />} />
 
           <Route path={CASHIER_ROUTES.cashierOrders} element={<CashierMyOrders />} />
-          <Route path={QSR_ROUTES.qsrMenu} element={<CashierMenuPage />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>

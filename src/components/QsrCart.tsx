@@ -24,7 +24,8 @@ import AlertDialog from "./AlertDialog";
 
 const deliveryFormInputs = [
   { type: "text", placeholder: "Name", name: "name" },
-  { type: "text", placeholder: "Phone Number", name: "phoneNumber" },
+  { type: "email", placeholder: "Email", name: "email" },
+  { type: "text", placeholder: "WhatsApp No.", name: "phoneNumber" },
 ];
 
 const QsrCart = ({
@@ -190,16 +191,7 @@ const QsrCart = ({
     initialValues: QsrCheckoutValues,
     validationSchema: QsrCheckoutSchema,
     onSubmit: (values) => {
-      // openPayNowModal();
-
-      handleCheckout({
-        order: cartOrder,
-        totalAmount: totalAmount,
-        discountAmount,
-        ...values,
-        quick_service: chef?.profile?._id,
-        cartMenu,
-      });
+      openPayNowModal();
     },
   });
 
@@ -234,118 +226,78 @@ const QsrCart = ({
             </p>
         </div>
         {cartView && (
-          <div className="w-full grow flex flex-col items-stretch justify-start">
+          <div className="w-full h-full grow flex flex-col items-stretch justify-between">
             {cartMenu.length > 0 ? (
                 <>
-                    <div className="w-full h-[30vh] lg:h-[35vh] mt-5 flex flex-col justify-start items-center gap-y-2 px-2 lg:px-1 overflow-y-auto">
+                    <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2 px-2 lg:px-1">
                     {cartMenu &&
                         cartMenu?.length > 0 &&
                         cartMenu?.map((meal: any, index: number) => {
                         return (
                             <div key={index} className="w-full bg-white p-1">
-                              <div
-                                  className="h-16 w-full flex flex-row justify-between gap-x-2"
-                                  key={index}
-                              >
-                                  <div className="w-1/5">
-                                  <img
-                                      src={meal.images[0]}
-                                      alt="meal"
-                                      className="h-full w-full rounded object-center object-cover"
-                                  />
-                                  </div>
+                            <div
+                                className="h-16 w-full flex flex-row justify-between gap-x-2"
+                                key={index}
+                            >
+                                <div className="w-1/5">
+                                <img
+                                    src={meal.images[0]}
+                                    alt="meal"
+                                    className="h-full w-full rounded object-center object-cover"
+                                />
+                                </div>
 
-                                  <div className="w-4/5 h-full flex flex-row items-center justify-between gap-x-2">
-                                  {/* NAME & PRICE */}
-                                  <div className="h-full w-1/2 text-start flex flex-col items-start justify-around">
-                                      <p className="text-xs lg:text-sm input_text capitalize font-medium ">
-                                      {truncateText(meal?.foodName, 25, 23)}
-                                      </p>
-                                      <p className="text-sm lg:text-base pt-1 font-bold">
-                                      ₦
-                                      {meal?.discount
-                                          ? (meal.price -
-                                              (meal.price / 100) * meal.discount) *
-                                          meal.quantity
-                                          : meal.price * meal.quantity}
-                                      </p>
-                                  </div>
+                                <div className="w-4/5 h-full flex flex-row items-center justify-between gap-x-2">
+                                {/* NAME & PRICE */}
+                                <div className="h-full w-1/2 text-start flex flex-col items-start justify-around">
+                                    <p className="text-xs lg:text-sm input_text capitalize font-medium ">
+                                    {truncateText(meal?.foodName, 25, 23)}
+                                    </p>
+                                    <p className="text-sm lg:text-base pt-1 font-bold">
+                                    ₦
+                                    {meal?.discount
+                                        ? (meal.price -
+                                            (meal.price / 100) * meal.discount) *
+                                        meal.quantity
+                                        : meal.price * meal.quantity}
+                                    </p>
+                                </div>
 
-                                  {/* BUTTON */}
-                                  <div className="h-full w-1/2 flex items-center justify-end">
-                                      <div className="mr-3 flex flex-row w-28 justify-between items-center gap-x-3 rounded-full solid_border h-10 p-3">
-                                      <p
-                                          className="primary_txt_color font-bold cursor-pointer"
-                                          onClick={() =>
-                                          handleDecrement(meal, meal?.minimumQuantity)
-                                          }
-                                      >
-                                          -
-                                      </p>
-                                      <p className="font-bold">{meal?.quantity}</p>
-                                      <p
-                                          className="primary_txt_color font-bold cursor-pointer"
-                                          onClick={() => handleIncrement(meal)}
-                                      >
-                                          +
-                                      </p>
-                                      </div>
-                                  </div>
-                                  </div>
-                              </div>
+                                {/* BUTTON */}
+                                <div className="h-full w-1/2 flex items-center justify-end">
+                                    <div className="mr-3 flex flex-row w-28 justify-between items-center gap-x-3 rounded-full solid_border h-10 p-3">
+                                    <p
+                                        className="primary_txt_color font-bold cursor-pointer"
+                                        onClick={() =>
+                                        handleDecrement(meal, meal?.minimumQuantity)
+                                        }
+                                    >
+                                        -
+                                    </p>
+                                    <p className="font-bold">{meal?.quantity}</p>
+                                    <p
+                                        className="primary_txt_color font-bold cursor-pointer"
+                                        onClick={() => handleIncrement(meal)}
+                                    >
+                                        +
+                                    </p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
 
-                              {showMinimumQuantityReached && selectedMealQuantityReached === meal && (
+                            {showMinimumQuantityReached &&
+                                selectedMealQuantityReached === meal && (
                                 <p className="mt-2 text-sm text-center text-red-600">
                                     Minimum quantity is {meal?.minimumQuantity}
                                 </p>
-                              )}
+                                )}
                             </div>
                         );
                         })}
                     </div>
 
-                    <div className="grow flex flex-col justify-between w-full mx-auto px-2 lg:px-1 ">
-                      <div>
-                        <div>
-                          <h5 className="font_medium font-semibold">Customer details</h5>
-                          <p className="font_regular text-sm">
-                            Enter the customer details below.
-                          </p>
-                        </div>
-
-                        <div className="">
-                          {deliveryFormInputs?.map((input, i) => (
-                            <Input
-                              key={i}
-                              type={input?.type}
-                              placeholder={input?.placeholder}
-                              name={input?.name}
-                              onChange={handleChange}
-                              value={values[input.name as keyof typeof values]}
-                              onkeyup={handlePhoneNumber}
-                              error={
-                                errors[input?.name as keyof typeof values] &&
-                                touched[input?.name as keyof typeof values] &&
-                                errors[input?.name as keyof typeof values]
-                              }
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col items-center justify-between gap-y-3">
-                        <Button
-                          title="Paid"
-                          loading={checkoutLoading}
-                          extraClasses="w-full p-3 rounded-full px-8 py-2"
-                          onClick={() => {
-                            handleSubmit();
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2">
+                    <div className="w-full mt-5 flex flex-col justify-start items-center gap-y-2">
                     {cartMenu?.length > 0 && (
                         <>
                         <div className="py-6 w-full px-2">
@@ -372,7 +324,7 @@ const QsrCart = ({
                         </div>
                         </>
                     )}
-                    </div> */}
+                    </div>
                 </>
             ): (
                 <div className="w-full h-full flex flex-col items-center justify-center">
@@ -382,7 +334,7 @@ const QsrCart = ({
           </div>
         )}
 
-        {/* {deliveryView && (
+        {deliveryView && (
           <div className="w-full h-fit mx-auto px-2 lg:px-1">
             <div>
               <h5 className="font_medium font-semibold">Customer details</h5>
@@ -410,7 +362,19 @@ const QsrCart = ({
 
               <div className="flex flex-col items-center justify-between gap-y-3 mt-10">
                 <Button
-                  title="Paid"
+                  title="Pay now"
+                  loading={checkoutLoading}
+                  extraClasses="w-full p-3 rounded-full"
+                  onClick={() => {
+                    if (values.email && values.phoneNumber) {
+                      handleSubmit();
+                    } else {
+                      handleClickOpen();
+                    }
+                  }}
+                />
+                <OutlineButton
+                  title="Pay with POS"
                   loading={checkoutLaterLoading}
                   extraClasses="w-full p-3 rounded-full px-8 py-2"
                   onClick={() => {
@@ -424,13 +388,22 @@ const QsrCart = ({
                     });
                   }}
                 />
+
+                <Button
+                  title="Back"
+                  extraClasses="w-full p-3 rounded-full mt-3"
+                  onClick={() => {
+                    setDeliveryView(false);
+                    setCartView(true);
+                  }}
+                />
               </div>
             </div>
           </div>
-        )} */}
+        )}
       </div>
 
-      {/* <Modal
+      <Modal
         open={payNowModal}
         onClose={closePayNowModal}
         aria-labelledby="parent-modal-title"
@@ -491,7 +464,7 @@ const QsrCart = ({
             </div>
           </div>
         </div>
-      </Modal> */}
+      </Modal>
 
       <AlertDialog
         message="Your email and Whatsapp number are required for online payments"

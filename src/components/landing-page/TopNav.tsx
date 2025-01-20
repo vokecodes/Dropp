@@ -230,6 +230,21 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
     },
     {
       icon: (
+        <CgFileDocument
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefOrders
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Orders",
+      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
+      to: CHEF_ROUTES.linkChefOrders,
+    },
+    {
+      icon: (
         <CiForkAndKnife
           size={24}
           color={
@@ -520,7 +535,7 @@ const TopNav = ({ showCart, onClickCart, cartTotalItems, event }: any) => {
         <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/">
-              <span className="sr-only">Dropp</span>
+              <span className="sr-only">Homemade</span>
               <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
             </Link>
           </div>

@@ -12,7 +12,6 @@ import {
   deleteDineInMenu,
   deleteQsrSubAdminDineInMenu,
   showHideDineInMenu,
-  showHideQsrCashierDineInMenu,
   showHideQsrSubAdminDineInMenu,
 } from "../_redux/dinningMenu/dinningMenuAction";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -25,8 +24,6 @@ const MenuCard = ({
   onClickCopy,
   mode,
   kitchen,
-  getChef,
-  chefId
 }: any) => {
   const dispatch = useAppDispatch();
   const { loading, hideLoading, dinningMenuLoading, dinningMenuHideLoading } =
@@ -60,17 +57,6 @@ const MenuCard = ({
             hide: !menu?.hide,
           },
           menu?._id
-        )
-      );
-    } else if (mode === "qsrCashier") {
-      await dispatch(
-        showHideQsrCashierDineInMenu(
-          {
-            hide: !menu?.hide,
-          },
-          menu?._id,
-          chefId,
-          getChef
         )
       );
     } else {
@@ -200,7 +186,7 @@ const MenuCard = ({
                     
                   )} */}
 
-                  {!kitchen && mode !== "qsrCashier" && (
+                  {!kitchen && (
                     <div className="w-full flex flex-row items-center justify-between gap-x-2 lg:gap-x-5">
                       <Button
                         title={favourite ? "Add to bag" : "Edit"}
@@ -220,7 +206,7 @@ const MenuCard = ({
                     </div>
                   )}
 
-                  {!kitchen && mode !== "qsrCashier" && (
+                  {!kitchen && (
                     <OutlineButton
                       title="Delete"
                       disabled={menu?.hide}

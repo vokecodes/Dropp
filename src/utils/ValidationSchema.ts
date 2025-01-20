@@ -121,7 +121,7 @@ export const NewMenuInputsSchema = Yup.object().shape({
 export const DineInNewMenuInputsSchema = Yup.object().shape({
   images: Yup.array(Yup.string()).required("Image is required."),
   foodName: Yup.string().required("Food name is required."),
-  price: Yup.number().min(1).required("Price is required."),
+  price: Yup.string().required("Price is required."),
   portion: Yup.string().required("Portion is required."),
   minimumQuantity: Yup.string().required("Minimum quantity is required."),
   description: Yup.string().required("Description is required."),
@@ -134,12 +134,6 @@ export const CashierInputsSchema = Yup.object().shape({
   employeeName: Yup.string().required("Employee name is required."),
   employeeID: Yup.string().required("Employee ID is required."),
   whatsappNumber: Yup.string().optional(),
-  password: Yup.string().required("Password is required."),
-});
-
-export const TerminalInputsSchema = Yup.object().shape({
-  terminal: Yup.string().required("Terminal is required."),
-  employeeName: Yup.string().required("Employee name is required."),
   password: Yup.string().required("Password is required."),
 });
 
@@ -193,7 +187,8 @@ export const RestaurantCheckoutSchema = Yup.object().shape({
 
 export const QsrCheckoutSchema = Yup.object().shape({
   name: Yup.string().optional(),
-  phoneNumber: Yup.string().optional(),
+  email: Yup.string().email().optional(),
+  phoneNumber: Yup.string().required("Phone Number is required."),
 });
 
 export const CashierLoginSchema = Yup.object().shape({
