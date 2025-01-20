@@ -98,6 +98,12 @@ export const cashierValues = {
   whatsappNumber: "",
 };
 
+export const terminalValues = {
+  terminal: "",
+  employeeName: "",
+  password: "",
+};
+
 export const WaiterTableValues = {
   section: "",
   employeeAssigned: "",
@@ -146,7 +152,6 @@ export const RestaurantCheckoutValues = {
 
 export const QsrCheckoutValues = {
   name: "",
-  email: "",
   phoneNumber: "",
 };
 

@@ -1498,7 +1498,7 @@ const SalesReports = () => {
                                     {transaction?.table?.table}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                    {transaction?.order?.map((menu: any, n) => (
+                                    {transaction?.order?.map((menu: any) => (
                                       <div
                                         key={generateUUIDBasedOnStringLength(
                                           "fgtr"
@@ -1509,7 +1509,7 @@ const SalesReports = () => {
                                           <div className="h-10 w-10 flex-shrink-0">
                                             <img
                                               className="h-10 w-10 rounded-full object-cover"
-                                              src={menu?.menu?.images[0]}
+                                              src={menu?.menu.images[0]}
                                               alt=""
                                             />
                                           </div>

@@ -19,10 +19,11 @@ import InfinityScroll from "../../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../../components/DashboardItemSkeletonLoader";
 import { Popover, Transition, RadioGroup } from "@headlessui/react";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
-import { formatRemoteAmountKobo, toTitleCase } from "../../../utils/formatMethods";
+import { formatRemoteAmountKobo, toTitleCase, uuidGen } from "../../../utils/formatMethods";
 import { IoSearchSharp } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import QsrDashboardLayout from "../../../components/QsrDashboardLayout";
+import { v4 as uuidv4 } from 'uuid';
 
 const paymentOptions = ["Online", "POS"];
 
@@ -440,6 +441,12 @@ const CashierMyOrders = () => {
                                       scope="col"
                                       className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
                                     >
+                                      Amount
+                                    </th>
+                                    {/* <th
+                                      scope="col"
+                                      className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
+                                    >
                                       <Popover className="relative">
                                         {({ open }) => (
                                           <>
@@ -502,7 +509,7 @@ const CashierMyOrders = () => {
                                                       {paymentOptions?.map(
                                                         (item: any) => (
                                                           <RadioGroup.Option
-                                                            key={item}
+                                                            key={uuidGen()}
                                                             value={item}
                                                             className={
                                                               "flex items-center cursor-pointer mb-2"
@@ -542,7 +549,7 @@ const CashierMyOrders = () => {
                                           </>
                                         )}
                                       </Popover>
-                                    </th>
+                                    </th> */}
                                     {/* <th
                                       scope="col"
                                       className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
@@ -656,7 +663,7 @@ const CashierMyOrders = () => {
                                 <tbody className="divide-y divide-gray-200">
                                   {searchFiltered?.filter(item => !item.parentOrder)?.map(
                                     (transaction: any, i: number) => (
-                                      <tr key={transaction.id + i}>
+                                      <tr key={uuidGen()}>
                                         <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
                                           #
                                           {transaction.id?.slice(-5)}
@@ -683,7 +690,7 @@ const CashierMyOrders = () => {
                                         <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
                                           {transaction?.order?.map((menu: any) => (
                                             <div
-                                              key={menu?._id}
+                                              key={uuidGen()}
                                               className="flex items-center"
                                             >
                                               <div className="h-10 w-10 flex-shrink-0">
