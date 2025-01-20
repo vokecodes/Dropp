@@ -148,15 +148,15 @@ export const changeSubChefPassword = (data: any) => {
 };
 
 export const registerAQsrSubAdmin = (data: any) => {
-  return SERVER.post(`${QSR_CASHIER_URL}/sub-admin/register`, { ...data });
+  return SERVER.post(`${QSR_CASHIER_URL}/admin/sub-admin/register`, { ...data });
 };
 
 export const getChefQsrSubAdmins = () => {
-  return SERVER.get(`${QSR_CASHIER_URL}/sub-admin`);
+  return SERVER.get(`${QSR_CASHIER_URL}/admin/sub-admin`);
 };
 
 export const deleteAQsrSubAdmin = (subChefId: string) => {
-  return SERVER.delete(`${QSR_CASHIER_URL}/sub-admin/${subChefId}`);
+  return SERVER.delete(`${QSR_CASHIER_URL}/admin/sub-admin/${subChefId}`);
 };
 
 export const getQsrSubAdminProfile = () => {
