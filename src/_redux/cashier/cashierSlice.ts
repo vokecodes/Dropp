@@ -6,9 +6,6 @@ const initialState = {
   error: null,
   cashier: null,
   cashiers: null,
-  terminals: null,
-  terminal: null,
-  terminalError: null,
 };
 
 export const cashierSLice = createSlice({
@@ -19,7 +16,6 @@ export const cashierSLice = createSlice({
     startCall: (state) => {
       state.loading = true;
       state.error = null;
-      state.terminalError = null;
     },
     // catch error
     catchError: (state, action) => {
@@ -36,7 +32,6 @@ export const cashierSLice = createSlice({
     hideStartCall: (state) => {
       state.hideLoading = true;
       state.error = null;
-      state.terminalError = null;
     },
     // hide catch error
     hideCatchError: (state, action) => {
@@ -47,42 +42,14 @@ export const cashierSLice = createSlice({
     loginCashier: (state, action) => {
       state.cashier = action.payload;
     },
-    // catch terminal error
-    catchTerminalError: (state, action) => {
-      state.loading = false;
-      state.terminalError = action.payload.error;
-    },
-    // add update terminal
-    getAddUpdateTerminal: (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.terminals = action.payload;
-    },
-    // terminal login
-    loginTerminal: (state, action) => {
-      state.terminal = action.payload;
-    },
     // cashier logout
     logoutCashier: (state) => {
       state.cashier = null;
       state.cashiers = null;
-      state.terminal = null;
-      state.terminals = null;
     },
   },
 });
 
-export const {
-  startCall,
-  catchError,
-  getAddUpdateCashier,
-  hideStartCall,
-  hideCatchError,
-  loginCashier,
-  logoutCashier,
-  catchTerminalError,
-  getAddUpdateTerminal,
-  loginTerminal,
-} = cashierSLice.actions;
+export const { startCall, catchError, getAddUpdateCashier, hideStartCall, hideCatchError, loginCashier, logoutCashier } = cashierSLice.actions;
 
 export default cashierSLice.reducer;

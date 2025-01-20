@@ -43,29 +43,28 @@ const ChefMenu = () => {
 
             <div className="bg-white rounded-2xl w-full py-10 px-5 mt-3">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-2 lg:gap-y-0 lg:gap-x-2 w-full h-fit py-5">
-
-                {!user?.isRestaurant ? (
-                  <Link to={CHEF_ROUTES.linkChefMenuOnline}>
-                    <div className="relative w-full h-fit rounded-2xl">
-                      <img
-                        src="/img/online.png"
-                        alt=""
-                        className="object-cover h-56 min-h-full w-full rounded-2xl"
-                      />
-                      <div className="absolute bottom-5 left-0 p-5 space-y-3">
-                        <p className="text-start text-white text-2xl font-semibold font_medium">
-                          Homemade Menu
-                        </p>
-                        <button
-                          className="px-3 py-1 rounded-lg text-white font_medium"
-                          style={{ backgroundColor: "#FFFFFF26" }}
-                        >
-                          Learn more
-                        </button>
-                      </div>
+                <Link to={CHEF_ROUTES.linkChefMenuOnline}>
+                  <div className="relative w-full h-fit rounded-2xl">
+                    <img
+                      src="/img/online.png"
+                      alt=""
+                      className="object-cover h-56 min-h-full w-full rounded-2xl"
+                    />
+                    <div className="absolute bottom-5 left-0 p-5 space-y-3">
+                      <p className="text-start text-white text-2xl font-semibold font_medium">
+                        Homemade Menu
+                      </p>
+                      <button
+                        className="px-3 py-1 rounded-lg text-white font_medium"
+                        style={{ backgroundColor: "#FFFFFF26" }}
+                      >
+                        Learn more
+                      </button>
                     </div>
-                  </Link>
-                ) : (
+                  </div>
+                </Link>
+
+                {user?.isRestaurant && (
                   <Link to={CHEF_ROUTES.linkChefMenuDineIn}>
                     <div
                       className="relative w-full h-fit rounded-2xl"
@@ -93,7 +92,6 @@ const ChefMenu = () => {
                     </div>
                   </Link>
                 )}
-
               </div>
             </div>
           </div>

@@ -229,10 +229,10 @@ const QsrDashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="fixed h-screen" style={{ width: "17.12rem" }}>
             <div className="h-5/6 w-full bg-white py-4 pr-3 flex flex-col">
               <p className="pl-10 text-lg text-black font_medium">
-                Hi {cashier?.employeeName || auth?.user.firstName},
+                Hi {auth?.user.firstName || cashier?.employeeName},
               </p>
               <p className="pl-10 text-sm gray_color font_medium">
-                {!cashier && user?.email}
+                {user?.email}
               </p>
               <div className="mt-5 flex-1">
                 <>

@@ -16,9 +16,9 @@ import { SoundNotification } from "../../components/SoundNotification";
 import { getABusinessByName } from "../../_redux/business/businessCrud";
 import InfinityScroll from "../../components/InfinityScroll";
 
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.VITE_BASE_URL, {
+//   withCredentials: true,
+// });
 
 const SuperWaiterDashboard = () => {
   const { superWaiter } = useSelector(
@@ -159,28 +159,28 @@ const SuperWaiterDashboard = () => {
   };
 
   // Listen for new orders from the server
-  useEffect(() => {
-    const handleNewOrder = () => {
-      getRestaurantOrders(1);
-      receiveNotification();
-    };
+  // useEffect(() => {
+  //   const handleNewOrder = () => {
+  //     getRestaurantOrders(1);
+  //     receiveNotification();
+  //   };
 
-    socket.on("newRestaurantOrder", handleNewOrder);
-    socket.on("newReadyOrder", handleNewOrder);
-    socket.on("updatedRestaurantOrder", handleNewOrder);
-    socket.on("updatedOrder", () => {
-      getRestaurantOrders(1);
-    });
+  //   socket.on("newRestaurantOrder", handleNewOrder);
+  //   socket.on("newReadyOrder", handleNewOrder);
+  //   socket.on("updatedRestaurantOrder", handleNewOrder);
+  //   socket.on("updatedOrder", () => {
+  //     getRestaurantOrders(1);
+  //   });
 
-    return () => {
-      socket.off("newRestaurantOrder", handleNewOrder);
-      socket.off("newReadyOrder", handleNewOrder);
-      socket.off("updatedRestaurantOrder", handleNewOrder);
-      socket.off("updatedOrder", () => {
-        getRestaurantOrders(1);
-      });
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("newRestaurantOrder", handleNewOrder);
+  //     socket.off("newReadyOrder", handleNewOrder);
+  //     socket.off("updatedRestaurantOrder", handleNewOrder);
+  //     socket.off("updatedOrder", () => {
+  //       getRestaurantOrders(1);
+  //     });
+  //   };
+  // }, []);
 
   const CATEGORIES = [
     { label: "New order", value: "pending" },

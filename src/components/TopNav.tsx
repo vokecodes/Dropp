@@ -226,6 +226,21 @@ const TopNav = ({ page, event }: any) => {
     },
     {
       icon: (
+        <CgFileDocument
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefOrders
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Orders",
+      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
+      to: CHEF_ROUTES.linkChefOrders,
+    },
+    {
+      icon: (
         <CiForkAndKnife
           size={24}
           color={
@@ -535,13 +550,13 @@ const TopNav = ({ page, event }: any) => {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             {person?.userType === USER_TYPE.CHEF ||
             person?.userType === USER_TYPE.COMPANY ? (
-              <Link to="/">
-                <span className="sr-only">Dropp</span>
+              <>
+                <span className="sr-only">Homemade</span>
                 <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
-              </Link>
+              </>
             ) : (
               <Link to="/">
-                <span className="sr-only">Dropp</span>
+                <span className="sr-only">Homemade</span>
                 <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
               </Link>
             )}
