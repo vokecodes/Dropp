@@ -28,6 +28,8 @@ const SuperWaiterDashboard = () => {
     shallowEqual
   );
 
+  console.log("superWaiter", superWaiter?.businessName);
+
   const [table, setTable] = useState([]);
   const [chef, setChef] = useState<any>(null);
 

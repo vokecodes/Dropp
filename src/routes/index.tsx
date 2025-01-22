@@ -71,10 +71,10 @@ const AppRoutes = () => {
           element={<RestaurantShop />}
         />
         <Route path={HOME_ROUTES.exploreQsr} element={<QsrShop />} />
-        <Route
+        {/* <Route
           path={HOME_ROUTES.exploreRestaurantEdit}
           element={<RestaurantShop />}
-        />
+        /> */}
         <Route
           path={HOME_ROUTES.chefLandingPage}
           element={<ChefLandingPage />}

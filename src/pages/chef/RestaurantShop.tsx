@@ -16,7 +16,10 @@ import { MdFastfood } from "react-icons/md";
 import ChefShopMenuCard from "../../components/ChefShopMenuCard";
 import ChefsReviews from "../../components/ChefsReviews";
 import Cart from "../../components/Cart";
-import { createARestaurantOrder, editARestaurantOrder } from "../../_redux/order/orderCrud";
+import {
+  createARestaurantOrder,
+  editARestaurantOrder,
+} from "../../_redux/order/orderCrud";
 import {
   getABusinessRestaurantByName,
   getABusinessRestaurantOrderByName,
@@ -70,7 +73,7 @@ const RestaurantShop = () => {
   const [chef, setChef] = useState<any>(null);
   const [waiter, setWaiter] = useState<any>(null);
   const [receiptValues, setReceiptValues] = useState({});
-  const [orderId, setOrderId] = useState<any>('')
+  const [orderId, setOrderId] = useState<any>("");
 
   const [chefRecommendedMenu, setChefRecommendedMenu] = useState<any>(null);
 
@@ -103,9 +106,7 @@ const RestaurantShop = () => {
   };
 
   const getWaiter = async () => {
-    SERVER.get(
-      `${RESTAURANT_TABLE_URL}/waiter/${table}`
-    )
+    SERVER.get(`${RESTAURANT_TABLE_URL}/waiter/${table}`)
       .then(({ data }) => {
         setWaiter(data.data);
       })
@@ -251,7 +252,7 @@ const RestaurantShop = () => {
         `${TRANSACTION_URL}/verify/${referenceId}`
       );
       const result = data?.data;
-      
+
       if (result?.status) {
         closeVerifyPaymentModal();
         openModal();
@@ -277,7 +278,7 @@ const RestaurantShop = () => {
         }
         return await createARestaurantOrder({ ...orderItem, table });
       };
-    
+
       const handlePayment = (orderId: string) => {
         const handler = window.PaystackPop.setup({
           key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
@@ -297,22 +298,21 @@ const RestaurantShop = () => {
             verifyTransaction(orderId);
           },
         });
-    
+
         handler.openIframe();
       };
-    
+
       const { data } = await createOrEditOrder();
-    
+
       if (data.success) {
         handlePayment(data.data.orderId);
       }
     } catch (err) {
       handleClickOpen();
-      console.log('err= ', err)
+      console.log("err= ", err);
     } finally {
       setCheckoutLoading(false);
     }
-        
   };
 
   const handlePayLaterCheckout = async (orderItem: any) => {
@@ -333,7 +333,7 @@ const RestaurantShop = () => {
           posPayment: true,
         });
       };
-    
+
       const handleSuccess = (orderId: string) => {
         resetCartView();
         dispatch(clearCart());
@@ -341,9 +341,9 @@ const RestaurantShop = () => {
         setOrderId(orderId);
         openModal();
       };
-    
+
       const { data } = await createOrEditOrder();
-    
+
       if (data.success) {
         handleSuccess(data.data.orderId);
       }
@@ -352,7 +352,6 @@ const RestaurantShop = () => {
     } finally {
       setCheckoutLaterLoading(false);
     }
-    
   };
 
   const handleIncrement = (meal: any) => {
@@ -424,6 +423,8 @@ const RestaurantShop = () => {
         c.quantity
     )
     .reduce((partialSum: any, a: any) => partialSum + a, 0);
+
+  console.log("chef", chef);
 
   return (
     <>
@@ -723,7 +724,7 @@ const RestaurantShop = () => {
                 </div>
               </div>
 
-              <Footer  logo={Images.logo} />
+              <Footer logo={Images.logo} />
 
               <CartFloat
                 cartMenu={cartMenu}
@@ -950,9 +951,7 @@ const RestaurantShop = () => {
               >
                 <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-auto -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
                   <div className="flex flex-col justify-between items-center p-0 h-full">
-                    <div
-                      className="h-fit my-3 w-100 w-full flex flex-col gap-y-10 min-h-60% lg:min-h-[80%]"
-                    >
+                    <div className="h-fit my-3 w-100 w-full flex flex-col gap-y-10 min-h-60% lg:min-h-[80%]">
                       <div className="flex">
                         <p className="flex-1 text-xl text-center font_bold black2"></p>
                         <IoMdClose
@@ -965,9 +964,7 @@ const RestaurantShop = () => {
                         />
                       </div>
 
-                      <div
-                        className="flex flex-col justify-center items-center h-full w-full mb-5 h-fit lg:min-h-[80%]"
-                      >
+                      <div className="flex flex-col justify-center items-center h-full w-full mb-5 h-fit lg:min-h-[80%]">
                         <div className="flex flex-col justify-center items-center w-full">
                           <div className="my-6 w-20 lg:w-28 h-20 lg:h-28 border-8 primary_border_color rounded-full flex justify-center items-center">
                             <svg
@@ -994,7 +991,12 @@ const RestaurantShop = () => {
                     </div>
 
                     <div className="my-3 lg:my-10 w-full">
-                      <DownloadPDFButton chef={chef} waiter={waiter}receiptValues={receiptValues} orderId={orderId}>
+                      <DownloadPDFButton
+                        chef={chef}
+                        waiter={waiter}
+                        receiptValues={receiptValues}
+                        orderId={orderId}
+                      >
                         <Button
                           title="Download receipt"
                           extraClasses="w-full p-3 rounded-full"
@@ -1006,7 +1008,11 @@ const RestaurantShop = () => {
                 </div>
               </Modal>
 
-              <AlertDialog message='An error has occured, ensure you have the correct Table number and an internet connection.' handleClose={handleClose} open={openAlertModal} />
+              <AlertDialog
+                message="An error has occured, ensure you have the correct Table number and an internet connection."
+                handleClose={handleClose}
+                open={openAlertModal}
+              />
             </div>
           ) : (
             <NotFound />
