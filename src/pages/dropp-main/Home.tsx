@@ -312,7 +312,7 @@ const Home = () => {
 
   return (
     <>
-      <div className={`${showModal ? "blur-bg" : ""}`}>
+      <div className={`overflow-y-hidden ${showModal ? "blur-bg" : ""}`}>
         {/* Header */}
         <Header
           itemsImage={Images.itemsGif}
@@ -1061,7 +1061,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="absolute bottom-[-4rem] lg:bottom-[-20rem] w-full z-10">
+          <div className="absolute bottom-[-4rem] lg:bottom-[-20rem] w-full">
             <div className="">
               <img
                 src="/images/restaurants-logo2.svg"
