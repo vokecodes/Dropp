@@ -16,9 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CHEF_ROUTES } from "../../routes/routes";
 import LogoutButton from "../../components/LogoutButton";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-import {
-  monitorForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import KitchenCard from "../../components/kitchenCard";
 import KitchenBoard from "../../components/KitchenBoard";
 import { SoundNotification } from "../../components/SoundNotification";
@@ -38,11 +36,9 @@ const Kitchen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { user, table, auth } = useSelector(
+  const { table } = useSelector(
     (state: any) => ({
-      auth: state.auth.user,
       table: state.table.table,
-      user: state.user.user,
     }),
     shallowEqual
   );
@@ -114,20 +110,14 @@ const Kitchen = () => {
               updatedColumns[status] = [];
             }
 
-            const existingIds = new Set(
-              updatedColumns[status].map((item) => item._id)
-            );
-
-            const newItems = data.data[status].filter(
-              (item) => !existingIds.has(item._id)
-            );
-
-            updatedColumns[status] = sortByCreatedAt([
+            // Append new orders instead of replacing the existing ones
+            updatedColumns[status] = [
               ...updatedColumns[status],
-              ...newItems,
-            ]);
+              ...data.data[status],
+            ];
           });
 
+          console.log("Updated Columns:", updatedColumns);
           return updatedColumns;
         });
       }
@@ -143,13 +133,20 @@ const Kitchen = () => {
       setHasMore((prev) => {
         const newHasMore = { ...prev };
 
-        Object.keys(data?.columnCount || {}).forEach((status) => {
-          const totalCount = data.columnCount[status]?.totalCount || 0;
+        Object.keys(prev).forEach((status) => {
+          const totalCount = data?.columnCount?.[status]?.totalCount || 0;
           const currentCount =
-            (columns[status]?.length || 0) + (data.data[status]?.length || 0);
-          newHasMore[status] = currentCount < totalCount;
+            (columns?.[status]?.length || 0) +
+            (data?.data?.[status]?.length || 0);
+
+          // If no new data is returned, prevent infinite loading
+          newHasMore[status] =
+            totalCount > 0 &&
+            currentCount < totalCount &&
+            data?.data?.[status]?.length > 0;
         });
 
+        console.log("Updated hasMore State:", newHasMore);
         return newHasMore;
       });
 
@@ -197,8 +194,20 @@ const Kitchen = () => {
     getRestaurantOrdersColumn(1);
   }, [endDate, selectedCategory, selectedTable]);
 
+  // const loadMore = () => {
+  //   if (loading.current) return;
+  //   getRestaurantOrdersColumn();
+  // };
+
   const loadMore = () => {
     if (loading.current) return;
+
+    // Prevent unnecessary calls if all columns have no more data
+    if (Object.values(hasMore).every((status) => !status)) {
+      console.log("No more data to fetch");
+      return;
+    }
+
     getRestaurantOrdersColumn();
   };
 
@@ -483,8 +492,10 @@ const Kitchen = () => {
   useEffect(() => {
     setFilteredColumns({});
 
-    let localFiltered = Object.keys(columns).length ? { ...columns, "completed": [...columns["completed"], ...columns["sent"]] } : {}
-    
+    let localFiltered = Object.keys(columns).length
+      ? { ...columns, completed: [...columns["completed"], ...columns["sent"]] }
+      : {};
+
     localFiltered = Object.fromEntries(
       Object.entries(localFiltered).map(([key, value]) => {
         // Sort by 'createdAt' before returning
@@ -860,7 +871,12 @@ const Kitchen = () => {
           <div className="snap-x md:snap-none snap-mandatory flex flex-row w-fit h-full gap-x-5 no-scroll-bar">
             {/* NEW ORDERS */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["pending"] || []}
+              restaurantOrders={
+                filteredColumns["pending"]?.filter(
+                  (ro) =>
+                    ro?.parentStatus === "kitchen" && ro?.status === "pending"
+                ) || []
+              }
               title="New orders"
               headerBg="primary_bg_color"
               bodyBg="bg_pink"
@@ -910,7 +926,12 @@ const Kitchen = () => {
 
             {/* COOKING */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["cooking"] || []}
+              restaurantOrders={
+                filteredColumns["cooking"]?.filter(
+                  (ro) =>
+                    ro?.parentStatus === "kitchen" && ro?.status === "cooking"
+                ) || []
+              }
               title="Cooking"
               headerBg="bg-zinc-500"
               bodyBg="bg-zinc-200"
@@ -962,7 +983,12 @@ const Kitchen = () => {
 
             {/* READY */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["ready"] || []}
+              restaurantOrders={
+                filteredColumns["ready"]?.filter(
+                  (ro) =>
+                    ro?.parentStatus === "kitchen" && ro?.status === "ready"
+                ) || []
+              }
               title="Ready for pickup"
               headerBg="bg-green-600"
               bodyBg="bg-green-100"
@@ -1012,7 +1038,13 @@ const Kitchen = () => {
 
             {/* COMPLETED */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["completed"] || []}
+              restaurantOrders={
+                filteredColumns["completed"]?.filter(
+                  (ro) =>
+                    ro?.parentStatus === "completed" &&
+                    ro?.status === "completed"
+                ) || []
+              }
               title="Completed"
               headerBg="bg-green-900"
               bodyBg="bg-gray-100"
@@ -1043,7 +1075,12 @@ const Kitchen = () => {
 
             {/* DECLINE */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["declined"] || []}
+              restaurantOrders={
+                filteredColumns["declined"]?.filter(
+                  (ro) =>
+                    ro?.parentStatus === "kitchen" && ro?.status === "declined"
+                ) || []
+              }
               title="Decline"
               headerBg="bg-red-900"
               bodyBg="bg-red-100"
@@ -1074,7 +1111,12 @@ const Kitchen = () => {
 
             {/* VOIDED */}
             <KitchenBoard
-              restaurantOrders={filteredColumns["archived"] || []}
+              restaurantOrders={
+                filteredColumns["archived"]?.filter(
+                  (ro) =>
+                    ro?.parentStatus === "kitchen" && ro?.status === "archived"
+                ) || []
+              }
               title="Void"
               headerBg="bg-black"
               bodyBg="bg-neutral-100"
