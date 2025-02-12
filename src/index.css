@@ -1111,7 +1111,6 @@ html {
   border-radius: 20px;
 }
 
-
 /* For Webkit browsers (Chrome, Safari, Edge) */
 .reduce-scrollbar {
   scrollbar-width: thin; /* For Firefox */
@@ -1137,6 +1136,14 @@ html {
   background-color: #555; /* Darker on hover */
 }
 
-.qsr-shop .carousel-root, .qsr-shop .carousel-root div, .qsr-shop .carousel-root ul, .qsr-shop .carousel-root ul li {
+.qsr-shop .carousel-root,
+.qsr-shop .carousel-root div,
+.qsr-shop .carousel-root ul,
+.qsr-shop .carousel-root ul li {
   height: 100%;
+}
+
+.kitchen-div {
+  overflow-y: auto;
+  height: calc(100vh - 200px); /* Adjust based on your header height */
 }

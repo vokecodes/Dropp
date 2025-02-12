@@ -13,7 +13,7 @@ const KitchenBoard = ({
   hasMore,
   getMore,
   status,
-}) => {
+}: any) => {
   const ref = useRef(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
@@ -62,14 +62,16 @@ const KitchenBoard = ({
           </span>
         </p>
       </div>
-      <InfinityScroll
+      {orders}
+
+      {/* <InfinityScroll
         data={restaurantOrders}
         getMore={getMore}
         hasMore={hasMore}
         scrollableTarget={status}
       >
         {orders}
-      </InfinityScroll>
+      </InfinityScroll> */}
     </div>
   );
 };
