@@ -64,6 +64,7 @@ export type InputProps = {
   container?: string;
   touched?: any;
   multipleSelect?: boolean;
+  newName?: string;
 };
 
 export type TextAreaProps = {
@@ -150,6 +151,7 @@ export type OrderItemProps = {
   customerImage?: string;
   customerName?: string;
   customerEmail?: string;
+  customerNumber?: string;
   address: string;
   note?: string;
   completed?: any;

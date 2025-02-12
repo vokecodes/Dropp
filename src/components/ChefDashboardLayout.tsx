@@ -193,6 +193,121 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       to: CHEF_ROUTES.linkChefSettings,
     },
   ];
+  
+  const newMenuItems = [
+    {
+      icon: (
+        <MdHomeFilled
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
+          }
+        />
+      ),
+      title: "Home",
+      active: location?.pathname === CHEF_ROUTES.linkChef,
+      to: CHEF_ROUTES.linkChef,
+    },
+    {
+      icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefReports
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Reports",
+      active: location?.pathname === CHEF_ROUTES.linkChefReports,
+      to: CHEF_ROUTES.linkChefReports,
+      pro: true
+    },
+    
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefMenu
+              ? "#06c167"
+              : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
+              ? "#06c167"
+              : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Menu",
+      active:
+        location?.pathname === CHEF_ROUTES.linkChefMenu ||
+        location?.pathname === CHEF_ROUTES.linkChefMenuOnline ||
+        location?.pathname === CHEF_ROUTES.linkChefMenuDineIn,
+      to: CHEF_ROUTES.linkChefMenu,
+    },
+    {
+      icon: (
+        <CgFileDocument
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefOrders
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Orders",
+      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
+      to: CHEF_ROUTES.linkChefOrders,
+    },
+    {
+      icon: (
+        <RiWallet3Line
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefWallet
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "My Wallet",
+      active: location?.pathname === CHEF_ROUTES.linkChefWallet,
+      to: CHEF_ROUTES.linkChefWallet,
+    },
+    {
+      icon: (
+        <BsChatDots
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefChat
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Chats",
+      active: location?.pathname === CHEF_ROUTES.linkChefChat,
+      to: CHEF_ROUTES.linkChefChat,
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === CHEF_ROUTES.linkChefSettings,
+      to: CHEF_ROUTES.linkChefSettings,
+    },
+  ];
 
   const restaurantMenuItems = [
     {
@@ -490,7 +605,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </>
                   ) : (
                     <>
-                      {menuItems?.map((item: any, i) => (
+                      {newMenuItems?.map((item: any, i) => (
                         <MenuItem
                           key={i}
                           icon={item?.icon}

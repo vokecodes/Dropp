@@ -60,7 +60,7 @@ const SubscriptionChefMenuCard = ({
   };
 
   return (
-    <div className="bg-white shadow rounded-xl">
+    <div className="bg-white shadow rounded-xl w-full h-full relative">
       <div className="absolute mt-5 ml-5 z-10">
         <div className="yellow_bg w-40 h-10 rounded-2xl flex items-center justify-center">
           <p className="text-sm text-black font_medium text-center">
@@ -70,7 +70,7 @@ const SubscriptionChefMenuCard = ({
       </div>
       <div>
         <div
-          className="z-30 bg-white w-10 h-10 rounded-full absolute mt-3 ml-64 flex self-end items-center justify-center cursor-pointer"
+          className="z-30 bg-white w-10 h-10 rounded-full absolute right-3 top-3 flex self-end items-center justify-center cursor-pointer"
           onClick={() => handleSHowHideMenu()}
         >
           {menu?._id === selectedMenu && hideLoading ? (
@@ -122,17 +122,17 @@ const SubscriptionChefMenuCard = ({
         <p className="text-gray-400 text-sm truncate mt-1 mb-3">
           {menu?.description}
         </p>
-        <div className="w-full flex flex-row items-center justify-between gap-x-5 mb-2">
+        <div className="w-full flex flex-row items-center justify-between gap-x-2 lg:gap-x-5">
           <Button
             title={"Edit"}
-            extraClasses="w-full rounded-full"
+            extraClasses="!w-1/2 !px-6"
             disabled={menu?.hide}
             onClick={onClickEdit}
           />
 
           <Button
             title={"Duplicate"}
-            extraClasses="w-full rounded-full"
+            extraClasses="!w-1/2 !px-6"
             disabled={menu?.hide}
             onClick={onClickCopy}
           />
@@ -143,7 +143,7 @@ const SubscriptionChefMenuCard = ({
             title="Delete"
             disabled={menu?.hide}
             loading={selectedMenuToDelete === menu?._id}
-            extraClasses="w-full rounded-full px-8 py-2"
+            extraClasses="!w-full !mx-auto rounded-full px-8 py-2 mt-2"
             onClick={() => {
               setSelectedMenuToDelete(menu?._id);
               if (user === "subChef") {
