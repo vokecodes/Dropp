@@ -75,26 +75,6 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
     },
     {
       icon: (
-        <CiForkAndKnife
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkChefDineIn
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefTableManagement
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Dine-in",
-      active:
-        location?.pathname === CHEF_ROUTES.linkChefDineIn ||
-        location?.pathname === CHEF_ROUTES.linkChefTableManagement,
-      to: CHEF_ROUTES.linkChefDineIn,
-      pro: true,
-    },
-    {
-      icon: (
         <MdOutlineFoodBank
           size={28}
           color={
@@ -114,22 +94,6 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
         location?.pathname === CHEF_ROUTES.linkChefMenuOnline ||
         location?.pathname === CHEF_ROUTES.linkChefMenuDineIn,
       to: CHEF_ROUTES.linkChefMenu,
-    },
-    {
-      icon: (
-        <GiKnifeFork
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkKitchen
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Kitchen",
-      active: location?.pathname === CHEF_ROUTES.linkKitchen,
-      to: CHEF_ROUTES.linkKitchen,
-      pro: true,
     },
     {
       icon: (
@@ -160,22 +124,6 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       title: "Chat",
       active: location?.pathname === CHEF_ROUTES.linkChefChat,
       to: CHEF_ROUTES.linkChefChat,
-    },
-    {
-      icon: (
-        <LuUsers
-          size={24}
-          color={
-            location?.pathname === CHEF_ROUTES.linkSubChefs
-              ? "#06c167"
-              : "#787878"
-          }
-        />
-      ),
-      title: "Sub Admins",
-      active: location?.pathname === CHEF_ROUTES.linkSubChefs,
-      to: CHEF_ROUTES.linkSubChefs,
-      pro: true,
     },
     {
       icon: (
