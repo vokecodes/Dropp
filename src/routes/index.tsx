@@ -38,7 +38,7 @@ import PrivacyPolicy from "../pages/dropp-main/PrivacyPolicy";
 import TermsService from "../pages/dropp-main/TermsService";
 import Subscription from "../pages/chef/Subscription";
 import WaiterRoutes from "../pages/waiter/Routes";
-import ChefRoutes from "../pages/chef/Routes";
+import ChefRoutes from "../pages/newChef/Routes";
 import CompanyRoutes from "../pages/company/Routes";
 import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";

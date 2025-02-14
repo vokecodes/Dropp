@@ -21,6 +21,7 @@ const Input = ({
   isReferralCodeLoading,
   container,
   multipleSelect,
+  newName,
 }: InputProps) => {
   return (
     <div className={`relative my-5 ${container}`}>
@@ -60,7 +61,7 @@ const Input = ({
           multiple={multipleSelect}
         >
           <option value="select">
-            Select {multipleSelect ? "tables" : "a category"}
+            Select {multipleSelect ? "tables" : newName ? newName : "a category"}
           </option>
           {options &&
             options?.length > 0 &&
