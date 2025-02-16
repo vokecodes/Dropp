@@ -123,6 +123,16 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 
 export const dateFormatter = new Intl.DateTimeFormat('en-GB', dateOptions);
 
+const dateNoTimeOptions: Intl.DateTimeFormatOptions = {
+  timeZone: 'Africa/Lagos',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hourCycle: 'h23',
+};
+
+export const dateNoTimeFormatter = new Intl.DateTimeFormat('en-GB', dateNoTimeOptions);
+
 
 
 export const generateUUIDBasedOnStringLength =(referenceString: string): string => {

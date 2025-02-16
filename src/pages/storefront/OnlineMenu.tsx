@@ -1,53 +1,53 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, shallowEqual } from "react-redux";
-import PageTitle from "../../../components/PageTitle";
-import OutlineButton from "../../../components/OutlineButton";
-import Button from "../../../components/Button";
+import PageTitle from "../../components/PageTitle";
+import OutlineButton from "../../components/OutlineButton";
+import Button from "../../components/Button";
 import Modal from "@mui/material/Modal";
 import { IoMdClose } from "react-icons/io";
-import Input from "../../../components/CustomInput";
+import Input from "../../components/CustomInput";
 import { BiImages, BiLinkAlt } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 import {
   NewMenuValues,
   NewSubscriptionMenuValues,
-} from "../../../utils/FormInitialValue";
+} from "../../utils/FormInitialValue";
 import { useFormik } from "formik";
-import Dropdown from "../../../components/Dropdown";
-import { useAppDispatch } from "../../../redux/hooks";
+import Dropdown from "../../components/Dropdown";
+import { useAppDispatch } from "../../redux/hooks";
 import {
   addMenu,
   clearError,
   getMenus,
   updateMenu,
-} from "../../../_redux/menu/menuAction";
-import MenuCard from "../../../components/MenuCard";
-import ColoredSpinner from "../../../components/ColoredSpinner";
-import { formatBusinessNameLink } from "../../../utils/formatMethods";
-import { updateBusinessStatus } from "../../../_redux/business/businessAction";
-import TextArea from "../../../components/TextArea";
-import { HandleMultipleImagesUpload } from "../../../utils/uploadMultipleImages";
+} from "../../_redux/menu/menuAction";
+import MenuCard from "../../components/MenuCard";
+import ColoredSpinner from "../../components/ColoredSpinner";
+import { formatBusinessNameLink } from "../../utils/formatMethods";
+import { updateBusinessStatus } from "../../_redux/business/businessAction";
+import TextArea from "../../components/TextArea";
+import { HandleMultipleImagesUpload } from "../../utils/uploadMultipleImages";
 import {
   addSubscriptionMenu,
   getSubscriptionMenus,
   updateSubscriptionMenu,
-} from "../../../_redux/subscriptionMenu/subscriptionMenuAction";
-import SubscriptionChefMenuCard from "../../../components/SubscriptionChefMenuCard";
+} from "../../_redux/subscriptionMenu/subscriptionMenuAction";
+import SubscriptionChefMenuCard from "../../components/SubscriptionChefMenuCard";
 import {
   NewMenuInputsSchema,
   NewSubscriptionMenuInputsSchema,
-} from "../../../utils/ValidationSchema";
-import ChefDashboardLayout from "../../../components/ChefDashboardLayout";
+} from "../../utils/ValidationSchema";
+import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { CHEF_ROUTES } from "../../../routes/routes";
+import { CHEF_ROUTES } from "../../routes/routes";
 import { IoSearchSharp } from "react-icons/io5";
 import { Autocomplete, Chip, InputAdornment, TextField } from "@mui/material";
-import { SERVER } from "../../../config/axios";
-import { MENU_CATEGORY_URL, MENU_DELIVERY_URL, MENU_TAG_URL } from "../../../_redux/urls";
+import { SERVER } from "../../config/axios";
+import { MENU_CATEGORY_URL, MENU_DELIVERY_URL, MENU_TAG_URL } from "../../_redux/urls";
 import { AiFillCloseCircle } from "react-icons/ai";
-import MenuDelivery from "../../../components/MenuDelivery";
+import MenuDelivery from "../../components/MenuDelivery";
 
 
 const menuTab = ["No", "Yes"];
@@ -431,10 +431,7 @@ const OnlineMenu = () => {
         <>
           <div className="w-full px-2 lg:px-6 py-4">
             <div className="flex flex-col lg:flex-row w-full items-center justify-between gap-y-3">
-              <Link className="flex items-center" to={CHEF_ROUTES.linkChefMenu}>
-                <MdOutlineArrowBackIosNew size={20} className="mr-3" />
-                <PageTitle title="Back" />
-              </Link>
+              <PageTitle title="Menu" />
 
               {business && (
                 <div className="">
@@ -563,7 +560,7 @@ const OnlineMenu = () => {
                       />
                       
                       <OutlineButton
-                        title="Add menu"
+                        title="Add Menu"
                         extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
                         onClick={() => {
                           setSelectedTabMenu(menuTab[0]);
@@ -578,26 +575,6 @@ const OnlineMenu = () => {
                   </div>
 
                   <div className="lg:inline-flex flex-row w-full flex-wrap mt-7 ">
-                    {subscriptionMenu?.map((menu: any) => (
-                      <div key={menu?._id} className="lg:w-[31%] mt-7 lg:mr-5">
-                        <SubscriptionChefMenuCard
-                          menu={menu}
-                          onClickEdit={() => {
-                            setSelectedTabMenu(menuTab[1]);
-                            setEditMenu(menu);
-                            openMenuModal();
-                            setValues(menu);
-                          }}
-                          onClickCopy={() => {
-                            setSelectedTabMenu(menuTab[1]);
-                            setCopyMenu(menu);
-                            openCopyMenuModal();
-                            setValues(menu);
-                          }}
-                        />
-                      </div>
-                    ))}
-
                     {menu?.map((menu: any) => (
                       <div key={menu?._id} className="lg:w-[31%] mt-7 lg:mr-5">
                         <MenuCard
@@ -674,37 +651,6 @@ const OnlineMenu = () => {
                   className="cursor-pointer"
                   onClick={closeMenuModal}
                 />
-              </div>
-
-              <div>
-                <p className="mt-5 text-lg text-center font_medium input_text">
-                  Is this a subscription meal?
-                </p>
-              </div>
-
-              <div className="flex bg_sec_gray_color rounded-full cursor-pointer justify-between mt-3 mb-5">
-                {menuTab?.map((menu: string) => (
-                  <p
-                    key={menu}
-                    className={`text-center font_regular py-4 w-1/2 text-base ${
-                      menu === selectedTabMenu
-                        ? "text-white primary_bg_color rounded-full"
-                        : "text-black"
-                    } `}
-                    onClick={() => {
-                      setSelectedTabMenu(menu);
-                      resetForm();
-                      dispatch(clearError());
-                      if (menu === menuTab[1]) {
-                        setFieldValue("subscription", true);
-                        return;
-                      }
-                      setFieldValue("subscription", false);
-                    }}
-                  >
-                    {menu}
-                  </p>
-                ))}
               </div>
 
               <div className="rounded-xl border gray_border_color flex flex-col items-center justify-center px-10 py-10 mt-3">

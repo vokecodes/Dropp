@@ -194,7 +194,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
     },
   ];
   
-  const newMenuItems = [
+  const storefrontMenuItems = [
     {
       icon: (
         <MdHomeFilled
@@ -222,7 +222,6 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       title: "Reports",
       active: location?.pathname === CHEF_ROUTES.linkChefReports,
       to: CHEF_ROUTES.linkChefReports,
-      pro: true
     },
     
     {
@@ -605,7 +604,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </>
                   ) : (
                     <>
-                      {newMenuItems?.map((item: any, i) => (
+                      {storefrontMenuItems?.map((item: any, i) => (
                         <MenuItem
                           key={i}
                           icon={item?.icon}

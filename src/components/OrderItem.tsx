@@ -11,12 +11,15 @@ import { useAppDispatch } from "../redux/hooks";
 import { formatPrice, toTitleCase, uuidGen } from "../utils/formatMethods";
 import { Popover, RadioGroup, Transition } from "@headlessui/react";
 import { IoIosArrowDown } from "react-icons/io";
+import { SERVER } from "../config/axios";
+import { STOREFRONT_ORDER_URL } from "../_redux/urls";
+import Spinner from "./Spinner";
 
 const STATUS_OPTIONS = [
-  "Pending",
-  "Delivered",
-  "Cancelled",
-  "Voided",
+  "pending",
+  "delivered",
+  "cancelled",
+  "voided",
 ]
 
 const OrderItem = ({
@@ -39,13 +42,33 @@ const OrderItem = ({
   event,
   checkoutCode,
   restaurantOrder,
+  order,
+  getStorefrontOrders
 }: OrderItemProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedOrder, setSelectedOrder] = useState<any>();
-  const [orderStatus, setOrderStatus] = useState(STATUS_OPTIONS[0])
+  const [orderStatus, setOrderStatus] = useState(order?.status)
 
   console.log('first= ', orders)
+
+  const [isSending, setIsSending] = useState(false);
+
+  const handleApprovalOrder = (status, orderObj) => {
+    setIsSending(true);
+    if(orderObj?.id){
+      SERVER.patch(`${STOREFRONT_ORDER_URL}/status/${orderObj.id}`, {
+        order: { ...orderObj, status: status },
+      })
+        .then(({ data }) => {
+          dispatch(getStorefrontOrders());
+        })
+        .catch((error) => {
+          console.log('err= ', error)
+        });
+    }
+    setIsSending(false);
+  };
 
   return (
     <div className="my-7">
@@ -373,18 +396,22 @@ const OrderItem = ({
                         : "text-[#EAAC29] bg-[#FFFAED] border-[#EAAC29]"
                       }
                       `}
-                      disabled={false}
+                      disabled={(isSending || orderStatus !== STATUS_OPTIONS[0]) ? true : false}
                     >
-                      {orderStatus === STATUS_OPTIONS[0]
-                        ? "Confirm Order"
-                        : orderStatus}
-                      <IoIosArrowDown
-                        size={10}
-                        className={
-                          orderStatus === STATUS_OPTIONS[1] &&
-                          "hidden"
-                        }
-                      />
+                      {isSending ? <Spinner /> : (
+                        <>
+                          {orderStatus === STATUS_OPTIONS[0]
+                            ? "Confirm Order"
+                            : toTitleCase(orderStatus)}
+                          <IoIosArrowDown
+                            size={10}
+                            className={
+                              orderStatus === STATUS_OPTIONS[1] &&
+                              "hidden"
+                            }
+                          />
+                        </>
+                      )}
                     </Popover.Button>
 
                     <Transition
@@ -410,6 +437,7 @@ const OrderItem = ({
                                     }
                                     onClick={() => {
                                       setOrderStatus(item);
+                                      handleApprovalOrder(item, order);
                                     }}
                                   >
                                     {({ active, checked }) => (

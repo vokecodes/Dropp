@@ -38,7 +38,8 @@ import PrivacyPolicy from "../pages/dropp-main/PrivacyPolicy";
 import TermsService from "../pages/dropp-main/TermsService";
 import Subscription from "../pages/chef/Subscription";
 import WaiterRoutes from "../pages/waiter/Routes";
-import ChefRoutes from "../pages/newChef/Routes";
+import ChefRoutes from "../pages/chef/Routes";
+import StorefrontRoutes from "../pages/storefront/Routes";
 import CompanyRoutes from "../pages/company/Routes";
 import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";
@@ -50,6 +51,7 @@ import {
   QsrSubAdminRoutes,
 } from "../pages/qsr/Routes";
 import QsrShop from "../pages/qsr/QsrShop";
+import StorefrontShop from "../pages/storefront/StorefrontShop";
 
 const AppRoutes = () => {
   const { user } = useSelector(
@@ -71,6 +73,7 @@ const AppRoutes = () => {
           element={<RestaurantShop />}
         />
         <Route path={HOME_ROUTES.exploreQsr} element={<QsrShop />} />
+        <Route path={HOME_ROUTES.exploreStorefront} element={<StorefrontShop />} />
         <Route
           path={HOME_ROUTES.exploreRestaurantEdit}
           element={<RestaurantShop />}
@@ -105,7 +108,7 @@ const AppRoutes = () => {
                 {user?.user?.chefType === QUICK_SERVICE_USER ? (
                   <Route path={QSR_ROUTES.qsr} element={<QsrRoutes />} />
                 ) : (
-                  <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
+                  <Route path={CHEF_ROUTES.chef} element={<StorefrontRoutes />} />
                 )}
               </>
             ) : user?.user?.userType === SUB_CHEF_USER ? (

@@ -16,9 +16,9 @@ import { MdFastfood } from "react-icons/md";
 import ChefShopMenuCard from "../../components/ChefShopMenuCard";
 import ChefsReviews from "../../components/ChefsReviews";
 import Cart from "../../components/Cart";
-import { createARestaurantOrder, editARestaurantOrder } from "../../_redux/order/orderCrud";
+import { createARestaurantOrder, createAStorefrontOrder, editARestaurantOrder } from "../../_redux/order/orderCrud";
 import {
-  getABusinessRestaurantByName,
+  getABusinessByName,
   getABusinessRestaurantOrderByName,
 } from "../../_redux/business/businessCrud";
 import axios from "axios";
@@ -49,8 +49,13 @@ import RestaurantMeal from "../../components/RestaurantMeal";
 import { Images } from "../../config/images";
 import AlertDialog from "../../components/AlertDialog";
 import DownloadPDFButton from "../../components/Receipt";
+import QsrCart from "../../components/QsrCart";
+import QsrShopMenuCard from "../../components/QsrShopMenuCard";
+import { BsFillHandbagFill } from "react-icons/bs";
+import StorefrontCart from "../../components/StorefrontCart";
+import StorefrontMenuCard from "../../components/StorefrontMenuCard";
 
-const RestaurantShop = () => {
+const StorefrontShop = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -65,31 +70,27 @@ const RestaurantShop = () => {
     shallowEqual
   );
 
-  const { businessName, table, menuId } = useParams();
+  const { businessName } = useParams();
 
   const [chef, setChef] = useState<any>(null);
-  const [waiter, setWaiter] = useState<any>(null);
   const [receiptValues, setReceiptValues] = useState({});
   const [orderId, setOrderId] = useState<any>('')
-
   const [chefRecommendedMenu, setChefRecommendedMenu] = useState<any>(null);
-
   const [selectedCategory, setSelectedCategory] = useState<any>("All");
-
   const [searchText, setSearchText] = useState<any>("");
+  const [deliveryCharge, setDeliveryCharge] = useState(0);
 
   const getChef = async () => {
     setIsLoading(true);
     try {
-      const businessRestaurant = await getABusinessRestaurantByName(
-        businessName
-      );
+      const { data } = await getABusinessByName(businessName);
+
       const restaurantOrder = await getABusinessRestaurantOrderByName(
         businessName
       );
 
-      if (businessRestaurant.data) {
-        setChef(businessRestaurant.data.data);
+      if (data) {
+        setChef(data.data);
       }
 
       if (restaurantOrder.data) {
@@ -102,16 +103,6 @@ const RestaurantShop = () => {
     }
   };
 
-  const getWaiter = async () => {
-    SERVER.get(
-      `${RESTAURANT_TABLE_URL}/waiter/${table}`
-    )
-      .then(({ data }) => {
-        setWaiter(data.data);
-      })
-      .catch((err) => {});
-  };
-
   useEffect(() => {
     ReactGA.send({
       hitType: "pageview",
@@ -122,7 +113,6 @@ const RestaurantShop = () => {
 
   useEffect(() => {
     getChef();
-    !location.pathname.includes("add") && getWaiter();
   }, []);
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -207,44 +197,6 @@ const RestaurantShop = () => {
     Hotjar.event("CHEF_SHOP_ADD_MEAL_TO_BAG");
   };
 
-  // const handleAddToBag = (menu: any) => {
-  //   const localCart = [...cartMenu];
-
-  //   // Check if menu is in the cart
-  //   const menuIndex = localCart.findIndex((item) => item.id === menu.id);
-
-  //   if (menuIndex !== -1) {
-  //     // If menu is in the cart, create a new object with the updated quantity
-  //     const updatedMenu = {
-  //       ...localCart[menuIndex],
-  //       quantity: menu.minimumQuantity,
-  //     };
-  //     localCart.splice(menuIndex, 1, updatedMenu);
-  //   } else {
-  //     // If menu is not in the cart, add it with the initial quantity
-  //     const newMenu = { ...menu, quantity: menu.minimumQuantity };
-  //     localCart.push(newMenu);
-  //   }
-
-  //   setCartMenu(localCart);
-  //   // Dispatch to redux
-  //   dispatch(addToCart(localCart));
-
-  //   setAddMenuError("");
-  //   resetCartView();
-
-  //   TrackGoogleAnalyticsEvent(
-  //     "CHEF_SHOP_ADD_MEAL_TO_BAG",
-  //     `${chef?.business?.businessName} Add meal to bag`,
-  //     window.location.pathname + window.location.search,
-  //     {
-  //       foodName: menu?.foodName,
-  //       chef: chef?.business?.businessName,
-  //     }
-  //   );
-  //   Hotjar.event("CHEF_SHOP_ADD_MEAL_TO_BAG");
-  // };
-
   const verifyTransaction = async (referenceId: any) => {
     try {
       const { data } = await axios.get(
@@ -269,13 +221,7 @@ const RestaurantShop = () => {
 
     try {
       const createOrEditOrder = async () => {
-        if (location.pathname.includes("add")) {
-          return await editARestaurantOrder(menuId, {
-            ...orderItem,
-            table,
-          });
-        }
-        return await createARestaurantOrder({ ...orderItem, table });
+        return await createAStorefrontOrder({ ...orderItem });
       };
     
       const handlePayment = (orderId: string) => {
@@ -320,13 +266,6 @@ const RestaurantShop = () => {
 
     try {
       const createOrEditOrder = async () => {
-        if (location.pathname.includes("add")) {
-          return await editARestaurantOrder(menuId, {
-            ...orderItem,
-            table,
-            posPayment: true,
-          });
-        }
         return await createARestaurantOrder({
           ...orderItem,
           table,
@@ -349,6 +288,7 @@ const RestaurantShop = () => {
       }
     } catch (err) {
       handleClickOpen();
+      console.log('err= ', err)
     } finally {
       setCheckoutLaterLoading(false);
     }
@@ -425,6 +365,19 @@ const RestaurantShop = () => {
     )
     .reduce((partialSum: any, a: any) => partialSum + a, 0);
 
+    const [q, setQ] = useState("");
+
+    const categoryFiltered = selectedCategory === "All" ? chef?.menu : chef?.menu.filter(item => item.category === selectedCategory)
+  
+    const searchFiltered = q === ""
+      ? categoryFiltered
+      : categoryFiltered.filter((item: any) =>
+        item?.category?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+        item?.foodName?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+        item?.description?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+      );
+
+
   return (
     <>
       {isLoading ? (
@@ -443,7 +396,7 @@ const RestaurantShop = () => {
                   <div className="lg:w-9/12 h-full">
                     <div className="w-full flex flex-col items-start justify-between gap-y-0 lg:gap-y-8">
                       {/* BIO */}
-                      <div className="w-full lg:pl-10">
+                      <div className="w-full lg:pl-10 lg:pt-5">
                         <div className="flex flex-row items-center my-5 lg:my-0 mx-5">
                           <div className="">
                             <div
@@ -473,10 +426,6 @@ const RestaurantShop = () => {
                                 <h1 className="text-xl lg:text-3xl font_bold ">
                                   {chef?.business?.businessName}
                                 </h1>
-                                <div className="w-2 h-2 rounded-full bg-[#8E8E8E]" />
-                                <p className="input_text font_regular">
-                                  {table}
-                                </p>
                               </div>
 
                               <div className="flex gap-x-1 items-center cursor-pointer">
@@ -506,6 +455,15 @@ const RestaurantShop = () => {
                         </div>
                       </div>
 
+                      <div className={`lg:hidden w-fit h-fit rounded-2xl border border-[#06C167] p-3 cursor-pointer top-[1.2rem] right-2 z-50 ${cartMenu && cartMenu?.length ? 'bg-[#EDFFF6] fixed' : 'bg-[#F3F3F3] absolute'}`} onClick={() => setCartModal(true)}>
+                        <span className="relative w-fit h-fit">
+                            <BsFillHandbagFill size={30} className={`text-[#06C167]`} />
+                            <span className="absolute top-0 right-0 h-4 w-4 flex items-center justify-center rounded-full border border-white bg-[#06C167]">
+                                <p className="text-[8px] text-white">{cartMenu?.length}</p>
+                            </span>
+                        </span>
+                      </div>
+
                       {/* SEARCH */}
                       <div className="w-full px-3 lg:px-16">
                         <div className="bg_sec_gray_color w-full lg:w-1/2 rounded-full px-3 flex items-center justify-between">
@@ -518,9 +476,9 @@ const RestaurantShop = () => {
                               className="bg_sec_gray_color py-3 w-full rounded-full input_text text-md font_regular outline-none"
                               onChange={(e: any) => {
                                 if (e.target.value) {
-                                  setSearchText(e.target.value);
+                                  setQ(e.target.value);
                                 } else {
-                                  setSearchText(e.target.value);
+                                  setQ(e.target.value);
                                 }
                               }}
                             />
@@ -531,7 +489,7 @@ const RestaurantShop = () => {
 
                     {/* CATEGORIES */}
                     <div className="sticky top-0 z-30 w-full px-2 lg:pl-16 pt-4 pb-2 bg-white">
-                      <div className="flex flex-row flex-nowrap overflow-x-scroll pb-2">
+                      <div className="flex flex-row flex-nowrap overflow-x-auto pb-2">
                         <div
                           className={`px-5 py-3 flex shrink-0 items-center mr-3 rounded-full cursor-pointer ${
                             selectedCategory === "All"
@@ -600,75 +558,33 @@ const RestaurantShop = () => {
 
                     {/* MEALS */}
                     <div className="pb-20 px-2 lg:pl-10 lg:pr-0">
-                      <div className="flex flex-col lg:gap-y-2">
-                        {chef?.menuCategories &&
-                        chef?.menuCategories?.length > 0 ? (
-                          selectedCategory === "All" ? (
-                            // chef?.menuCategories.map(
-                            //   (category: any, i: number) => (
-                            <div
-                              // key={category?.value}
-                              className="flex flex-col items-start justify-start gap-y-1"
-                            >
-                              <RestaurantMeal
-                                // category={category}
-                                selectedCategory={selectedCategory}
-                                chef={chef}
-                                handleAddToBag={handleAddToBag}
+                      <div className="grid grid-cols-2 lg:grid-cols-5 justify-center items-stretch gap-5 w-full flex-wrap mt-7 lg:px-2">
+                        {searchFiltered?.map((menu: any) => (
+                        <React.Fragment key={menu?._id}>
+                            <StorefrontMenuCard
+                                menu={menu}
+                                mode={"dineIn"}
+                                onClickEdit={() => {
+                                    setEditMenu(menu);
+                                    openMenuModal();
+                                    setValues(menu);
+                                }}
+                                onClickCopy={() => {
+                                    setCopyMenu(menu);
+                                    openCopyMenuModal();
+                                    setValues(menu);
+                                }}
+                                inCart={cartMenu?.find((m: any) => m._id === menu._id)}
+                                onClickAddToBag={() => handleAddToBag(menu)}
                                 cartMenu={cartMenu}
-                                searchText={searchText}
                                 handleIncrement={handleIncrement}
                                 handleDecrement={handleDecrement}
-                                chefRecommendedMenu={chefRecommendedMenu}
-                                showMinimumQuantityReached={
-                                  showMinimumQuantityReached
-                                }
+                                selectedMealQuantityReached={selectedMealQuantityReached}
+                                showMinimumQuantityReached={showMinimumQuantityReached}
                                 addMenuError={addMenuError}
-                                selectedMealQuantityReached={
-                                  selectedMealQuantityReached
-                                }
-                              />
-                            </div>
-                          ) : (
-                            //   )
-                            // )
-                            <div className="flex flex-col items-start justify-start gap-y-1">
-                              {/* <div>
-                              <h1 className="card_headerText text-2xl">
-                                {selectedCategory}
-                              </h1>
-                            </div> */}
-                              <RestaurantMeal
-                                selectedCategory={selectedCategory}
-                                chef={chef}
-                                handleAddToBag={handleAddToBag}
-                                cartMenu={cartMenu}
-                                searchText={searchText}
-                                handleIncrement={handleIncrement}
-                                handleDecrement={handleDecrement}
-                                chefRecommendedMenu={chefRecommendedMenu}
-                                showMinimumQuantityReached={
-                                  showMinimumQuantityReached
-                                }
-                                addMenuError={addMenuError}
-                                selectedMealQuantityReached={
-                                  selectedMealQuantityReached
-                                }
-                              />
-                            </div>
-                          )
-                        ) : (
-                          <div className="flex flex-col items-center">
-                            <img
-                              src="/img/no-employees.svg"
-                              alt="empty"
-                              className="mt-8 mb-3"
                             />
-                            <h2 className="text-xl input_text mb-3">
-                              No meals here.
-                            </h2>
-                          </div>
-                        )}
+                        </React.Fragment>
+                        ))}
                       </div>
 
                       {/* REVIEWS */}
@@ -679,14 +595,16 @@ const RestaurantShop = () => {
                   </div>
 
                   <div className="hidden lg:block w-3/12 h-full fixed right-0 z-30">
-                    <div className="">
-                      <RestaurantCart
+                    <div className="h-full w-full">
+                      <StorefrontCart
                         handleCheckout={(orderItem: any) =>
-                          handleCheckout(orderItem)
+                            handleCheckout(orderItem)
                         }
                         handlePayLaterCheckout={(orderItem: any) =>
-                          handlePayLaterCheckout(orderItem)
+                            handlePayLaterCheckout(orderItem)
                         }
+                        deliveryCharge={deliveryCharge}
+                        setDeliveryCharge={setDeliveryCharge}
                         checkoutLoading={checkoutLoading}
                         checkoutLaterLoading={checkoutLaterLoading}
                         cartMenu={cartMenu}
@@ -701,37 +619,30 @@ const RestaurantShop = () => {
                         setDeliveryView={setDeliveryView}
                         reviewView={reviewView}
                         setReviewView={setReviewView}
-                        errorLogin={errorLogin}
-                        setErrorLogin={setErrorLogin}
                         handleDelete={handleDelete}
-                        selectedMealQuantityReached={
-                          selectedMealQuantityReached
-                        }
+                        selectedMealQuantityReached={selectedMealQuantityReached}
                         showMinimumQuantityReached={showMinimumQuantityReached}
                         addMenuError={addMenuError}
                         setAddMenuError={setAddMenuError}
                         openModal={openModal}
-                        chefRecommendedMenu={chefRecommendedMenu}
                         handleAddToBag={handleAddToBag}
                         cartModal={cartModal}
                         setCartModal={setCartModal}
                         totalAmount={totalAmount}
-                        updateReceiptValues={setReceiptValues}
+                        closeCartModal={closeCartModal}
                       />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <Footer  logo={Images.logo} />
+              <Footer shop={true}  logo={Images.logo} />
 
               <CartFloat
                 cartMenu={cartMenu}
-                totalAmount={totalAmount}
-                deliveryCost={0}
+                chef={chef}
                 cartModal={cartModal}
                 setCartModal={setCartModal}
-                restaurantcartMenu={true}
               />
 
               <Modal
@@ -739,59 +650,48 @@ const RestaurantShop = () => {
                 onClose={closeCartModal}
                 aria-labelledby="parent-modal-title"
                 aria-describedby="parent-modal-description"
-                className="lg:hidden"
               >
-                <div className="absolute z-10 h-full w-screen bg-neutral-100 lg:bg-white overflow-auto outline-none">
-                  {/* <div className="flex pt-5 pr-5">
-                    <div className="flex-1"></div>
-                    <IoMdClose
-                      size={24}
-                      color="#8E8E8E"
-                      className="cursor-pointer"
-                      onClick={closeCartModal}
+                <div className="fixed right-0 z-10 h-full w-full lg:w-1/3 bg-neutral-100 lg:bg-white overflow-auto outline-none">
+                    <StorefrontCart
+                      handleCheckout={(orderItem: any) =>
+                          handleCheckout(orderItem)
+                      }
+                      handlePayLaterCheckout={(orderItem: any) =>
+                          handlePayLaterCheckout(orderItem)
+                      }
+                      deliveryCharge={deliveryCharge}
+                      setDeliveryCharge={setDeliveryCharge}
+                      checkoutLoading={checkoutLoading}
+                      checkoutLaterLoading={checkoutLaterLoading}
+                      cartMenu={cartMenu}
+                      chef={chef}
+                      handleIncrement={handleIncrement}
+                      handleDecrement={handleDecrement}
+                      selectedDate={selectedDate}
+                      setSelectedDate={setSelectedDate}
+                      cartView={cartView}
+                      setCartView={setCartView}
+                      deliveryView={deliveryView}
+                      setDeliveryView={setDeliveryView}
+                      reviewView={reviewView}
+                      setReviewView={setReviewView}
+                      handleDelete={handleDelete}
+                      selectedMealQuantityReached={selectedMealQuantityReached}
+                      showMinimumQuantityReached={showMinimumQuantityReached}
+                      addMenuError={addMenuError}
+                      setAddMenuError={setAddMenuError}
+                      openModal={openModal}
+                      handleAddToBag={handleAddToBag}
+                      cartModal={cartModal}
+                      setCartModal={setCartModal}
+                      totalAmount={totalAmount}
+                      closeCartModal={closeCartModal}
                     />
-                  </div> */}
-                  <RestaurantCart
-                    handleCheckout={(orderItem: any) =>
-                      handleCheckout(orderItem)
-                    }
-                    handlePayLaterCheckout={(orderItem: any) =>
-                      handlePayLaterCheckout(orderItem)
-                    }
-                    checkoutLoading={checkoutLoading}
-                    checkoutLaterLoading={checkoutLaterLoading}
-                    cartMenu={cartMenu}
-                    chef={chef}
-                    handleIncrement={handleIncrement}
-                    handleDecrement={handleDecrement}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    cartView={cartView}
-                    setCartView={setCartView}
-                    deliveryView={deliveryView}
-                    setDeliveryView={setDeliveryView}
-                    reviewView={reviewView}
-                    setReviewView={setReviewView}
-                    errorLogin={errorLogin}
-                    setErrorLogin={setErrorLogin}
-                    handleDelete={handleDelete}
-                    selectedMealQuantityReached={selectedMealQuantityReached}
-                    showMinimumQuantityReached={showMinimumQuantityReached}
-                    addMenuError={addMenuError}
-                    setAddMenuError={setAddMenuError}
-                    openModal={openModal}
-                    chefRecommendedMenu={chefRecommendedMenu}
-                    handleAddToBag={handleAddToBag}
-                    cartModal={cartModal}
-                    setCartModal={setCartModal}
-                    totalAmount={totalAmount}
-                    updateReceiptValues={setReceiptValues}
-                  />
                 </div>
               </Modal>
 
-              {/* RESTAURANT DETAILS */}
 
+              {/* RESTAURANT DETAILS */}
               <Modal
                 open={businessModal}
                 onClose={closeBusinessModal}
@@ -846,8 +746,6 @@ const RestaurantShop = () => {
                           <h1 className="text-xl lg:text-3xl font_bold ">
                             {chef?.business?.businessName}
                           </h1>
-                          <div className="w-2 h-2 rounded-full bg-[#8E8E8E]" />
-                          <p className="input_text font_regular">{table}</p>
                         </div>
 
                         <p className="input_text font_regular">
@@ -994,19 +892,17 @@ const RestaurantShop = () => {
                     </div>
 
                     <div className="my-3 lg:my-10 w-full">
-                      <DownloadPDFButton chef={chef} waiter={waiter}receiptValues={receiptValues} orderId={orderId}>
-                        <Button
-                          title="Download receipt"
-                          extraClasses="w-full p-3 rounded-full"
-                          // onClick={() => closeModal()}
-                        />
-                      </DownloadPDFButton>
+                      <Button
+                        title="Done"
+                        extraClasses="w-full p-3 rounded-full"
+                        onClick={() => closeModal()}
+                      />
                     </div>
                   </div>
                 </div>
               </Modal>
 
-              <AlertDialog message='An error has occured, ensure you have the correct Table number and an internet connection.' handleClose={handleClose} open={openAlertModal} />
+              <AlertDialog message='An error has occured, ensure you have an internet connection.' handleClose={handleClose} open={openAlertModal} />
             </div>
           ) : (
             <NotFound />
@@ -1017,4 +913,4 @@ const RestaurantShop = () => {
   );
 };
 
-export default RestaurantShop;
+export default StorefrontShop;

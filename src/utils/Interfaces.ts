@@ -143,7 +143,9 @@ export type WalletItemProps = {
 
 export type OrderItemProps = {
   id: string;
+  order?: any;
   orders?: any;
+  getStorefrontOrders?: any;
   cartMenu?: any;
   date: string;
   time: string;

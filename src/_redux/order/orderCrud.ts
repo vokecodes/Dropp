@@ -3,6 +3,7 @@ import {
   ORDER_URL,
   QSR_ORDER_URL,
   RESTAURANT_ORDER_URL,
+  STOREFRONT_ORDER_URL,
   SUBSCRIPTION_URL,
   SUB_CHEF_URL,
 } from "../urls";
@@ -28,6 +29,10 @@ export const getChefUserOrders = () => {
   return SERVER.get(`${ORDER_URL}/chef`);
 };
 
+export const getStorefrontOrdersCrud = () => {
+  return SERVER.get(`${STOREFRONT_ORDER_URL}/storefront`);
+};
+
 export const updateChefUserOrders = (id: string, data: any) => {
   return SERVER.patch(`${ORDER_URL}/${id}`, { ...data });
 };
@@ -42,6 +47,10 @@ export const getChefUserSubscriptionOrders = () => {
 
 export const createARestaurantOrder = (data: any) => {
   return SERVER.post(`${RESTAURANT_ORDER_URL}`, { ...data });
+};
+
+export const createAStorefrontOrder = (data: any) => {
+  return SERVER.post(`${STOREFRONT_ORDER_URL}`, { ...data });
 };
 
 export const createAQsrOrder = (data: any) => {

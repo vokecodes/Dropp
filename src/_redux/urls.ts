@@ -95,6 +95,8 @@ export const MENU_DELIVERY_URL = `${BASE_API_URL}/menu-delivery`;
 
 export const RESTAURANT_ORDER_URL = `${BASE_API_URL}/restaurant-order`;
 
+export const STOREFRONT_ORDER_URL = `${BASE_API_URL}/storefront-order`;
+
 export const QSR_ORDER_URL = `${BASE_API_URL}/qsr-order`;
 
 export const ADMIN_DROPP_DASHBOARD_URL = `${BASE_API_URL}/admin/dropp-dashboard`;

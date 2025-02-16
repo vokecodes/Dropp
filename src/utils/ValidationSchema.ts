@@ -205,6 +205,24 @@ export const QsrCheckoutSchema = Yup.object().shape({
   phoneNumber: Yup.string().optional(),
 });
 
+export const StorefrontPickupSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  email: Yup.string().email().required(),
+  phoneNumber: Yup.string().required(),
+  discountCode: Yup.string().optional(),
+});
+
+export const StorefrontDeliverySchema = Yup.object().shape({
+  name: Yup.string().required(),
+  email: Yup.string().email().required(),
+  phoneNumber: Yup.string().required(),
+  deliveryState: Yup.string().required(),
+  deliveryArea: Yup.string().required(),
+  deliveryTime: Yup.string().required(),
+  deliveryAddress: Yup.string().required(),
+  discountCode: Yup.string().optional(),
+});
+
 export const CashierLoginSchema = Yup.object().shape({
   employeeID: Yup.string().required("Employee ID is required."),
   password: Yup.string().required("Password is required."),
