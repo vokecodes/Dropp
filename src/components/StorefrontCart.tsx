@@ -22,6 +22,7 @@ import { Modal } from "@mui/material";
 import { TbTruckDelivery } from "react-icons/tb";
 import AlertDialog from "./AlertDialog";
 import { IoLocationOutline } from "react-icons/io5";
+import { StorefrontValues } from "../utils/Interfaces";
 
 const deliveryFormInputs = [
   { type: "text", placeholder: "Name", name: "name" },
@@ -206,7 +207,7 @@ const StorefrontCart = ({
     touched,
     resetForm,
     isValid,
-  } = useFormik({
+  } = useFormik<StorefrontValues>({
     initialValues: deliveryOption === DELIVERY_OPTIONS[0] ? StorefrontDeliveryValues : StorefrontPickupValues,
     validationSchema: deliveryOption === DELIVERY_OPTIONS[0] ? StorefrontDeliverySchema : StorefrontPickupSchema,
     onSubmit: (values) => {
@@ -371,9 +372,9 @@ const StorefrontCart = ({
 
                                     handleChange({ target });
                                 }}
-                                  value={values.deliveryState}
+                                  value={values?.deliveryState}
                                   options={statesList}
-                                  error={errors.deliveryState && touched.deliveryState && errors.deliveryState}
+                                  error={errors?.deliveryState && touched?.deliveryState && errors?.deliveryState}
                                 />
 
                                 <Input
@@ -541,6 +542,7 @@ const StorefrontCart = ({
                     totalAmount: totalAmount + processingFee + (deliveryOption === DELIVERY_OPTIONS[0] ? deliveryCharge : 0),
                     discountAmount,
                     ...values,
+                    deliveryOption: deliveryOption,
                     storefront: chef?.profile?._id,
                     cartMenu,
                   });

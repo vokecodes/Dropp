@@ -170,6 +170,17 @@ export type OrderItemProps = {
   paymentLoading?: boolean;
 };
 
+export type StorefrontValues = {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  deliveryState?: string;
+  deliveryArea?: string;
+  deliveryTime?: string;
+  deliveryAddress?: string;
+  discountCode: string;
+};
+
 export type EmployeeItemProps = {
   id?: string;
   lastName?: string;

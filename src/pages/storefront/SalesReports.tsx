@@ -868,6 +868,12 @@ const SalesReports = () => {
                               </th>
                               <th
                                 scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                              >
+                                Fulfillment Option
+                              </th>
+                              <th
+                                scope="col"
                                 className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[120px]"
                               >
                                 <Popover className="relative">
@@ -1044,6 +1050,9 @@ const SalesReports = () => {
                                   </td>
                                   <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
                                     {transaction?.deliveryTime}
+                                  </td>
+                                  <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                    {transaction?.deliveryOption}
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
                                     {transaction?.paymentType}
