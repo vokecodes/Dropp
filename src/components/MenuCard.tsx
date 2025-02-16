@@ -94,7 +94,7 @@ const MenuCard = ({
 
   return (
     <>
-      <div className="bg-white shadow rounded-xl w-full h-full relative">
+      <div className="flex flex-col items-stretch bg-white shadow rounded-xl w-full h-full relative">
         {menu?.discount && (
           <div className="absolute mt-5 ml-5 z-10">
             <div className="yellow_bg w-40 h-10 rounded-2xl flex items-center justify-center">
@@ -153,92 +153,93 @@ const MenuCard = ({
             />
           </div>
         </div>
-        <div className={`py-4 px-6 ${menu?.hide ? "opacity-50" : ""}`}>
-          <h2 className=" text-black font_bold ">{menu?.foodName}</h2>
-          <h6 className="text-lg font_bold primary_txt_color mt-1">
-            <span
-              className={`${
-                menu?.discount ? "line-through primary_light_txt_color" : ""
-              }`}
-            >
-              ₦{formatPrice(menu?.price)}
-            </span>{" "}
-            {menu?.discount && (
-              <span>
-                ₦
-                {formatPrice(
-                  menu?.price - (menu?.price / 100) * menu?.discount
-                )}
-              </span>
-            )}
-          </h6>
-          <p className="text-gray-400 text-sm truncate mt-1">
-            {menu?.description}
-          </p>
+        <div className={`grow flex flex-col items-stretch justify-between py-4 px-6 ${menu?.hide ? "opacity-50" : ""}`}>
+          <div>
+            <h2 className=" text-black font_bold ">{menu?.foodName}</h2>
+            <h6 className="text-lg font_bold primary_txt_color mt-1">
+              <span
+                className={`${
+                  menu?.discount ? "line-through primary_light_txt_color" : ""
+                }`}
+              >
+                ₦{formatPrice(menu?.price)}
+              </span>{" "}
+              {menu?.discount && (
+                <span>
+                  ₦
+                  {formatPrice(
+                    menu?.price - (menu?.price / 100) * menu?.discount
+                  )}
+                </span>
+              )}
+            </h6>
+            <p className="text-gray-400 text-sm truncate mt-1">
+              {menu?.description}
+            </p>
 
-          <>
-            <div className="my-3">
-              {!favourite && (
-                <>
-                  {/* {mode === "dineIn" ? (
-                    <div className="w-full flex flex-row items-center justify-between gap-x-5">
-                      <Button
-                        title="Details"
-                        extraClasses="w-full rounded-full mt-2"
-                        disabled={menu?.hide}
-                        onClick={() => openMenuInfoModal()}
-                      />
+          </div>
 
+          <div className="my-3">
+            {!favourite && (
+              <>
+                {/* {mode === "dineIn" ? (
+                  <div className="w-full flex flex-row items-center justify-between gap-x-5">
+                    <Button
+                      title="Details"
+                      extraClasses="w-full rounded-full mt-2"
+                      disabled={menu?.hide}
+                      onClick={() => openMenuInfoModal()}
+                    />
+
+                    <Button
+                      title={"Duplicate"}
+                      extraClasses="w-full rounded-full"
+                      disabled={menu?.hide}
+                      onClick={onClickCopy}
+                    />
+                  </div>
+                ) : (
+                  
+                )} */}
+
+                {!kitchen && mode !== "qsrCashier" && (
+                  <div className="w-full flex flex-row items-center justify-between gap-x-2 lg:gap-x-5">
+                    <Button
+                      title={favourite ? "Add to bag" : "Edit"}
+                      extraClasses="!w-1/2 !px-6"
+                      disabled={menu?.hide}
+                      onClick={favourite ? () => {} : onClickEdit}
+                    />
+
+                    {!favourite && (
                       <Button
                         title={"Duplicate"}
-                        extraClasses="w-full rounded-full"
+                        extraClasses="!w-1/2 !px-6"
                         disabled={menu?.hide}
                         onClick={onClickCopy}
                       />
-                    </div>
-                  ) : (
-                    
-                  )} */}
+                    )}
+                  </div>
+                )}
 
-                  {!kitchen && mode !== "qsrCashier" && (
-                    <div className="w-full flex flex-row items-center justify-between gap-x-2 lg:gap-x-5">
-                      <Button
-                        title={favourite ? "Add to bag" : "Edit"}
-                        extraClasses="!w-1/2 !px-6"
-                        disabled={menu?.hide}
-                        onClick={favourite ? () => {} : onClickEdit}
-                      />
-
-                      {!favourite && (
-                        <Button
-                          title={"Duplicate"}
-                          extraClasses="!w-1/2 !px-6"
-                          disabled={menu?.hide}
-                          onClick={onClickCopy}
-                        />
-                      )}
-                    </div>
-                  )}
-
-                  {!kitchen && mode !== "qsrCashier" && (
-                    <OutlineButton
-                      title="Delete"
-                      disabled={menu?.hide}
-                      loading={mode === "dineIn" ? dinningMenuLoading : loading}
-                      extraClasses="!w-full !mx-auto rounded-full px-8 py-2 mt-2"
-                      onClick={() =>
-                        mode === "dineIn"
-                          ? dispatch(deleteDineInMenu(menu?._id))
-                          : mode === "qsrSubAdmin" 
-                          ? dispatch(deleteQsrSubAdminDineInMenu(menu?._id))
-                          : dispatch(deleteMenu(menu?._id))
-                      }
-                    />
-                  )}
-                </>
-              )}
-            </div>
-          </>
+                {!kitchen && mode !== "qsrCashier" && (
+                  <OutlineButton
+                    title="Delete"
+                    disabled={menu?.hide}
+                    loading={mode === "dineIn" ? dinningMenuLoading : loading}
+                    extraClasses="!w-full !mx-auto rounded-full px-8 py-2 mt-2"
+                    onClick={() =>
+                      mode === "dineIn"
+                        ? dispatch(deleteDineInMenu(menu?._id))
+                        : mode === "qsrSubAdmin" 
+                        ? dispatch(deleteQsrSubAdminDineInMenu(menu?._id))
+                        : dispatch(deleteMenu(menu?._id))
+                    }
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 

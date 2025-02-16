@@ -8,6 +8,7 @@ import { SeOrderItemProps } from "../../utils/Interfaces";
 import {
   getChefOrders,
   getChefSubscriptionOrders,
+  getStorefrontOrders,
 } from "../../_redux/order/orderAction";
 import moment from "moment";
 import SubscriptionOrderItem from "../../components/SubscriptionOrderItem";
@@ -34,10 +35,9 @@ const renderTableHeader = () => (
 const ChefOrders = () => {
   const dispatch = useAppDispatch();
 
-  const { orders, auth, subscriptionOrders } = useSelector(
+  const { orders, auth } = useSelector(
     (state: any) => ({
       orders: state.orders.orders,
-      subscriptionOrders: state.orders.subscriptionOrders,
       auth: state.auth.user,
     }),
     shallowEqual
@@ -48,9 +48,10 @@ const ChefOrders = () => {
   const [selectedCustomerOrders, setSelectedCustomerOrders] = useState<any>("");
 
   useEffect(() => {
-    dispatch(getChefOrders());
-    dispatch(getChefSubscriptionOrders());
+    dispatch(getStorefrontOrders());
   }, []);
+
+  console.log('first= ', orders)
 
   return (
     <>
@@ -71,26 +72,26 @@ const ChefOrders = () => {
               <>
                 {renderTableHeader()}
                 {orders &&
-                orders?.filter((o: any) => o.status === "processed")?.length >
+                orders?.filter((o: any) => o.status === "pending")?.length >
                   0 ? (
                   orders
-                    ?.filter((o: any) => o.status === "processed")
+                    ?.filter((o: any) => o.status === "pending")
                     ?.map((order: any, i: number) => (
                       <div className="w-full min-w-[800px]">
                         <OrderItem
                           key={order?.id}
                           id={order?.id}
                           orders={order.cartMenu}
+                          order={order}
+                          getStorefrontOrders={getStorefrontOrders}
                           date={moment(order?.deliveryDate).format(
                             "MMM DD YYYY"
                           )}
                           time={order?.deliveryTime}
                           showCustomer={selectedCustomerOrders === order?.id}
-                          customerImage={order?.customer?.image}
-                          customerName={`${order?.customer?.firstName} ${order?.customer?.lastName}`}
-                          customerNumber={order?.customer?.phoneNumber}
+                          customerName={order?.name}
+                          customerNumber={order?.phoneNumber}
                           address={order?.deliveryAddress}
-                          note={order?.note}
                           checkoutCode={order?.checkoutCode}
                           completed={order?.status}
                           onClickIconOpen={() =>
@@ -112,28 +113,27 @@ const ChefOrders = () => {
                 {renderTableHeader()}
 
                 {orders &&
-                orders?.filter((o: any) => o.status === "completed")?.length >
+                orders?.filter((o: any) => o.status !== "pending")?.length >
                   0 ? (
                   orders
-                    ?.filter((o: any) => o.status === "completed")
+                    ?.filter((o: any) => o.status !== "pending")
                     ?.map((order: any, i: number) => (
                       <div className="w-full min-w-[800px]">
                         <OrderItem
                           key={order?.id}
                           id={order?.id}
                           orders={order.cartMenu}
+                          order={order}
+                          getStorefrontOrders={getStorefrontOrders}
                           date={moment(order?.deliveryDate).format(
                             "MMM DD YYYY"
                           )}
                           time={order?.deliveryTime}
                           showCustomer={selectedCustomerOrders === order?.id}
-                          customerImage={order?.customer?.image}
-                          customerName={`${order?.customer?.firstName} ${order?.customer?.lastName}`}
+                          customerName={`${order?.name}`}
+                          customerNumber={`${order?.phoneNumber}`}
                           address={order?.deliveryAddress}
-                          note={order?.note}
                           completed={order?.status}
-                          review={order?.review}
-                          rating={order?.rating}
                           checkoutCode={order?.checkoutCode}
                           onClickIconOpen={() =>
                             setSelectedCustomerOrders(order.id)
@@ -174,13 +174,12 @@ const ChefOrders = () => {
                         time={order?.deliveryTime}
                         showCustomer={selectedCustomerOrders === order?._id}
                         customerImage={order?.customer?.image}
-                        customerName={`${order?.customer?.firstName} ${order?.customer?.lastName}`}
+                        customerName={`${order?.customer?.firstName}`}
                         address={order.deliveryAddress}
                         meals={order.meals}
                         weeks={order.weeks}
                         startDate={order.startDate}
                         totalAmount={order?.totalAmount}
-                        note={order?.note}
                         completed={order?.status}
                         filteredMenuDetails={order.filteredMenuDetails}
                         review={order?.review}

@@ -143,7 +143,9 @@ export type WalletItemProps = {
 
 export type OrderItemProps = {
   id: string;
+  order?: any;
   orders?: any;
+  getStorefrontOrders?: any;
   cartMenu?: any;
   date: string;
   time: string;
@@ -166,6 +168,17 @@ export type OrderItemProps = {
   paid?: boolean;
   markAsPaid?: any;
   paymentLoading?: boolean;
+};
+
+export type StorefrontValues = {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  deliveryState?: string;
+  deliveryArea?: string;
+  deliveryTime?: string;
+  deliveryAddress?: string;
+  discountCode: string;
 };
 
 export type EmployeeItemProps = {

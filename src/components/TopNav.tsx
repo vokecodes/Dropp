@@ -195,6 +195,120 @@ const TopNav = ({ page, event }: any) => {
     },
   ];
 
+  const storefrontMenuItems = [
+    {
+      icon: (
+        <MdHomeFilled
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
+          }
+        />
+      ),
+      title: "Home",
+      active: location?.pathname === CHEF_ROUTES.linkChef,
+      to: CHEF_ROUTES.linkChef,
+    },
+    {
+      icon: (
+        <FaSquarePollVertical
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefReports
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Reports",
+      active: location?.pathname === CHEF_ROUTES.linkChefReports,
+      to: CHEF_ROUTES.linkChefReports,
+    },
+    
+    {
+      icon: (
+        <MdOutlineFoodBank
+          size={28}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefMenu
+              ? "#06c167"
+              : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
+              ? "#06c167"
+              : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Menu",
+      active:
+        location?.pathname === CHEF_ROUTES.linkChefMenu ||
+        location?.pathname === CHEF_ROUTES.linkChefMenuOnline ||
+        location?.pathname === CHEF_ROUTES.linkChefMenuDineIn,
+      to: CHEF_ROUTES.linkChefMenu,
+    },
+    {
+      icon: (
+        <CgFileDocument
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefOrders
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Orders",
+      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
+      to: CHEF_ROUTES.linkChefOrders,
+    },
+    {
+      icon: (
+        <RiWallet3Line
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefWallet
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "My Wallet",
+      active: location?.pathname === CHEF_ROUTES.linkChefWallet,
+      to: CHEF_ROUTES.linkChefWallet,
+    },
+    {
+      icon: (
+        <BsChatDots
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefChat
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Chats",
+      active: location?.pathname === CHEF_ROUTES.linkChefChat,
+      to: CHEF_ROUTES.linkChefChat,
+    },
+    {
+      icon: (
+        <AiFillSetting
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefSettings
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Settings",
+      active: location?.pathname === CHEF_ROUTES.linkChefSettings,
+      to: CHEF_ROUTES.linkChefSettings,
+    },
+  ];
+
   const restaurantMenuItems = [
     {
       icon: (
@@ -521,7 +635,7 @@ const TopNav = ({ page, event }: any) => {
       : person?.isRestaurant
       ? restaurantMenuItems
       : person?.userType === USER_TYPE.CHEF
-      ? chefMenuItems
+      ? storefrontMenuItems
       : person?.userType === USER_TYPE.COMPANY
       ? companyMenuItems
       : customerMenuItems;
@@ -537,7 +651,7 @@ const TopNav = ({ page, event }: any) => {
             person?.userType === USER_TYPE.COMPANY ? (
               <Link to="/">
                 <span className="sr-only">Dropp</span>
-                <img className="h-6 w-auto" src="/images/logo.svg" alt="" />
+                <img className="h-6 w-auto" src={person?.userType === USER_TYPE.CHEF ? "/img/logos/logo-store.png" : "/images/logo.svg"} alt="" />
               </Link>
             ) : (
               <Link to="/">

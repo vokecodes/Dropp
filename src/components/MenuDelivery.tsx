@@ -27,8 +27,9 @@ const MenuDelivery = ({
         }));
 
         setStates(statesJson);
+        setValues({});
         if(deliveryItems){
-            setValues(deliveryItems)
+            setValues(deliveryItems);
             setLgas(nigeria_state_and_lgas.filter(item => item.alias === deliveryItems.delivery_city)[0].lgas)
             setDeliveryTime(deliveryItems.delivery_time)
             setDeliveryArea(deliveryItems.delivery_areas)

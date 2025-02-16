@@ -164,6 +164,24 @@ export const QsrCheckoutValues = {
   phoneNumber: "",
 };
 
+export const StorefrontDeliveryValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  deliveryState: "",
+  deliveryArea: "",
+  deliveryTime: "",
+  deliveryAddress: "",
+  discountCode: "",
+};
+
+export const StorefrontPickupValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  discountCode: "",
+};
+
 export const CashierLoginValues = {
   employeeID: "",
   password: "",
