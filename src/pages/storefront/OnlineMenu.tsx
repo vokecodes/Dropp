@@ -43,11 +43,13 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { CHEF_ROUTES } from "../../routes/routes";
 import { IoSearchSharp } from "react-icons/io5";
-import { Autocomplete, Chip, InputAdornment, TextField } from "@mui/material";
+import { Alert, Autocomplete, Chip, InputAdornment, Snackbar, TextField } from "@mui/material";
 import { SERVER } from "../../config/axios";
 import { MENU_CATEGORY_URL, MENU_DELIVERY_URL, MENU_TAG_URL } from "../../_redux/urls";
 import { AiFillCloseCircle } from "react-icons/ai";
 import MenuDelivery from "../../components/MenuDelivery";
+import AlertDialog from "../../components/AlertDialog";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 
 const menuTab = ["No", "Yes"];
@@ -96,6 +98,20 @@ const OnlineMenu = () => {
     }),
     shallowEqual
   );
+
+  const [alertPresent, setAlertPresent] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleCloseAlert = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
 
 
   const [editMenu, setEditMenu] = useState<any>();
@@ -448,7 +464,7 @@ const OnlineMenu = () => {
                       extraClasses="px-8 py-2 !border-[#06C167] !text-[#06C167]"
                       onClick={() =>
                         window.open(
-                          `/preview/${formatBusinessNameLink(
+                          `/preview/storefront/${formatBusinessNameLink(
                             business?.businessName
                           )}`,
                           "_blank"
@@ -497,14 +513,13 @@ const OnlineMenu = () => {
 
                       <button 
                         className="w-fit h-full px-6 py-3 rounded-xl bg-[#06C167]"
-                        onClick={() =>
-                          window.open(
-                            `/explore/${formatBusinessNameLink(
-                              business?.businessName
-                            )}`,
-                            "_blank"
-                          )
-                        }
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/storefront/${formatBusinessNameLink(
+                            business?.businessName
+                          )}`)
+                          setAlertPresent("Url copied to clipboard!");
+                          setOpenAlert(true);
+                        }}
                       >
                         <BiLinkAlt size={30} color="#fff" />
                       </button>
@@ -520,104 +535,102 @@ const OnlineMenu = () => {
             </div>
 
             <div className="bg-white rounded-2xl w-full py-10 px-2 lg:px-5 mt-3">
-              {menu && menu?.length > 0 ? (
-                <>
-                  <div className="flex flex-col lg:flex-row w-full justify-between gap-y-5">
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-x-3 gap-y-3">
-                      <div className="flex gap-3">
-                        <div className="w-fit bg-white rounded-full pl-18 pr-20 flex items-center justify-between w-fit border border-neutral-200">
-                          <div className="p-2">
-                            <IoSearchSharp color="#D6D6D6" size={20} />
-                          </div>
-                          <div className="flex-1 ml-4">
-                            <input
-                              // ref={ref}
-                              placeholder="Search menu"
-                              className="py-2 w-full rounded-full input_text text-md font_regular outline-none"
-                              // value={q}
-                              // onChange={handleSearchChange}
-                            />
-                          </div>
-                        </div>
+              <div className="flex flex-col lg:flex-row w-full justify-between gap-y-5">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-x-3 gap-y-3">
+                  <div className="flex gap-3">
+                    <div className="w-fit bg-white rounded-full pl-18 pr-20 flex items-center justify-between w-fit border border-neutral-200">
+                      <div className="p-2">
+                        <IoSearchSharp color="#D6D6D6" size={20} />
                       </div>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-x-3 gap-y-3">
-                      <OutlineButton
-                        title="Category"
-                        extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
-                        onClick={() => {
-                          openCatModal();
-                        }}
-                      />
-
-                      <OutlineButton
-                        title="Ingredient"
-                        extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
-                        onClick={() => {
-                          openTagsModal();
-                        }}
-                      />
-                      
-                      <OutlineButton
-                        title="Add Menu"
-                        extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
-                        onClick={() => {
-                          setSelectedTabMenu(menuTab[0]);
-                          setValues(NewMenuValues);
-                          setDeliveryDays([]);
-                          setCloseDateValue();
-                          setDiscountValue();
-                          openMenuModal();
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="lg:inline-flex flex-row w-full flex-wrap mt-7 ">
-                    {menu?.map((menu: any) => (
-                      <div key={menu?._id} className="lg:w-[31%] mt-7 lg:mr-5">
-                        <MenuCard
-                          menu={menu}
-                          onClickEdit={() => {
-                            setSelectedTabMenu(menuTab[0]);
-                            setEditMenu(menu);
-                            openMenuModal();
-                            setValues(menu);
-                            setDeliveryDays(menu?.deliveryDays);
-                            setCloseDateValue({
-                              label: `${menu.closeDate} hours before delivery`,
-                              value: menu.closeDate,
-                            });
-                            if (parseFloat(menu.discount) > 0) {
-                              setDiscountValue({
-                                label: `${menu.discount}% Discount`,
-                                value: menu.discount,
-                              });
-                            }
-                          }}
-                          onClickCopy={() => {
-                            setSelectedTabMenu(menuTab[0]);
-                            setCopyMenu(menu);
-                            openCopyMenuModal();
-                            setValues(menu);
-                            setDeliveryDays(menu?.deliveryDays);
-                            setCloseDateValue({
-                              label: `${menu.closeDate} hours before delivery`,
-                              value: menu.closeDate,
-                            });
-                            if (parseFloat(menu.discount) > 0) {
-                              setDiscountValue({
-                                label: `${menu.discount}% Discount`,
-                                value: menu.discount,
-                              });
-                            }
-                          }}
+                      <div className="flex-1 ml-4">
+                        <input
+                          // ref={ref}
+                          placeholder="Search menu"
+                          className="py-2 w-full rounded-full input_text text-md font_regular outline-none"
+                          // value={q}
+                          // onChange={handleSearchChange}
                         />
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </>
+                </div>
+
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-x-3 gap-y-3">
+                  <OutlineButton
+                    title="Category"
+                    extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
+                    onClick={() => {
+                      openCatModal();
+                    }}
+                  />
+
+                  <OutlineButton
+                    title="Ingredient"
+                    extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
+                    onClick={() => {
+                      openTagsModal();
+                    }}
+                  />
+                  
+                  <OutlineButton
+                    title="Add Menu"
+                    extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
+                    onClick={() => {
+                      setSelectedTabMenu(menuTab[0]);
+                      setValues(NewMenuValues);
+                      setDeliveryDays([]);
+                      setCloseDateValue();
+                      setDiscountValue();
+                      openMenuModal();
+                    }}
+                  />
+                </div>
+              </div>
+
+              {menu && menu?.length > 0 ? (
+                <div className="lg:inline-flex flex-row w-full flex-wrap mt-7 ">
+                  {menu?.map((menu: any) => (
+                    <div key={menu?._id} className="lg:w-[31%] mt-7 lg:mr-5">
+                      <MenuCard
+                        menu={menu}
+                        onClickEdit={() => {
+                          setSelectedTabMenu(menuTab[0]);
+                          setEditMenu(menu);
+                          openMenuModal();
+                          setValues(menu);
+                          setDeliveryDays(menu?.deliveryDays);
+                          setCloseDateValue({
+                            label: `${menu.closeDate} hours before delivery`,
+                            value: menu.closeDate,
+                          });
+                          if (parseFloat(menu.discount) > 0) {
+                            setDiscountValue({
+                              label: `${menu.discount}% Discount`,
+                              value: menu.discount,
+                            });
+                          }
+                        }}
+                        onClickCopy={() => {
+                          setSelectedTabMenu(menuTab[0]);
+                          setCopyMenu(menu);
+                          openCopyMenuModal();
+                          setValues(menu);
+                          setDeliveryDays(menu?.deliveryDays);
+                          setCloseDateValue({
+                            label: `${menu.closeDate} hours before delivery`,
+                            value: menu.closeDate,
+                          });
+                          if (parseFloat(menu.discount) > 0) {
+                            setDiscountValue({
+                              label: `${menu.discount}% Discount`,
+                              value: menu.discount,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               ) : (
                 <div className="flex flex-col items-center">
                   <h2 className="text-xl input_text mb-3">
@@ -1606,6 +1619,14 @@ const OnlineMenu = () => {
               </div>
             </div>
           </Modal>
+
+          <Snackbar
+            open={openAlert}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            autoHideDuration={6000}
+            onClose={handleCloseAlert}
+            message={alertPresent}
+          />
         </>
       </ChefDashboardLayout>
     </>
