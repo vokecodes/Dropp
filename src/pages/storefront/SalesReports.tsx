@@ -1040,10 +1040,10 @@ const SalesReports = () => {
                                     }
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
-                                    {transaction?.deliveryArea}, {toTitleCase(transaction?.deliveryState)}
+                                    {transaction?.deliveryState ? `${transaction?.deliveryArea}, ${toTitleCase(transaction?.deliveryState)}` : '-'}
                                   </td>
                                   <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
-                                    {transaction?.deliveryAddress}
+                                    {transaction?.deliveryAddress || '-'}
                                   </td>
                                   <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
                                     {dateNoTimeFormatter.format(new Date(transaction?.createdAt))}

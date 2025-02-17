@@ -86,11 +86,12 @@ const AppRoutes = () => {
           path={HOME_ROUTES.companies}
           element={<CompaniesLandingPage />}
         />
-        <Route path={HOME_ROUTES.previewChef} element={<PreviewChefShop />} />
+        <Route path={HOME_ROUTES.previewStorefront} element={<StorefrontShop />} />
         <Route
           path={HOME_ROUTES.previewRestaurant}
           element={<PreviewRestaurantShop />}
         />
+        <Route path={HOME_ROUTES.previewChef} element={<PreviewChefShop />} />
         <Route path={HOME_ROUTES.events} element={<Events />} />
         <Route path={HOME_ROUTES.foodSafety} element={<FoodSafety />} />
         <Route path={HOME_ROUTES.privacyPolicy} element={<PrivacyPolicy />} />

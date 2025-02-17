@@ -1,4 +1,4 @@
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete, Chip, TextField } from '@mui/material'
 import Input from "./CustomInput";
 import React, { useEffect, useState } from 'react'
 import nigeria_state_and_lgas from "../file/nigeria_state_and_lgas.json"
@@ -136,7 +136,16 @@ const MenuDelivery = ({
                 size="small"
                 options={lgas}
                 value={deliveryArea}
+                freeSolo
                 getOptionLabel={(option) => option}
+                renderTags={(value: readonly string[], getTagProps) =>
+                    value.map((option: string, index: number) => {
+                      const { key, ...tagProps } = getTagProps({ index });
+                      return (
+                        <Chip variant="outlined" label={option} key={key} {...tagProps} />
+                      );
+                    })
+                }
                 onChange={(event, newValue) => {
                     setDeliveryArea(newValue);
                     setFieldValue(
