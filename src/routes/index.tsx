@@ -13,6 +13,7 @@ import {
   HOME_ROUTES,
   QSR_ROUTES,
   QSR_SUBADMIN_ROUTES,
+  STOREFRONT_ROUTES,
   SUB_CHEF_ROUTES,
   WAITER_ROUTES,
 } from "./routes";
@@ -23,6 +24,7 @@ import {
   COMPANY_USER,
   QSR_SUB_ADMIN_USER,
   QUICK_SERVICE_USER,
+  STOREFRONT_USER,
   SUB_CHEF_USER,
 } from "../config/UserType";
 import Explore from "../pages/customer/Explore";
@@ -108,8 +110,10 @@ const AppRoutes = () => {
               <>
                 {user?.user?.chefType === QUICK_SERVICE_USER ? (
                   <Route path={QSR_ROUTES.qsr} element={<QsrRoutes />} />
+                ) : user?.user?.chefType === STOREFRONT_USER ? (
+                  <Route path={STOREFRONT_ROUTES.storefront} element={<StorefrontRoutes />} />
                 ) : (
-                  <Route path={CHEF_ROUTES.chef} element={<StorefrontRoutes />} />
+                  <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
                 )}
               </>
             ) : user?.user?.userType === SUB_CHEF_USER ? (

@@ -15,7 +15,7 @@ import { DashboardLayoutProps } from "../utils/Interfaces";
 import { CHEF_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
-import { SUB_CHEF_USER } from "../config/UserType";
+import { STOREFRONT_USER, SUB_CHEF_USER } from "../config/UserType";
 
 const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
@@ -587,6 +587,21 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                         />
                       ))}
                     </>
+                  ) : auth?.user?.chefType === STOREFRONT_USER ? (
+                    <>
+                      {storefrontMenuItems?.map((item: any, i) => (
+                        <MenuItem
+                          key={i}
+                          icon={item?.icon}
+                          title={item?.title}
+                          active={item?.active}
+                          to={item?.to}
+                          newTab={item?.newTab}
+                          beta={item?.beta}
+                          pro={item?.pro}
+                        />
+                      ))}
+                    </>
                   ) : auth?.user?.isRestaurant ? (
                     <>
                       {restaurantMenuItems?.map((item: any, i) => (
@@ -604,7 +619,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </>
                   ) : (
                     <>
-                      {storefrontMenuItems?.map((item: any, i) => (
+                      {menuItems?.map((item: any, i) => (
                         <MenuItem
                           key={i}
                           icon={item?.icon}
@@ -620,7 +635,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                   )}
                 </>
 
-                <LogoutButton />
+                <LogoutButton chefType={auth?.user?.chefType === STOREFRONT_USER ? STOREFRONT_USER : ""} />
               </div>
               <div className="ml-8">
                 <Button

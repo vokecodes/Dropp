@@ -19,6 +19,7 @@ export const USER_TYPE = Object.freeze({
   SUB_CHEF: "subChef",
   CUSTOMER: "customer",
   COMPANY: "company",
+  STOREFRONT: "storefront",
 });
 
 export const chefData = [

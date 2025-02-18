@@ -30,6 +30,16 @@ export const AUTH_ROUTES = {
   linkCompanyForgotPassword: "/auth/company-forgot-password",
   companyResetPassword: "company-reset-password",
   linkCompanyResetPassword: "/auth/company-reset-password",
+  
+  storefrontSignUp: "storefront-signup",
+  linkStorefrontSignUp: "/auth/storefront-signup",
+  storefrontLogin: "storefront-login/:navigateFrom?",
+  linkStorefrontLogin: "/auth/storefront-login",
+  linkStorefrontCheckoutLogin: "/auth/storefront-login/explore",
+  storefrontForgotPassword: "storefront-forgot-password",
+  linkStorefrontForgotPassword: "/auth/storefront-forgot-password",
+  storefrontResetPassword: "storefront-reset-password",
+  linkStorefrontResetPassword: "/auth/storefront-reset-password",
 
   adminLogin: "admin-login",
   linkAdminLogin: "/auth/admin-login",
@@ -44,8 +54,8 @@ export const HOME_ROUTES = {
   linkExplore: "/explore",
   exploreChef: "explore/:businessName/:foodName?",
   linkExploreChef: "/explore/:businessName/:foodName?",
-  exploreStorefront: "storefront/:businessName",
-  linkExploreStorefront: "/storefront/:businessName",
+  exploreStorefront: "storefront-shop/:businessName",
+  linkExploreStorefront: "/storefront-shop/:businessName",
   exploreQsr: "restaurant/qsr/:businessName",
   linkExploreQsr: "/restaurant/qsr/:businessName",
   exploreRestaurant: "restaurant/:businessName/:table",
@@ -130,6 +140,25 @@ export const CHEF_ROUTES = {
   linkSubChefs: "/chef/sub-chef",
   chefReports: "reports",
   linkChefReports: "/chef/reports",
+};
+
+export const STOREFRONT_ROUTES = {
+  storefront: "/storefront/*",
+  linkStorefront: "/storefront",
+  storefrontOrders: "orders",
+  linkStorefrontOrders: "/storefront/orders",
+  storefrontMenu: "menu",
+  linkStorefrontMenu: "/storefront/menu",
+  storefrontWallet: "wallet",
+  linkStorefrontWallet: "/storefront/wallet",
+  storefrontChat: "chat",
+  linkStorefrontChat: "/storefront/chat",
+  storefrontSettings: "settings",
+  linkStorefrontSettings: "/storefront/settings",
+  storefrontLandingPage: "storefront-explore",
+  linkStorefrontLandingPage: "/storefront-explore",
+  storefrontReports: "reports",
+  linkStorefrontReports: "/storefront/reports",
 };
 
 export const QSR_ROUTES = {
