@@ -94,7 +94,7 @@ export const forgotResetPasswordUserAccount =
       });
   };
 
-export const logOutUserAccount = (navigate: any, admin= false, cashier=false) => (dispatch: any) => {
+export const logOutUserAccount = (navigate: any, admin= false, cashier=false, chefType="") => (dispatch: any) => {
   dispatch(logoutAccount());
   dispatch(logoutUserProfile());
   dispatch(logoutBusiness());
@@ -118,6 +118,8 @@ export const logOutUserAccount = (navigate: any, admin= false, cashier=false) =>
     navigate("/auth/admin-login");
   }else if(cashier){
     navigate("/cashier")
+  }else if(chefType === "storefront"){
+    navigate("/storefront-login")
   }else{
     navigate("/auth");
   }

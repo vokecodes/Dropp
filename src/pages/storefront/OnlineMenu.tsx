@@ -514,7 +514,7 @@ const OnlineMenu = () => {
                       <button 
                         className="w-fit h-full px-6 py-3 rounded-xl bg-[#06C167]"
                         onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/storefront/${formatBusinessNameLink(
+                          navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/storefront-shop/${formatBusinessNameLink(
                             business?.businessName
                           )}`)
                           setAlertPresent("Url copied to clipboard!");
@@ -771,7 +771,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="number"
-                  placeholder={`Price (Homemade charges ${
+                  placeholder={`Price (Dropp charges ${
                     selectedTabMenu === menuTab[1] ? "10" : businessFeePercent
                   }% on every meal)`}
                   name="price"
@@ -1178,7 +1178,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="number"
-                  placeholder={`Price (Homemade charges ${
+                  placeholder={`Price (Dropp charges ${
                     selectedTabMenu === menuTab[1] ? "10" : businessFeePercent
                   }% on every meal)`}
                   name="price"
