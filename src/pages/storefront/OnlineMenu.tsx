@@ -438,7 +438,15 @@ const OnlineMenu = () => {
     getMenuDelivery();
   }, []);
 
-  // console.log('menuDelivery= ', menuDelivery)
+  const [q, setQ] = useState("");
+  
+  const searchFiltered = q === ""
+    ? menu
+    : menu.filter((item: any) =>
+      item?.category?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+      item?.foodName?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+      item?.description?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+    );
 
 
   return (
@@ -547,8 +555,13 @@ const OnlineMenu = () => {
                           // ref={ref}
                           placeholder="Search menu"
                           className="py-2 w-full rounded-full input_text text-md font_regular outline-none"
-                          // value={q}
-                          // onChange={handleSearchChange}
+                          onChange={(e: any) => {
+                            if (e.target.value) {
+                              setQ(e.target.value);
+                            } else {
+                              setQ(e.target.value);
+                            }
+                          }}
                         />
                       </div>
                     </div>
@@ -589,7 +602,7 @@ const OnlineMenu = () => {
 
               {menu && menu?.length > 0 ? (
                 <div className="lg:inline-flex flex-row w-full flex-wrap mt-7 ">
-                  {menu?.map((menu: any) => (
+                  {searchFiltered?.map((menu: any) => (
                     <div key={menu?._id} className="lg:w-[31%] mt-7 lg:mr-5">
                       <MenuCard
                         menu={menu}
@@ -771,9 +784,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="number"
-                  placeholder={`Price (Dropp charges ${
-                    selectedTabMenu === menuTab[1] ? "10" : businessFeePercent
-                  }% on every meal)`}
+                  placeholder="Price"
                   name="price"
                   onChange={(e: any) => {
                     if (selectedTabMenu === menuTab[1]) {
@@ -808,39 +819,6 @@ const OnlineMenu = () => {
                     }}
                   />
                 )}
-
-                <div className="flex justify-between">
-                  <div className="w-[48%]">
-                    <Input
-                      placeholder="What you earn"
-                      value={
-                        values.discount
-                          ? Math.floor(
-                              ((values.price -
-                                (values.price / 100) * values.discount) /
-                                100) *
-                                (100 - businessFeePercent)
-                            )
-                          : selectedTabMenu === menuTab[1]
-                          ? (values.price / 100) * 90
-                          : (values.price / 100) * (100 - businessFeePercent)
-                      }
-                      readOnly
-                    />
-                  </div>
-                  <div className="w-[48%]">
-                    <Input
-                      placeholder="What customer pays"
-                      value={
-                        values.discount
-                          ? values.price -
-                            (values.price / 100) * values.discount
-                          : values.price
-                      }
-                      readOnly
-                    />
-                  </div>
-                </div>
 
                 <Input
                   type="text"
@@ -1178,9 +1156,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="number"
-                  placeholder={`Price (Dropp charges ${
-                    selectedTabMenu === menuTab[1] ? "10" : businessFeePercent
-                  }% on every meal)`}
+                  placeholder='Price'
                   name="price"
                   onChange={(e: any) => {
                     if (selectedTabMenu === menuTab[1]) {
@@ -1215,39 +1191,6 @@ const OnlineMenu = () => {
                     }}
                   />
                 )}
-
-                <div className="flex justify-between">
-                  <div className="w-[48%]">
-                    <Input
-                      placeholder="What you earn"
-                      value={
-                        values.discount
-                          ? Math.floor(
-                              ((values.price -
-                                (values.price / 100) * values.discount) /
-                                100) *
-                                (100 - businessFeePercent)
-                            )
-                          : selectedTabMenu === menuTab[1]
-                          ? (values.price / 100) * 90
-                          : (values.price / 100) * (100 - businessFeePercent)
-                      }
-                      readOnly
-                    />
-                  </div>
-                  <div className="w-[48%]">
-                    <Input
-                      placeholder="What customer pays"
-                      value={
-                        values.discount
-                          ? values.price -
-                            (values.price / 100) * values.discount
-                          : values.price
-                      }
-                      readOnly
-                    />
-                  </div>
-                </div>
 
                 <Input
                   type="text"

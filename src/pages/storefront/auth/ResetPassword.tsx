@@ -25,7 +25,7 @@ const StorefrontResetPasswordPage = () => {
 
   const userResetPassword = (values: any, formikBag: any) => {
     axios
-      .post(`${BASE_API_URL}/auth/storefront-reset-password`, {
+      .post(`${BASE_API_URL}/auth/storefront/reset-password`, {
         ...values,
       })
       .then(({ data }) => {

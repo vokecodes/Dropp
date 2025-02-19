@@ -365,17 +365,17 @@ const StorefrontShop = () => {
     )
     .reduce((partialSum: any, a: any) => partialSum + a, 0);
 
-    const [q, setQ] = useState("");
+  const [q, setQ] = useState("");
 
-    const categoryFiltered = selectedCategory === "All" ? chef?.menu : chef?.menu.filter(item => item.category === selectedCategory)
-  
-    const searchFiltered = q === ""
-      ? categoryFiltered
-      : categoryFiltered.filter((item: any) =>
-        item?.category?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
-        item?.foodName?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
-        item?.description?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
-      );
+  const categoryFiltered = selectedCategory === "All" ? chef?.menu : chef?.menu.filter(item => item.category === selectedCategory)
+
+  const searchFiltered = q === ""
+    ? categoryFiltered
+    : categoryFiltered.filter((item: any) =>
+      item?.category?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+      item?.foodName?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
+      item?.description?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+    );
 
 
   return (
