@@ -19,7 +19,7 @@ const StorefrontForgotPasswordPage = () => {
 
   const userForgotPassword = (values: any, formikBag: any) => {
     axios
-      .post(`${BASE_API_URL}/auth/storefront-forgot-password`, {
+      .post(`${BASE_API_URL}/auth/storefront/forgot-password`, {
         ...values,
       })
       .then(({ data }) => {

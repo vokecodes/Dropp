@@ -12,7 +12,7 @@ import MenuItem from "./MenuItem";
 import TopNav from "./TopNav";
 import Button from "./Button";
 import { DashboardLayoutProps } from "../utils/Interfaces";
-import { CHEF_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
+import { CHEF_ROUTES, STOREFRONT_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { STOREFRONT_USER, SUB_CHEF_USER } from "../config/UserType";
@@ -200,28 +200,28 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChef ? "#06c167" : "#787878"
+            location?.pathname === STOREFRONT_ROUTES.linkStorefront ? "#06c167" : "#787878"
           }
         />
       ),
       title: "Home",
-      active: location?.pathname === CHEF_ROUTES.linkChef,
-      to: CHEF_ROUTES.linkChef,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefront,
+      to: STOREFRONT_ROUTES.linkStorefront,
     },
     {
       icon: (
         <FaSquarePollVertical
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefReports
+            location?.pathname === STOREFRONT_ROUTES.linkStorefrontReports
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Reports",
-      active: location?.pathname === CHEF_ROUTES.linkChefReports,
-      to: CHEF_ROUTES.linkChefReports,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontReports,
+      to: STOREFRONT_ROUTES.linkStorefrontReports,
     },
     
     {
@@ -229,11 +229,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdOutlineFoodBank
           size={28}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefMenu
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefMenuOnline
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefMenuDineIn
+            location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu
               ? "#06c167"
               : "#787878"
           }
@@ -241,70 +237,68 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       ),
       title: "Menu",
       active:
-        location?.pathname === CHEF_ROUTES.linkChefMenu ||
-        location?.pathname === CHEF_ROUTES.linkChefMenuOnline ||
-        location?.pathname === CHEF_ROUTES.linkChefMenuDineIn,
-      to: CHEF_ROUTES.linkChefMenu,
+        location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu,
+      to: STOREFRONT_ROUTES.linkStorefrontMenu,
     },
     {
       icon: (
         <CgFileDocument
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefOrders
+            location?.pathname === STOREFRONT_ROUTES.linkStorefrontOrders
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Orders",
-      active: location?.pathname === CHEF_ROUTES.linkChefOrders,
-      to: CHEF_ROUTES.linkChefOrders,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontOrders,
+      to: STOREFRONT_ROUTES.linkStorefrontOrders,
     },
     {
       icon: (
         <RiWallet3Line
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefWallet
+            location?.pathname === STOREFRONT_ROUTES.linkStorefrontWallet
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "My Wallet",
-      active: location?.pathname === CHEF_ROUTES.linkChefWallet,
-      to: CHEF_ROUTES.linkChefWallet,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontWallet,
+      to: STOREFRONT_ROUTES.linkStorefrontWallet,
     },
     {
       icon: (
         <BsChatDots
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefChat
+            location?.pathname === STOREFRONT_ROUTES.linkStorefrontChat
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Chats",
-      active: location?.pathname === CHEF_ROUTES.linkChefChat,
-      to: CHEF_ROUTES.linkChefChat,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontChat,
+      to: STOREFRONT_ROUTES.linkStorefrontChat,
     },
     {
       icon: (
         <AiFillSetting
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefSettings
+            location?.pathname === STOREFRONT_ROUTES.linkStorefrontSettings
               ? "#06c167"
               : "#787878"
           }
         />
       ),
       title: "Settings",
-      active: location?.pathname === CHEF_ROUTES.linkChefSettings,
-      to: CHEF_ROUTES.linkChefSettings,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontSettings,
+      to: STOREFRONT_ROUTES.linkStorefrontSettings,
     },
   ];
 

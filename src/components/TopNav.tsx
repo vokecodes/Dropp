@@ -627,10 +627,10 @@ const TopNav = ({ page, event }: any) => {
   const menuItems =
     person?.userType === USER_TYPE.SUB_CHEF
       ? subChefMenuItems
-      : person?.isRestaurant
-      ? restaurantMenuItems
       : person?.chefType === USER_TYPE.STOREFRONT
       ? storefrontMenuItems
+      : person?.isRestaurant
+      ? restaurantMenuItems
       : person?.userType === USER_TYPE.CHEF
       ? chefMenuItems
       : person?.userType === USER_TYPE.COMPANY
