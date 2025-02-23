@@ -8,7 +8,12 @@ import { AUTH_DATA } from "../../../reducers/type";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL, CHEF_LOGIN_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
-import { QSR_SUB_ADMIN_USER, QUICK_SERVICE_USER, SUB_CHEF_USER } from "../../../config/UserType";
+import {
+  QSR_SUB_ADMIN_USER,
+  QUICK_SERVICE_USER,
+  STOREFRONT_USER,
+  SUB_CHEF_USER,
+} from "../../../config/UserType";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -38,6 +43,8 @@ const LoginPage = () => {
           navigate("/qsr-sub-admin");
         } else if (user?.chefType === QUICK_SERVICE_USER) {
           navigate("/qsr");
+        } else if (user?.chefType === STOREFRONT_USER) {
+          navigate("/storefront");
         } else {
           navigate(`/${user?.userType}`);
         }
