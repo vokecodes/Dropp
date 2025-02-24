@@ -383,7 +383,9 @@ const StorefrontSignUpPage = () => {
 
                 {/* restaurant location */}
                 <div className="mb-3">
-                  <p className="font_regular mb-3">Storefront location</p>
+                  <p className="font_regular mb-3">
+                    Location or Business Location
+                  </p>
                   <div className="w-full flex flex-row items-center justify-start gap-x-2 gap-y-3 my-3 flex-wrap">
                     {restaurantLocations.map((item, i) => (
                       <div

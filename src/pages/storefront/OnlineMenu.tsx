@@ -43,14 +43,24 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { CHEF_ROUTES } from "../../routes/routes";
 import { IoSearchSharp } from "react-icons/io5";
-import { Alert, Autocomplete, Chip, InputAdornment, Snackbar, TextField } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Chip,
+  InputAdornment,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import { SERVER } from "../../config/axios";
-import { MENU_CATEGORY_URL, MENU_DELIVERY_URL, MENU_TAG_URL } from "../../_redux/urls";
+import {
+  MENU_CATEGORY_URL,
+  MENU_DELIVERY_URL,
+  MENU_TAG_URL,
+} from "../../_redux/urls";
 import { AiFillCloseCircle } from "react-icons/ai";
 import MenuDelivery from "../../components/MenuDelivery";
 import AlertDialog from "../../components/AlertDialog";
 import { CheckIcon } from "@heroicons/react/24/outline";
-
 
 const menuTab = ["No", "Yes"];
 const maxSubMeal = 3500;
@@ -112,7 +122,6 @@ const OnlineMenu = () => {
 
     setOpenAlert(false);
   };
-
 
   const [editMenu, setEditMenu] = useState<any>();
   const [copyMenu, setCopyMenu] = useState<any>();
@@ -373,10 +382,7 @@ const OnlineMenu = () => {
   const getDinningMenuTags = () => {
     SERVER.get(MENU_TAG_URL)
       .then(({ data }) => {
-        if (
-          data?.menuTag?.tags &&
-          data?.menuTag?.tags?.length > 0
-        ) {
+        if (data?.menuTag?.tags && data?.menuTag?.tags?.length > 0) {
           setDinningMenuTags(data?.menuTag?.tags);
         }
       })
@@ -410,17 +416,14 @@ const OnlineMenu = () => {
       typeof value === "string" ? value.split(",") : value
     );
   };
-  
+
   const [menuDelivery, setMenuDelivery] = useState<any>([]);
 
   const getMenuDelivery = () => {
     SERVER.get(MENU_DELIVERY_URL)
       .then(({ data }) => {
         setMenuDelivery([]);
-        if (
-          data?.data &&
-          data?.data?.length > 0
-        ) {
+        if (data?.data && data?.data?.length > 0) {
           setMenuDelivery(data?.data);
         }
       })
@@ -428,7 +431,6 @@ const OnlineMenu = () => {
         console.log(err);
       });
   };
-  
 
   useEffect(() => {
     dispatch(getMenus());
@@ -439,15 +441,21 @@ const OnlineMenu = () => {
   }, []);
 
   const [q, setQ] = useState("");
-  
-  const searchFiltered = q === ""
-    ? menu
-    : menu.filter((item: any) =>
-      item?.category?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
-      item?.foodName?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1 ||
-      item?.description?.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
-    );
 
+  const searchFiltered =
+    q === ""
+      ? menu
+      : menu.filter(
+          (item: any) =>
+            item?.category?.toString().toLowerCase().indexOf(q.toLowerCase()) >
+              -1 ||
+            item?.foodName?.toString().toLowerCase().indexOf(q.toLowerCase()) >
+              -1 ||
+            item?.description
+              ?.toString()
+              .toLowerCase()
+              .indexOf(q.toLowerCase()) > -1
+        );
 
   return (
     <>
@@ -460,7 +468,6 @@ const OnlineMenu = () => {
               {business && (
                 <div className="">
                   <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-y-3 gap-x-3 px-3">
-
                     <OutlineButton
                       title="Delivery"
                       extraClasses="px-8 py-2 !border-[#06C167] !text-[#06C167]"
@@ -519,12 +526,16 @@ const OnlineMenu = () => {
                         }
                       />
 
-                      <button 
+                      <button
                         className="w-fit h-full px-6 py-3 rounded-xl bg-[#06C167]"
                         onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/storefront-shop/${formatBusinessNameLink(
-                            business?.businessName
-                          )}`)
+                          navigator.clipboard.writeText(
+                            `${window.location.protocol}//${
+                              window.location.host
+                            }/storefront-shop/${formatBusinessNameLink(
+                              business?.businessName
+                            )}`
+                          );
                           setAlertPresent("Url copied to clipboard!");
                           setOpenAlert(true);
                         }}
@@ -553,7 +564,7 @@ const OnlineMenu = () => {
                       <div className="flex-1 ml-4">
                         <input
                           // ref={ref}
-                          placeholder="Search menu"
+                          placeholder="Search Menu"
                           className="py-2 w-full rounded-full input_text text-md font_regular outline-none"
                           onChange={(e: any) => {
                             if (e.target.value) {
@@ -584,7 +595,7 @@ const OnlineMenu = () => {
                       openTagsModal();
                     }}
                   />
-                  
+
                   <OutlineButton
                     title="Add Menu"
                     extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
@@ -1156,7 +1167,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="number"
-                  placeholder='Price'
+                  placeholder="Price"
                   name="price"
                   onChange={(e: any) => {
                     if (selectedTabMenu === menuTab[1]) {
@@ -1517,7 +1528,7 @@ const OnlineMenu = () => {
               </div>
             </div>
           </Modal>
-          
+
           {/* DELIVERY */}
           <Modal
             open={deliveryModal}
@@ -1538,17 +1549,27 @@ const OnlineMenu = () => {
                 />
               </div>
 
-              <div className="mt-3 w-full h-5/6 relative">
-                
-
+              <div className="mt-3 w-full relative">
                 <div className="flex flex-col items-stretch gap-y-5 w-full h-full px-2 py-3 overflow-y-auto">
-                  {menuDelivery?.length > 0 && (
+                  {menuDelivery?.length > 0 &&
                     menuDelivery?.map((item, i) => (
-                      <MenuDelivery key={item._id} menuDelivery={menuDelivery}  setMenuDelivery={setMenuDelivery} closeDeliveryModal={closeDeliveryModal} getMenuDelivery={getMenuDelivery} deliveryItems={item} />
-                    ))
-                  )}
+                      <MenuDelivery
+                        key={item._id}
+                        menuDelivery={menuDelivery}
+                        setMenuDelivery={setMenuDelivery}
+                        closeDeliveryModal={closeDeliveryModal}
+                        getMenuDelivery={getMenuDelivery}
+                        deliveryItems={item}
+                      />
+                    ))}
 
-                  <MenuDelivery menuDelivery={menuDelivery}  setMenuDelivery={setMenuDelivery} closeDeliveryModal={closeDeliveryModal} getMenuDelivery={getMenuDelivery} deliveryItems={false} />
+                  <MenuDelivery
+                    menuDelivery={menuDelivery}
+                    setMenuDelivery={setMenuDelivery}
+                    closeDeliveryModal={closeDeliveryModal}
+                    getMenuDelivery={getMenuDelivery}
+                    deliveryItems={false}
+                  />
                 </div>
 
                 {/* <div className="mt-10 absolute bottom-0 w-full">

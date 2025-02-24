@@ -12,7 +12,11 @@ import MenuItem from "./MenuItem";
 import TopNav from "./TopNav";
 import Button from "./Button";
 import { DashboardLayoutProps } from "../utils/Interfaces";
-import { CHEF_ROUTES, STOREFRONT_ROUTES, SUB_CHEF_ROUTES } from "../routes/routes";
+import {
+  CHEF_ROUTES,
+  STOREFRONT_ROUTES,
+  SUB_CHEF_ROUTES,
+} from "../routes/routes";
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { STOREFRONT_USER, SUB_CHEF_USER } from "../config/UserType";
@@ -193,14 +197,16 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       to: CHEF_ROUTES.linkChefSettings,
     },
   ];
-  
+
   const storefrontMenuItems = [
     {
       icon: (
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === STOREFRONT_ROUTES.linkStorefront ? "#06c167" : "#787878"
+            location?.pathname === STOREFRONT_ROUTES.linkStorefront
+              ? "#06c167"
+              : "#787878"
           }
         />
       ),
@@ -223,7 +229,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontReports,
       to: STOREFRONT_ROUTES.linkStorefrontReports,
     },
-    
+
     {
       icon: (
         <MdOutlineFoodBank
@@ -236,8 +242,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
         />
       ),
       title: "Menu",
-      active:
-        location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu,
+      active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu,
       to: STOREFRONT_ROUTES.linkStorefrontMenu,
     },
     {
@@ -283,7 +288,8 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       ),
       title: "Chats",
       active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontChat,
-      to: STOREFRONT_ROUTES.linkStorefrontChat,
+      // to: STOREFRONT_ROUTES.linkStorefrontChat,
+      coming: true,
     },
     {
       icon: (
@@ -593,6 +599,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                           newTab={item?.newTab}
                           beta={item?.beta}
                           pro={item?.pro}
+                          coming={item?.coming}
                         />
                       ))}
                     </>
@@ -629,7 +636,13 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                   )}
                 </>
 
-                <LogoutButton chefType={auth?.user?.chefType === STOREFRONT_USER ? STOREFRONT_USER : ""} />
+                <LogoutButton
+                  chefType={
+                    auth?.user?.chefType === STOREFRONT_USER
+                      ? STOREFRONT_USER
+                      : ""
+                  }
+                />
               </div>
               <div className="ml-8">
                 <Button

@@ -403,7 +403,11 @@ const ChefWallet = () => {
                     />
 
                     <Input
-                      value={`${payment?.accountNumber} - ${payment?.bankName} - ${payment?.accountName}`}
+                      value={
+                        payment
+                          ? `${payment?.accountNumber} - ${payment?.bankName} - ${payment?.accountName}`
+                          : ""
+                      }
                       readOnly
                     />
 

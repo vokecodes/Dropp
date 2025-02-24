@@ -8,7 +8,7 @@ import ChefDashboardLayout from "../../components/ChefDashboardLayout";
 import DOrderCard from "../../components/DOrderCard";
 import PageTitle from "../../components/PageTitle";
 import { useAppDispatch } from "../../redux/hooks";
-import { CHEF_ROUTES } from "../../routes/routes";
+import { STOREFRONT_ROUTES } from "../../routes/routes";
 import { getBusiness } from "../../_redux/business/businessAction";
 import { getPayment } from "../../_redux/payment/paymentAction";
 import {
@@ -54,29 +54,24 @@ const ChefDashboard = () => {
   }, [user]);
 
   const checkItems = [
-    // {
-    //   title: "Add a profile picture",
-    //   checked: user?.image,
-    //   to: CHEF_ROUTES.linkChefSettings,
-    // },
     {
-      title: "Update personal info",
+      title: "Update Personal Info",
       checked: user?.image && user?.phoneNumber && user?.address && user?.bio,
-      to: CHEF_ROUTES.linkChefSettings,
+      to: STOREFRONT_ROUTES.linkStorefrontSettings,
     },
     {
-      title: "Add a business",
+      title: "Add Business",
       checked: business,
       to:
         user?.image && user?.phoneNumber && user?.address && user?.bio
-          ? CHEF_ROUTES.linkChefSettings
+          ? STOREFRONT_ROUTES.linkStorefrontSettings
           : "",
     },
     {
-      title: "Add a payment",
+      title: "Add Payment Account",
       checked: payment,
-      to: business ? CHEF_ROUTES.linkChefSettings : "",
-    }
+      to: business ? STOREFRONT_ROUTES.linkStorefrontSettings : "",
+    },
   ];
 
   return (
@@ -141,14 +136,14 @@ const ChefDashboard = () => {
                   total={
                     orders?.filter((o: any) => o.status === "processed")?.length
                   }
-                  to={CHEF_ROUTES.linkChefOrders}
+                  to={STOREFRONT_ROUTES.linkStorefrontOrders}
                 />
                 <DOrderCard
                   title="Completed orders"
                   total={
                     orders?.filter((o: any) => o.status === "completed")?.length
                   }
-                  to={CHEF_ROUTES.linkChefOrders}
+                  to={STOREFRONT_ROUTES.linkStorefrontOrders}
                 />
               </div>
               <div>

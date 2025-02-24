@@ -41,7 +41,7 @@ import InfinityScroll from "../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../components/DashboardItemSkeletonLoader";
 
 const PAYMENT_OPTIONS = ["All", "Card", "Transfer", "USSD"];
-const DELIVERY_STATUS = ["All", "Pending", "Delivered"];
+const DELIVERY_STATUS = ["All", "Pending", "Completed"];
 const DELIVERY_DAY = [
   "All",
   "Sunday",
@@ -63,7 +63,6 @@ const BannerSkeletonLoader = () => (
     <Skeleton width={150} height={20} style={{ marginTop: "10px" }} />
   </div>
 );
-
 
 const SalesReports = () => {
   const dispatch = useAppDispatch();
@@ -154,10 +153,10 @@ const SalesReports = () => {
 
   const [openPaymentOptions, setOpenPaymentOptions] = useState(false);
   const [paymentType, setPaymentType] = useState(PAYMENT_OPTIONS[0]);
-  
+
   const [openDayOptions, setOpenDayOptions] = useState(false);
   const [deliveryDay, setDeliveryDay] = useState(DELIVERY_DAY[0]);
-  
+
   const [openLocationOptions, setOpenLocationOptions] = useState(false);
   const [deliveryLocation, setDeliveryLocation] = useState(null);
 
@@ -202,13 +201,9 @@ const SalesReports = () => {
     setHasMore(true);
   };
 
-
   useEffect(() => {
     setPage(1);
-  }, [
-    endDate,
-    paymentType,
-  ]);
+  }, [endDate, paymentType]);
 
   useEffect(() => {
     if (page === 1) {
@@ -292,27 +287,25 @@ const SalesReports = () => {
   const dineExportToCSV = async () => {
     setIsDownloading(true);
     try {
-      await downloadRestaurantReport(
-        startDate,
-        endDate,
-        paymentType,
-      ).then(({ data }) => {
-        const csv = dineInConvertToCSV(data?.data);
+      await downloadRestaurantReport(startDate, endDate, paymentType).then(
+        ({ data }) => {
+          const csv = dineInConvertToCSV(data?.data);
 
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
+          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+          const link = document.createElement("a");
 
-        if (link.download !== undefined) {
-          const url = URL.createObjectURL(blob);
-          link.setAttribute("href", url);
-          link.setAttribute("download", "dine-in-orders.csv");
-          link.style.visibility = "hidden";
+          if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "dine-in-orders.csv");
+            link.style.visibility = "hidden";
 
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         }
-      });
+      );
     } catch (err) {
       console.error("CSV Export Error:", err);
     } finally {
@@ -371,8 +364,8 @@ const SalesReports = () => {
 
   return (
     <>
-       <ChefDashboardLayout>
-          <div className="w-full p-2 lg:px-6 py-4 bg-white" style={{}}>
+      <ChefDashboardLayout>
+        <div className="w-full p-2 lg:px-6 py-4 bg-white" style={{}}>
           <PageTitle title={moment().format("MMMM Do, YYYY")} />
           <div className="w-full lg:w-4/5 my-10 flex flex-col lg:flex-row flex-wrap items-center gap-3">
             <div className="w-full lg:w-1/5">
@@ -403,7 +396,7 @@ const SalesReports = () => {
                 onChange={(e: any) => setEndDate(e.target.value)}
               />
             </div>
-            
+
             <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">
                 Delivery day
@@ -462,9 +455,7 @@ const SalesReports = () => {
             </div>
 
             <div className="w-full lg:w-1/5">
-              <label className="text-sm font_medium text-black">
-                Location
-              </label>
+              <label className="text-sm font_medium text-black">Location</label>
               <div className="mt-2 lg:mt-0">
                 <div
                   className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
@@ -517,7 +508,7 @@ const SalesReports = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="w-full lg:w-1/5">
               <label className="text-sm font_medium text-black">
                 Payment Type
@@ -581,9 +572,7 @@ const SalesReports = () => {
             ) : (
               <div className="p-6">
                 <div className="flex gap-3 items-center">
-                  <p className="text-base text-black font_medium">
-                    Net Sales
-                  </p>
+                  <p className="text-base text-black font_medium">Net Sales</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -665,9 +654,9 @@ const SalesReports = () => {
           <div className="w-full bg-white border border-[#E1E1E1] rounded-xl p-2 lg:p-6">
             <div className="w-full flex flex-col lg:flex-row justify-start lg:justify-between items-center gap-y-3">
               <div className="flex gap-3">
-                {DELIVERY_STATUS.map(item => (
+                {DELIVERY_STATUS.map((item) => (
                   <div
-                  key={uuidGen()}
+                    key={uuidGen()}
                     className={`text-center font_medium py-2 w-24 lg:w-36 h-10 rounded-full cursor-pointer ${
                       deliveryStatus === item
                         ? "text-white primary_bg_color"
@@ -1040,13 +1029,21 @@ const SalesReports = () => {
                                     }
                                   </td>
                                   <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
-                                    {transaction?.deliveryState ? `${transaction?.deliveryArea}, ${toTitleCase(transaction?.deliveryState)}` : '-'}
+                                    {transaction?.deliveryState
+                                      ? `${
+                                          transaction?.deliveryArea
+                                        }, ${toTitleCase(
+                                          transaction?.deliveryState
+                                        )}`
+                                      : "-"}
                                   </td>
                                   <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
-                                    {transaction?.deliveryAddress || '-'}
+                                    {transaction?.deliveryAddress || "-"}
                                   </td>
                                   <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                    {dateNoTimeFormatter.format(new Date(transaction?.createdAt))}
+                                    {dateNoTimeFormatter.format(
+                                      new Date(transaction?.createdAt)
+                                    )}
                                   </td>
                                   <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
                                     {transaction?.deliveryTime}
