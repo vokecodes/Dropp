@@ -642,6 +642,7 @@ const StorefrontCart = ({
                         ? deliveryCharge
                         : 0),
                     discountAmount,
+                    deliveryCharge,
                     ...values,
                     deliveryOption: deliveryOption,
                     storefront: chef?.profile?._id,
