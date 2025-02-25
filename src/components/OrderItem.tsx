@@ -15,12 +15,7 @@ import { SERVER } from "../config/axios";
 import { STOREFRONT_ORDER_URL } from "../_redux/urls";
 import Spinner from "./Spinner";
 
-const STATUS_OPTIONS = [
-  "pending",
-  "delivered",
-  "cancelled",
-  "voided",
-]
+const STATUS_OPTIONS = ["pending", "delivered", "cancelled", "voided"];
 
 const OrderItem = ({
   id,
@@ -43,20 +38,21 @@ const OrderItem = ({
   checkoutCode,
   restaurantOrder,
   order,
-  getStorefrontOrders
+  getStorefrontOrders,
+  noTax,
 }: OrderItemProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedOrder, setSelectedOrder] = useState<any>();
-  const [orderStatus, setOrderStatus] = useState(order?.status)
+  const [orderStatus, setOrderStatus] = useState(order?.status);
 
-  console.log('first= ', orders)
+  console.log("first= ", orders);
 
   const [isSending, setIsSending] = useState(false);
 
   const handleApprovalOrder = (status, orderObj) => {
     setIsSending(true);
-    if(orderObj?.id){
+    if (orderObj?.id) {
       SERVER.patch(`${STOREFRONT_ORDER_URL}/status/${orderObj.id}`, {
         order: { ...orderObj, status: status },
       })
@@ -64,7 +60,7 @@ const OrderItem = ({
           dispatch(getStorefrontOrders());
         })
         .catch((error) => {
-          console.log('err= ', error)
+          console.log("err= ", error);
         });
     }
     setIsSending(false);
@@ -135,7 +131,7 @@ const OrderItem = ({
 
                         return (
                           <p className="h-11 mb-5 text-xl font_bold text-black">
-                            ₦{formatPrice(priceAfterTax)}
+                            ₦{formatPrice(noTax ? price : priceAfterTax)}
                           </p>
                         );
                       })}
@@ -227,7 +223,7 @@ const OrderItem = ({
                           </p>
                         ) : (
                           <p className="text-lg font-extrabold font_bold text-black">
-                            ₦{formatPrice(priceAfterTax)}
+                            ₦{formatPrice(noTax ? price : priceAfterTax)}
                           </p>
                         )}
                       </div>
@@ -316,7 +312,10 @@ const OrderItem = ({
               <div className="w-1/3">
                 {orders?.length > 0 &&
                   orders?.map((order: any) => (
-                    <div key={order._id} className="h-11 flex items-center mb-5">
+                    <div
+                      key={order._id}
+                      className="h-11 flex items-center mb-5"
+                    >
                       <img
                         src={order?.images[0]}
                         alt="food"
@@ -344,7 +343,6 @@ const OrderItem = ({
                     Checkout Code: {checkoutCode}
                   </p>
                 )}
-                
               </div>
 
               <div className="w-1/3 flex flex-row">
@@ -373,8 +371,11 @@ const OrderItem = ({
                           const priceAfterTax = (price / 100) * 85;
 
                           return (
-                            <p key={order._id} className="h-11 mb-5 text-xl font_bold text-black">
-                              ₦{formatPrice(priceAfterTax)}
+                            <p
+                              key={order._id}
+                              className="h-11 mb-5 text-xl font_bold text-black"
+                            >
+                              ₦{formatPrice(noTax ? price : priceAfterTax)}
                             </p>
                           );
                         })}
@@ -388,17 +389,23 @@ const OrderItem = ({
                       className={`w-fit text-xs text-medium border border-solid px-3 py-2 text-center rounded-xl flex flex-row items-center justify-center gap-x-1 
                       ${
                         orderStatus === STATUS_OPTIONS[0]
-                        ? "text-[#ffffff] bg-[#000000] border-[#D8D8D8]"
-                        : orderStatus === STATUS_OPTIONS[1]
-                        ? "text-[#06C167] bg-[#ECFFEB] border border-[#06C167]"
-                        : orderStatus === STATUS_OPTIONS[2]
-                        ? "text-[#C10606] bg-[#FFF5F5] border-[#C10606]"
-                        : "text-[#EAAC29] bg-[#FFFAED] border-[#EAAC29]"
+                          ? "text-[#ffffff] bg-[#000000] border-[#D8D8D8]"
+                          : orderStatus === STATUS_OPTIONS[1]
+                          ? "text-[#06C167] bg-[#ECFFEB] border border-[#06C167]"
+                          : orderStatus === STATUS_OPTIONS[2]
+                          ? "text-[#C10606] bg-[#FFF5F5] border-[#C10606]"
+                          : "text-[#EAAC29] bg-[#FFFAED] border-[#EAAC29]"
                       }
                       `}
-                      disabled={(isSending || orderStatus !== STATUS_OPTIONS[0]) ? true : false}
+                      disabled={
+                        isSending || orderStatus !== STATUS_OPTIONS[0]
+                          ? true
+                          : false
+                      }
                     >
-                      {isSending ? <Spinner /> : (
+                      {isSending ? (
+                        <Spinner />
+                      ) : (
                         <>
                           {orderStatus === STATUS_OPTIONS[0]
                             ? "Confirm Order"
@@ -406,8 +413,7 @@ const OrderItem = ({
                           <IoIosArrowDown
                             size={10}
                             className={
-                              orderStatus === STATUS_OPTIONS[1] &&
-                              "hidden"
+                              orderStatus === STATUS_OPTIONS[1] && "hidden"
                             }
                           />
                         </>
@@ -427,43 +433,41 @@ const OrderItem = ({
                         <div className="w-full">
                           <RadioGroup>
                             <div className="space-y-3">
-                              {STATUS_OPTIONS?.map(
-                                (item: any, i) => (
-                                  <RadioGroup.Option
-                                    key={uuidGen()}
-                                    value={item}
-                                    className={
-                                      "flex items-center cursor-pointer mb-2"
-                                    }
-                                    onClick={() => {
-                                      setOrderStatus(item);
-                                      handleApprovalOrder(item, order);
-                                    }}
-                                  >
-                                    {({ active, checked }) => (
-                                      <>
-                                        <div
-                                          className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
-                                            orderStatus === item
-                                              ? "primary_bg_color"
-                                              : "bg_gray_color"
-                                          }`}
-                                        />
+                              {STATUS_OPTIONS?.map((item: any, i) => (
+                                <RadioGroup.Option
+                                  key={uuidGen()}
+                                  value={item}
+                                  className={
+                                    "flex items-center cursor-pointer mb-2"
+                                  }
+                                  onClick={() => {
+                                    setOrderStatus(item);
+                                    handleApprovalOrder(item, order);
+                                  }}
+                                >
+                                  {({ active, checked }) => (
+                                    <>
+                                      <div
+                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                          orderStatus === item
+                                            ? "primary_bg_color"
+                                            : "bg_gray_color"
+                                        }`}
+                                      />
 
-                                        <div className="text-sm">
-                                          <RadioGroup.Label
-                                            as="p"
-                                            className={`text-xs lg:text-sm secondary_gray_color text-black capitalize`}
-                                            >
-                                            {checked}
-                                            {toTitleCase(item)}
-                                          </RadioGroup.Label>
-                                        </div>
-                                      </>
-                                    )}
-                                  </RadioGroup.Option>
-                                )
-                              )}
+                                      <div className="text-sm">
+                                        <RadioGroup.Label
+                                          as="p"
+                                          className={`text-xs lg:text-sm secondary_gray_color text-black capitalize`}
+                                        >
+                                          {checked}
+                                          {toTitleCase(item)}
+                                        </RadioGroup.Label>
+                                      </div>
+                                    </>
+                                  )}
+                                </RadioGroup.Option>
+                              ))}
                             </div>
                           </RadioGroup>
                         </div>
@@ -516,7 +520,7 @@ const OrderItem = ({
                           </p>
                         ) : (
                           <p className="text-lg font-extrabold font_bold text-black mr-5">
-                            ₦{formatPrice(priceAfterTax)}
+                            ₦{formatPrice(noTax ? price : priceAfterTax)}
                           </p>
                         )}
                       </div>
@@ -557,7 +561,6 @@ const OrderItem = ({
               </div>
             </div>
           </div>
-
 
           {showCustomer && (
             <>

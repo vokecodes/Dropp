@@ -26,9 +26,7 @@ const renderTableHeader = () => (
     <p className="w-1/3 text-sm lg:text-base font_regular gray_color">
       Delivery Date & Time
     </p>
-    <p className="w-1/3 text-sm lg:text-base font_regular gray_color">
-      Amount
-    </p>
+    <p className="w-1/3 text-sm lg:text-base font_regular gray_color">Amount</p>
   </div>
 );
 
@@ -51,7 +49,7 @@ const ChefOrders = () => {
     dispatch(getStorefrontOrders());
   }, []);
 
-  console.log('first= ', orders)
+  console.log("first= ", orders);
 
   return (
     <>
@@ -99,6 +97,7 @@ const ChefOrders = () => {
                           }
                           onClickIconClose={() => setSelectedCustomerOrders("")}
                           event={order?.event}
+                          noTax
                         />
                       </div>
                     ))
@@ -140,6 +139,7 @@ const ChefOrders = () => {
                           }
                           onClickIconClose={() => setSelectedCustomerOrders("")}
                           event={order?.event}
+                          noTax
                         />
                       </div>
                     ))

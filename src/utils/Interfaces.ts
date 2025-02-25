@@ -168,6 +168,7 @@ export type OrderItemProps = {
   paid?: boolean;
   markAsPaid?: any;
   paymentLoading?: boolean;
+  noTax?: boolean;
 };
 
 export type StorefrontValues = {
