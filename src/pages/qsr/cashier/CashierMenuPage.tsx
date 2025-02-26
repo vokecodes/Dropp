@@ -46,7 +46,11 @@ import { SERVER } from "../../../config/axios";
 import ChefDashboardLayout from "../../../components/ChefDashboardLayout";
 import { Link } from "react-router-dom";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
-import { CASHIER_ROUTES, CHEF_ROUTES, QSR_ROUTES } from "../../../routes/routes";
+import {
+  CASHIER_ROUTES,
+  CHEF_ROUTES,
+  QSR_ROUTES,
+} from "../../../routes/routes";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
@@ -91,37 +95,36 @@ const CashierMenuPage = () => {
   const theme = useTheme();
   // const [ingredients, setIngredients] = React.useState<string[]>([]);
 
-  const { cashier } =
-    useSelector(
-      (state: any) => ({
-        cashier: state.cashier.cashier,
-      }),
-      shallowEqual
-    );
+  const { cashier } = useSelector(
+    (state: any) => ({
+      cashier: state.cashier.cashier,
+    }),
+    shallowEqual
+  );
 
   const [chef, setChef] = useState<any>(null);
 
   const getChef = async () => {
-      setIsLoading(true);
-      try {
-        const businessRestaurant = await getABusinessRestaurantByName(
-          cashier.businessName,
-          false
-        );
-  
-        if (businessRestaurant.data) {
-          setChef(businessRestaurant.data.data);
-        }
-      } catch (error) {
-        console.log("error= ", error);
-      } finally {
-        setIsLoading(false);
+    setIsLoading(true);
+    try {
+      const businessRestaurant = await getABusinessRestaurantByName(
+        cashier.businessName,
+        false
+      );
+
+      if (businessRestaurant.data) {
+        setChef(businessRestaurant.data.data);
       }
-    };
-  
-    useEffect(() => {
-      getChef();
-    }, []);
+    } catch (error) {
+      console.log("error= ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getChef();
+  }, []);
 
   const [q, setQ] = useState("");
 
@@ -146,14 +149,14 @@ const CashierMenuPage = () => {
         <>
           <div className="w-full px-2 lg:px-6 py-4">
             <div className="lg:flex flex-row w-full justify-start">
-                <Link to={CASHIER_ROUTES.linkCashier}>
-                    <div className="flex flex-row items-center cursor-pointer">
-                        <MdOutlineArrowBackIosNew size={20} className="mr-3" />
-                        <PageTitle title="Back" />
-                    </div>
-                </Link>
-                
-                {/* {business && (
+              <Link to={CASHIER_ROUTES.linkCashier}>
+                <div className="flex flex-row items-center cursor-pointer">
+                  <MdOutlineArrowBackIosNew size={20} className="mr-3" />
+                  <PageTitle title="Back" />
+                </div>
+              </Link>
+
+              {/* {business && (
                     <div className="">
                     <div className="flex flex-col lg:flex-row justify-between gap-y-2 lg:gap-y-0">
                         <OutlineButton
@@ -220,32 +223,31 @@ const CashierMenuPage = () => {
                 <>
                   <div className="inline-flex flex-col lg:flex-row w-full justify-between gap-y-3">
                     <div className="inline-flex flex-row">
-                        <div className="flex flex-col lg:flex-row justify-between items-center gap-y-3 lg:gap-y-0 lg:gap-x-5">
-                            <div className="w-full lg:w-fit flex flex-row justify-between items-center lg:justify-start lg:gap-x-5">
-
-                                <h1 className="text-xl text-black font_medium mt-1.5 text-center lg:text-start w-full lg:w-fit">
-                                    Menu board
-                                </h1>
-                            </div>
-
-                            <div className="flex gap-3">
-                                <div className="w-fit bg-white rounded-full pl-18 pr-5 flex items-center justify-between border border-neutral-200">
-                                    <div className="p-2">
-                                        <IoSearchSharp color="#D6D6D6" size={20} />
-                                    </div>
-                                    <div className="flex-1 ml-4">
-                                        <input
-                                            placeholder="Search menu"
-                                            className="py-2 w-full lg:w-64 rounded-full input_text text-md font_regular outline-none"
-                                            value={q}
-                                            onChange={(e: any) => {
-                                            setQ(e.target.value);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                      <div className="flex flex-col lg:flex-row justify-between items-center gap-y-3 lg:gap-y-0 lg:gap-x-5">
+                        <div className="w-full lg:w-fit flex flex-row justify-between items-center lg:justify-start lg:gap-x-5">
+                          <h1 className="text-xl text-black font_medium mt-1.5 text-center lg:text-start w-full lg:w-fit">
+                            Menu board
+                          </h1>
                         </div>
+
+                        <div className="flex gap-3">
+                          <div className="w-fit bg-white rounded-full pl-18 pr-5 flex items-center justify-between border border-neutral-200">
+                            <div className="p-2">
+                              <IoSearchSharp color="#D6D6D6" size={20} />
+                            </div>
+                            <div className="flex-1 ml-4">
+                              <input
+                                placeholder="Search Menu"
+                                className="py-2 w-full lg:w-64 rounded-full input_text text-md font_regular outline-none"
+                                value={q}
+                                onChange={(e: any) => {
+                                  setQ(e.target.value);
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 

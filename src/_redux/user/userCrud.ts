@@ -10,6 +10,7 @@ import {
   ADMIN_ALL_RESTAURANTS,
   QSR_ORDER_URL,
   QSR_CASHIER_URL,
+  STOREFRONT_ORDER_URL,
 } from "../urls";
 import { SERVER } from "../../config/axios";
 
@@ -186,6 +187,17 @@ export const getRestaurantDashboardCrud = (
   );
 };
 
+export const getStorefrontDashboardCrud = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  deliveryStatus = "",
+) => {
+  return SERVER.get(
+    `${STOREFRONT_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryStatus=${deliveryStatus}`
+  );
+};
+
 export const getQsrDashboardCrud = (
   fromDate = "",
   toDate = "",
@@ -244,6 +256,18 @@ export const getRestaurantOrdersPage = (
 ) => {
   return SERVER.get(
     `${RESTAURANT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const getStorefrontOrdersPage = (
+  page = 1,
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  deliveryStatus = ""
+) => {
+  return SERVER.get(
+    `${STOREFRONT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryStatus=${deliveryStatus}`
   );
 };
 

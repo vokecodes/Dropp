@@ -83,11 +83,19 @@ export const DINNING_MENU_URL = `${BASE_API_URL}/dinning-menu`;
 
 export const DINNING_MENU_CATEGORY_URL = `${BASE_API_URL}/dinning-menu-category`;
 
+export const MENU_CATEGORY_URL = `${BASE_API_URL}/menu-category`;
+
 export const EXTRA_EMAILS_URL = `${BASE_API_URL}/chef/extra-emails`;
 
 export const DINNING_MENU_TAG_URL = `${BASE_API_URL}/dinning-menu-tag`;
 
+export const MENU_TAG_URL = `${BASE_API_URL}/menu-tag`;
+
+export const MENU_DELIVERY_URL = `${BASE_API_URL}/menu-delivery`;
+
 export const RESTAURANT_ORDER_URL = `${BASE_API_URL}/restaurant-order`;
+
+export const STOREFRONT_ORDER_URL = `${BASE_API_URL}/storefront-order`;
 
 export const QSR_ORDER_URL = `${BASE_API_URL}/qsr-order`;
 

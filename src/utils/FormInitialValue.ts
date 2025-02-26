@@ -68,6 +68,7 @@ export const PaymentValues = {
 
 export const NewMenuValues = {
   foodName: "",
+  category: "",
   price: "",
   portion: "",
   minimumQuantity: "",
@@ -98,6 +99,13 @@ export const cashierValues = {
   whatsappNumber: "",
 };
 
+export const deliveryValues = {
+  delivery_city: "",
+  delivery_areas: [],
+  delivery_time: [],
+  delivery_fee: ""
+};
+
 export const terminalValues = {
   terminal: "",
   employeeName: "",
@@ -124,6 +132,7 @@ export const SuperWaiterTableValues = {
 
 export const NewSubscriptionMenuValues = {
   foodName: "",
+  category: "",
   price: "",
   portion: "",
   description: "",
@@ -153,6 +162,24 @@ export const RestaurantCheckoutValues = {
 export const QsrCheckoutValues = {
   name: "",
   phoneNumber: "",
+};
+
+export const StorefrontDeliveryValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  deliveryState: "",
+  deliveryArea: "",
+  deliveryTime: "",
+  deliveryAddress: "",
+  discountCode: "",
+};
+
+export const StorefrontPickupValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  discountCode: "",
 };
 
 export const CashierLoginValues = {

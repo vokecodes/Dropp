@@ -30,6 +30,7 @@ import {
   getQsrSubAdminDashboardCrud,
   updateQsrSubAdminProfile,
   changeQsrSubAdminPassword,
+  getStorefrontDashboardCrud,
 } from "./userCrud";
 import {
   startCall,
@@ -380,6 +381,17 @@ export const getRestaurantDashboardAccount =
   (dispatch: any) => {
     dispatch(startDashboardCall());
     return getRestaurantDashboardCrud(fromDate, toDate, payment, section, table, breakdownOption)
+      .then(({ data }) => {
+        dispatch(getRestaurantDashboard({ ...data?.data }));
+      })
+      .finally(() => dispatch(stopDashboardCall()));
+  };
+
+  export const getStorefrontDashboardAccount =
+  (fromDate = "", toDate = "", payment = "", deliveryStatus="") =>
+  (dispatch: any) => {
+    dispatch(startDashboardCall());
+    return getStorefrontDashboardCrud(fromDate, toDate, payment, deliveryStatus)
       .then(({ data }) => {
         dispatch(getRestaurantDashboard({ ...data?.data }));
       })

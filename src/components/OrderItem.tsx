@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -8,7 +8,14 @@ import { CHEF_ROUTES } from "../routes/routes";
 import { completeOrder } from "../_redux/order/orderAction";
 import ColoredSpinner from "./ColoredSpinner";
 import { useAppDispatch } from "../redux/hooks";
-import { formatPrice } from "../utils/formatMethods";
+import { formatPrice, toTitleCase, uuidGen } from "../utils/formatMethods";
+import { Popover, RadioGroup, Transition } from "@headlessui/react";
+import { IoIosArrowDown } from "react-icons/io";
+import { SERVER } from "../config/axios";
+import { STOREFRONT_ORDER_URL } from "../_redux/urls";
+import Spinner from "./Spinner";
+
+const STATUS_OPTIONS = ["pending", "delivered", "cancelled", "voided"];
 
 const OrderItem = ({
   id,
@@ -19,6 +26,7 @@ const OrderItem = ({
   customerImage,
   customerName,
   customerEmail,
+  customerNumber,
   address,
   note,
   completed,
@@ -29,10 +37,34 @@ const OrderItem = ({
   event,
   checkoutCode,
   restaurantOrder,
+  order,
+  getStorefrontOrders,
+  noTax,
 }: OrderItemProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedOrder, setSelectedOrder] = useState<any>();
+  const [orderStatus, setOrderStatus] = useState(order?.status);
+
+  console.log("first= ", orders);
+
+  const [isSending, setIsSending] = useState(false);
+
+  const handleApprovalOrder = (status, orderObj) => {
+    setIsSending(true);
+    if (orderObj?.id) {
+      SERVER.patch(`${STOREFRONT_ORDER_URL}/status/${orderObj.id}`, {
+        order: { ...orderObj, status: status },
+      })
+        .then(({ data }) => {
+          dispatch(getStorefrontOrders());
+        })
+        .catch((error) => {
+          console.log("err= ", error);
+        });
+    }
+    setIsSending(false);
+  };
 
   return (
     <div className="my-7">
@@ -99,7 +131,7 @@ const OrderItem = ({
 
                         return (
                           <p className="h-11 mb-5 text-xl font_bold text-black">
-                            ₦{formatPrice(priceAfterTax)}
+                            ₦{formatPrice(noTax ? price : priceAfterTax)}
                           </p>
                         );
                       })}
@@ -191,7 +223,7 @@ const OrderItem = ({
                           </p>
                         ) : (
                           <p className="text-lg font-extrabold font_bold text-black">
-                            ₦{formatPrice(priceAfterTax)}
+                            ₦{formatPrice(noTax ? price : priceAfterTax)}
                           </p>
                         )}
                       </div>
@@ -275,12 +307,15 @@ const OrderItem = ({
         </>
       ) : (
         <>
-          <div className="hidden lg:block">
+          <div className="block">
             <div className="flex px-8 pb-4">
               <div className="w-1/3">
                 {orders?.length > 0 &&
                   orders?.map((order: any) => (
-                    <div className="h-11 flex items-center mb-5">
+                    <div
+                      key={order._id}
+                      className="h-11 flex items-center mb-5"
+                    >
                       <img
                         src={order?.images[0]}
                         alt="food"
@@ -299,60 +334,146 @@ const OrderItem = ({
               </div>
 
               <div className="w-1/3">
-                {event ? (
-                  <>
-                    {orders?.length > 0 &&
-                      orders?.map((order: any) => {
-                        return (
-                          <p className="h-11 mb-5 text-xl font_bold text-black">
-                            ₦{formatPrice(order.eventAmount)}
-                          </p>
-                        );
-                      })}
-                  </>
-                ) : (
-                  <>
-                    {orders?.length > 0 &&
-                      orders?.map((order: any) => {
-                        const price =
-                          (order?.discount
-                            ? order?.price -
-                              (order?.price / 100) * order?.discount
-                            : order?.price) * order?.quantity;
-
-                        const priceAfterTax = (price / 100) * 85;
-
-                        return (
-                          <p className="h-11 mb-5 text-xl font_bold text-black">
-                            ₦{formatPrice(priceAfterTax)}
-                          </p>
-                        );
-                      })}
-                  </>
+                <p className="text-base font-bold font_regular text-black">
+                  {date}
+                </p>
+                <p className="text-sm font_regular sec_gray_color">{time}</p>
+                {checkoutCode && (
+                  <p className="text-md font_bold text-black">
+                    Checkout Code: {checkoutCode}
+                  </p>
                 )}
               </div>
 
-              <div className="w-1/3 flex flex-col lg:flex-row">
+              <div className="w-1/3 flex flex-row">
                 <div>
-                  <p className="text-base font-bold font_regular text-black">
-                    {date}
-                  </p>
-                  <p className="text-sm font_regular sec_gray_color">{time}</p>
-                  {checkoutCode && (
-                    <p className="text-md font_bold text-black">
-                      Checkout Code: {checkoutCode}
-                    </p>
+                  {event ? (
+                    <>
+                      {orders?.length > 0 &&
+                        orders?.map((order: any) => {
+                          return (
+                            <p className="h-11 mb-5 text-xl font_bold text-black">
+                              ₦{formatPrice(order.eventAmount)}
+                            </p>
+                          );
+                        })}
+                    </>
+                  ) : (
+                    <>
+                      {orders?.length > 0 &&
+                        orders?.map((order: any) => {
+                          const price =
+                            (order?.discount
+                              ? order?.price -
+                                (order?.price / 100) * order?.discount
+                              : order?.price) * order?.quantity;
+
+                          const priceAfterTax = (price / 100) * 85;
+
+                          return (
+                            <p
+                              key={order._id}
+                              className="h-11 mb-5 text-xl font_bold text-black"
+                            >
+                              ₦{formatPrice(noTax ? price : priceAfterTax)}
+                            </p>
+                          );
+                        })}
+                    </>
                   )}
                 </div>
 
                 <div className="flex-1 flex justify-center">
-                  {completed !== "completed" && (
-                    <OutlineButton
-                      title="Chat"
-                      extraClasses="rounded-lg px-4 py-2 text-xs h-10"
-                      onClick={() => navigate(CHEF_ROUTES.linkChefChat)}
-                    />
-                  )}
+                  <Popover className="relative">
+                    <Popover.Button
+                      className={`w-fit text-xs text-medium border border-solid px-3 py-2 text-center rounded-xl flex flex-row items-center justify-center gap-x-1 
+                      ${
+                        orderStatus === STATUS_OPTIONS[0]
+                          ? "text-[#ffffff] bg-[#000000] border-[#D8D8D8]"
+                          : orderStatus === STATUS_OPTIONS[1]
+                          ? "text-[#06C167] bg-[#ECFFEB] border border-[#06C167]"
+                          : orderStatus === STATUS_OPTIONS[2]
+                          ? "text-[#C10606] bg-[#FFF5F5] border-[#C10606]"
+                          : "text-[#EAAC29] bg-[#FFFAED] border-[#EAAC29]"
+                      }
+                      `}
+                      disabled={
+                        isSending || orderStatus !== STATUS_OPTIONS[0]
+                          ? true
+                          : false
+                      }
+                    >
+                      {isSending ? (
+                        <Spinner />
+                      ) : (
+                        <>
+                          {orderStatus === STATUS_OPTIONS[0]
+                            ? "Confirm Order"
+                            : toTitleCase(orderStatus)}
+                          <IoIosArrowDown
+                            size={10}
+                            className={
+                              orderStatus === STATUS_OPTIONS[1] && "hidden"
+                            }
+                          />
+                        </>
+                      )}
+                    </Popover.Button>
+
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-200"
+                      enterFrom="opacity-0 translate-y-1"
+                      enterTo="opacity-100 translate-y-0"
+                      leave="transition ease-in duration-150"
+                      leaveFrom="opacity-100 translate-y-0"
+                      leaveTo="opacity-0 translate-y-1"
+                    >
+                      <Popover.Panel className="box-border absolute z-10 bg-white mb-2 w-24 lg:w-32 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black">
+                        <div className="w-full">
+                          <RadioGroup>
+                            <div className="space-y-3">
+                              {STATUS_OPTIONS?.map((item: any, i) => (
+                                <RadioGroup.Option
+                                  key={uuidGen()}
+                                  value={item}
+                                  className={
+                                    "flex items-center cursor-pointer mb-2"
+                                  }
+                                  onClick={() => {
+                                    setOrderStatus(item);
+                                    handleApprovalOrder(item, order);
+                                  }}
+                                >
+                                  {({ active, checked }) => (
+                                    <>
+                                      <div
+                                        className={`w-2 lg:w-4 h-2 lg:h-4 rounded-full mr-2 lg:mr-3 ${
+                                          orderStatus === item
+                                            ? "primary_bg_color"
+                                            : "bg_gray_color"
+                                        }`}
+                                      />
+
+                                      <div className="text-sm">
+                                        <RadioGroup.Label
+                                          as="p"
+                                          className={`text-xs lg:text-sm secondary_gray_color text-black capitalize`}
+                                        >
+                                          {checked}
+                                          {toTitleCase(item)}
+                                        </RadioGroup.Label>
+                                      </div>
+                                    </>
+                                  )}
+                                </RadioGroup.Option>
+                              ))}
+                            </div>
+                          </RadioGroup>
+                        </div>
+                      </Popover.Panel>
+                    </Transition>
+                  </Popover>
                 </div>
 
                 <div className="cursor-pointer">
@@ -365,7 +486,7 @@ const OrderItem = ({
               </div>
             </div>
           </div>
-          <div className="lg:hidden px-8 pb-4">
+          <div className="hidden px-8 pb-4">
             <div className="flex">
               <div className="flex-1">
                 {orders?.length > 0 &&
@@ -378,7 +499,7 @@ const OrderItem = ({
                     const priceAfterTax = (price / 100) * 85;
 
                     return (
-                      <div className="flex mb-3">
+                      <div key={order._id} className="flex mb-3">
                         <img
                           src={order?.images[0]}
                           alt="food"
@@ -399,7 +520,7 @@ const OrderItem = ({
                           </p>
                         ) : (
                           <p className="text-lg font-extrabold font_bold text-black mr-5">
-                            ₦{formatPrice(priceAfterTax)}
+                            ₦{formatPrice(noTax ? price : priceAfterTax)}
                           </p>
                         )}
                       </div>
@@ -440,29 +561,27 @@ const OrderItem = ({
               </div>
             </div>
           </div>
+
           {showCustomer && (
             <>
-              <div className="hidden lg:block">
+              <div className="block">
                 <div className="flex dashboard_bg px-8 py-4">
                   <div className="w-1/3 flex">
-                    {customerImage ? (
-                      <img
-                        src={customerImage}
-                        alt="customer"
-                        className="w-11 h-11 rounded-full"
-                      />
-                    ) : (
-                      <CiUser size={28} color="#06c167" />
-                    )}
-                    <div className="ml-3">
+                    <div className="w-full">
                       <p className="text-lg font-bold font_regular text-black">
+                        Customer:
+                      </p>
+                      <p className="text-sm font_regular sec_gray_color">
                         {customerName}
+                      </p>
+                      <p className="text-sm font_regular sec_gray_color">
+                        {customerNumber}
                       </p>
                     </div>
                   </div>
-                  <div className="w-2/3">
+                  <div className="w-1/3">
                     <div className="flex">
-                      <div className="w-1/2">
+                      <div className="w-full">
                         <p className="text-lg font-bold font_regular text-black">
                           Address:
                         </p>
@@ -504,7 +623,7 @@ const OrderItem = ({
                           <div className="flex justify-center items-center">
                             {[...Array(rating)]?.map((_, i: any) => (
                               <svg
-                                key={i}
+                                key={uuidGen()}
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 fill="#06c167"
@@ -523,8 +642,16 @@ const OrderItem = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center w-1/3 ml-2">
-                    {completed !== "completed" && (
+                  <div className="flex flex-col justify-start items-center gap-y-3 w-1/3 ml-2">
+                    <div className="w-full">
+                      <p className="text-lg font-bold font_regular text-black">
+                        Note:
+                      </p>
+                      <p className="text-sm font_regular sec_gray_color">
+                        {note}
+                      </p>
+                    </div>
+                    {/* {completed !== "completed" && (
                       <div>
                         <label className="custom_checkbox">
                           {selectedOrder === id ? (
@@ -552,12 +679,12 @@ const OrderItem = ({
                           <span className="checkmark"></span>
                         </label>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>
 
-              <div className="lg:hidden">
+              <div className="hidden">
                 <div className="dashboard_bg px-8 py-4">
                   <div className="flex justify-between">
                     <div className="flex items-center">
@@ -648,7 +775,7 @@ const OrderItem = ({
                       <div className="flex justify-center items-center">
                         {[...Array(rating)]?.map((_, i: any) => (
                           <svg
-                            key={i}
+                            key={uuidGen()}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill="#06c167"

@@ -11,11 +11,10 @@ import { registerLoginAccount } from "../../../_redux/auth/authSlice";
 import {
   QSR_SUB_ADMIN_USER,
   QUICK_SERVICE_USER,
-  STOREFRONT_USER,
   SUB_CHEF_USER,
 } from "../../../config/UserType";
 
-const LoginPage = () => {
+const StorefrontLoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,18 +36,8 @@ const LoginPage = () => {
       .then(({ data }) => {
         const user = data?.data?.user;
 
-        if (user?.userType === SUB_CHEF_USER) {
-          navigate("/sub-chef");
-        } else if (user?.userType === QSR_SUB_ADMIN_USER) {
-          navigate("/qsr-sub-admin");
-        } else if (user?.chefType === QUICK_SERVICE_USER) {
-          navigate("/qsr");
-        } else if (user?.chefType === STOREFRONT_USER) {
-          navigate("/storefront");
-        } else {
-          navigate(`/${user?.userType}`);
-        }
         dispatch(registerLoginAccount({ ...data?.data }));
+        navigate("/storefront");
       })
       .catch((error) => {
         const { message } = error.response.data;
@@ -172,7 +161,7 @@ const LoginPage = () => {
                   </div>
 
                   <div className="w-full">
-                    <Link to={"/auth/forgot-password"}>
+                    <Link to={"/auth/storefront-forgot-password"}>
                       <p className="text-xs font_regular hover:underline font-semibold">
                         <span className="text-[#747372]">
                           Forgot Password?{" "}
@@ -222,7 +211,7 @@ const LoginPage = () => {
               )}
             </Formik>
             <div className="flex justify-center items-center mt-3 mb-5">
-              <Link to={"/auth/register"}>
+              <Link to={"/auth/storefront-signup"}>
                 <p
                   className="text-gray-500 cursor-pointer font_regular"
                   // onClick={() => setAuthType(!authType)}
@@ -251,4 +240,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default StorefrontLoginPage;

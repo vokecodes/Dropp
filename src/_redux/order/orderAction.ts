@@ -7,6 +7,7 @@ import {
   getChefUserSubscriptionOrders,
   getRestaurantOrdersCrud,
   getSubChefRestaurantOrders,
+  getStorefrontOrdersCrud,
 } from "./orderCrud";
 import {
   startCall,
@@ -52,6 +53,18 @@ export const getChefOrders = () => (dispatch: any) => {
   dispatch(startCall());
   return getChefUserOrders()
     .then(({ data }) => dispatch(getOrders(data.data)))
+    .catch((err) => {
+      const error = err?.response?.data;
+      dispatch(catchError({ error: error?.message }));
+    });
+};
+
+export const getStorefrontOrders = () => (dispatch: any) => {
+  dispatch(startCall());
+  return getStorefrontOrdersCrud()
+    .then(({ data }) => {
+      dispatch(getOrders(data.data))
+    })
     .catch((err) => {
       const error = err?.response?.data;
       dispatch(catchError({ error: error?.message }));

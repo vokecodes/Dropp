@@ -108,6 +108,7 @@ export const ReviewSchema = Yup.object().shape({
 export const NewMenuInputsSchema = Yup.object().shape({
   images: Yup.array(Yup.string()).required("Image is required."),
   foodName: Yup.string().required("Food name is required."),
+  category: Yup.string(),
   price: Yup.string().required("Price is required."),
   portion: Yup.string().required("Portion is required."),
   minimumQuantity: Yup.string().required("Minimum quantity is required."),
@@ -137,6 +138,13 @@ export const CashierInputsSchema = Yup.object().shape({
   password: Yup.string().required("Password is required."),
 });
 
+export const DeliveryInputsSchema = Yup.object().shape({
+  delivery_city: Yup.string().required("Delivery city is required."),
+  delivery_areas: Yup.array(Yup.string()).min(1, 'At least one delivery area is required').required("Delivery areas are required."),
+  delivery_time: Yup.array(Yup.string()).min(1, 'At least one delivery time is required').required("Delivery time is required."),
+  delivery_fee: Yup.number().required("Delivery fee is required."),
+});
+
 export const TerminalInputsSchema = Yup.object().shape({
   terminal: Yup.string().required("Terminal is required."),
   employeeName: Yup.string().required("Employee name is required."),
@@ -164,6 +172,7 @@ export const SuperWaiterTableInputsSchema = Yup.object().shape({
 export const NewSubscriptionMenuInputsSchema = Yup.object().shape({
   images: Yup.array(Yup.string()).required("Image is required."),
   foodName: Yup.string().required("Food name is required."),
+  category: Yup.string(),
   price: Yup.string().required("Price is required."),
   portion: Yup.string().required("Portion is required."),
   description: Yup.string().required("Description is required."),
@@ -194,6 +203,24 @@ export const RestaurantCheckoutSchema = Yup.object().shape({
 export const QsrCheckoutSchema = Yup.object().shape({
   name: Yup.string().optional(),
   phoneNumber: Yup.string().optional(),
+});
+
+export const StorefrontPickupSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  email: Yup.string().email().required(),
+  phoneNumber: Yup.string().required(),
+  discountCode: Yup.string().optional(),
+});
+
+export const StorefrontDeliverySchema = Yup.object().shape({
+  name: Yup.string().required(),
+  email: Yup.string().email().required(),
+  phoneNumber: Yup.string().required(),
+  deliveryState: Yup.string().required(),
+  deliveryArea: Yup.string().required(),
+  deliveryTime: Yup.string().required(),
+  deliveryAddress: Yup.string().required(),
+  discountCode: Yup.string().optional(),
 });
 
 export const CashierLoginSchema = Yup.object().shape({

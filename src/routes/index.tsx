@@ -13,6 +13,7 @@ import {
   HOME_ROUTES,
   QSR_ROUTES,
   QSR_SUBADMIN_ROUTES,
+  STOREFRONT_ROUTES,
   SUB_CHEF_ROUTES,
   WAITER_ROUTES,
 } from "./routes";
@@ -23,6 +24,7 @@ import {
   COMPANY_USER,
   QSR_SUB_ADMIN_USER,
   QUICK_SERVICE_USER,
+  STOREFRONT_USER,
   SUB_CHEF_USER,
 } from "../config/UserType";
 import Explore from "../pages/customer/Explore";
@@ -39,6 +41,7 @@ import TermsService from "../pages/dropp-main/TermsService";
 import Subscription from "../pages/chef/Subscription";
 import WaiterRoutes from "../pages/waiter/Routes";
 import ChefRoutes from "../pages/chef/Routes";
+import StorefrontRoutes from "../pages/storefront/Routes";
 import CompanyRoutes from "../pages/company/Routes";
 import CustomerRoutes from "../pages/customer/Routes";
 import SubChefRoutes from "../pages/sub-chef/Routes";
@@ -50,6 +53,7 @@ import {
   QsrSubAdminRoutes,
 } from "../pages/qsr/Routes";
 import QsrShop from "../pages/qsr/QsrShop";
+import StorefrontShop from "../pages/storefront/StorefrontShop";
 
 const AppRoutes = () => {
   const { user } = useSelector(
@@ -71,6 +75,7 @@ const AppRoutes = () => {
           element={<RestaurantShop />}
         />
         <Route path={HOME_ROUTES.exploreQsr} element={<QsrShop />} />
+        <Route path={HOME_ROUTES.exploreStorefront} element={<StorefrontShop />} />
         <Route
           path={HOME_ROUTES.exploreRestaurantEdit}
           element={<RestaurantShop />}
@@ -83,11 +88,12 @@ const AppRoutes = () => {
           path={HOME_ROUTES.companies}
           element={<CompaniesLandingPage />}
         />
-        <Route path={HOME_ROUTES.previewChef} element={<PreviewChefShop />} />
+        <Route path={HOME_ROUTES.previewStorefront} element={<StorefrontShop />} />
         <Route
           path={HOME_ROUTES.previewRestaurant}
           element={<PreviewRestaurantShop />}
         />
+        <Route path={HOME_ROUTES.previewChef} element={<PreviewChefShop />} />
         <Route path={HOME_ROUTES.events} element={<Events />} />
         <Route path={HOME_ROUTES.foodSafety} element={<FoodSafety />} />
         <Route path={HOME_ROUTES.privacyPolicy} element={<PrivacyPolicy />} />
@@ -104,6 +110,8 @@ const AppRoutes = () => {
               <>
                 {user?.user?.chefType === QUICK_SERVICE_USER ? (
                   <Route path={QSR_ROUTES.qsr} element={<QsrRoutes />} />
+                ) : user?.user?.chefType === STOREFRONT_USER ? (
+                  <Route path={STOREFRONT_ROUTES.storefront} element={<StorefrontRoutes />} />
                 ) : (
                   <Route path={CHEF_ROUTES.chef} element={<ChefRoutes />} />
                 )}

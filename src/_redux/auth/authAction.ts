@@ -16,7 +16,7 @@ import { logoutFavourite } from "../favourite/favouriteSLice";
 import { logoutOrders } from "../order/orderSLice";
 import { logoutTransactions } from "../transaction/transactionSLice";
 import { logoutWallet } from "../wallet/walletSLice";
-import { HOME_ROUTES, SUB_CHEF_ROUTES } from "../../routes/routes";
+import { AUTH_ROUTES, HOME_ROUTES, SUB_CHEF_ROUTES } from "../../routes/routes";
 import { clearCart } from "../cart/cartAction";
 import { logoutCard } from "../card/cardSLice";
 import { logoutSubscriptionMenu } from "../subscriptionMenu/subscriptionMenuSlice";
@@ -94,31 +94,35 @@ export const forgotResetPasswordUserAccount =
       });
   };
 
-export const logOutUserAccount = (navigate: any, admin= false, cashier=false) => (dispatch: any) => {
-  dispatch(logoutAccount());
-  dispatch(logoutUserProfile());
-  dispatch(logoutBusiness());
-  dispatch(logoutPayment());
-  dispatch(logoutMenu());
-  dispatch(logoutFavourite());
-  dispatch(logoutOrders());
-  dispatch(logoutTransactions());
-  dispatch(logoutWallet());
-  dispatch(clearCart());
-  dispatch(logoutCard());
-  dispatch(logoutSubscriptionMenu());
-  dispatch(logoutSubscription());
-  dispatch(logoutWaiter());
-  dispatch(logoutDiningMenu());
-  dispatch(logoutCashier());
+export const logOutUserAccount =
+  (navigate: any, admin = false, cashier = false, chefType = "") =>
+  (dispatch: any) => {
+    dispatch(logoutAccount());
+    dispatch(logoutUserProfile());
+    dispatch(logoutBusiness());
+    dispatch(logoutPayment());
+    dispatch(logoutMenu());
+    dispatch(logoutFavourite());
+    dispatch(logoutOrders());
+    dispatch(logoutTransactions());
+    dispatch(logoutWallet());
+    dispatch(clearCart());
+    dispatch(logoutCard());
+    dispatch(logoutSubscriptionMenu());
+    dispatch(logoutSubscription());
+    dispatch(logoutWaiter());
+    dispatch(logoutDiningMenu());
+    dispatch(logoutCashier());
 
-  sessionStorage.removeItem("auth");
+    sessionStorage.removeItem("auth");
 
-  if(admin){
-    navigate("/auth/admin-login");
-  }else if(cashier){
-    navigate("/cashier")
-  }else{
-    navigate("/auth");
-  }
-};
+    if (admin) {
+      navigate("/auth/admin-login");
+    } else if (cashier) {
+      navigate("/cashier");
+    } else if (chefType === "storefront") {
+      navigate(AUTH_ROUTES.linkStorefrontLogin);
+    } else {
+      navigate("/auth");
+    }
+  };

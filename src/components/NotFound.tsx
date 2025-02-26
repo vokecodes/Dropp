@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, shallowEqual } from "react-redux";
 import Button from "./Button";
 import { CHEF_USER } from "../config/UserType";
-import { CHEF_ROUTES, QSR_ROUTES } from "../routes/routes";
+import { CHEF_ROUTES, QSR_ROUTES, STOREFRONT_ROUTES } from "../routes/routes";
 import { useEffect } from "react";
 
 const NotFound = () => {
@@ -39,6 +39,8 @@ const NotFound = () => {
               navigate(
                 user?.user?.chefType === "quick_service" ? 
                 QSR_ROUTES?.linkQsr :
+                user?.user?.chefType === "storefront" ? 
+                STOREFRONT_ROUTES?.linkStorefront :
                 user?.user?.userType === CHEF_USER ? CHEF_ROUTES.linkChef : "/"
               )
             }
