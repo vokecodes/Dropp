@@ -636,13 +636,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
                   )}
                 </>
 
-                <LogoutButton
-                  chefType={
-                    auth?.user?.chefType === STOREFRONT_USER
-                      ? STOREFRONT_USER
-                      : ""
-                  }
-                />
+                <LogoutButton />
               </div>
               <div className="ml-8">
                 <Button

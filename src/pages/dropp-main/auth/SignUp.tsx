@@ -67,12 +67,12 @@ const SignUpPage = () => {
   const restaurantTypes = [
     { value: "QSR", label: "QSR", type: "quick_service" },
     { value: "Dine-in", label: "Dine-in", type: "restaurant" },
-    { value: "Private Chefs", label: "Private Chefs", type: "chef" },
+    { value: "Private Chefs", label: "Private Chefs", type: "storefront" },
     { value: "Bar & Lounge", label: "Bar & Lounge", type: "quick_service" },
     { value: "Cafe", label: "Cafe", type: "quick_service" },
     { value: "Food Truck", label: "Food Truck", type: "quick_service" },
     { value: "Fast Casual", label: "Fast Casual", type: "quick_service" },
-    { value: "Others", label: "Others", type: "chef" },
+    { value: "Others", label: "Others", type: "storefront" },
   ];
 
   const [restaurantType, setRestaurantType] = useState<any>("");
@@ -141,6 +141,8 @@ const SignUpPage = () => {
         dispatch(registerLoginAccount({ ...data?.data }));
         if (values.type === "quick_service") {
           navigate("/qsr");
+        } else if (values.type === "storefront") {
+          navigate("/storefront");
         } else {
           navigate("/chef");
         }
