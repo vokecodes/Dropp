@@ -120,8 +120,6 @@ export const logOutUserAccount =
       navigate("/auth/admin-login");
     } else if (cashier) {
       navigate("/cashier");
-    } else if (chefType === "storefront") {
-      navigate(AUTH_ROUTES.linkStorefrontLogin);
     } else {
       navigate("/auth");
     }
