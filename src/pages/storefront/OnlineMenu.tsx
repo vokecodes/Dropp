@@ -467,7 +467,7 @@ const OnlineMenu = () => {
 
               {business && (
                 <div className="">
-                  <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-y-3 gap-x-3 px-3">
+                  <div className="flex flex-row items-stretch lg:items-center justify-between gap-y-2 gap-x-2 px-3">
                     <OutlineButton
                       title="Delivery"
                       extraClasses="px-8 py-2 !border-[#06C167] !text-[#06C167]"
@@ -487,7 +487,7 @@ const OnlineMenu = () => {
                       }
                     />
 
-                    <div className="h-full flex flex-row items-center justify-center lg:justify-between gap-x-3">
+                    {/* <div className="h-full flex flex-row items-center justify-center lg:justify-between gap-x-3">
                       <Button
                         loading={businessLoading}
                         title={
@@ -525,24 +525,24 @@ const OnlineMenu = () => {
                                 )
                         }
                       />
+                    </div> */}
 
-                      <button
-                        className="w-fit h-full px-6 py-3 rounded-xl bg-[#06C167]"
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `${window.location.protocol}//${
-                              window.location.host
-                            }/storefront-shop/${formatBusinessNameLink(
-                              business?.businessName
-                            )}`
-                          );
-                          setAlertPresent("Url copied to clipboard!");
-                          setOpenAlert(true);
-                        }}
-                      >
-                        <BiLinkAlt size={30} color="#fff" />
-                      </button>
-                    </div>
+                    <button
+                      className="w-fit h-full px-6 py-3 rounded-xl bg-[#06C167]"
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `${window.location.protocol}//${
+                            window.location.host
+                          }/storefront-shop/${formatBusinessNameLink(
+                            business?.businessName
+                          )}`
+                        );
+                        setAlertPresent("Url copied to clipboard!");
+                        setOpenAlert(true);
+                      }}
+                    >
+                      <BiLinkAlt size={30} color="#fff" />
+                    </button>
                   </div>
                   {publishError && (
                     <p className="mt-2 text-sm text-center text-red-600">

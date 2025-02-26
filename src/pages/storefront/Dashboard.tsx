@@ -18,7 +18,10 @@ import {
   getProfileUserAccount,
 } from "../../_redux/user/userAction";
 import { getCustomerWallet } from "../../_redux/wallet/walletAction";
-import { getChefOrders } from "../../_redux/order/orderAction";
+import {
+  getChefOrders,
+  getStorefrontOrders,
+} from "../../_redux/order/orderAction";
 import { formatPrice, formatRemoteAmountKobo } from "../../utils/formatMethods";
 import DOWalletCard from "../../components/DOWalletCard";
 
@@ -43,7 +46,7 @@ const ChefDashboard = () => {
     dispatch(getPayment());
     dispatch(getChefWalletAccount());
     dispatch(getChefRestaurantWalletAccount());
-    dispatch(getChefOrders());
+    dispatch(getStorefrontOrders());
   }, []);
 
   useEffect(() => {
@@ -134,14 +137,17 @@ const ChefDashboard = () => {
                 <DOrderCard
                   title="New orders"
                   total={
-                    orders?.filter((o: any) => o.status === "processed")?.length
+                    orders?.filter((o: any) => o.status === "pending")?.length
                   }
                   to={STOREFRONT_ROUTES.linkStorefrontOrders}
                 />
                 <DOrderCard
                   title="Completed orders"
                   total={
-                    orders?.filter((o: any) => o.status === "completed")?.length
+                    orders?.filter(
+                      (o: any) =>
+                        o.status === "completed" || o.status === "delivered"
+                    )?.length
                   }
                   to={STOREFRONT_ROUTES.linkStorefrontOrders}
                 />

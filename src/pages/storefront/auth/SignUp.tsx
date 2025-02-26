@@ -10,6 +10,7 @@ import { AUTH_DATA } from "../../../reducers/type";
 import { BASE_API_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
 import { useAppDispatch } from "../../../redux/hooks";
+import { AUTH_ROUTES } from "../../../routes/routes";
 
 const StorefrontSignUpPage = () => {
   const navigate = useNavigate();
@@ -466,7 +467,7 @@ const StorefrontSignUpPage = () => {
             )}
           </Formik>
           <div className="flex justify-center items-center mt-3 mb-5">
-            <Link to={"/auth/storefront-login"}>
+            <Link to={AUTH_ROUTES.linkStorefrontLogin}>
               <p
                 className="text-gray-500 cursor-pointer font_regular"
                 // onClick={() => setAuthType(!authType)}

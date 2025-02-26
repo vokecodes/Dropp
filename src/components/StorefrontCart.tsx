@@ -643,6 +643,7 @@ const StorefrontCart = ({
                         : 0),
                     discountAmount,
                     deliveryCharge,
+                    processingFee,
                     ...values,
                     deliveryOption: deliveryOption,
                     storefront: chef?.profile?._id,

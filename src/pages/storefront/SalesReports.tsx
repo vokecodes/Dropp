@@ -827,9 +827,15 @@ const SalesReports = () => {
                               </th>
                               <th
                                 scope="col"
+                                className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
+                              >
+                                Delivery Amount
+                              </th>
+                              <th
+                                scope="col"
                                 className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[150px]"
                               >
-                                Amount
+                                Total Amount
                               </th>
                               <th
                                 scope="col"
@@ -945,117 +951,152 @@ const SalesReports = () => {
                           </thead>
                           <tbody className="divide-y divide-gray-200">
                             {filteredOrders?.map(
-                              (transaction: any, i: number) => (
-                                <tr
-                                  key={generateUUIDBasedOnStringLength("ttru")}
-                                >
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    #{transaction._id?.slice(-5)}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    {moment(transaction?.createdAt).format(
-                                      "DD/MM/YYYY"
+                              (transaction: any, i: number) => {
+                                // Calculate total amount from order array
+                                const totalOrderAmount =
+                                  transaction.order.reduce((total, item) => {
+                                    let price = item.menu.price;
+
+                                    // Apply discount if available
+                                    if (item.menu.discount) {
+                                      const discountAmount =
+                                        (price *
+                                          parseFloat(item.menu.discount)) /
+                                        100;
+                                      price -= discountAmount;
+                                    }
+
+                                    return total + price * item.quantity;
+                                  }, 0);
+
+                                // Add delivery charge
+                                const totalWithoutFee =
+                                  totalOrderAmount + transaction.deliveryCharge;
+
+                                return (
+                                  <tr
+                                    key={generateUUIDBasedOnStringLength(
+                                      "ttru"
                                     )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    {moment(transaction?.createdAt).format(
-                                      "hh:mm A"
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
-                                    {transaction?.name}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
-                                    {transaction?.email}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                    {transaction?.phoneNumber}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
-                                    {transaction?.order?.map((menu: any) => (
-                                      <div
-                                        key={generateUUIDBasedOnStringLength(
-                                          "fgtr"
-                                        )}
-                                        className="flex items-center"
-                                      >
-                                        {menu?.menu?.images.length > 0 && (
-                                          <div className="h-10 w-10 flex-shrink-0">
-                                            <img
-                                              className="h-10 w-10 rounded-full object-cover"
-                                              src={menu?.menu.images[0]}
-                                              alt=""
-                                            />
-                                          </div>
-                                        )}
-                                        <div className="ml-4">
-                                          <div className="font-medium text-wrap">
-                                            {menu?.menu?.foodName} X{" "}
-                                            {menu?.quantity}
-                                          </div>
-                                          <div className="">
-                                            ₦
-                                            {parseInt(
-                                              menu?.menu?.eventAmount
-                                                ? menu?.menu?.eventAmount
-                                                : menu?.menu?.discount
-                                                ? menu?.menu?.price -
-                                                  (menu?.menu?.price / 100) *
-                                                    menu?.menu?.discount
-                                                : menu?.menu?.price
-                                            ).toLocaleString()}
+                                  >
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                      #{transaction.id?.slice(-5)}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                      {moment(transaction?.createdAt).format(
+                                        "DD/MM/YYYY"
+                                      )}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                      {moment(transaction?.createdAt).format(
+                                        "hh:mm A"
+                                      )}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[150px] max-w-[250px] text-wrap">
+                                      {transaction?.name}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px] text-wrap">
+                                      {transaction?.email}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                      {transaction?.phoneNumber}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 w-auto min-w-[200px] max-w-[250px] text-wrap">
+                                      {transaction?.order?.map((menu: any) => (
+                                        <div
+                                          key={generateUUIDBasedOnStringLength(
+                                            "fgtr"
+                                          )}
+                                          className="flex items-center"
+                                        >
+                                          {menu?.menu?.images.length > 0 && (
+                                            <div className="h-10 w-10 flex-shrink-0">
+                                              <img
+                                                className="h-10 w-10 rounded-full object-cover"
+                                                src={menu?.menu.images[0]}
+                                                alt=""
+                                              />
+                                            </div>
+                                          )}
+                                          <div className="ml-4">
+                                            <div className="font-medium text-wrap">
+                                              {menu?.menu?.foodName} X{" "}
+                                              {menu?.quantity}
+                                            </div>
+                                            <div className="">
+                                              ₦
+                                              {parseInt(
+                                                menu?.menu?.eventAmount
+                                                  ? menu?.menu?.eventAmount
+                                                  : menu?.menu?.discount
+                                                  ? menu?.menu?.price -
+                                                    (menu?.menu?.price / 100) *
+                                                      menu?.menu?.discount
+                                                  : menu?.menu?.price
+                                              ).toLocaleString()}
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    ))}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
-                                    {transaction?.order?.reduce(
-                                      (total: any, item: any) =>
-                                        total + item.quantity,
-                                      0
-                                    )}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
-                                    {
-                                      formatRemoteAmountKobo(
-                                        transaction?.totalAmount
-                                      ).naira
-                                    }
-                                    {
-                                      formatRemoteAmountKobo(
-                                        transaction?.totalAmount
-                                      ).kobo
-                                    }
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
-                                    {transaction?.deliveryState
-                                      ? `${
-                                          transaction?.deliveryArea
-                                        }, ${toTitleCase(
-                                          transaction?.deliveryState
-                                        )}`
-                                      : "-"}
-                                  </td>
-                                  <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
-                                    {transaction?.deliveryAddress || "-"}
-                                  </td>
-                                  <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                    {dateNoTimeFormatter.format(
-                                      new Date(transaction?.createdAt)
-                                    )}
-                                  </td>
-                                  <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                    {transaction?.deliveryTime}
-                                  </td>
-                                  <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                    {transaction?.deliveryOption}
-                                  </td>
-                                  <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                    {transaction?.paymentType}
-                                  </td>
-                                </tr>
-                              )
+                                      ))}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[100px]">
+                                      {transaction?.order?.reduce(
+                                        (total: any, item: any) =>
+                                          total + item.quantity,
+                                        0
+                                      )}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                      {
+                                        formatRemoteAmountKobo(
+                                          transaction?.deliveryCharge
+                                        ).naira
+                                      }
+                                      {
+                                        formatRemoteAmountKobo(
+                                          transaction?.deliveryCharge
+                                        ).kobo
+                                      }
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[150px]">
+                                      {
+                                        formatRemoteAmountKobo(totalWithoutFee)
+                                          .naira
+                                      }
+                                      {
+                                        formatRemoteAmountKobo(totalWithoutFee)
+                                          .kobo
+                                      }
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
+                                      {transaction?.deliveryState
+                                        ? `${
+                                            transaction?.deliveryArea
+                                          }, ${toTitleCase(
+                                            transaction?.deliveryState
+                                          )}`
+                                        : "-"}
+                                    </td>
+                                    <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[200px]">
+                                      {transaction?.deliveryAddress || "-"}
+                                    </td>
+                                    <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                      {dateNoTimeFormatter.format(
+                                        new Date(transaction?.createdAt)
+                                      )}
+                                    </td>
+                                    <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                      {transaction?.deliveryTime}
+                                    </td>
+                                    <td className="py-4 pl-0 text-sm font_medium capitalize text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                      {transaction?.deliveryOption}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-0 text-sm capitalize font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
+                                      {transaction?.paymentType}
+                                    </td>
+                                  </tr>
+                                );
+                              }
                             )}
                           </tbody>
                         </table>

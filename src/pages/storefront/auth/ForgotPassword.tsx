@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL } from "../../../_redux/urls";
+import { AUTH_ROUTES } from "../../../routes/routes";
 
 const StorefrontForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ const StorefrontForgotPasswordPage = () => {
                     </div>
 
                     <div className="w-full">
-                      <Link to={"/auth/storefront-login"}>
+                      <Link to={AUTH_ROUTES.linkStorefrontLogin}>
                         <p className="text-xs font_regular hover:underline font-semibold">
                           <span className="text-[#747372]">
                             Already registered?{" "}

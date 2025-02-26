@@ -8,7 +8,11 @@ import { AUTH_DATA } from "../../../reducers/type";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL, CHEF_LOGIN_URL } from "../../../_redux/urls";
 import { registerLoginAccount } from "../../../_redux/auth/authSlice";
-import { QSR_SUB_ADMIN_USER, QUICK_SERVICE_USER, SUB_CHEF_USER } from "../../../config/UserType";
+import {
+  QSR_SUB_ADMIN_USER,
+  QUICK_SERVICE_USER,
+  SUB_CHEF_USER,
+} from "../../../config/UserType";
 
 const StorefrontLoginPage = () => {
   const navigate = useNavigate();
@@ -32,8 +36,8 @@ const StorefrontLoginPage = () => {
       .then(({ data }) => {
         const user = data?.data?.user;
 
-        navigate("/storefront");
         dispatch(registerLoginAccount({ ...data?.data }));
+        navigate("/storefront");
       })
       .catch((error) => {
         const { message } = error.response.data;

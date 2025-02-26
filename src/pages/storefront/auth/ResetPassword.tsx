@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import { BASE_API_URL } from "../../../_redux/urls";
+import { AUTH_ROUTES } from "../../../routes/routes";
 
 const StorefrontResetPasswordPage = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const StorefrontResetPasswordPage = () => {
         ...values,
       })
       .then(({ data }) => {
-        navigate("/auth/storefront-login");
+        navigate(AUTH_ROUTES.linkStorefrontLogin);
       })
       .catch((error) => {
         const { message } = error.response.data;
