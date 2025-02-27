@@ -26,6 +26,7 @@ import {
 } from "../../utils/formatMethods";
 import {
   downloadRestaurantReport,
+  downloadStorefrontReport,
   getOrdersPage,
   getRestaurantOrdersPage,
   getStorefrontOrdersPage,
@@ -39,9 +40,11 @@ import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { ClickAwayListener } from "@mui/material";
 import InfinityScroll from "../../components/InfinityScroll";
 import { DashboardItemSkeletonLoader } from "../../components/DashboardItemSkeletonLoader";
+import { SERVER } from "../../config/axios";
+import { MENU_DELIVERY_URL } from "../../_redux/urls";
 
 const PAYMENT_OPTIONS = ["All", "Card", "Transfer", "USSD"];
-const DELIVERY_STATUS = ["All", "Pending", "Completed"];
+const DELIVERY_STATUS = ["All", "Pending", "Delivered"];
 const DELIVERY_DAY = [
   "All",
   "Sunday",
@@ -77,9 +80,26 @@ const SalesReports = () => {
     shallowEqual
   );
 
+  const [menuDelivery, setMenuDelivery] = useState<any>([]);
+
+  const getMenuDelivery = () => {
+    SERVER.get(MENU_DELIVERY_URL)
+      .then(({ data }) => {
+        setMenuDelivery([]);
+        if (data?.data && data?.data?.length > 0) {
+          const tempLocations = data?.data.map(option => option.delivery_city)
+          setMenuDelivery(["All", ...tempLocations]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     dispatch(getProfileChefAccount());
     dispatch(getChefWalletAccount());
+    getMenuDelivery();
   }, []);
 
   useEffect(() => {
@@ -158,7 +178,7 @@ const SalesReports = () => {
   const [deliveryDay, setDeliveryDay] = useState(DELIVERY_DAY[0]);
 
   const [openLocationOptions, setOpenLocationOptions] = useState(false);
-  const [deliveryLocation, setDeliveryLocation] = useState(null);
+  const [deliveryLocation, setDeliveryLocation] = useState("All");
 
   const [transactions, setTransactions] = useState<any>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -171,6 +191,8 @@ const SalesReports = () => {
       startDate,
       endDate,
       paymentType,
+      deliveryDay, 
+      deliveryLocation,
       deliveryStatus
     ).then(({ data }) => {
       if (page === 1) {
@@ -203,7 +225,7 @@ const SalesReports = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [endDate, paymentType]);
+  }, [endDate, paymentType, deliveryStatus, deliveryDay, deliveryLocation]);
 
   useEffect(() => {
     if (page === 1) {
@@ -212,12 +234,14 @@ const SalesReports = () => {
           startDate,
           endDate,
           paymentType,
+          deliveryDay,
+          deliveryLocation,
           deliveryStatus
         )
       );
       fetchStorefrontOrders();
     }
-  }, [page, endDate, deliveryStatus]);
+  }, [page, endDate, paymentType, deliveryStatus, deliveryDay, deliveryLocation]);
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -229,13 +253,16 @@ const SalesReports = () => {
       "Name",
       "Email",
       "Phone No.",
-      "Table",
       "Food",
       "Total Orders",
-      "Waiter",
-      "Amount",
-      "Payment",
-      "Status",
+      "Delivery Amount",
+      "Total Amount",
+      "Delivery Area & State",
+      "Delivery Address",
+      "Delivery Date",
+      "Delivery Time",
+      "Fulfillment Option",
+      "Payment"
     ].join(",");
 
     const rows = data
@@ -260,24 +287,44 @@ const SalesReports = () => {
           0
         );
 
+        // Calculate total amount from order array
+        const totalOrderAmount =
+        order.order.reduce((total, item) => {
+          let price = item.menu.price;
+
+          // Apply discount if available
+          if (item.menu.discount) {
+            const discountAmount =
+              (price *
+                parseFloat(item.menu.discount)) /
+              100;
+            price -= discountAmount;
+          }
+
+          return total + price * item.quantity;
+        }, 0);
+
+        // Add delivery charge
+        const totalWithoutFee =
+        totalOrderAmount + order.deliveryCharge;
+
         return [
-          `#${order._id.substring(order?._id?.length - 5)}`,
+          `#${order.id.substring(order?.id?.length - 5)}`,
           formattedDate,
           formattedTime,
           order?.name || "-",
           order?.email || "-",
           order?.phoneNumber || "-",
-          order?.table?.table || "-",
           foodDetails,
           totalMeal,
-          order?.table?.employeeAssigned || "-",
-          `₦${order?.totalAmount}`,
-          order?.posPayment ? "POS" : "Online",
-          order?.gift === true
-            ? "gift"
-            : order?.order[0]?.status === "archived"
-            ? "void"
-            : order?.order[0]?.status || "---",
+          `₦${order?.deliveryCharge}`,
+          `₦${totalWithoutFee}`,
+          (order?.deliveryState ? `"${ order?.deliveryArea }, ${toTitleCase( order?.deliveryState )}"` : "---"),
+          `"${order?.deliveryAddress|| '---'}"` ,
+          `"${dateFormatter.format(new Date(order?.createdAt))}"`,
+          order?.deliveryTime || '---',
+          order?.deliveryOption,
+          order?.paymentType
         ].join(",");
       });
 
@@ -287,7 +334,7 @@ const SalesReports = () => {
   const dineExportToCSV = async () => {
     setIsDownloading(true);
     try {
-      await downloadRestaurantReport(startDate, endDate, paymentType).then(
+      await downloadStorefrontReport(startDate, endDate, paymentType, deliveryDay, deliveryLocation, deliveryStatus).then(
         ({ data }) => {
           const csv = dineInConvertToCSV(data?.data);
 
@@ -347,6 +394,10 @@ const SalesReports = () => {
   const handleClickAway = (flag: string) => {
     if (flag === "payment") {
       setOpenPaymentOptions(false);
+    } else if (flag === "deliveryDay") {
+      setOpenDayOptions(false);
+    } else if (flag === "locations") {
+      setOpenLocationOptions(false);
     }
   };
 
@@ -464,7 +515,7 @@ const SalesReports = () => {
                   }}
                 >
                   <p className={`text-xs lg:text-sm filter_text font_medium`}>
-                    {deliveryLocation}
+                    {toTitleCase(deliveryLocation)}
                   </p>
                   {openLocationOptions ? (
                     <TiArrowSortedUp color="#8E8E8E" size={20} />
@@ -474,18 +525,18 @@ const SalesReports = () => {
                 </div>
                 {openLocationOptions && (
                   <ClickAwayListener
-                    onClickAway={() => handleClickAway("payment")}
+                    onClickAway={() => handleClickAway("locations")}
                   >
                     <div
                       className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                     >
-                      {[]?.map((location: any, i: number) => (
+                      {menuDelivery?.map((location: any, i: number) => (
                         <div
                           className="flex items-center cursor-pointer mb-2"
                           key={i}
                           onClick={() => {
                             resetFilters();
-                            setPaymentType(location);
+                            setDeliveryLocation(location);
                             setOpenLocationOptions(false);
                           }}
                         >
@@ -499,7 +550,7 @@ const SalesReports = () => {
                           <p
                             className={`text-xs lg:text-sm secondary_gray_color text-black`}
                           >
-                            {location}
+                            {toTitleCase(location)}
                           </p>
                         </div>
                       ))}
@@ -670,7 +721,7 @@ const SalesReports = () => {
               </div>
 
               <div className="flex gap-3">
-                {/* <div
+                <div
                   className="py-2 px-4 w-36 h-10 flex items-center justify-center gap-3 rounded-full cursor-pointer text-black bg-[#EDECEC]"
                   onClick={() => {
                     dineExportToCSV();
@@ -715,7 +766,7 @@ const SalesReports = () => {
                       </svg>
                     </>
                   )}
-                </div> */}
+                </div>
 
                 <div
                   className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-[#EDECEC]"
@@ -1081,12 +1132,12 @@ const SalesReports = () => {
                                       {transaction?.deliveryAddress || "-"}
                                     </td>
                                     <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                      {dateNoTimeFormatter.format(
+                                      {dateFormatter.format(
                                         new Date(transaction?.createdAt)
                                       )}
                                     </td>
                                     <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                      {transaction?.deliveryTime}
+                                      {transaction?.deliveryTime || '-'}
                                     </td>
                                     <td className="py-4 pl-0 text-sm font_medium capitalize text-[#310E0E] lg:pl-3 min-w-[120px]">
                                       {transaction?.deliveryOption}
