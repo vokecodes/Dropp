@@ -10,6 +10,7 @@ import Input from "../../components/CustomInput";
 import { useFormik } from "formik";
 import OutlineButton from "../../components/OutlineButton";
 import Button from "../../components/Button";
+import Table from "../../components/Table";
 
 const INVENTORY_MENU = [
   "Supply",
@@ -41,16 +42,23 @@ const VendorOptions = [
   },
 ];
 
+const supplierColumns = ["Supplier ID", "Name/type", "Email", "Phone number"];
 const suppliers = [
   {
     id: "2625533",
-    name: "coca cola plc",
-    type: "Beverages",
+    name: { name: "Coca Cola PLC", type: "Beverages" },
     email: "coca@example.com",
     phone: "08136445274",
   },
 ];
 
+const purchaseOrderColumns = [
+  "Supplier",
+  "Items",
+  "Total Items",
+  "Total Order",
+  "Status",
+];
 const purchaseOrders = [
   {
     supplier: "Coca Cola",
@@ -172,7 +180,7 @@ const ChefInventory = () => {
 
           <div className="bg-white rounded-3xl p-10 ">
             {selectedOrder === INVENTORY_MENU[0] && (
-              <div className="p-6 bg-gray-50 min-h-screen">
+              <div className="">
                 {/* Tabs */}
                 <div className="flex space-x-3">
                   <button
@@ -254,107 +262,11 @@ const ChefInventory = () => {
                   )}
                 </div>
 
-                {/* Supplier Table */}
                 {activeSupplyTab === "Supplier" && (
-                  <div className="mt-6 bg-white rounded-xl shadow-md">
-                    <table className="w-full text-left">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Supplier ID
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Name/type
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Email
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Phone number
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {suppliers.map((supplier) => (
-                          <tr key={supplier.id} className="border-b">
-                            <td className="py-4 px-6 text-black font_medium">
-                              {supplier.id}
-                            </td>
-                            <td className="py-4 px-6">
-                              <span className="text-black font_medium block">
-                                {supplier.name}
-                              </span>
-                              <span className="text-[#7F7F7F] text-sm">
-                                {supplier.type}
-                              </span>
-                            </td>
-                            <td className="py-4 px-6 font-semibold text-[#7F7F7F]">
-                              {supplier.email}
-                            </td>
-                            <td className="py-4 px-6 text-[#7F7F7F]">
-                              {supplier.phone}
-                            </td>
-                            <td className="py-4 px-6 text-[#7F7F7F] text-xl">
-                              <FaEllipsisH />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <Table columns={supplierColumns} data={suppliers} />
                 )}
-
-                {/* Purchase Order Table */}
                 {activeSupplyTab === "Purchase Order" && (
-                  <div className="mt-6 bg-white rounded-xl shadow-md">
-                    <table className="w-full text-left">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Supplier
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Items
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Total Items
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Total Order
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium">
-                            Status
-                          </th>
-                          <th className="py-3 px-6 text-[#7F7F7F] font_medium"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {purchaseOrders.map((order) => (
-                          <tr key={order.supplier} className="border-b">
-                            <td className="py-4 px-6 text-black font_medium">
-                              {order.supplier}
-                            </td>
-                            <td className="py-4 px-6 text-black font_medium">
-                              {order.items}
-                            </td>
-                            <td className="py-4 px-6 font-semibold text-[#7F7F7F]">
-                              {order.totalItems}
-                            </td>
-                            <td className="py-4 px-6 text-[#7F7F7F]">
-                              {order.totalOrder}
-                            </td>
-                            <td className="py-4 px-6 text-[#7F7F7F]">
-                              {order.status}
-                            </td>
-                            <td className="py-4 px-6 text-[#7F7F7F] text-xl">
-                              <FaEllipsisH />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <Table columns={purchaseOrderColumns} data={purchaseOrders} />
                 )}
               </div>
             )}
