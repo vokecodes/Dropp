@@ -191,10 +191,12 @@ export const getStorefrontDashboardCrud = (
   fromDate = "",
   toDate = "",
   payment = "",
+  deliveryDay = "", 
+  deliveryLocation = "",
   deliveryStatus = "",
 ) => {
   return SERVER.get(
-    `${STOREFRONT_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryStatus=${deliveryStatus}`
+    `${STOREFRONT_ORDER_URL}/dashboard?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryDay=${deliveryDay}&deliveryLocation=${deliveryLocation}&deliveryStatus=${deliveryStatus}`
   );
 };
 
@@ -264,10 +266,12 @@ export const getStorefrontOrdersPage = (
   fromDate = "",
   toDate = "",
   payment = "",
+  deliveryDay = "", 
+  deliveryLocation = "",
   deliveryStatus = ""
 ) => {
   return SERVER.get(
-    `${STOREFRONT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryStatus=${deliveryStatus}`
+    `${STOREFRONT_ORDER_URL}/restaurant-orders?page=${page}&fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryDay=${deliveryDay}&deliveryLocation=${deliveryLocation}&deliveryStatus=${deliveryStatus}`
   );
 };
 
@@ -305,6 +309,19 @@ export const downloadRestaurantReport = (
 ) => {
   return SERVER.get(
     `${RESTAURANT_ORDER_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&section=${section}&table=${table}&breakdownOption=${breakdownOption}`
+  );
+};
+
+export const downloadStorefrontReport = (
+  fromDate = "",
+  toDate = "",
+  payment = "",
+  deliveryDay = "", 
+  deliveryLocation = "",
+  deliveryStatus = ""
+) => {
+  return SERVER.get(
+    `${STOREFRONT_ORDER_URL}/download?fromDate=${fromDate}&toDate=${toDate}&payment=${payment}&deliveryDay=${deliveryDay}&deliveryLocation=${deliveryLocation}&deliveryStatus=${deliveryStatus}`
   );
 };
 
