@@ -5,7 +5,7 @@ import { BsChatDots } from "react-icons/bs";
 import { RiWallet3Line } from "react-icons/ri";
 import { CgFileDocument } from "react-icons/cg";
 import { CiForkAndKnife } from "react-icons/ci";
-import { MdHomeFilled, MdOutlineFoodBank } from "react-icons/md";
+import { MdHomeFilled, MdOutlineFoodBank, MdInventory } from "react-icons/md";
 import { GiKnifeFork } from "react-icons/gi";
 import { FaSquarePollVertical } from "react-icons/fa6";
 import MenuItem from "./MenuItem";
@@ -356,6 +356,23 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
         location?.pathname === CHEF_ROUTES.linkChefDineIn ||
         location?.pathname === CHEF_ROUTES.linkChefTableManagement,
       to: CHEF_ROUTES.linkChefDineIn,
+    },
+    {
+      icon: (
+        <MdInventory
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefDineIn
+              ? "#06c167"
+              : location?.pathname === CHEF_ROUTES.linkChefTableManagement
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Inventory",
+      active: location?.pathname === CHEF_ROUTES.linkChefInventory,
+      to: CHEF_ROUTES.linkChefInventory,
     },
     {
       icon: (
