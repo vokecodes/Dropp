@@ -1041,37 +1041,6 @@ const OnlineMenu = () => {
                 />
               </div>
 
-              <div>
-                <p className="mt-5 text-lg text-center font_medium input_text">
-                  Is this a subscription meal?
-                </p>
-              </div>
-
-              <div className="flex bg_sec_gray_color rounded-full cursor-pointer justify-between mt-3 mb-5">
-                {menuTab?.map((menu: string) => (
-                  <p
-                    key={menu}
-                    className={`text-center font_regular py-4 w-1/2 text-base ${
-                      menu === selectedTabMenu
-                        ? "text-white primary_bg_color rounded-full"
-                        : "text-black"
-                    } `}
-                    onClick={() => {
-                      setSelectedTabMenu(menu);
-                      resetForm();
-                      dispatch(clearError());
-                      if (menu === menuTab[1]) {
-                        setFieldValue("subscription", true);
-                        return;
-                      }
-                      setFieldValue("subscription", false);
-                    }}
-                  >
-                    {menu}
-                  </p>
-                ))}
-              </div>
-
               <div className="rounded-xl border gray_border_color flex flex-col items-center justify-center px-10 py-10 mt-3">
                 <div className="flex flex-wrap">
                   {values.images &&
