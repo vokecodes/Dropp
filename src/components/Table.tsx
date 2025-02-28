@@ -17,7 +17,7 @@ const Table = ({ columns, data }) => {
         <tbody>
           {data.map((row, rowIndex) => (
             <tr key={rowIndex} className="border-b">
-              {Object.values(row).map((value, cellIndex) => (
+              {Object.values(row).map((value: any, cellIndex) => (
                 <td
                   key={cellIndex}
                   className="py-4 px-6 text-black font-medium"
@@ -25,10 +25,10 @@ const Table = ({ columns, data }) => {
                   {typeof value === "object" ? (
                     <span>
                       <span className="text-black font-semibold block">
-                        {value.name}
+                        {value?.name}
                       </span>
                       <span className="text-[#7F7F7F] text-sm">
-                        {value.type}
+                        {value?.type}
                       </span>
                     </span>
                   ) : (
