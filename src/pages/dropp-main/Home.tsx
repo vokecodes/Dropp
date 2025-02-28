@@ -186,9 +186,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log('selectedCategory= ', selectedCategory)
-    scrollToCategoryPost(CATEGORIES.indexOf(selectedCategory))
-  }, [selectedCategory])
+    console.log("selectedCategory= ", selectedCategory);
+    scrollToCategoryPost(CATEGORIES.indexOf(selectedCategory));
+  }, [selectedCategory]);
 
   const businessesRef = useRef<any>(null);
   const [businessScrollDirection, setBusinessScrollDirection] = useState(1); // 1 for right, -1 for left
@@ -761,7 +761,7 @@ const Home = () => {
               Flexible plans to make it easy to start or switch.
             </p>
 
-            <div className="lg:w-4/5 mx-auto mt-10">
+            {/* <div className="lg:w-4/5 mx-auto mt-10">
               <div className="lg:flex justify-center gap-8">
                 <div className="bg-[#99C446] rounded-2xl p-8 mb-10 relative">
                   <p className="lg:text-5xl text-3xl text-[#24412C] font_bold">
@@ -863,7 +863,8 @@ const Home = () => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </div> */}
+
             <div id="demoForm" className="lg:w-4/5 mx-auto">
               <div className="bg-white rounded-2xl lg:p-20 p-6">
                 <p className="lg:text-5xl text-3xl text_black font_bold text-center">
