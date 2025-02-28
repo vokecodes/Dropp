@@ -12,6 +12,8 @@ import OutlineButton from "../../components/OutlineButton";
 import Button from "../../components/Button";
 import Table from "../../components/Table";
 import InventorySupply from "../../components/InventorySupply";
+import InventoryRecipe from "../../components/InventoryRecipe";
+import InventoryMenu from "../../components/InventoryMenu";
 
 const INVENTORY_MENU = [
   "Supply",
@@ -113,6 +115,8 @@ const ChefInventory = () => {
 
           <div className="bg-white rounded-3xl p-10 ">
             {selectedOrder === INVENTORY_MENU[0] && <InventorySupply />}
+            {selectedOrder === INVENTORY_MENU[3] && <InventoryRecipe />}
+            {selectedOrder === INVENTORY_MENU[4] && <InventoryMenu />}
           </div>
         </div>
       </ChefDashboardLayout>
