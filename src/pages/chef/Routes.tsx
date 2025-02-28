@@ -19,6 +19,7 @@ import SalesReports from "./SalesReports";
 import SectionManagement from "./SectionManagement";
 import IdleTimerLayout from "../../utils/idleTimerLayout";
 import ChefInventory from "./Inventory";
+import Stocktake from "./Stocktake";
 
 const ChefRoutes = () => {
   const { auth } = useSelector(
@@ -45,6 +46,7 @@ const ChefRoutes = () => {
           />
           <Route path={CHEF_ROUTES.chefSettings} element={<ChefSettings />} />
           <Route path={CHEF_ROUTES.chefInventory} element={<ChefInventory />} />
+          <Route path={CHEF_ROUTES.chefStocktake} element={<Stocktake />} />
           <Route path={CHEF_ROUTES.chefWallet} element={<ChefWallet />} />
           <Route path={CHEF_ROUTES.chefChat} element={<ChefMessage />} />
           <Route path={CHEF_ROUTES.chefMenuOnline} element={<OnlineMenu />} />

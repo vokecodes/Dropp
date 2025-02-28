@@ -639,8 +639,6 @@ const TopNav = ({ page, event }: any) => {
 
   const notHomeRoutes = location?.pathname.startsWith("/c");
 
-  console.log('chefType= ', person?.chefType)
-
   return (
     <Popover className="sticky top-0 w-full bg-white z-50">
       <div className="lg:mx-5 px-4 sm:px-6">
