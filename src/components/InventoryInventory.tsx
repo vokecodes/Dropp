@@ -197,7 +197,7 @@ const InventoryInventory = () => {
         <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
           <div className="flex">
             <p className="flex-1 text-xl text-center font_bold black2">
-              Add a Supplier
+              Add an Item
             </p>
             <IoMdClose
               size={24}
@@ -210,16 +210,16 @@ const InventoryInventory = () => {
           <div>
             <Input
               type="text"
-              placeholder="Name"
+              placeholder="Item Name"
               name="name"
-              onChange={handleChange}
-              value={values.name}
-              error={errors.name && touched.name && errors.name}
+              //   onChange={handleChange}
+              //   value={values.name}
+              //   error={errors.name && touched.name && errors.name}
             />
 
             <Input
               type="text"
-              placeholder={`Phone Number`}
+              placeholder="Description"
               name="phoneNumber"
               onChange={handleChange}
               value={values.phoneNumber}
@@ -239,10 +239,29 @@ const InventoryInventory = () => {
             />
 
             <Input
+              type="dropdown"
+              placeholder="Unit of Measurement"
+              name="category"
+              onChange={handleChange}
+              value={values.category}
+              options={[]}
+              error={errors.category && touched.category && errors.category}
+            />
+
+            <Input
               type="text"
-              placeholder="Account Details"
+              placeholder="Cost Per Unit"
               name="account"
               // extraClasses={'!mt-10 !lg:mt-0'}
+              onChange={handleChange}
+              value={values.account}
+              error={errors.account && touched.account && errors.account}
+            />
+
+            <Input
+              type="text"
+              placeholder="Reorder Level"
+              name="account"
               onChange={handleChange}
               value={values.account}
               error={errors.account && touched.account && errors.account}
@@ -254,10 +273,47 @@ const InventoryInventory = () => {
                   </p>
                 )} */}
 
+            <Input
+              type="radio"
+              placeholder="Automate Reorder"
+              name="account"
+              onChange={handleChange}
+              value={values.account}
+              error={errors.account && touched.account && errors.account}
+            />
+
+            <Input
+              type="radio"
+              placeholder="Automate Reorder Reminder"
+              name="account"
+              onChange={handleChange}
+              value={values.account}
+              error={errors.account && touched.account && errors.account}
+            />
+
+            <Input
+              type="text"
+              placeholder="Reorder Quantity"
+              name="account"
+              onChange={handleChange}
+              value={values.account}
+              error={errors.account && touched.account && errors.account}
+            />
+
+            <Input
+              type="dropdown"
+              placeholder="Supplier"
+              name="category"
+              onChange={handleChange}
+              value={values.category}
+              options={[]}
+              error={errors.category && touched.category && errors.category}
+            />
+
             <div className="mt-10">
               <Button
                 loading={isLoading}
-                title="Add Supplier"
+                title="Add Item"
                 extraClasses="w-full p-3 rounded-full px-8 py-2"
                 onClick={() => {
                   handleSubmit();
