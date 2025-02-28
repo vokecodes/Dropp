@@ -15,6 +15,7 @@ import InventorySupply from "../../components/InventorySupply";
 import InventoryRecipe from "../../components/InventoryRecipe";
 import InventoryMenu from "../../components/InventoryMenu";
 import InventoryStocktake from "../../components/InventoryStocktake";
+import InventoryInventory from "../../components/InventoryInventory";
 
 const INVENTORY_MENU = [
   "Supply",
@@ -116,6 +117,7 @@ const ChefInventory = () => {
 
           <div className="bg-white rounded-3xl p-10 ">
             {selectedOrder === INVENTORY_MENU[0] && <InventorySupply />}
+            {selectedOrder === INVENTORY_MENU[1] && <InventoryInventory />}
             {selectedOrder === INVENTORY_MENU[2] && <InventoryStocktake />}
             {selectedOrder === INVENTORY_MENU[3] && <InventoryRecipe />}
             {selectedOrder === INVENTORY_MENU[4] && <InventoryMenu />}

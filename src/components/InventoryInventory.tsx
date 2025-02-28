@@ -8,22 +8,35 @@ import { IoMdClose } from "react-icons/io";
 import Table from "./Table";
 import { AiOutlineDown, AiOutlineSearch } from "react-icons/ai";
 
-const supplierColumns = ["Supplier ID", "Name/type", "Email", "Phone number"];
+const supplierColumns = [
+  "SKU",
+  "Item",
+  "Category",
+  "Unit",
+  "Unit Cost",
+  "Total Cost",
+  "Reorder Level",
+];
 const suppliers = [
   {
-    id: "2625533",
-    name: { name: "Coca Cola PLC", type: "Beverages" },
-    email: "coca@example.com",
-    phone: "08136445274",
+    id: "52633534",
+    item: "Rice (Mama Gold)",
+    category: "Bar, Kitchen",
+    unit: "kg",
+    unitCost: "₦10000",
+    totalCost: "₦10000",
+    reorderLevel: 20,
   },
 ];
 
 const purchaseOrderColumns = [
-  "Supplier",
-  "Items",
-  "Total Items",
-  "Total Order",
-  "Status",
+  "SKU",
+  "Item",
+  "Category",
+  "Unit",
+  "Unit Cost",
+  "Total Cost",
+  "Reorder Level",
 ];
 const purchaseOrders = [
   {
@@ -36,15 +49,14 @@ const purchaseOrders = [
 ];
 
 const purchaseOrdersSubOptions = [
-  "All",
+  "All Items",
+  "In Stock",
+  "Out of Stock",
   "Pending",
-  "Response",
-  "Approved",
-  "Delivered",
 ];
 
-const InventorySupply = () => {
-  const [activeSupplyTab, setActiveSupplyTab] = useState("Supplier");
+const InventoryInventory = () => {
+  const [activeSupplyTab, setActiveSupplyTab] = useState("Stocks");
 
   const [purchaseOrdersSubTab, setPurchaseOrdersSubTab] = useState("All");
 
@@ -84,23 +96,23 @@ const InventorySupply = () => {
       <div className="flex space-x-3">
         <button
           className={`px-5 py-2 rounded-full font-medium ${
-            activeSupplyTab === "Supplier"
+            activeSupplyTab === "Items"
               ? "bg-primary text-white"
               : "bg-[#EDECEC] text-black"
           }`}
-          onClick={() => setActiveSupplyTab("Supplier")}
+          onClick={() => setActiveSupplyTab("Items")}
         >
-          Supplier
+          Items
         </button>
         <button
           className={`px-5 py-2 rounded-full font-medium ${
-            activeSupplyTab === "Purchase Order"
+            activeSupplyTab === "Stocks"
               ? "bg-primary text-white"
               : "bg-[#EDECEC] text-black"
           }`}
-          onClick={() => setActiveSupplyTab("Purchase Order")}
+          onClick={() => setActiveSupplyTab("Stocks")}
         >
-          Purchase order
+          Stocks
         </button>
       </div>
 
@@ -116,7 +128,7 @@ const InventorySupply = () => {
               className="w-full pl-12 pr-4 py-2 rounded-full bg-[#EDECEC] text-black focus:outline-none"
             />
           </div>
-          {activeSupplyTab === "Purchase Order" && (
+          {activeSupplyTab === "Stocks" && (
             <div className="flex space-x-3">
               {purchaseOrdersSubOptions?.map((option) => (
                 <button
@@ -135,36 +147,22 @@ const InventorySupply = () => {
         </div>
 
         {/* Action Buttons */}
-        {activeSupplyTab === "Supplier" && (
+        {activeSupplyTab === "Items" && (
           <div className="flex space-x-3">
-            <button className="border border-black text-black px-5 py-2 rounded-lg flex items-center space-x-2">
-              <span>Add item</span> <AiOutlineDown />
-            </button>
             <button
               className="bg-black text-white px-5 py-2 rounded-lg flex items-center space-x-2"
               onClick={openSupplierModal}
             >
-              <span>Add a supplier</span> <AiOutlineDown />
-            </button>
-          </div>
-        )}
-
-        {activeSupplyTab === "Purchase Order" && (
-          <div className="flex space-x-3">
-            <button
-              className="bg-black text-white px-6 py-2 rounded-lg flex items-center space-x-2"
-              onClick={openSupplierModal}
-            >
-              <span>Create an order</span> <AiOutlineDown />
+              <span>Add Item</span> <AiOutlineDown />
             </button>
           </div>
         )}
       </div>
 
-      {activeSupplyTab === "Supplier" && (
+      {activeSupplyTab === "Items" && (
         <Table columns={supplierColumns} data={suppliers} />
       )}
-      {activeSupplyTab === "Purchase Order" && (
+      {activeSupplyTab === "Stocks" && (
         <Table columns={purchaseOrderColumns} data={purchaseOrders} />
       )}
 
@@ -252,4 +250,4 @@ const InventorySupply = () => {
   );
 };
 
-export default InventorySupply;
+export default InventoryInventory;
