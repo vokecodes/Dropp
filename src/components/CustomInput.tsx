@@ -24,6 +24,7 @@ const Input = ({
   newName,
 }: // radioSelected = false,
 // radioSetSelected,
+
 InputProps) => {
   const [radioSelectedState, setRadioSelectedState] = useState(false);
 
