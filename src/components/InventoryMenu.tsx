@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { FaEllipsisH } from "react-icons/fa";
 import Modal from "@mui/material/Modal";
 import Button from "./Button";
-import Input from "./Input";
+import Input from "./CustomInput";
 import { IoMdClose } from "react-icons/io";
 import Table from "./Table";
 import { AiOutlineDown, AiOutlineSearch } from "react-icons/ai";

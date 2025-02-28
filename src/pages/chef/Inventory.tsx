@@ -16,6 +16,7 @@ import InventoryRecipe from "../../components/InventoryRecipe";
 import InventoryMenu from "../../components/InventoryMenu";
 import InventoryStocktake from "../../components/InventoryStocktake";
 import InventoryInventory from "../../components/InventoryInventory";
+import MiniTabMenu from "../../components/MiniTabMenu";
 
 const INVENTORY_MENU = [
   "Supply",
@@ -100,19 +101,11 @@ const ChefInventory = () => {
           <PageTitle title="Inventory" />
 
           <div className="my-10 flex space-x-4">
-            {INVENTORY_MENU?.map((order: string) => (
-              <button
-                key={order}
-                className={`px-6 py-2 rounded-full text-center font-medium transition-all ${
-                  order === selectedOrder
-                    ? "bg-primary text-white"
-                    : "bg-[#EDECEC] text-black"
-                }`}
-                onClick={() => setSelectedOrder(order)}
-              >
-                {order}
-              </button>
-            ))}
+            <MiniTabMenu
+              ordersMenu={INVENTORY_MENU}
+              selectedOrder={selectedOrder}
+              setSelectedOrder={setSelectedOrder}
+            />
           </div>
 
           <div className="bg-white rounded-3xl p-10 ">

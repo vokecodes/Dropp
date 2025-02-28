@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { FaEllipsisH } from "react-icons/fa";
 import Modal from "@mui/material/Modal";
 import Button from "./Button";
-import Input from "./Input";
+import Input from "./CustomInput";
 import { IoMdClose } from "react-icons/io";
 import Table from "./Table";
 import { AiOutlineDown, AiOutlineSearch } from "react-icons/ai";
@@ -26,6 +26,9 @@ const suppliers = [
     unitCost: "₦10000",
     totalCost: "₦10000",
     reorderLevel: 20,
+    showDescription: true,
+    description:
+      "Rice is a starchy cereal grain that comes from the seeds of the semi-aquatic grass Oryza sativa",
   },
 ];
 
@@ -56,7 +59,7 @@ const purchaseOrdersSubOptions = [
 ];
 
 const InventoryInventory = () => {
-  const [activeSupplyTab, setActiveSupplyTab] = useState("Stocks");
+  const [activeSupplyTab, setActiveSupplyTab] = useState("Items");
 
   const [purchaseOrdersSubTab, setPurchaseOrdersSubTab] = useState("All");
 
@@ -120,13 +123,31 @@ const InventoryInventory = () => {
       <div className="flex justify-between items-center mt-6">
         {/* Search Bar */}
         <div className="flex gap-2">
-          <div className="relative w-[300px]">
-            <AiOutlineSearch className="absolute left-4 top-3 text-gray-400 text-lg" />
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full pl-12 pr-4 py-2 rounded-full bg-[#EDECEC] text-black focus:outline-none"
-            />
+          <div className="flex gap-3">
+            <div className="relative w-[300px]">
+              <AiOutlineSearch className="absolute left-4 top-3 text-gray-400 text-lg" />
+              <input
+                type="text"
+                placeholder="Search"
+                className="w-full pl-12 pr-4 py-2 rounded-full bg-[#EDECEC] text-black focus:outline-none"
+              />
+            </div>
+            {activeSupplyTab === "Items" && (
+              <div className="flex space-x-3">
+                <button
+                  className="bg-white border border-[#B7B7B7] text-[#6D6D6D] font_medium px-5 py-2 rounded-lg flex items-center space-x-2"
+                  //   onClick={openSupplierModal}
+                >
+                  <span>Add Category</span>
+                </button>
+                <button
+                  className="bg-white border border-[#B7B7B7] text-[#6D6D6D] font_medium px-5 py-2 rounded-lg flex items-center space-x-2"
+                  //   onClick={openSupplierModal}
+                >
+                  <span>Add Unit of Measurement</span>
+                </button>
+              </div>
+            )}
           </div>
           {activeSupplyTab === "Stocks" && (
             <div className="flex space-x-3">

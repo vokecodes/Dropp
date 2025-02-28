@@ -3,13 +3,17 @@ import { useFormik } from "formik";
 import { FaEllipsisH } from "react-icons/fa";
 import Modal from "@mui/material/Modal";
 import Button from "./Button";
-import Input from "./Input";
+import Input from "./CustomInput";
 import { IoMdClose } from "react-icons/io";
 import Table from "./Table";
 import { AiOutlineDown, AiOutlineSearch } from "react-icons/ai";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { ClickAwayListener } from "@mui/material";
-import { dateFormatter, generateUUIDBasedOnStringLength, toTitleCase } from "../utils/formatMethods";
+import {
+  dateFormatter,
+  generateUUIDBasedOnStringLength,
+  toTitleCase,
+} from "../utils/formatMethods";
 import { DashboardItemSkeletonLoader } from "./DashboardItemSkeletonLoader";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -17,34 +21,29 @@ import { CHEF_ROUTES } from "../routes/routes";
 
 const DEPARTMENT_OPTIONS = ["All", "bar", "lounge", "room", "kitchen"];
 
-const ITEMS_OPTIONS = ["All", ];
+const ITEMS_OPTIONS = ["All"];
 
 const STOCK_TAKERS = [
   {
     createdAt: "",
-    itemsTaken: [
-      "Rice 3 bag", 
-      "Yam 4 Tuber", 
-      "Cheese 3"
-    ],
+    itemsTaken: ["Rice 3 bag", "Yam 4 Tuber", "Cheese 3"],
     department: "Bar",
-    stocktaker: "Tolu Abiodun"
-  }
+    stocktaker: "Tolu Abiodun",
+  },
 ];
 
 const InventoryStocktake = () => {
-  
   const [isLoading, setIsLoading] = useState(false);
 
   const [dateOption, setDateOption] = useState("");
 
   const [openDepartments, setOpenDepartments] = useState(false);
   const [departments, setDepartments] = useState(DEPARTMENT_OPTIONS[0]);
-  
+
   const [openItems, setOpenItems] = useState(false);
   const [items, setItems] = useState(ITEMS_OPTIONS[0]);
 
-  const [selectedStocktaker, setSelectedStocktaker] = useState(null)
+  const [selectedStocktaker, setSelectedStocktaker] = useState(null);
   const [seeStocktakerModal, setSeeStocktakerModal] = useState(false);
   const openSeeStocktakerModal = (stocktaker: any) => {
     setSeeStocktakerModal(true);
@@ -75,7 +74,6 @@ const InventoryStocktake = () => {
       console.log("values= ", values);
     },
   });
-
 
   const handleClickAway = (flag: string) => {
     if (flag === "departments") {
@@ -116,9 +114,7 @@ const InventoryStocktake = () => {
           </div>
 
           <div className="w-full lg:w-1/5">
-            <label className="text-sm font_medium text-black">
-              Department
-            </label>
+            <label className="text-sm font_medium text-black">Department</label>
             <div className="mt-2 lg:mt-0">
               <div
                 className="h-14 bg-[#F8F8F8] block w-full flex justify-between rounded-md border-0 p-4 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-pointer"
@@ -190,9 +186,7 @@ const InventoryStocktake = () => {
                 )}
               </div>
               {openItems && (
-                <ClickAwayListener
-                  onClickAway={() => handleClickAway("items")}
-                >
+                <ClickAwayListener onClickAway={() => handleClickAway("items")}>
                   <div
                     className={`absolute z-10 bg-white mb-2 w-24 lg:w-44 shadow-2xl p-2 lg:p-4 rounded-2xl secondary_gray_color text-black`}
                   >
@@ -227,9 +221,7 @@ const InventoryStocktake = () => {
         </div>
 
         <Link to={CHEF_ROUTES.linkChefStocktake}>
-          <button
-            className="bg-black text-white px-5 py-2 rounded-lg flex items-center space-x-2"
-          >
+          <button className="bg-black text-white px-5 py-2 rounded-lg flex items-center space-x-2">
             Take Stock
           </button>
         </Link>
@@ -280,31 +272,32 @@ const InventoryStocktake = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {STOCK_TAKERS?.map(
-                  (transaction: any, i: number) => (
-                    <tr
-                      key={generateUUIDBasedOnStringLength(
-                        "ttru"
-                      )}
-                    >
-                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3">
-                        {dateFormatter.format(transaction?.createdAt)}
-                      </td>
-                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3">
-                        {transaction?.itemsTaken?.join(", ")}
-                      </td>
-                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 text-wrap">
-                        {transaction?.department}
-                      </td>
-                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 max-w-[400px] text-wrap">
-                        {transaction?.stocktaker}
-                      </td>
-                      <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3">
-                        <span className="p-3 rounded-xl border border-[#BDBDBD] cursor-pointer" onClick={() => {openSeeStocktakerModal(transaction)}}>View</span>
-                      </td>
-                    </tr>
-                  )
-                )}
+                {STOCK_TAKERS?.map((transaction: any, i: number) => (
+                  <tr key={generateUUIDBasedOnStringLength("ttru")}>
+                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3">
+                      {dateFormatter.format(transaction?.createdAt)}
+                    </td>
+                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3">
+                      {transaction?.itemsTaken?.join(", ")}
+                    </td>
+                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 text-wrap">
+                      {transaction?.department}
+                    </td>
+                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 max-w-[400px] text-wrap">
+                      {transaction?.stocktaker}
+                    </td>
+                    <td className="whitespace-nowrap py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3">
+                      <span
+                        className="p-3 rounded-xl border border-[#BDBDBD] cursor-pointer"
+                        onClick={() => {
+                          openSeeStocktakerModal(transaction);
+                        }}
+                      >
+                        View
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
@@ -342,9 +335,9 @@ const InventoryStocktake = () => {
                     <p>Date & Time</p>
                   </div>
                   <div className="grid grid-rows-3 gap-y-2">
-                    <p>{selectedStocktaker?.stocktaker || '---'}</p>
-                    <p>{selectedStocktaker?.department || '---'}</p>
-                    <p>{selectedStocktaker?.createdAt || '---'}</p>
+                    <p>{selectedStocktaker?.stocktaker || "---"}</p>
+                    <p>{selectedStocktaker?.department || "---"}</p>
+                    <p>{selectedStocktaker?.createdAt || "---"}</p>
                   </div>
                 </div>
 
@@ -368,7 +361,6 @@ const InventoryStocktake = () => {
                       </div>
                     </div>
                   ))}
-
                 </div>
               </div>
             </div>
