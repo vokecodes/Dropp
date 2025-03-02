@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { FaEllipsisH } from "react-icons/fa";
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data }:any) => {
   return (
     <div className="mt-6 bg-white rounded-xl shadow-md">
       <table className="w-full text-left">

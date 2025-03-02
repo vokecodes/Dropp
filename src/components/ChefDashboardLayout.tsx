@@ -20,6 +20,7 @@ import {
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { STOREFRONT_USER, SUB_CHEF_USER } from "../config/UserType";
+import { IoIosPeople } from "react-icons/io";
 
 const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
@@ -362,9 +363,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
         <MdInventory
           size={24}
           color={
-            location?.pathname === CHEF_ROUTES.linkChefDineIn
-              ? "#06c167"
-              : location?.pathname === CHEF_ROUTES.linkChefTableManagement
+            location?.pathname === CHEF_ROUTES.linkChefInventory
               ? "#06c167"
               : "#787878"
           }
@@ -441,6 +440,21 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       title: "Chat",
       active: location?.pathname === CHEF_ROUTES.linkChefChat,
       to: CHEF_ROUTES.linkChefChat,
+    },
+    {
+      icon: (
+        <IoIosPeople
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefTeams
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Teams",
+      active: location?.pathname === CHEF_ROUTES.linkChefTeams,
+      to: CHEF_ROUTES.linkChefTeams,
     },
     {
       icon: (
