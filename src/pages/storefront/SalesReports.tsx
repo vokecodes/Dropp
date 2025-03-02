@@ -87,7 +87,9 @@ const SalesReports = () => {
       .then(({ data }) => {
         setMenuDelivery([]);
         if (data?.data && data?.data?.length > 0) {
-          const tempLocations = data?.data.map(option => option.delivery_city)
+          const tempLocations = data?.data.map(
+            (option) => option.delivery_city
+          );
           setMenuDelivery(["All", ...tempLocations]);
         }
       })
@@ -191,7 +193,7 @@ const SalesReports = () => {
       startDate,
       endDate,
       paymentType,
-      deliveryDay, 
+      deliveryDay,
       deliveryLocation,
       deliveryStatus
     ).then(({ data }) => {
@@ -241,7 +243,14 @@ const SalesReports = () => {
       );
       fetchStorefrontOrders();
     }
-  }, [page, endDate, paymentType, deliveryStatus, deliveryDay, deliveryLocation]);
+  }, [
+    page,
+    endDate,
+    paymentType,
+    deliveryStatus,
+    deliveryDay,
+    deliveryLocation,
+  ]);
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -253,7 +262,7 @@ const SalesReports = () => {
       "Name",
       "Email",
       "Phone No.",
-      "Food",
+      "Item",
       "Total Orders",
       "Delivery Amount",
       "Total Amount",
@@ -262,7 +271,7 @@ const SalesReports = () => {
       "Delivery Date",
       "Delivery Time",
       "Fulfillment Option",
-      "Payment"
+      "Payment",
     ].join(",");
 
     const rows = data
@@ -288,16 +297,13 @@ const SalesReports = () => {
         );
 
         // Calculate total amount from order array
-        const totalOrderAmount =
-        order.order.reduce((total, item) => {
+        const totalOrderAmount = order.order.reduce((total, item) => {
           let price = item.menu.price;
 
           // Apply discount if available
           if (item.menu.discount) {
             const discountAmount =
-              (price *
-                parseFloat(item.menu.discount)) /
-              100;
+              (price * parseFloat(item.menu.discount)) / 100;
             price -= discountAmount;
           }
 
@@ -305,8 +311,7 @@ const SalesReports = () => {
         }, 0);
 
         // Add delivery charge
-        const totalWithoutFee =
-        totalOrderAmount + order.deliveryCharge;
+        const totalWithoutFee = totalOrderAmount + order.deliveryCharge;
 
         return [
           `#${order.id.substring(order?.id?.length - 5)}`,
@@ -319,12 +324,14 @@ const SalesReports = () => {
           totalMeal,
           `₦${order?.deliveryCharge}`,
           `₦${totalWithoutFee}`,
-          (order?.deliveryState ? `"${ order?.deliveryArea }, ${toTitleCase( order?.deliveryState )}"` : "---"),
-          `"${order?.deliveryAddress|| '---'}"` ,
+          order?.deliveryState
+            ? `"${order?.deliveryArea}, ${toTitleCase(order?.deliveryState)}"`
+            : "---",
+          `"${order?.deliveryAddress || "---"}"`,
           `"${dateFormatter.format(new Date(order?.createdAt))}"`,
-          order?.deliveryTime || '---',
+          order?.deliveryTime || "---",
           order?.deliveryOption,
-          order?.paymentType
+          order?.paymentType,
         ].join(",");
       });
 
@@ -334,25 +341,30 @@ const SalesReports = () => {
   const dineExportToCSV = async () => {
     setIsDownloading(true);
     try {
-      await downloadStorefrontReport(startDate, endDate, paymentType, deliveryDay, deliveryLocation, deliveryStatus).then(
-        ({ data }) => {
-          const csv = dineInConvertToCSV(data?.data);
+      await downloadStorefrontReport(
+        startDate,
+        endDate,
+        paymentType,
+        deliveryDay,
+        deliveryLocation,
+        deliveryStatus
+      ).then(({ data }) => {
+        const csv = dineInConvertToCSV(data?.data);
 
-          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-          const link = document.createElement("a");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
 
-          if (link.download !== undefined) {
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "dine-in-orders.csv");
-            link.style.visibility = "hidden";
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", "dine-in-orders.csv");
+          link.style.visibility = "hidden";
 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         }
-      );
+      });
     } catch (err) {
       console.error("CSV Export Error:", err);
     } finally {
@@ -868,7 +880,7 @@ const SalesReports = () => {
                                 scope="col"
                                 className="px-3 py-3.5 text-left text-sm font_medium text-black font-normal min-w-[200px]"
                               >
-                                Food
+                                Item
                               </th>
                               <th
                                 scope="col"
@@ -1137,7 +1149,7 @@ const SalesReports = () => {
                                       )}
                                     </td>
                                     <td className="py-4 pl-0 text-sm font_medium text-[#310E0E] lg:pl-3 min-w-[120px]">
-                                      {transaction?.deliveryTime || '-'}
+                                      {transaction?.deliveryTime || "-"}
                                     </td>
                                     <td className="py-4 pl-0 text-sm font_medium capitalize text-[#310E0E] lg:pl-3 min-w-[120px]">
                                       {transaction?.deliveryOption}

@@ -241,7 +241,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
           }
         />
       ),
-      title: "Menu",
+      title: "Item",
       active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu,
       to: STOREFRONT_ROUTES.linkStorefrontMenu,
     },

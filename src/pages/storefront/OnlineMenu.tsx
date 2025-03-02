@@ -463,7 +463,7 @@ const OnlineMenu = () => {
         <>
           <div className="w-full px-2 lg:px-6 py-4">
             <div className="flex flex-col lg:flex-row w-full items-center justify-between gap-y-3">
-              <PageTitle title="Menu" />
+              <PageTitle title="Item" />
 
               {business && (
                 <div className="">
@@ -564,7 +564,7 @@ const OnlineMenu = () => {
                       <div className="flex-1 ml-4">
                         <input
                           // ref={ref}
-                          placeholder="Search Menu"
+                          placeholder="Search Item"
                           className="py-2 w-full rounded-full input_text text-md font_regular outline-none"
                           onChange={(e: any) => {
                             if (e.target.value) {
@@ -589,7 +589,7 @@ const OnlineMenu = () => {
                   />
 
                   <OutlineButton
-                    title="Ingredient"
+                    title="Tag"
                     extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
                     onClick={() => {
                       openTagsModal();
@@ -597,7 +597,7 @@ const OnlineMenu = () => {
                   />
 
                   <OutlineButton
-                    title="Add Menu"
+                    title="Add Item"
                     extraClasses="!w-4/5 !mx-auto !lg:mx-auto lg:w-52 px-8 py-2 !border-[#06C167] !text-[#06C167]"
                     onClick={() => {
                       setSelectedTabMenu(menuTab[0]);
@@ -658,10 +658,10 @@ const OnlineMenu = () => {
               ) : (
                 <div className="flex flex-col items-center">
                   <h2 className="text-xl input_text mb-3">
-                    You have not added a menu.
+                    You have not added a item.
                   </h2>
                   <Button
-                    title="Add a menu"
+                    title="Add a item"
                     extraClasses="py-4"
                     onClick={openMenuModal}
                   />
@@ -680,7 +680,7 @@ const OnlineMenu = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
-                  {editMenu ? "Edit menu" : "Add a new menu"}
+                  {editMenu ? "Edit item" : "Add a new item"}
                 </p>
                 <IoMdClose
                   size={24}
@@ -738,7 +738,7 @@ const OnlineMenu = () => {
                       <>
                         <BiImages size={50} color="#06c167" />
                         <p className="flex-1 text-xl text-center font_regular sec_black_color mt-1">
-                          Add an image of the food
+                          Add an image of the item
                         </p>
                       </>
                     )}
@@ -776,7 +776,7 @@ const OnlineMenu = () => {
               <div>
                 <Input
                   type="text"
-                  placeholder="Food Name"
+                  placeholder="Item Name"
                   name="foodName"
                   onChange={handleChange}
                   value={values.foodName}
@@ -833,7 +833,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="text"
-                  placeholder="Portion size: E.g plate, 10 liter bowl, 5 liter bowl"
+                  placeholder="Portion size: E.g bag, plate, pack etc."
                   name="portion"
                   onChange={handleChange}
                   value={values.portion}
@@ -856,7 +856,7 @@ const OnlineMenu = () => {
                 )}
 
                 <TextArea
-                  placeholder="Food description"
+                  placeholder="Item description"
                   name="description"
                   onChange={handleChange}
                   value={values.description}
@@ -914,8 +914,8 @@ const OnlineMenu = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Main ingredients"
-                      placeholder="Main ingredients"
+                      label="Main tags"
+                      placeholder="Main tags"
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -1031,7 +1031,7 @@ const OnlineMenu = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
-                  Copy menu
+                  Copy item
                 </p>
                 <IoMdClose
                   size={24}
@@ -1120,7 +1120,7 @@ const OnlineMenu = () => {
                       <>
                         <BiImages size={50} color="#06c167" />
                         <p className="flex-1 text-xl text-center font_regular sec_black_color mt-1">
-                          Add an image of the food
+                          Add an image of the item
                         </p>
                       </>
                     )}
@@ -1158,7 +1158,7 @@ const OnlineMenu = () => {
               <div>
                 <Input
                   type="text"
-                  placeholder="Food Name"
+                  placeholder="Item Name"
                   name="foodName"
                   onChange={handleChange}
                   value={values.foodName}
@@ -1205,7 +1205,7 @@ const OnlineMenu = () => {
 
                 <Input
                   type="text"
-                  placeholder="Portion size: E.g plate, 10 liter bowl, 5 liter bowl"
+                  placeholder="Portion size: E.g bag, plate, pack etc."
                   name="portion"
                   onChange={handleChange}
                   value={values.portion}
@@ -1228,7 +1228,7 @@ const OnlineMenu = () => {
                 )}
 
                 <TextArea
-                  placeholder="Food description"
+                  placeholder="Item description"
                   name="description"
                   onChange={handleChange}
                   value={values.description}
@@ -1241,8 +1241,8 @@ const OnlineMenu = () => {
 
                 <TextArea
                   type="text"
-                  placeholder="Main ingredients"
-                  name="ingredients"
+                  placeholder="Main tags"
+                  name="tags"
                   onChange={handleChange}
                   value={values.ingredients}
                   error={
@@ -1329,7 +1329,7 @@ const OnlineMenu = () => {
                 <div className="mt-10">
                   <OutlineButton
                     loading={loading || subscriptionMenuLoading}
-                    title="Save Menu"
+                    title="Save Item"
                     extraClasses="w-full p-3 rounded-full px-8 py-2"
                     onClick={() => {
                       if (discountValue) {
@@ -1447,7 +1447,7 @@ const OnlineMenu = () => {
             <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 h-3/4 overflow-scroll -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
               <div className="flex">
                 <p className="flex-1 text-xl text-center font_bold black2">
-                  Add a new Ingredient
+                  Add a new Tag
                 </p>
                 <IoMdClose
                   size={24}
@@ -1462,7 +1462,7 @@ const OnlineMenu = () => {
                   sx={{ m: 1 }}
                   variant="outlined"
                   className="w-full"
-                  label="Ingredients"
+                  label="Tag"
                   id="outlined-adornment-password"
                   onChange={(e: any) => {
                     setTag(e.target.value);
@@ -1520,7 +1520,7 @@ const OnlineMenu = () => {
                 <div className="mt-10 absolute bottom-0 w-full">
                   <OutlineButton
                     loading={isLoadingTags}
-                    title="Save Ingredients"
+                    title="Save Tag"
                     extraClasses="w-full p-3 rounded-full px-8 py-2"
                     onClick={() => handleSaveTag()}
                   />

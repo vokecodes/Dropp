@@ -21,7 +21,7 @@ const completedOrders: any = [];
 const renderTableHeader = () => (
   <div className="min-w-[800px] flex justify-start border-b pb-4 px-8">
     <p className="w-1/3 text-sm lg:text-base font_regular gray_color">
-      Food Name
+      Item Name
     </p>
     <p className="w-1/3 text-sm lg:text-base font_regular gray_color">
       Delivery Date & Time
