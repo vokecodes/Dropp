@@ -130,6 +130,8 @@ export const CHEF_ROUTES = {
   linkChefReports: "/chef/reports",
   chefInventory: "inventory",
   linkChefInventory: "/chef/inventory",
+  chefTeams: "teams",
+  linkChefTeams: "/chef/teams",
   chefStocktake: "inventory/stocktake",
   linkChefStocktake: "/chef/inventory/stocktake",
 };

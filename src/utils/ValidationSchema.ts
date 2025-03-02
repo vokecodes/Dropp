@@ -169,6 +169,42 @@ export const SuperWaiterTableInputsSchema = Yup.object().shape({
   password: Yup.string().required("Password is required."),
 });
 
+export const ManagerInputsSchema = Yup.object().shape({
+  section: Yup.array(Yup.string()).required("Section is required."),
+  subTables: Yup.array(Yup.string()).required("Table is required."),
+  employeeAssigned: Yup.string().required("Employee name is required."),
+  employeeID: Yup.string().required("Employee ID is required."),
+  whatsappNumber: Yup.string().optional(),
+  password: Yup.string().required("Password is required."),
+});
+
+export const WaiterInputsSchema = Yup.object().shape({
+  section: Yup.array(Yup.string()).required("Section is required."),
+  subTables: Yup.array(Yup.string()).required("Table is required."),
+  employeeAssigned: Yup.string().required("Employee name is required."),
+  employeeID: Yup.string().required("Employee ID is required."),
+  whatsappNumber: Yup.string().optional(),
+  password: Yup.string().required("Password is required."),
+});
+
+export const NewCashierInputsSchema = Yup.object().shape({
+  section: Yup.array(Yup.string()).required("Section is required."),
+  subTables: Yup.array(Yup.string()).required("Table is required."),
+  employeeAssigned: Yup.string().required("Employee name is required."),
+  employeeID: Yup.string().required("Employee ID is required."),
+  whatsappNumber: Yup.string().optional(),
+  password: Yup.string().required("Password is required."),
+});
+
+export const NewTerminalInputsSchema = Yup.object().shape({
+  section: Yup.array(Yup.string()).required("Section is required."),
+  subTables: Yup.array(Yup.string()).required("Table is required."),
+  employeeAssigned: Yup.string().required("Employee name is required."),
+  employeeID: Yup.string().required("Employee ID is required."),
+  whatsappNumber: Yup.string().optional(),
+  password: Yup.string().required("Password is required."),
+});
+
 export const NewSubscriptionMenuInputsSchema = Yup.object().shape({
   images: Yup.array(Yup.string()).required("Image is required."),
   foodName: Yup.string().required("Food name is required."),
