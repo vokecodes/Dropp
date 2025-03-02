@@ -3,10 +3,13 @@ import { useFormik } from "formik";
 import { FaEllipsisH } from "react-icons/fa";
 import Modal from "@mui/material/Modal";
 import Button from "./Button";
-import Input from "./Input";
+import Input from "./CustomInput";
 import { IoMdClose } from "react-icons/io";
 import Table from "./Table";
 import { AiOutlineDown, AiOutlineSearch } from "react-icons/ai";
+import OutlineButton from "./OutlineButton";
+import { formatRemoteAmountKobo } from "../utils/formatMethods";
+import MiniTabMenu from "./MiniTabMenu";
 
 const recipeColumns = ["Name", "Category", "Quantity", "Cost"];
 const recipes = [
@@ -18,11 +21,15 @@ const recipes = [
   },
 ];
 
+const TABS = ["Recipe Items", "Procedure"];
+
 const InventoryRecipe = () => {
   const [recipeModal, setRecipeModal] = useState(false);
   const openRecipeModal = () => setRecipeModal(true);
   const closeRecipeModal = () => setRecipeModal(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedTab, setSelectedTab] = useState(TABS[0]);
 
   const {
     handleChange,
@@ -36,9 +43,9 @@ const InventoryRecipe = () => {
   } = useFormik({
     initialValues: {
       name: "",
-      phoneNumber: "",
       category: "",
-      account: "",
+      description: "",
+      quantity: "",
     },
     onSubmit: (values) => {
       console.log("values= ", values);
@@ -78,11 +85,9 @@ const InventoryRecipe = () => {
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 -translate-y-1/2 -translate-x-1/2 bg-white rounded-3xl p-7 my-10 outline-none">
+        <div className="absolute top-1/2 left-1/2 w-5/6 lg:w-1/3 -translate-y-1/2 -translate-x-1/2 bg-[#F8F8F8] rounded-3xl p-7 my-10 outline-none h-4/5 overflow-auto">
           <div className="flex">
-            <p className="flex-1 text-xl text-center font_bold black2">
-              Add a Recipe
-            </p>
+            <p className="flex-1 text-xl font_bold black2">Recipe</p>
             <IoMdClose
               size={24}
               color="#8E8E8E"
@@ -91,64 +96,211 @@ const InventoryRecipe = () => {
             />
           </div>
 
-          <div>
-            <Input
-              type="text"
-              placeholder="Name"
-              name="name"
-              onChange={handleChange}
-              value={values.name}
-              error={errors.name && touched.name && errors.name}
+          <div className="mt-5 mb-8 w-1/2 mx-auto">
+            <MiniTabMenu
+              ordersMenu={TABS}
+              selectedOrder={selectedTab}
+              setSelectedOrder={setSelectedTab}
             />
+          </div>
 
-            <Input
-              type="text"
-              placeholder={`Phone Number`}
-              name="phoneNumber"
-              onChange={handleChange}
-              value={values.phoneNumber}
-              error={
-                errors.phoneNumber && touched.phoneNumber && errors.phoneNumber
-              }
-            />
+          {TABS[0] === selectedTab && (
+            <div>
+              <Input
+                type="text"
+                placeholder="Name"
+                name="name"
+                onChange={handleChange}
+                value={values.name}
+                error={errors.name && touched.name && errors.name}
+              />
 
-            <Input
-              type="dropdown"
-              placeholder="Category"
-              name="category"
-              onChange={handleChange}
-              value={values.category}
-              options={[]}
-              error={errors.category && touched.category && errors.category}
-            />
+              <Input
+                type="dropdown"
+                placeholder="Category"
+                name="category"
+                onChange={handleChange}
+                value={values.category}
+                options={[]}
+                error={errors.category && touched.category && errors.category}
+              />
 
-            <Input
-              type="text"
-              placeholder="Account Details"
-              name="account"
-              // extraClasses={'!mt-10 !lg:mt-0'}
-              onChange={handleChange}
-              value={values.account}
-              error={errors.account && touched.account && errors.account}
-            />
+              <Input
+                type="text-area"
+                placeholder="Description"
+                name="description"
+                onChange={handleChange}
+                value={values.description}
+                error={
+                  errors.description &&
+                  touched.description &&
+                  errors.description
+                }
+              />
 
-            {/* {error  && (
+              <Input
+                type="text"
+                placeholder="Quantity"
+                name="quantity"
+                onChange={handleChange}
+                value={values.quantity}
+                error={errors.quantity && touched.quantity && errors.quantity}
+              />
+
+              <div className="border border-[#D3D3D3] my-4 " />
+              <p className="flex-1 text-xl font_bold black2">Add Ingredients</p>
+              <div className="bg-white rounded-3xl p-4 shadow-2xl mt-4 mb-8">
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Item"
+                    name="item"
+                    // onChange={handleChange}
+                    // value={values.name}
+                    // error={errors.name && touched.name && errors.name}
+                  />
+                  <Input
+                    type="text"
+                    placeholder="Net Quantity"
+                    name="netQuantity"
+                    // onChange={handleChange}
+                    // value={values.name}
+                    // error={errors.name && touched.name && errors.name}
+                  />
+                  <Input
+                    type="text"
+                    placeholder="Waste Quantity"
+                    name="wasteQuantity"
+                    // onChange={handleChange}
+                    // value={values.name}
+                    // error={errors.name && touched.name && errors.name}
+                  />
+
+                  <div className="flex justify-between items-center my-4">
+                    <p className="text-md font_medium text-[#787878]">
+                      Unit Cost:
+                    </p>
+                    <p className="text-md font_medium text-[#787878]">
+                      {formatRemoteAmountKobo(2000).naira}
+                      {formatRemoteAmountKobo(2000).kobo}
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center my-4">
+                    <p className="text-md font_medium text-[#787878]">
+                      Gross Quantity:
+                    </p>
+                    <p className="text-md font_medium text-[#787878]">4</p>
+                  </div>
+                  <div className="flex justify-between items-center my-4">
+                    <p className="text-md font_medium text-[#787878]">Total:</p>
+                    <p className="text-md font_medium text-[#787878]">
+                      {formatRemoteAmountKobo(10000).naira}
+                      {formatRemoteAmountKobo(10000).kobo}
+                    </p>
+                  </div>
+
+                  <OutlineButton
+                    loading={isLoading}
+                    title="Save & add another"
+                    extraClasses="w-full p-3 rounded-full px-8 py-2"
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* {error  && (
                   <p className="text-sm text-center text-red-600 my-2">
                     {error}
                   </p>
                 )} */}
 
-            <div className="mt-10">
-              <Button
-                loading={isLoading}
-                title="Add Recipe"
-                extraClasses="w-full p-3 rounded-full px-8 py-2"
-                onClick={() => {
-                  handleSubmit();
-                }}
-              />
+              <div className="">
+                <Button
+                  loading={isLoading}
+                  title="Add sub-recipe"
+                  extraClasses="w-full p-3 rounded-full px-8 py-2"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          )}
+
+          {TABS[1] === selectedTab && (
+            <div>
+              <Input
+                type="text"
+                placeholder="Prep Time"
+                name="name"
+                // onChange={handleChange}
+                // value={values.name}
+                // error={errors.name && touched.name && errors.name}
+              />
+
+              <Input
+                type="dropdown"
+                placeholder="Cooking Time"
+                name="category"
+                // onChange={handleChange}
+                // value={values.category}
+                // options={[]}
+                // error={errors.category && touched.category && errors.category}
+              />
+
+              <div className="flex justify-between items-center my-4">
+                <p className="text-md font_medium text-[#787878]">
+                  Time to completion:
+                </p>
+                <p className="text-md font_medium text-[#787878]">100 mins</p>
+              </div>
+
+              <Input
+                type="text-area"
+                placeholder="Cooking instructions"
+                name="description"
+                // onChange={handleChange}
+                // value={values.description}
+                // error={
+                //   errors.description &&
+                //   touched.description &&
+                //   errors.description
+                // }
+              />
+
+              <Input
+                type="text-area"
+                placeholder="About the Item"
+                name="description"
+                // onChange={handleChange}
+                // value={values.description}
+                // error={
+                //   errors.description &&
+                //   touched.description &&
+                //   errors.description
+                // }
+              />
+
+              {/* {error  && (
+                  <p className="text-sm text-center text-red-600 my-2">
+                    {error}
+                  </p>
+                )} */}
+
+              <div className="">
+                <Button
+                  loading={isLoading}
+                  title="Save Procedure"
+                  extraClasses="w-full p-3 rounded-full px-8 py-2"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </Modal>
     </div>
