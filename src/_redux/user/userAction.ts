@@ -388,10 +388,10 @@ export const getRestaurantDashboardAccount =
   };
 
   export const getStorefrontDashboardAccount =
-  (fromDate = "", toDate = "", payment = "", deliveryStatus="") =>
+  (fromDate = "", toDate = "", payment = "", deliveryDay="",  deliveryLocation="", deliveryStatus="") =>
   (dispatch: any) => {
     dispatch(startDashboardCall());
-    return getStorefrontDashboardCrud(fromDate, toDate, payment, deliveryStatus)
+    return getStorefrontDashboardCrud(fromDate, toDate, payment, deliveryDay, deliveryLocation, deliveryStatus)
       .then(({ data }) => {
         dispatch(getRestaurantDashboard({ ...data?.data }));
       })

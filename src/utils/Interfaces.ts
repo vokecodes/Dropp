@@ -65,6 +65,8 @@ export type InputProps = {
   touched?: any;
   multipleSelect?: boolean;
   newName?: string;
+  radioSelected?: any;
+  radioSetSelected?: any;
 };
 
 export type TextAreaProps = {

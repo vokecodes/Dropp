@@ -87,17 +87,15 @@ const ChefPersonal = () => {
     console.log("rm", user?._id);
     let localMenuCategories = [...extraEmails];
 
-    localMenuCategories = localMenuCategories.filter(
-      (item) => item !== cat
-    );
+    localMenuCategories = localMenuCategories.filter((item) => item !== cat);
 
     setExtraEmails(localMenuCategories);
   };
 
   const [catModal, setCatModal] = useState(false);
   const openCatModal = () => {
-    setExtraEmails(user?.extraEmails ? [...user?.extraEmails] : [])
-    setCatModal(true)
+    setExtraEmails(user?.extraEmails ? [...user?.extraEmails] : []);
+    setCatModal(true);
   };
   const closeCatModal = () => {
     setCatModal(false);
@@ -108,18 +106,16 @@ const ChefPersonal = () => {
     SERVER.patch(`${EXTRA_EMAILS_URL}/${user?._id}`, {
       extraEmails: extraEmails,
     })
-    .then(({ data }) => {
-      console.log("handleSaveCategoryD", data);
-      closeCatModal();
-      dispatch(updateProfileAccount({ ...data?.chef }));
-    })
-    .catch((err) => {
-      console.log("handleSaveCategoryE", err);
-    })
-    .finally(() => setIsLoadingCategories(false));
+      .then(({ data }) => {
+        console.log("handleSaveCategoryD", data);
+        closeCatModal();
+        dispatch(updateProfileAccount({ ...data?.chef }));
+      })
+      .catch((err) => {
+        console.log("handleSaveCategoryE", err);
+      })
+      .finally(() => setIsLoadingCategories(false));
   };
-
-
 
   const { handleChange, handleSubmit, values, setFieldValue } = useFormik({
     initialValues: user,
@@ -146,7 +142,7 @@ const ChefPersonal = () => {
             </div>
           )}
           <p className="text-xl text-black font-bold font_medium">
-            Chef {user?.firstName}
+            {user?.firstName} {user?.lastName}
           </p>
           <p className="text-base gray_color font_regular mt-2">
             {user?.phoneNumber}

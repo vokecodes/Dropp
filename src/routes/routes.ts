@@ -30,24 +30,12 @@ export const AUTH_ROUTES = {
   linkCompanyForgotPassword: "/auth/company-forgot-password",
   companyResetPassword: "company-reset-password",
   linkCompanyResetPassword: "/auth/company-reset-password",
-  
-  storefrontSignUp: "storefront-signup",
-  linkStorefrontSignUp: "/auth/storefront-signup",
-  storefrontLogin: "storefront-login/:navigateFrom?",
-  linkStorefrontLogin: "/auth/storefront-login",
-  linkStorefrontCheckoutLogin: "/auth/storefront-login/explore",
-  storefrontForgotPassword: "storefront-forgot-password",
-  linkStorefrontForgotPassword: "/auth/storefront-forgot-password",
-  storefrontResetPassword: "storefront-reset-password",
-  linkStorefrontResetPassword: "/auth/storefront-reset-password",
 
   adminLogin: "admin-login",
   linkAdminLogin: "/auth/admin-login",
 };
 
-export const DROPP_ROUTES = {
-  
-}
+export const DROPP_ROUTES = {};
 
 export const HOME_ROUTES = {
   explore: "explore",
@@ -140,6 +128,12 @@ export const CHEF_ROUTES = {
   linkSubChefs: "/chef/sub-chef",
   chefReports: "reports",
   linkChefReports: "/chef/reports",
+  chefInventory: "inventory",
+  linkChefInventory: "/chef/inventory",
+  chefTeams: "teams",
+  linkChefTeams: "/chef/teams",
+  chefStocktake: "inventory/stocktake",
+  linkChefStocktake: "/chef/inventory/stocktake",
 };
 
 export const STOREFRONT_ROUTES = {

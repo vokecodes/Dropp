@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { InputProps } from "../utils/Interfaces";
 import ColoredSpinner from "./ColoredSpinner";
 
@@ -22,10 +22,15 @@ const Input = ({
   container,
   multipleSelect,
   newName,
-}: InputProps) => {
+}: // radioSelected = false,
+// radioSetSelected,
+
+InputProps) => {
+  const [radioSelectedState, setRadioSelectedState] = useState(false);
+
   return (
     <div className={`relative my-5 ${container}`}>
-      {type !== "dropdown" && type !== "textarea" && (
+      {type !== "dropdown" && type !== "textarea" && type !== "radio" && (
         <input
           type={type}
           value={value ? value : ""}
@@ -38,6 +43,21 @@ const Input = ({
           autoComplete="off"
           onKeyUp={onkeyup}
         />
+      )}
+      {type === "radio" && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm">{placeholder}</p>
+          <div
+            className={`w-10 h-5 rounded-full flex items-center p-1 ${
+              radioSelectedState
+                ? "bg-primary justify-end"
+                : "bg-[#727272] justify-start"
+            }`}
+            onClick={() => setRadioSelectedState(!radioSelectedState)}
+          >
+            <div className="w-3 h-3 rounded-full bg-white" />
+          </div>
+        </div>
       )}
       {type === "textarea" && (
         <textarea
@@ -61,7 +81,14 @@ const Input = ({
           multiple={multipleSelect}
         >
           <option value="select">
-            Select {multipleSelect ? "tables" : newName ? newName : "a category"}
+            Select{" "}
+            {multipleSelect
+              ? "tables"
+              : newName
+              ? newName
+              : placeholder
+              ? placeholder
+              : "a category"}
           </option>
           {options &&
             options?.length > 0 &&
@@ -72,11 +99,13 @@ const Input = ({
             ))}
         </select>
       )}
-      <label className="placeholder_text_container absolute left-5 top-4 pointer-events-none">
-        <p className="placeholder_text text-base input_text input_placeholder">
-          {placeholder}
-        </p>
-      </label>
+      {type !== "radio" && (
+        <label className="placeholder_text_container absolute left-5 top-4 pointer-events-none">
+          <p className="placeholder_text text-base input_text input_placeholder">
+            {placeholder}
+          </p>
+        </label>
+      )}
       {password && (
         <div
           className="absolute top-4 right-5 cursor-pointer"

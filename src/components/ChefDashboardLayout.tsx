@@ -5,7 +5,7 @@ import { BsChatDots } from "react-icons/bs";
 import { RiWallet3Line } from "react-icons/ri";
 import { CgFileDocument } from "react-icons/cg";
 import { CiForkAndKnife } from "react-icons/ci";
-import { MdHomeFilled, MdOutlineFoodBank } from "react-icons/md";
+import { MdHomeFilled, MdOutlineFoodBank, MdInventory } from "react-icons/md";
 import { GiKnifeFork } from "react-icons/gi";
 import { FaSquarePollVertical } from "react-icons/fa6";
 import MenuItem from "./MenuItem";
@@ -20,6 +20,7 @@ import {
 import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { STOREFRONT_USER, SUB_CHEF_USER } from "../config/UserType";
+import { IoIosPeople } from "react-icons/io";
 
 const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
@@ -241,7 +242,7 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
           }
         />
       ),
-      title: "Menu",
+      title: "Item",
       active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu,
       to: STOREFRONT_ROUTES.linkStorefrontMenu,
     },
@@ -359,6 +360,21 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
     },
     {
       icon: (
+        <MdInventory
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefInventory
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Inventory",
+      active: location?.pathname === CHEF_ROUTES.linkChefInventory,
+      to: CHEF_ROUTES.linkChefInventory,
+    },
+    {
+      icon: (
         <MdOutlineFoodBank
           size={28}
           color={
@@ -424,6 +440,21 @@ const ChefDashboardLayout = ({ children }: DashboardLayoutProps) => {
       title: "Chat",
       active: location?.pathname === CHEF_ROUTES.linkChefChat,
       to: CHEF_ROUTES.linkChefChat,
+    },
+    {
+      icon: (
+        <IoIosPeople
+          size={24}
+          color={
+            location?.pathname === CHEF_ROUTES.linkChefTeams
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Teams",
+      active: location?.pathname === CHEF_ROUTES.linkChefTeams,
+      to: CHEF_ROUTES.linkChefTeams,
     },
     {
       icon: (

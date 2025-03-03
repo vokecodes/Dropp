@@ -142,7 +142,7 @@ const ChefBusiness = () => {
                 </p>
               </div>
             )} */}
-            <div className="border-b py-7">
+            {/* <div className="border-b py-7">
               <p className="text-lg gray_color font_regular">Your locality</p>
               <div className="my-5 flex">
                 {business?.businessSpecialisation?.length > 0 &&
@@ -150,7 +150,7 @@ const ChefBusiness = () => {
                     <TagItem key={locality} title={locality} />
                   ))}
               </div>
-            </div>
+            </div> */}
             <div className="my-10">
               <OutlineButton
                 title="Edit my business"
@@ -310,7 +310,7 @@ const ChefBusiness = () => {
                 />
               </div>
 
-              <Dropdown
+              {/* <Dropdown
                 label="Add your locality"
                 options={LOCALITY}
                 value={businessSpecialisation}
@@ -320,7 +320,7 @@ const ChefBusiness = () => {
                   setBusinessSpecialisation(v);
                   setFieldValue("businessSpecialisation", items);
                 }}
-              />
+              /> */}
 
               {/* <CustomInput
                 type="dropdown"

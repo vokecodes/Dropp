@@ -130,6 +130,42 @@ export const SuperWaiterTableValues = {
   whatsappNumber: "",
 };
 
+export const ManagerValues = {
+  employeeAssigned: "",
+  employeeID: "",
+  section: [],
+  subTables: [],
+  password: "",
+  whatsappNumber: "",
+};
+
+export const WaiterValues = {
+  section: [],
+  employeeAssigned: "",
+  employeeID: "",
+  subTables: [],
+  password: "",
+  whatsappNumber: "",
+};
+
+export const CashierValues = {
+  section: "",
+  employeeAssigned: "",
+  employeeID: "",
+  table: "",
+  password: "",
+  whatsappNumber: "",
+};
+
+export const TerminalValues = {
+  section: [],
+  employeeAssigned: "",
+  employeeID: "",
+  subTables: [],
+  password: "",
+  whatsappNumber: "",
+};
+
 export const NewSubscriptionMenuValues = {
   foodName: "",
   category: "",
