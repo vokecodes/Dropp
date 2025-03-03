@@ -31,6 +31,16 @@ export const AUTH_ROUTES = {
   companyResetPassword: "company-reset-password",
   linkCompanyResetPassword: "/auth/company-reset-password",
 
+  storefrontSignUp: "storefront-signup",
+  linkStorefrontSignUp: "/auth/storefront-signup",
+  storefrontLogin: "storefront-login/:navigateFrom?",
+  linkStorefrontLogin: "/auth/storefront-login",
+  linkStorefrontCheckoutLogin: "/auth/storefront-login/explore",
+  storefrontForgotPassword: "storefront-forgot-password",
+  linkStorefrontForgotPassword: "/auth/storefront-forgot-password",
+  storefrontResetPassword: "storefront-reset-password",
+  linkStorefrontResetPassword: "/auth/storefront-reset-password",
+
   adminLogin: "admin-login",
   linkAdminLogin: "/auth/admin-login",
 };
