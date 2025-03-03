@@ -1018,10 +1018,10 @@ const SalesReports = () => {
                                 // Calculate total amount from order array
                                 const totalOrderAmount =
                                   transaction.order.reduce((total, item) => {
-                                    let price = item.menu.price;
+                                    let price = item?.menu?.price;
 
                                     // Apply discount if available
-                                    if (item.menu.discount) {
+                                    if (item?.menu?.discount) {
                                       const discountAmount =
                                         (price *
                                           parseFloat(item.menu.discount)) /
