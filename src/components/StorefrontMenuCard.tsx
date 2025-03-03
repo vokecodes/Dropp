@@ -442,7 +442,7 @@ const StorefrontMenuCard = ({
                   </p>
                 </div>
                 <div className="mb-3">
-                  <h2 className="text-lg font_bold">Main ingredients</h2>
+                  <h2 className="text-lg font_bold">Main tags</h2>
                   {/* {menu?.ingredients &&
                   menu?.ingredients?.length > 0 &&
                   menu?.ingredients?.map((ingredient: any) => (

@@ -1005,7 +1005,7 @@ const OnlineMenu = () => {
                 <div className="mt-10">
                   <OutlineButton
                     loading={loading || subscriptionMenuLoading}
-                    title="Save Menu"
+                    title="Save Item"
                     extraClasses="w-full p-3 rounded-full px-8 py-2"
                     onClick={() => {
                       if (discountValue) {
@@ -1476,7 +1476,7 @@ const OnlineMenu = () => {
                           onClick={handleClickTags}
                           className="primary_bg_color text-white text-xs rounded-lg py-1 px-2 cursor-pointer"
                         >
-                          Add ingredient
+                          Add tag
                         </button>
                       </InputAdornment>
                     ),
