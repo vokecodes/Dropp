@@ -46,7 +46,13 @@ import LogoutButton from "./LogoutButton";
 import { LuUsers } from "react-icons/lu";
 import { QSR_SUB_ADMIN_USER } from "../config/UserType";
 
-const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, admin }: any) => {
+const Navbar = ({
+  setShowModal,
+  setSelectedCategory,
+  authPage,
+  handleScrollTo,
+  admin,
+}: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -591,8 +597,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
         />
       ),
       title: "Menu",
-      active:
-        location?.pathname === QSR_ROUTES.linkQsrMenu,
+      active: location?.pathname === QSR_ROUTES.linkQsrMenu,
       to: QSR_ROUTES.linkQsrMenu,
     },
     {
@@ -611,20 +616,20 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
       to: QSR_ROUTES.linkQsrCashier,
     },
     {
-        icon: (
-            <BsChatDots
-            size={24}
-            color={
-                location?.pathname === QSR_ROUTES.linkQsrAudit
-                ? "#06c167"
-                : "#787878"
-            }
-            />
-        ),
-        title: "Audit log",
-        coming: true,
-        active: location?.pathname === QSR_ROUTES.linkQsrAudit,
-        to: "#",
+      icon: (
+        <BsChatDots
+          size={24}
+          color={
+            location?.pathname === QSR_ROUTES.linkQsrAudit
+              ? "#06c167"
+              : "#787878"
+          }
+        />
+      ),
+      title: "Audit log",
+      coming: true,
+      active: location?.pathname === QSR_ROUTES.linkQsrAudit,
+      to: "#",
     },
     {
       icon: (
@@ -642,7 +647,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
       to: QSR_ROUTES.linkQsrSettings,
     },
   ];
-  
+
   const subAdminMenuItems = [
     {
       icon: (
@@ -672,8 +677,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
         />
       ),
       title: "Menu",
-      active:
-        location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
+      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
       to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminMenu,
     },
     {
@@ -703,18 +707,21 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
         />
       ),
       title: "Settings",
-      active: location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
+      active:
+        location?.pathname === QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
       to: QSR_SUBADMIN_ROUTES.linkQsrSubAdminSettings,
     },
   ];
-  
+
   const cashierMenuItems = [
     {
       icon: (
         <MdHomeFilled
           size={24}
           color={
-            location?.pathname === CASHIER_ROUTES.linkCashier ? "#06c167" : "#787878"
+            location?.pathname === CASHIER_ROUTES.linkCashier
+              ? "#06c167"
+              : "#787878"
           }
         />
       ),
@@ -734,10 +741,9 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
         />
       ),
       title: "Orders",
-      active:
-        location?.pathname === CASHIER_ROUTES.linkCashierOrders,
+      active: location?.pathname === CASHIER_ROUTES.linkCashierOrders,
       to: CASHIER_ROUTES.linkCashierOrders,
-    }
+    },
   ];
 
   const menuItems =
@@ -775,12 +781,15 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
     },
     { name: "Product", href: "#", current: false },
     { name: "Pricing", href: "#pricing", current: false },
-    { name: "Marketplace", href: HOME_ROUTES.linkExplore, current: false },
   ];
 
   const mobileNavigation = [
-    { name: "Pricing", href: "", onclick: () => handleScrollTo('pricing', 2000), current: false },
-    { name: "Marketplace", href: HOME_ROUTES.linkExplore, current: false },
+    {
+      name: "Pricing",
+      href: "",
+      onclick: () => handleScrollTo("pricing", 2000),
+      current: false,
+    },
   ];
 
   const restaurantNavigation = [
@@ -803,7 +812,6 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
     <Disclosure as="header" className="pt-8 px-3 lg:px-0 z-40 w-full">
       <div className="px-2 sm:px-4 lg:px-32">
         <div className="relative flex h-16 justify-between">
-
           {/* LOGO */}
           <div className="relative z-50 flex px-2 lg:px-0">
             <div className="flex flex-shrink-0 items-center">
@@ -872,7 +880,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
                     </Menu>
                     <a
                       // href="#restaurant"
-                      onClick={() => handleScrollTo('restaurant', 1000)}
+                      onClick={() => handleScrollTo("restaurant", 1000)}
                       className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer"
                     >
                       Private Chef
@@ -922,21 +930,15 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
                     </Menu>
                     <a
                       // href="#pricing"
-                      onClick={() => handleScrollTo('pricing', 3000)}
+                      onClick={() => handleScrollTo("pricing", 3000)}
                       className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer"
                     >
                       Pricing
                     </a>
-                    <a
-                      href={HOME_ROUTES.linkExplore}
-                      className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A]"
-                    >
-                      Marketplace
-                    </a>
                   </nav>
                 </div>
               )}
-              
+
               <div className="relative lg:z-50 lg:ml-4 flex lg:gap-3 lg:items-center">
                 {auth?.user ? (
                   <>
@@ -990,7 +992,9 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
                 as="nav"
                 aria-label="Global"
                 // className="bg-red-900 h-full"
-                className={`absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col  pt-3 pb-3 lg:pb-0 rounded-xl z-50 shadow-xl ${auth?.user ? 'gallery_bg' : 'bg-white'} `}
+                className={`absolute top-14 right-0 lg:-right-14 w-11/12 lg:w-96 flex flex-col  pt-3 pb-3 lg:pb-0 rounded-xl z-50 shadow-xl ${
+                  auth?.user ? "gallery_bg" : "bg-white"
+                } `}
               >
                 {auth?.user ? (
                   <div className="bg-white lg:rounded-b-xl">
@@ -1005,13 +1009,18 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
                     ))}
                     <LogoutButton />
                     <div className="ml-8 py-6">
-                      <Button title="Help center" extraClasses="w-5/6 text-sm" />
+                      <Button
+                        title="Help center"
+                        extraClasses="w-5/6 text-sm"
+                      />
                     </div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-start justify-start gap-y-4 px-2">
-                    
-                    <Menu as="div" className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid">
+                    <Menu
+                      as="div"
+                      className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid"
+                    >
                       <div>
                         <MenuButton className="relative flex">
                           <span className="absolute -inset-1.5" />
@@ -1048,7 +1057,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
                               // href={item.href}
                               className="block px-4 py-2 text-sm font_medium text-gray-700 data-[focus]:bg-gray-100 cursor-pointer"
                               onClick={() => {
-                                console.log('click')
+                                console.log("click");
                                 setSelectedCategory(item.name);
                                 handleScrollTo(item.href, 1000);
                               }}
@@ -1062,13 +1071,16 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
 
                     <a
                       // href="#restaurant"
-                      onClick={() => handleScrollTo('restaurant', 1000)}
+                      onClick={() => handleScrollTo("restaurant", 1000)}
                       className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer h-full w-full border-[#4A443A] border-b border-solid"
                     >
                       Private Chef
                     </a>
 
-                    <Menu as="div" className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid">
+                    <Menu
+                      as="div"
+                      className="relative flex-shrink-0 h-full w-full border-[#4A443A] border-b border-solid"
+                    >
                       <div>
                         <MenuButton className="relative flex">
                           <span className="absolute -inset-1.5" />
@@ -1114,17 +1126,10 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
 
                     <a
                       // href="#pricing"
-                      onClick={() => handleScrollTo('pricing', 3000)}
+                      onClick={() => handleScrollTo("pricing", 3000)}
                       className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] cursor-pointer h-full w-full border-[#4A443A] border-b border-solid"
                     >
                       Pricing
-                    </a>
-
-                    <a
-                      href={HOME_ROUTES.linkExplore}
-                      className="inline-flex items-center px-3 py-2 text-lg font_medium text-[#4A443A] h-full w-full border-[#4A443A] border-b border-solid"
-                    >
-                      Marketplace
                     </a>
 
                     <div className="w-full flex flex-row items-center justify-center gap-x-4">
@@ -1159,8 +1164,7 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
               className="hidden h-6 w-6 group-data-[open]:block text-white"
             />
           </DisclosureButton> */}
-          
-          
+
           {/* <DisclosurePanel as="nav" aria-label="Global" className="flex lg:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               <Disclosure as="div" className="">
@@ -1277,11 +1281,8 @@ const Navbar = ({ setShowModal, setSelectedCategory, authPage, handleScrollTo, a
               )}
             </div>
           </DisclosurePanel> */}
-
-          
         </div>
       </div>
-
     </Disclosure>
   );
 };

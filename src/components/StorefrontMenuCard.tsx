@@ -218,9 +218,9 @@ const StorefrontMenuCard = ({
             </div>
 
             <div className="flex gap-x-3">
-              <div className="w-full text-xs">
+              <div className="w-full">
                 <h2
-                  className="text-black font_medium overflow-hidden text-ellipsis capitalize text-nowrap"
+                  className="text-base text-black font_medium overflow-hidden text-ellipsis capitalize text-nowrap mt-2"
                   onClick={openMenuInfoModal}
                 >
                   {truncateText(menu?.foodName, 17, 20)}
