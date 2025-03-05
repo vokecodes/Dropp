@@ -97,11 +97,19 @@ const StorefrontCart = ({
   const [timeList, setTimeList] = useState([]);
 
   useEffect(() => {
+    let state_counter = [];
+
     if (chef?.menuDelivery.length > 0) {
-      const listStates = chef?.menuDelivery?.map((item) => ({
-        label: toTitleCase(item.delivery_city),
-        value: item.delivery_city,
-      }));
+      const listStates = chef?.menuDelivery?.map((item) => {
+        if (state_counter.includes(item.delivery_city)) return
+
+        state_counter.push(item.delivery_city)
+
+        return ({
+          label: toTitleCase(item.delivery_city),
+          value: item.delivery_city,
+        });
+      }).filter(item => !!item);
       listStates && setStatesList(listStates);
     }
   }, []);
@@ -224,6 +232,7 @@ const StorefrontCart = ({
     touched,
     resetForm,
     isValid,
+    setFieldValue,
   } = useFormik<StorefrontValues>({
     initialValues:
       deliveryOption === DELIVERY_OPTIONS[0]
@@ -405,47 +414,24 @@ const StorefrontCart = ({
                               newName={"State"}
                               name="deliveryState"
                               onChange={({ target }) => {
-                                console.log(
-                                  "first= ",
-                                  target.value,
-                                  chef?.menuDelivery?.filter(
-                                    (item) =>
-                                      item.delivery_city === target.value
-                                  )[0]
-                                );
-
                                 setLgas(
                                   chef?.menuDelivery
                                     ?.filter(
                                       (item) =>
                                         item.delivery_city === target.value
-                                    )[0]
-                                    .delivery_areas.map((area) => ({
-                                      label: toTitleCase(area),
+                                    ).reduce((a, c, i) => [...a, ...c.delivery_areas.map(area => ({
+                                      label: `${toTitleCase(area).trim()} - ₦${c.delivery_fee}`,
                                       value: area,
-                                    }))
-                                );
-
-                                setTimeList(
-                                  chef?.menuDelivery
-                                    ?.filter(
-                                      (item) =>
-                                        item.delivery_city === target.value
-                                    )[0]
-                                    .delivery_time.map((time) => ({
-                                      label: toTitleCase(time),
-                                      value: time,
-                                    }))
-                                );
-
-                                setDeliveryCharge(
-                                  chef?.menuDelivery?.filter(
-                                    (item) =>
-                                      item.delivery_city === target.value
-                                  )[0].delivery_fee
+                                      delivery_fee: c.delivery_fee,
+                                      parent: c._id
+                                    }))], [])
                                 );
 
                                 handleChange({ target });
+                                
+                                setFieldValue("deliveryArea", "");
+                                setFieldValue("deliveryTime", "");
+                                setDeliveryCharge(0);
                               }}
                               value={values?.deliveryState}
                               options={statesList}
@@ -461,8 +447,32 @@ const StorefrontCart = ({
                               placeholder="Delivery Areas"
                               newName={"Area"}
                               name="deliveryArea"
-                              onChange={handleChange}
-                              value={values.deliveryArea}
+                              onChange={({ target }) => {
+                                const currentState = lgas.filter(item => item.label === target.options[target.selectedIndex].text)[0];
+
+                                setTimeList(
+                                  chef?.menuDelivery
+                                    ?.filter(
+                                      (item) =>
+                                        item._id === currentState.parent
+                                    )[0]
+                                    .delivery_time.map((time) => ({
+                                      label: toTitleCase(time),
+                                      value: time,
+                                    }))
+                                );
+
+                                setDeliveryCharge(
+                                  chef?.menuDelivery?.filter(
+                                    (item) =>
+                                      item._id === currentState.parent
+                                  )[0].delivery_fee
+                                );
+
+                                handleChange({ target });
+                                setFieldValue("deliveryTime", "");
+                              }}
+                              value={values?.deliveryArea}
                               options={lgas}
                               error={
                                 errors.deliveryArea &&
