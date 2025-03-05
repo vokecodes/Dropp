@@ -26,6 +26,7 @@ import {
   HOME_ROUTES,
   QSR_ROUTES,
   QSR_SUBADMIN_ROUTES,
+  STOREFRONT_ROUTES,
   SUB_CHEF_ROUTES,
 } from "../routes/routes";
 
@@ -217,6 +218,114 @@ const Navbar = ({
       active: location?.pathname === CHEF_ROUTES.linkChefSettings,
       to: CHEF_ROUTES.linkChefSettings,
     },
+  ];
+
+  const storefrontMenuItems = [
+      {
+        icon: (
+          <MdHomeFilled
+            size={24}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefront ? "#06c167" : "#787878"
+            }
+          />
+        ),
+        title: "Home",
+        active: location?.pathname === STOREFRONT_ROUTES.linkStorefront,
+        to: STOREFRONT_ROUTES.linkStorefront,
+      },
+      {
+        icon: (
+          <FaSquarePollVertical
+            size={24}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefrontReports
+                ? "#06c167"
+                : "#787878"
+            }
+          />
+        ),
+        title: "Reports",
+        active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontReports,
+        to: STOREFRONT_ROUTES.linkStorefrontReports,
+      },
+      
+      {
+        icon: (
+          <MdOutlineFoodBank
+            size={28}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu
+                ? "#06c167"
+                : "#787878"
+            }
+          />
+        ),
+        title: "Menu",
+        active:
+          location?.pathname === STOREFRONT_ROUTES.linkStorefrontMenu,
+        to: STOREFRONT_ROUTES.linkStorefrontMenu,
+      },
+      {
+        icon: (
+          <CgFileDocument
+            size={24}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefrontOrders
+                ? "#06c167"
+                : "#787878"
+            }
+          />
+        ),
+        title: "Orders",
+        active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontOrders,
+        to: STOREFRONT_ROUTES.linkStorefrontOrders,
+      },
+      {
+        icon: (
+          <RiWallet3Line
+            size={24}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefrontWallet
+                ? "#06c167"
+                : "#787878"
+            }
+          />
+        ),
+        title: "My Wallet",
+        active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontWallet,
+        to: STOREFRONT_ROUTES.linkStorefrontWallet,
+      },
+      {
+        icon: (
+          <BsChatDots
+            size={24}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefrontChat
+                ? "#06c167"
+                : "#787878"
+            }
+          />
+        ),
+        title: "Chats",
+        active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontChat,
+        to: STOREFRONT_ROUTES.linkStorefrontChat,
+      },
+      {
+        icon: (
+          <AiFillSetting
+            size={24}
+            color={
+              location?.pathname === STOREFRONT_ROUTES.linkStorefrontSettings
+                ? "#06c167"
+                : "#787878"
+            }
+          />
+        ),
+        title: "Settings",
+        active: location?.pathname === STOREFRONT_ROUTES.linkStorefrontSettings,
+        to: STOREFRONT_ROUTES.linkStorefrontSettings,
+      },
   ];
 
   const restaurantMenuItems = [
@@ -751,6 +860,8 @@ const Navbar = ({
       ? superAdminMenuItems
       : auth?.user?.userType === QSR_SUB_ADMIN_USER
       ? subAdminMenuItems
+      : person?.chefType === USER_TYPE.STOREFRONT
+      ? storefrontMenuItems
       : cashier
       ? cashierMenuItems
       : person?.userType === USER_TYPE.SUB_CHEF
